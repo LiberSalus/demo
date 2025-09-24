@@ -21,7 +21,6 @@ const Principal = ({children}) => {
       </div>
 
       <div className={styles.cntModulos}>
-
         {children}
       </div>
 
