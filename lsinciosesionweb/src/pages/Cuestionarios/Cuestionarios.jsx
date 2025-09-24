@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./cuestionarios.module.css";
 import { ROUTES } from "@/routes";
 import { NavLink } from "react-router-dom";
@@ -17,6 +17,9 @@ import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEv
 import completado from "@/components/Tarjetas/TarjetaCuestionarios/completado.svg";
 import proceso from "@/components/Tarjetas/TarjetaCuestionarios/proceso.svg";
 import inactivo from "@/components/Tarjetas/TarjetaCuestionarios/candado.svg";
+import TarjetaProgresoArea from "@/components/Tarjetas/TarjetaProgresoArea/TarjetaProgresoArea";
+
+import InputRango from "./Inputs/InputRango";
 
 const estados = ["inactivo", "completado", "proceso"];
 
@@ -44,32 +47,29 @@ const perfilCuestionario = [
   },
 ];
 
-const srcIcon = {
-  completado,
-  proceso,
-  inactivo,
-};
+const srcIcon = { completado, proceso, inactivo };
 
-const TarjetaCuestionario = () => {
-  return (
-    <div className={styles.cntEstadosCuestionario}>
-      {perfilCuestionario.map((cuestionario) => (
-        <TrjEstadoCuestionario
-          key={cuestionario.id}
-          id={cuestionario.id}
-          nombre={cuestionario.nombre}
-          descripcion={cuestionario.descripcion}
-          estado={estados[cuestionario.estado]}
-          fecha={cuestionario.fecha}
-          srcIcon={srcIcon[estados[cuestionario.estado]]}
-          name={estados[cuestionario.estado]}
-        />
-      ))}
-    </div>
-  );
-};
+const TarjetaCuestionario = () => (
+  <div className={styles.cntEstadosCuestionario}>
+    {perfilCuestionario.map((c) => (
+      <TrjEstadoCuestionario
+        key={c.id}
+        id={c.id}
+        nombre={c.nombre}
+        descripcion={c.descripcion}
+        estado={estados[c.estado]}
+        fecha={c.fecha}
+        srcIcon={srcIcon[estados[c.estado]]}
+        name={estados[c.estado]}
+      />
+    ))}
+  </div>
+);
 
 const Cuestionarios = () => {
+  // ✅ único estado para el slider
+  const [valor, setValor] = useState(5);
+
   return (
     <Principal>
       <div className={styles.cntCuestionarios}>
@@ -96,7 +96,7 @@ const Cuestionarios = () => {
               <div className={styles.tarjeta}>
                 <div className={styles.caja}>
                   <div className={styles.cntIcon}>
-                    <img src={fisico}></img>
+                    <img src={fisico} />
                   </div>
                   <p>Bienestar Físico</p>
                 </div>
@@ -109,7 +109,7 @@ const Cuestionarios = () => {
               <div className={styles.tarjeta}>
                 <div className={styles.caja}>
                   <div className={styles.cntIcon}>
-                    <img src={social}></img>
+                    <img src={social} />
                   </div>
                   <p>Bienestar Social</p>
                 </div>
@@ -119,7 +119,7 @@ const Cuestionarios = () => {
               <div className={styles.tarjeta}>
                 <div className={styles.caja}>
                   <div className={styles.cntIcon}>
-                    <img src={mental}></img>
+                    <img src={mental} />
                   </div>
                   <p>Bienestar Mental</p>
                 </div>
@@ -131,7 +131,7 @@ const Cuestionarios = () => {
               <div className={styles.tarjeta}>
                 <div className={styles.caja}>
                   <div className={styles.cntIcon}>
-                    <img src={nutricional}></img>
+                    <img src={nutricional} />
                   </div>
                   <p>Bienestar Nutricional</p>
                 </div>
@@ -152,7 +152,7 @@ const Cuestionarios = () => {
             <p>O</p>
           </div>
 
-          <div className={styles.cntNum}>
+          <div className={styles.cntNumIZ}>
             <div className={styles.num}>
               <p>1</p>
               <p>
@@ -161,21 +161,105 @@ const Cuestionarios = () => {
               </p>
             </div>
             <div className={styles.cntComponente}>
+              <p>Bienestar Físico</p>
               <TarjetaCuestionario />
             </div>
           </div>
 
           <div className={styles.componente}>
             <div className={styles.cntListadoEstado}>
-              <p>Bienestar Fisico</p>
-              <TarjetaCuestionario/>
+              <p>Bienestar Físico</p>
+              <TarjetaCuestionario />
               <p>Bienestar Social</p>
-              <TarjetaCuestionario/>
-              <p>Bienestar Fisico</p>
-              <TarjetaCuestionario/>
+              <TarjetaCuestionario />
+              <p>Bienestar Mental</p>
+              <TarjetaCuestionario />
+              <p>Bienestar Nutricional</p>
+              <TarjetaCuestionario />
             </div>
             <div className={styles.cntCompEval}>
               <TarjetaEvaluacion />
+            </div>
+          </div>
+
+          <div className={styles.cntNumDR}>
+            <div className={styles.cntComponente}>
+              <TarjetaProgresoArea />
+            </div>
+            <div className={styles.cntBotones}>
+              <button className={styles.boton}>Bienestar Físico</button>
+              <button className={styles.boton}>Bienestar Social</button>
+              <button className={styles.boton}>Bienestar Mental</button>
+              <button className={styles.boton}>Bienestar Nutricional</button>
+            </div>
+            <div className={styles.num}>
+              <p>2</p>
+              <p>
+                Para cada área de bienestar podrás gestionar el avance de
+                cuestionarios
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.cntMejora}>
+            <p>Reactivos en cuestionarios</p>
+            <p>
+              "Cada cuestionario contiene diferentes tipos de preguntas, desde
+              escribir tu opinión hasta seleccionar opciones o valorar en una
+              escala. ¡Responde con honestidad para obtener mejores resultados!
+            </p>
+            <p>!</p>
+          </div>
+
+          <div className={styles.cntNumIZ}>
+            <div className={styles.num}>
+              <p>3</p>
+              <p>
+                Según el tipo de cuestionario se presentarán los tipos de
+                preguntas
+              </p>
+            </div>
+
+            <div className={styles.cntPreguntas}>
+              <div className={styles.pregunta}>
+                <p>
+                  1. Durante los últimos 7 días, ¿cuántos días realizó usted
+                  actividades físicas vigorosas como levantar objetos pesados,
+                  excavar, aeróbicos o pedalear rápido en bicicleta?
+                </p>
+                <p>Desliza el marcador hasta el número que consideres</p>
+                <div className={styles.cntInput}>
+                  <InputRango
+                    value={valor}
+                    onChange={setValor}
+                    min={1}
+                    max={7}
+                    step={1}
+                  />
+                </div>
+              </div>
+              <div className={styles.pregunta}>
+                <p>
+                  ¿Has consumido bebidas con alcohol (cerveza, vino, ginebra,
+                  etc)?
+                </p>
+                <div className={styles.cntInputs}>
+                  <input className={styles.inputChk} type="chechbox"></input>
+                  <label>SI</label>
+                  <input className={styles.inputChk} type="chechbox"></input>
+                  <label>NO</label>
+                </div>
+                <p>
+                  ¿Has consumido bebidas con alcohol (cerveza, vino, ginebra,
+                  etc)?
+                </p>
+                <div className={styles.cntInputs}>
+                  <input className={styles.inputChk} type="chechbox"></input>
+                  <label>SI</label>
+                  <input className={styles.inputChk} type="chechbox"></input>
+                  <label>NO</label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
