@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./cuestionarios.module.css";
 import { ROUTES } from "@/routes";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Menu from "@/components/menu/Menu";
 import Principal from "@/Layout/Principal";
 import TarjetaListadoAvance from "./TarjetaListadoAvance/TarjetaListadoAvance";
@@ -237,6 +237,7 @@ const Cuestionarios = () => {
                     step={1}
                   />
                 </div>
+                <button className={styles.boton}>Siguiente</button>
               </div>
               <div className={styles.pregunta}>
                 <p>
@@ -244,9 +245,9 @@ const Cuestionarios = () => {
                   etc)?
                 </p>
                 <div className={styles.cntInputs}>
-                  <input className={styles.inputChk} type="chechbox"></input>
+                  <input className={styles.inputChk} type="checkbox"></input>
                   <label>SI</label>
-                  <input className={styles.inputChk} type="chechbox"></input>
+                  <input className={styles.inputChk} type="checkbox"></input>
                   <label>NO</label>
                 </div>
                 <p>
@@ -254,12 +255,39 @@ const Cuestionarios = () => {
                   etc)?
                 </p>
                 <div className={styles.cntInputs}>
-                  <input className={styles.inputChk} type="chechbox"></input>
+                  <input className={styles.inputChk} type="checkbox"></input>
                   <label>SI</label>
-                  <input className={styles.inputChk} type="chechbox"></input>
+                  <input className={styles.inputChk} type="checkbox"></input>
                   <label>NO</label>
                 </div>
+                <button className={styles.boton}>Siguiente</button>
               </div>
+            </div>
+          </div>
+          <div className={styles.cntAvance}>
+            <div>
+              <p>Progreso</p>
+              <div className={styles.barra}>
+                <div className={styles.avance}></div>
+              </div>
+            </div>
+            <p>
+              Si requieres salir, da clic en el boton para mantener tu progreso
+            </p>
+            <button className={styles.boton}>Guardar</button>
+          </div>
+          <div className={styles.cntMsj}>
+            <p>TU PARTICIPACIÓN ES CLAVE</p>
+            <p>Cada respuesta que compartes ayuda a construir un panorama más claro de tu bienestar. <br/> ¡Contribuyes a mejorar tu salud y la de tu comunidad!</p>
+          </div>
+          <div className={styles.cntAreas}>
+            <p>ÁREAS DE BIENESTAR</p>
+            <div>
+            <Link to="/cuestionarios/fisico" className={styles.boton}>Bienestar Físico</Link>
+            <Link to="/cuestionarios/mental" className={styles.boton}>Bienestar Mental</Link>
+            <Link to="/cuestionarios/social" className={styles.boton}>Bienestar Social</Link>
+            <Link to="/cuestionarios/nutricional" className={styles.boton}>Bienestar Nutricional</Link>
+
             </div>
           </div>
         </div>

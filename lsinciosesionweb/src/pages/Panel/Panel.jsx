@@ -33,7 +33,7 @@ const Panel = () => {
           <TarjetaCarrucel/>
         </div>
         <div className={styles.cntTrjBienestar}>
-          <TarjetaBienestar />
+          <TarjetaBienestar /> {/* 👈 aqui vienen  tb los botones a las areas  */}
         </div>
         <div className={styles.cntTrjCuestionario}>
           <TarjetaCuestionario />

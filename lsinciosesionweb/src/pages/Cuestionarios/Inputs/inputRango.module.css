@@ -86,10 +86,10 @@
   background-image: radial-gradient(circle, var(--tick-inactive) calc(var(--tick)/2), transparent calc(var(--tick)/2));
 }
 
-.slider::after{
+/* .slider::after{
   width: var(--pct);
   background-image: radial-gradient(circle, var(--tick-active) calc(var(--tick)/2), transparent calc(var(--tick)/2));
-}
+} */
 
 /* Halo */
 /* .halo{
@@ -109,10 +109,10 @@
 
 /* Labels */
 .labels{
-  margin-top: 0.625rem; /* 10px */
+  margin-top: 0.625rem; 
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;   /* 12px */
+  font-size: 0.75rem;   
   color: #0f172a;
   user-select: none;
   font-weight: bold;

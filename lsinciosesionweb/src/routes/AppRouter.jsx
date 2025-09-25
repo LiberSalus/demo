@@ -9,6 +9,8 @@ export const ROUTES = {
     LOGIN: '/login',
     INICIO: '/inicio',
     CUESTIONARIOS: '/cuestionarios',
+    CUESTIONARIOS_AREA: "/cuestionarios/:area",
+    CUESTIONARIOS_RUN: "/cuestionarios/:area/:key",
     HISTORIAL: '/historial',
     CABINA: '/cabina',
     AYUDA: '/ayuda'

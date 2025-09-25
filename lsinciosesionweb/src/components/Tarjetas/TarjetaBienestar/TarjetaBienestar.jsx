@@ -1,15 +1,16 @@
 import React from 'react'
 import styles from './tarjetaBienestar.module.css'
+import { NavLink } from 'react-router-dom'
 
 const TarjetaBienestar = () => {
   return (
     <div className={styles.cntTarjetaBienestar}>
         <p>Áreas de Bienestar</p>
         <div className={styles.cntAccesos}>
-            <a className={styles.link} href="#">Bienestar físico</a>
-            <a className={styles.link} href="#">Bienestar emocional</a>
-            <a className={styles.link} href="#">Bienestar social</a>
-            <a className={styles.link} href="#">Bienestar nutricional</a>
+            <NavLink className={styles.link} to="/cuestionarios/fisico">Bienestar físico</NavLink>
+            <NavLink className={styles.link} to="/cuestionarios/mental">Bienestar mental</NavLink>
+            <NavLink className={styles.link} to="/cuestionarios/social">Bienestar social</NavLink>
+            <NavLink className={styles.link} to="/cuestionarios/nutricional">Bienestar nutricional</NavLink>
         </div>
     </div>
   )
