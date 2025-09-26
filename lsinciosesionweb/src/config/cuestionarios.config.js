@@ -3,54 +3,54 @@ export const AREAS = [
   {
     id: "fisico",
     name: "Bienestar Físico",
-    color: "#0ea5e9",
     area3D: "Físico",
-    description:
-      "Evalúa tu condición física y hábitos para prevenir riesgos y mejorar tu salud.",
     questionnaires: [
       {
         key: "CALIDAD_VIDA_SF12",
         name: "Calidad de Vida SF-12",
-        description:
-          "Formulario para evaluar el estado de salud y calidad de vida.",
-        file: () => import("@/components/Cuestionarios/data/propuesta2.json"), // lazy
+        description: "Evalúa el estado de salud y calidad de vida.",
+        profiles: ["adulto_activo", "mayor_asistido"],     // quién aplica
+        unlock_if: null,                                   // sin condición extra
+        file: () => import("@/pages/Cuestionarios/propuesta2.json"),
       },
-      // agrega más cuestionarios físicos aquí...
+      // Ejemplo: se libera si SF12 ≥ 50% o si existe respuesta específica
+      {
+        key: "EJERCICIO_HABITOS",
+        name: "Hábitos de Ejercicio (Follow-up)",
+        description: "Profundiza si se detectan áreas de mejora.",
+        profiles: ["adulto_activo"],
+        unlock_if: { any: [
+          { type: "percent", of: "CALIDAD_VIDA_SF12", op: ">=", value: 50 },
+          { type: "answer",  qid: 5, of: "CALIDAD_VIDA_SF12", op: "includes", value: 3 } // (p.ej. marcó 'ejercicio')
+        ]},
+        file: () => import("@/pages/Cuestionarios/propuesta2.json"),
+      },
     ],
   },
   {
     id: "mental",
     name: "Bienestar Mental",
-    color: "#8b5cf6",
     area3D: "Mental",
-    description:
-      "Identifica tu estado emocional y estrés para orientar apoyos personalizados.",
-    questionnaires: [],
+    questionnaires: [
+      {
+        key: "MENTAL_DEMO",
+        name: "Cuestionario Mental (demo)",
+        description: "Demo temporal.",
+        profiles: ["adulto_activo", "mayor_asistido", "menor_tutor"],
+        unlock_if: null,
+        file: () => import("@/pages/Cuestionarios/propuesta2.json"),
+      },
+    ],
   },
-  {
-    id: "social",
-    name: "Bienestar Social",
-    color: "#f59e0b",
-    area3D: "Social",
-    description:
-      "Explora tu red de apoyo y participación para fortalecer tu equilibrio social.",
-    questionnaires: [],
-  },
-  {
-    id: "nutricional",
-    name: "Bienestar Nutricional",
-    color: "#10b981",
-    area3D: "Nutricional",
-    description:
-      "Conoce hábitos de alimentación y oportunidades de mejora nutricional.",
-    questionnaires: [],
-  },
+  { id: "social", name: "Bienestar Social", area3D: "Social", questionnaires: [] },
+  { id: "nutricional", name: "Bienestar Nutricional", area3D: "Nutricional", questionnaires: [] },
 ];
 
-export const findArea = (areaId) => AREAS.find(a => a.id === areaId);
+export const findArea = (areaId) =>
+  AREAS.find(a => a.id === (areaId || "").toLowerCase());
+
 export const findQuestionnaire = (areaId, key) => {
-  const area = findArea(areaId);
-  if (!area) return null;
-  return area.questionnaires.find(q => q.key === key) || null;
+  const a = findArea(areaId);
+  if (!a) return null;
+  return a.questionnaires.find(q => q.key === key) || null;
 };
-a

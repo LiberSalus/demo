@@ -1,0 +1,199 @@
+.cntPlantillaQs {
+    width: 88vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: 0,5s ease;
+    column-span: all;
+}
+
+.cntInfo {
+    /* border: 2px dashed lightblue; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    & >  :nth-child(1) {
+        flex: 100%;
+        text-align: left;
+        font-size: 2rem;
+        margin-left: 2rem;
+    }
+    & > .cntDescripcion {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        margin-left: 1rem;
+        & > :nth-child(1) {
+            padding: 0 0 0.5rem 1rem;
+            font-weight: bold;
+        }
+        & > :nth-child(2) {
+            color: darkblue;
+        }
+        & > :nth-child(3) {
+            width: 80%;
+            text-align: left;
+            padding-top: 0.5rem;
+        }
+    }
+    & > .cntReactivos, & > .cntTiempo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-right: 3rem;
+        gap: 1rem;
+        & > :nth-child(1) {
+            font-weight: bold;
+        }
+        & > img {
+            width: fit-content;
+            margin: 0 auto;   
+        }
+        & > :nth-child(3) {
+            color: darkblue;
+            font-size: 3rem;
+            & > span {
+                font-size: 1.5rem;
+            }
+        }
+    }
+    & > .cntDescripcion, & > .cntReactivos, & > .cntTiempo {
+        margin-top: 4rem;
+    }
+    & > .cntMono {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        & > :nth-child(1){
+            width: fit-content;
+            align-self: center;
+            background-color: rgb(29, 29, 75);
+            color: white;
+            border-radius: 2rem;
+            transition: 0.3s ease;
+            &:hover{
+                background-color: white;
+                color: darkblue;
+            }
+        }
+        & > .cntModelo {
+            width:  15rem;
+            height: 15rem;
+            margin: 0 auto;
+            position: relative;
+            & > :nth-child(1) {
+                position: absolute;
+            }
+        }
+        & > :nth-child(3) {
+            margin: 0 auto;
+            width: 50%;
+        }
+    }
+}
+
+.cntFormulario {
+    margin-top: 3rem;
+    /* border: 2px dashed lightblue; */
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    position: relative;
+}
+
+.cntFormulario .Form {
+    
+    max-width: 70%;
+    min-width: 40%;
+}
+
+.Form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;   
+    & > :nth-child(1) {
+        font-size: large;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    & > :nth-child(2) {
+        margin-bottom: 2rem;
+    }
+    & > .cntPreguntas {
+        padding-left: 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+    }
+}
+
+.cntProgreso {
+    position: sticky;
+    width: fit-content;
+    height: 100% ;
+    margin-top: 3rem;
+    padding: 1rem;
+    
+
+    top: 0;
+    right: 0;
+    & > .cntBarra {
+        font-size: 1.5rem;
+        
+        & > .barra {
+            margin: 1rem 0;
+            width: 18rem;
+            height: 2.0rem;
+            border-radius: 3rem;
+            background-color: rgb(245, 244, 244);
+            position: relative;
+            overflow: hidden;
+            & > .progreso {
+                position: absolute;
+                width:  50%;
+                height: 100%;
+                border-radius: 3rem;
+                background-color: lawngreen;
+                transition: width 1.0s ease;
+            }
+        }
+        
+    }
+    & > .cntBotones {
+        display: flex;
+        justify-content: center;
+        
+        
+        gap: 1rem;
+        text-wrap: nowrap;
+
+        & > button {
+            color: white;
+            border-radius: 3rem;
+            background-color: rgb(29, 29, 75);
+            padding: 0.5rem 1.5rem;
+            transition: 0.3s ease;
+            cursor: pointer;
+            &:hover {
+                background-color: white;
+                color: darkblue;
+            }
+        }
+    }
+}
+
+.qAppear {
+  animation: qfade .35s ease both;
+}
+@keyframes qfade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+

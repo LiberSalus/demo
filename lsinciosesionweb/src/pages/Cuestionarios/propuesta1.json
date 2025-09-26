@@ -1,0 +1,84 @@
+{
+  "name": "Cuestionario de Bienestar Físico",
+  "description": "Este cuestionario busca conocer tu estado de salud general y detectar necesidades de atención o seguimiento.",
+  "list_questions": [
+    {
+      "id": 1,
+      "type": "SINGLE_CHOICE",
+      "text": "¿Conoce su diagnóstico?",
+      "list_options": [
+        { "id": 1, "value": 1, "text": "Sí" },
+        { "id": 2, "value": 0, "text": "No" }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "TEXT",
+      "text": "De ser así, ¿cuál es su diagnóstico?",
+      "show_if": {
+        "all": [ { "q": 1, "op": "==", "value": 1 } ]
+      }
+    },
+    {
+      "id": 3,
+      "type": "TEXT",
+      "text": "Inicio del padecimiento",
+      "show_if": {
+        "all": [ { "q": 1, "op": "==", "value": 1 } ]
+      }
+    },
+    {
+      "id": 4,
+      "type": "SINGLE_CHOICE",
+      "text": "¿Se encuentra en tratamiento actualmente?",
+      "list_options": [
+        { "id": 1, "value": 1, "text": "Sí" },
+        { "id": 2, "value": 0, "text": "No" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "MULTIPLE_CHOICE",
+      "text": "Tratamientos indicados:",
+      "list_options": [
+        { "id": 1, "value": 1, "text": "Farmacológico" },
+        { "id": 2, "value": 2, "text": "Terapia" },
+        { "id": 3, "value": 3, "text": "Intervención quirúrgica" },
+        { "id": 4, "value": 4, "text": "Otro" }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "TEXT",
+      "text": "Especifique otro tratamiento indicado",
+      "show_if": {
+        "all": [ { "q": 5, "op": "includes", "value": 4 } ]
+      }
+    },
+    {
+      "id": 7,
+      "type": "SINGLE_CHOICE",
+      "text": "¿Consume psicofármaco, alcohol o droga?",
+      "list_options": [
+        { "id": 1, "value": 1, "text": "Sí" },
+        { "id": 2, "value": 0, "text": "No" }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "TEXT",
+      "text": "Especifique sustancia",
+      "show_if": {
+        "all": [ { "q": 7, "op": "==", "value": 1 } ]
+      }
+    },
+    {
+      "id": 9,
+      "type": "TEXT",
+      "text": "Tiempo y frecuencia de consumo",
+      "show_if": {
+        "all": [ { "q": 7, "op": "==", "value": 1 } ]
+      }
+    }
+  ]
+}

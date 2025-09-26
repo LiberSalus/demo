@@ -23,6 +23,8 @@ export const AppRouter = () => {
                 <Route path={ROUTES.LOGIN} element={<Login />} />
                 <Route path={ROUTES.INICIO} element={<Inicio />} />
                 <Route path={ROUTES.CUESTIONARIOS} element={<Cuestionarios />} />
+                <Route path="/cuestionarios/:area" element={<CuestionariosArea />} />
+                <Route path="/cuestionarios/:area/:key" element={<CuestionarioRun />} />
                 <Route path={ROUTES.HISTORIAL} element={<Historial />} />
                 <Route path={ROUTES.CABINA} element={<Cabina />} />
                 <Route path={ROUTES.AYUDA} element={<Ayuda />} />

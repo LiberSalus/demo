@@ -1,0 +1,62 @@
+.pregunta {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-bottom: 2rem;
+    & > p {
+        font-size: 1.2rem;
+        text-align: left;
+        margin-bottom: 1rem;
+    }
+    & > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        
+        gap: 1.0rem;
+        & > input {
+            transform: translateY(-4px);
+            margin-left: 2rem;
+        }
+        & > label {
+            line-height: 1.2;
+        }
+    }
+    & input {
+        margin-top: 0.5rem;
+    }
+}
+
+/* radio, checkbox */
+.inputRadio, .inputMultipleCh {
+    appearance: none; 
+    width: 20px;
+    height: 20px;
+    border: 1px solid #4c56af; /* Borde del círculo externo */
+    background-color: #eff1fc;
+    border-radius: 4px; 
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    &:checked {
+        background-color: #4c56af;
+    } 
+}
+
+.inputRadio:checked + label,
+.inputMultipleCh:checked + label {
+    font-weight: bold;
+    color: darkblue;
+}
+
+
+
+/* text */
+.inputText {
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: darkblue;
+    font-weight: bold;
+}
