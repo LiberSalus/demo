@@ -1,162 +1,145 @@
-import React, { useRef, useMemo, useCallback, useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import styles from "./Menu.module.css";
-import Estelas, { PALETTES } from "./estelas";
-import { ROUTES } from "@/routes";
+import { ROUTES } from "@/config/routes";
 
-// assets
-import logo from "../../images/Capa_1-2.png";
-import inicio       from "./inicio.svg";
-import cuestionario from "./cuestionario.svg";
-import historial    from "./historial.svg";
-import cabina       from "./cabina.svg";
-import ayuda        from "./ayuda.svg";
+const MI_SALUD = [
+  { to: ROUTES.SOBRE_MI,         label: "Sobre mi" },
+  { to: ROUTES.HISTORIA_SALUD,   label: "Mi historia con la salud" },
+  { to: ROUTES.FAMILIA_HERENCIA, label: "Mi familia y herencia" },
+  { to: ROUTES.CUERPO_HISTORIA,  label: "Mi cuerpo y su historia" },
+  { to: ROUTES.RESPONDE_CUIDATE, label: "Responde y cuídate" },
+];
 
-const MenuItem = ({ to, text, icon, paletteKey, onEnter, onLeave, end }) => {
+const MIS_CONSULTAS = [
+  { to: ROUTES.SUSURROS,       label: "Susurros Salud" },
+  { to: ROUTES.COMPRENSION,    label: "Comprensión de mi situación" },
+  { to: ROUTES.PLAN_CUIDADO,   label: "Mi plan de cuidado" },
+  { to: ROUTES.AVANCE,         label: "Cómo voy avanzando" },
+  { to: ROUTES.PROXIMOS_PASOS, label: "Próximos pasos" },
+  { to: ROUTES.LO_QUE_DICE,    label: "Lo que dice tu salud" },
+  { to: ROUTES.AREAS,          label: "Áreas" },
+];
+
+const EXTRA = [
+  { to: ROUTES.ANY,   label: "Any" },
+  { to: ROUTES.FRANKY,label: "Franky" },
+  { to: ROUTES.DUDAS, label: "Dudas frecuentes" },
+];
+
+export default function Menu() {
+  const [expanded, setExpanded] = useState(false);          // ancho del menú
+  const [openGroups, setOpenGroups] = useState({            // submenús abiertos
+    miSalud: true,
+    misConsultas: false,
+    extra: false,
+  });
+
+  const toggleGroup = (key) =>
+    setOpenGroups((s) => ({ ...s, [key]: !s[key] }));
+
   return (
-    <div
-      className={styles.menuItem}
-      onMouseEnter={() => onEnter(paletteKey)}
-      onMouseLeave={onLeave}
-      onFocus={() => onEnter(paletteKey)}
-      onBlur={onLeave}
+    <nav
+      className={`${styles.menu} ${expanded ? styles.expanded : styles.collapsed}`}
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
+      aria-label="Menú principal"
+      aria-expanded={expanded}
     >
-      <img src={icon} alt="" className={styles.icono} />
-      <NavLink
-        to={to}
-        end={end}
-        className={({ isActive }) =>
-          isActive ? `${styles.link} ${styles.active}` : styles.link
-        }
-        onMouseEnter={(e) => e.stopPropagation()}
-        onMouseLeave={(e) => e.stopPropagation()}
-        aria-label={text}
-      >
-        {text}
-      </NavLink>
-    </div>
-  );
-};
-
-const Menu = () => {
-  const estelasRef = useRef(null);
-  const location = useLocation();
-  const [baseKey, setBaseKey] = useState("inicio"); // clave de paleta base actual
-
-  const ITEM_PALETTES = useMemo(
-    () => ({
-      inicio:       PALETTES.principal,
-      cuestionario: PALETTES.turquesa,
-      historial:    PALETTES.dorado,
-      cabina:       PALETTES.naranja,
-      ayuda:        PALETTES.magenta,
-    }),
-    []
-  );
-
-  const PATH_TO_KEY = useMemo(
-    () => ({
-      [ROUTES.INICIO]: "inicio",
-      [ROUTES.CUESTIONARIOS]: "cuestionario",
-      [ROUTES.HISTORIAL]: "historial",
-      [ROUTES.CABINA]: "cabina",
-      [ROUTES.AYUDA]: "ayuda",
-    }),
-    []
-  );
-
-  // Fija paleta base según ruta activa
-  useEffect(() => {
-    const key = PATH_TO_KEY[location.pathname] ?? "inicio";
-    setBaseKey(key);
-    const pal = ITEM_PALETTES[key] ?? PALETTES.principal;
-    estelasRef.current?.transitionToPalette(pal);
-  }, [location.pathname, PATH_TO_KEY, ITEM_PALETTES]);
-
-  const handleEnter = useCallback(
-    (key) => {
-      const pal = ITEM_PALETTES[key];
-      if (!pal) return;
-      estelasRef.current?.transitionToPalette(pal);
-      // Throttle opcional si notas spam de morph:
-      estelasRef.current?.morph();
-    },
-    [ITEM_PALETTES]
-  );
-
-  const handleLeave = useCallback(() => {
-    const pal = ITEM_PALETTES[baseKey] ?? PALETTES.principal;
-    estelasRef.current?.transitionToPalette(pal);
-  }, [ITEM_PALETTES, baseKey]);
-
-  return (
-    <div className={styles.cntMenu}>
-      <div className={styles.fondoEstelas}>
-        <Estelas
-          ref={estelasRef}
-          targetParticles={7}
-          maxParticles={10}
-          speedFactor={0.5}
-          dirGlowStrength={1.0}
-          dirGlowMaxAlpha={0.65}
-          killMarginPx={12}
-          viewMargin={64}
-          colorEase="cubic-bezier(0.075, 0.82, 0.165, 1)"
-          morphEase="cubic-bezier(0.075, 0.82, 0.165, 1)"
-          colorDurationMs={900}
-          morphDurationMs={800}
-        />
+      {/* Cabecera */}
+      <div className={styles.logoRow}>
+        <span className={styles.brand} aria-hidden={!expanded}>Liber Salus</span>
       </div>
 
-      <div className={styles.cntLogo}>
-        <img className={styles.imglogo} src={logo} alt="Logo Liber Salus" />
+      {/* Grupo: Mi Salud */}
+      <div className={styles.group}>
+        <button
+          type="button"
+          className={styles.groupHeader}
+          onClick={() => toggleGroup("miSalud")}
+          aria-expanded={openGroups.miSalud}
+        >
+          <span className={styles.linkText}>Mi Salud</span>
+          <span className={`${styles.chev} ${openGroups.miSalud ? styles.chevOpen : ""}`} />
+        </button>
+
+        <ul className={`${styles.subList} ${openGroups.miSalud ? styles.subOpen : styles.subClosed}`}>
+          {MI_SALUD.map((l) => (
+            <li key={l.to} className={styles.item}>
+              <NavLink
+                to={l.to}
+                className={({ isActive }) =>
+                  isActive ? `${styles.link} ${styles.active}` : styles.link
+                }
+                title={l.label}
+              >
+                <span className={styles.bullet} />
+                <span className={styles.linkText}>{l.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div className={styles.opciones}>
-        <MenuItem
-          to={ROUTES.INICIO}
-          text="Inicio"
-          icon={inicio}
-          paletteKey="inicio"
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-          end
-        />
-        <MenuItem
-          to={ROUTES.CUESTIONARIOS}
-          text="Cuestionarios"
-          icon={cuestionario}
-          paletteKey="cuestionario"
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-        />
-        <MenuItem
-          to={ROUTES.HISTORIAL}
-          text="Historial"
-          icon={historial}
-          paletteKey="historial"
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-        />
-        <MenuItem
-          to={ROUTES.CABINA}
-          text="Cabina"
-          icon={cabina}
-          paletteKey="cabina"
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-        />
-        <MenuItem
-          to={ROUTES.AYUDA}
-          text="Ayuda"
-          icon={ayuda}
-          paletteKey="ayuda"
-          onEnter={handleEnter}
-          onLeave={handleLeave}
-        />
+      {/* Grupo: Mis Consultas */}
+      <div className={styles.group}>
+        <button
+          type="button"
+          className={styles.groupHeader}
+          onClick={() => toggleGroup("misConsultas")}
+          aria-expanded={openGroups.misConsultas}
+        >
+          <span className={styles.linkText}>Mis Consultas</span>
+          <span className={`${styles.chev} ${openGroups.misConsultas ? styles.chevOpen : ""}`} />
+        </button>
+
+        <ul className={`${styles.subList} ${openGroups.misConsultas ? styles.subOpen : styles.subClosed}`}>
+          {MIS_CONSULTAS.map((l) => (
+            <li key={l.to} className={styles.item}>
+              <NavLink
+                to={l.to}
+                className={({ isActive }) =>
+                  isActive ? `${styles.link} ${styles.active}` : styles.link
+                }
+                title={l.label}
+              >
+                <span className={styles.bullet} />
+                <span className={styles.linkText}>{l.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+
+      {/* Grupo: Extra */}
+      <div className={styles.group}>
+        <button
+          type="button"
+          className={styles.groupHeader}
+          onClick={() => toggleGroup("extra")}
+          aria-expanded={openGroups.extra}
+        >
+          <span className={styles.linkText}>Otros</span>
+          <span className={`${styles.chev} ${openGroups.extra ? styles.chevOpen : ""}`} />
+        </button>
+
+        <ul className={`${styles.subList} ${openGroups.extra ? styles.subOpen : styles.subClosed}`}>
+          {EXTRA.map((l) => (
+            <li key={l.to} className={styles.item}>
+              <NavLink
+                to={l.to}
+                className={({ isActive }) =>
+                  isActive ? `${styles.link} ${styles.active}` : styles.link
+                }
+                title={l.label}
+              >
+                <span className={styles.bullet} />
+                <span className={styles.linkText}>{l.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   );
-};
-
-export default Menu;
+}

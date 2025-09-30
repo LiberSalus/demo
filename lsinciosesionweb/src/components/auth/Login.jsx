@@ -1,83 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./login.module.css";
-import logo from "@/images/Capa_1-2.png";
-import eyeIcon from "@/images/Icons _ eye-empty.png"; // ✅ importa el icono
-import { login } from "@/services/auth"; // ✅ importa el servicio
-//import { setAuthToken } from "@/services/apiClient";
-import Derechos from "../Derechos/Derechos";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ROUTES } from "@/config/routes";
+// ...
 
 const Login = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    role: "paciente", // paciente | medico
-  });
-  const [showPwd, setShowPwd] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const location = useLocation();
+  const from = location.state?.from?.pathname || ROUTES.INICIO; // 👈 default a INICIO
 
-  const onChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name === "switch" && type === "checkbox") {
-      setForm((f) => ({ ...f, role: checked ? "medico" : "paciente" }));
-    } else {
-      setForm((f) => ({ ...f, [name]: value }));
-    }
-  };
-
-  const validate = () => {
-    if (!form.email.trim()) return "El correo es obligatorio.";
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!emailOk) return "Formato de correo inválido.";
-    if (!form.password) return "La contraseña es obligatoria.";
-    if (form.password.length < 6) return "Mínimo 6 caracteres en contraseña.";
-    return null;
-  };
+  // ... (state, onChange, validate)
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
-    const v = validate();
-    if (v) return setErrorMsg(v);
+    // ...validaciones
 
     try {
       setLoading(true);
       const data = await login({
         username: form.email.trim(),
         password: form.password,
-        role: form.role, // "paciente" | "medico"
+        role: form.role,
       });
 
-      // si usas cookie HttpOnly, no necesitas guardarla manualmente.
-      // marcamos auth para el ProtectedRoute “temporal”:
       localStorage.setItem("auth_ready", "1");
-
-      // ...después de obtener los datos del login/usuario:
       localStorage.setItem(
         "perfil_min",
         JSON.stringify({
-          nombre: data?.user?.first_name && data?.user?.last_name || data?.user?.nombre || "Usuario",
-          // puedes guardar más campos si quieres:
-          // avatarUrl: data?.user?.avatar,
+          nombre:
+            (data?.user?.first_name && data?.user?.last_name) ||
+            data?.user?.nombre ||
+            "Usuario",
         })
       );
 
-      navigate("/inicio", { replace: true });
+      navigate(from, { replace: true }); // 👈 va a /inicio (o al from)
     } catch (err) {
-      console.error(err);
-      const apiMsg =
-        err?.response?.data?.detail ||
-        err?.response?.data?.message ||
-        err?.message;
-      setErrorMsg(
-        apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo."
-      );
+      // ...
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("auth_ready")) {
+      navigate(from, { replace: true }); // 👈 si ya logueado, ve a /inicio
+    }
+  }, [from, navigate]);
+
+  // ... JSX igual
+
 
   return (
     <div className={styles.cntTarjeta}>
@@ -137,7 +108,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* ✅ Email (antes estaba cortado) */}
+        {/* Email */}
         <div className={styles.cntInput}>
           <label htmlFor="email">Correo electrónico</label>
           <input

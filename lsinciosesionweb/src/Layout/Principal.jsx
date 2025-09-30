@@ -5,6 +5,7 @@ import TarjetaUsuario from '@/components/Tarjetas/TarjetaUsuario/TarjetaUsuario'
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
 
 
+
 const Principal = ({children}) => {
   return (
     <div className={styles.panel}>
