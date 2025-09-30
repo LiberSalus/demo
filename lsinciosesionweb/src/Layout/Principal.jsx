@@ -1,32 +1,32 @@
-import React from 'react'
-import Menu from '@/components/menu/Menu'
-import styles from "../pages/Panel/panel.module.css";
-import TarjetaUsuario from '@/components/Tarjetas/TarjetaUsuario/TarjetaUsuario'
+// src/Layout/Principal.jsx
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Menu from "@/components/menu/Menu";
+import styles from "./principal.module.css";
+import TarjetaUsuario from "@/components/Tarjetas/TarjetaUsuario/TarjetaUsuario";
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
 
-
-
-const Principal = ({children}) => {
+export default function Principal() {
   return (
-    <div className={styles.panel}>
-      <div className={styles.backgroundPanel}>
+    <div className={styles.shell}>
+      <div className={styles.bg}>
         <BackgroundPanel />
       </div>
 
-      <div className={styles.cntMenu}>
+      {/* Sidebar (fijo a la izquierda) */}
+      <aside className={styles.sidebar}>
         <Menu />
-      </div>
+      </aside>
 
-      <div className={styles.cntTrjUsuario}>
+      {/* Header (tarjeta usuario) */}
+      <header className={styles.header}>
         <TarjetaUsuario />
-      </div>
+      </header>
 
-      <div className={styles.cntModulos}>
-        {children}
-      </div>
-
+      {/* Contenido principal */}
+      <main className={styles.content}>
+        <Outlet />
+      </main>
     </div>
   );
 }
-
-export default Principal

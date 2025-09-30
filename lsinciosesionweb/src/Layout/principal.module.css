@@ -1,0 +1,62 @@
+/* src/Layout/principal.module.css */
+:root{
+  --sidebar-w: 5rem;       /* ancho del menú colapsado */
+  --gap: 1rem;
+  --radius: 12px;
+}
+
+.shell {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar content";
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Menú fijo a la izquierda (overlay) */
+.sidebar {
+  grid-area: sidebar;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 3;
+  box-shadow: 3px 0px 15px 1px rgba(0,0,0,0.1);
+}
+
+/* Header arriba */
+.header {
+  grid-area: header;
+  z-index: 2;
+  justify-content: end;
+  border: 1px dashed lightgray;
+  border-radius: var(--radius);
+  margin: var(--gap) var(--gap) var(--gap) var(--sidebar-w);
+  box-sizing: border-box;
+}
+
+/* Main */
+.content {
+  grid-area: content;
+  position: relative;
+  z-index: 1;
+  padding: 16px 24px;
+  border: 1px dashed lightgray;
+  border-radius: var(--radius);
+  margin: 0 var(--gap) var(--gap) var(--sidebar-w);
+  box-sizing: border-box;
+  overflow: auto;           /* si el contenido crece, hace scroll aquí */
+  min-height: calc(100vh - (var(--gap) * 2) - 56px); /* opcional */
+}
+
+

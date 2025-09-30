@@ -1,18 +1,46 @@
+// src/pages/Login/Login.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/config/routes";
-// ...
+import styles from "./login.module.css";
+import logo from "@/images/Capa_1-2.png";
+import eyeIcon from "@/images/Icons _ eye-empty.png";
+import Derechos from "@/components/Derechos/Derechos";
+import { login } from "@/services/auth";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || ROUTES.INICIO; // 👈 default a INICIO
+  const from = location.state?.from?.pathname || ROUTES.INICIO;
 
-  // ... (state, onChange, validate)
+  const [form, setForm] = useState({ email: "", password: "", role: "paciente" });
+  const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const onChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name === "switch" && type === "checkbox") {
+      setForm((f) => ({ ...f, role: checked ? "medico" : "paciente" }));
+    } else {
+      setForm((f) => ({ ...f, [name]: value }));
+    }
+  };
+
+  const validate = () => {
+    if (!form.email.trim()) return "El correo es obligatorio.";
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+    if (!emailOk) return "Formato de correo inválido.";
+    if (!form.password) return "La contraseña es obligatoria.";
+    if (form.password.length < 6) return "Mínimo 6 caracteres en contraseña.";
+    return null;
+    };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // ...validaciones
+    setErrorMsg("");
+    const v = validate();
+    if (v) return setErrorMsg(v);
 
     try {
       setLoading(true);
@@ -22,20 +50,33 @@ const Login = () => {
         role: form.role,
       });
 
+      const user = data?.user || {};
+      const fullName =
+        (user.first_name && user.last_name && `${user.first_name} ${user.last_name}`) ||
+        user.nombre ||
+        "Usuario";
+
       localStorage.setItem("auth_ready", "1");
       localStorage.setItem(
         "perfil_min",
         JSON.stringify({
-          nombre:
-            (data?.user?.first_name && data?.user?.last_name) ||
-            data?.user?.nombre ||
-            "Usuario",
+          nombre: fullName,
+          email: user.email || "",
+          // avatarUrl: user.avatar || null, // cuando exista
         })
       );
 
-      navigate(from, { replace: true }); // 👈 va a /inicio (o al from)
+      // Notifica a la TarjetaUsuario para que se refresque
+      window.dispatchEvent(new CustomEvent("perfil:update"));
+
+      navigate(from, { replace: true });
     } catch (err) {
-      // ...
+      console.error(err);
+      const apiMsg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        err?.message;
+      setErrorMsg(apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -43,12 +84,9 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem("auth_ready")) {
-      navigate(from, { replace: true }); // 👈 si ya logueado, ve a /inicio
+      navigate(from, { replace: true });
     }
   }, [from, navigate]);
-
-  // ... JSX igual
-
 
   return (
     <div className={styles.cntTarjeta}>
@@ -87,18 +125,14 @@ const Login = () => {
             />
             <div className={styles.perfil}>
               <span
-                className={`${styles.span} ${
-                  form.role === "paciente" ? styles.activo : styles.inactivo
-                }`}
+                className={`${styles.span} ${form.role === "paciente" ? styles.activo : styles.inactivo}`}
                 onClick={() => setForm((f) => ({ ...f, role: "paciente" }))}
                 style={{ cursor: "pointer" }}
               >
                 Paciente
               </span>
               <span
-                className={`${styles.span} ${
-                  form.role === "medico" ? styles.activo : styles.inactivo
-                }`}
+                className={`${styles.span} ${form.role === "medico" ? styles.activo : styles.inactivo}`}
                 onClick={() => setForm((f) => ({ ...f, role: "medico" }))}
                 style={{ cursor: "pointer" }}
               >
@@ -133,11 +167,7 @@ const Login = () => {
               onClick={() => setShowPwd((s) => !s)}
               aria-label={showPwd ? "Ocultar contraseña" : "Mostrar contraseña"}
             >
-              <img
-                className={styles.imgOjo}
-                src={eyeIcon}
-                alt={showPwd ? "Ocultar contraseña" : "Mostrar contraseña"}
-              />
+              <img className={styles.imgOjo} src={eyeIcon} alt="Mostrar/Ocultar contraseña" />
             </button>
 
             <input
@@ -156,18 +186,12 @@ const Login = () => {
         </div>
 
         {errorMsg && (
-          <div
-            className={styles.mensajeError}
-            role="alert"
-            aria-live="assertive"
-          >
+          <div className={styles.mensajeError} role="alert" aria-live="assertive">
             {errorMsg}
           </div>
         )}
 
-        <a className={styles.olvida} href="/recuperar">
-          ¿Olvidaste tu contraseña?
-        </a>
+        <a className={styles.olvida} href="/recuperar">¿Olvidaste tu contraseña?</a>
 
         <input
           className={styles.btn}
@@ -178,9 +202,7 @@ const Login = () => {
       </form>
 
       <div className={styles.cntRegistro}>
-        <p>
-          ¿Aún no tienes cuenta? <a href="/registro">Registrarme</a>
-        </p>
+        <p>¿Aún no tienes cuenta? <a href="/registro">Registrarme</a></p>
       </div>
       <Derechos />
     </div>

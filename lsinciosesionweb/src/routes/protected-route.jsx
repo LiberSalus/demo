@@ -1,3 +1,4 @@
+// src/routes/protected-route.jsx
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/config/routes";
 

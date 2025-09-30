@@ -1,3 +1,5 @@
+// src/pages/Panel/Panel.jsx
+
 import React from "react";
 import styles from "./panel.module.css";
 import Menu from "@/components/menu/Menu";

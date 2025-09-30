@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Principal from "@/Layout/Principal";
-import styles from "./inicio.module.css"; // opcional
+import styles from "./inicio.module.css";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
@@ -11,18 +10,19 @@ export default function Inicio() {
       if (raw) {
         const p = JSON.parse(raw);
         if (p?.nombre) setNombre(p.nombre);
+        // si guardas first/last_name:
+        if (!p?.nombre && p?.first_name) {
+          setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
+        }
       }
     } catch {}
   }, []);
 
   return (
-    <Principal>
-      <div className={styles?.wrap || ""} style={{ padding: "24px" }}>
-        <h2 style={{ marginBottom: 8 }}>¡Hola, {nombre}!</h2>
-        <p>Bienvenido a tu panel. Aquí verás tu resumen y accesos rápidos.</p>
-
-        {/* aquí luego pones tus tarjetas: progreso global, accesos, etc. */}
-      </div>
-    </Principal>
+    <div className={styles?.wrap || ""} style={{ padding: "24px" }}>
+      <h2 style={{ marginBottom: 8 }}>¡Hola, {nombre}!</h2>
+      <p>Bienvenido a tu panel. Aquí verás tu resumen y accesos rápidos.</p>
+      {/* aquí tus tarjetas/widgets */}
+    </div>
   );
 }

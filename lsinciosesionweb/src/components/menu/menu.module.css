@@ -1,95 +1,209 @@
-/* base del menú (ya la tenías) */
-.menu {
-  height: 100%;
-  color: #cbd5e1;
-  background: #0f172a;
-  border-right: 1px solid rgba(255,255,255,.06);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: width .25s ease;
+:root {
+  --menu-w: 4rem;
+  /* colapsado */
+  --menu-w-open: 15rem;
+  /* expandido */
+  --bg: rgba(255, 255, 255, .7);
+  --bg-2: rgba(245, 245, 245, .7);
+  --txt: #1f2937;
+  --txt-dim: #4b5563;
+  --brand: #4f46e5;
+  --accent: #6366f1;
+  --hover: rgba(99, 102, 241, .08);
+  --radius: .875rem;
 }
-.collapsed { width: 64px; }
-.expanded  { width: 240px; }
 
-.logoRow {
-  padding: 16px 12px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  height: 56px;
+.menu {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: var(--menu-w);
+  background: var(--bg);
+  backdrop-filter: blur(.8rem);
+  /* 👈 blur */
+  -webkit-backdrop-filter: blur(.8rem);
+  color: var(--txt);
+  transition: width .25s ease, background .3s ease;
+  overflow: visible;
+  border-right: 1px solid rgba(0, 0, 0, .06);
+}
+
+.menu.expanded {
+  width: var(--menu-w-open);
+}
+
+.menu.collapsed {
+  width: var(--menu-w);
+}
+
+/* -------- Brand (logo + texto) -------- */
+.brand {
+  height: 3.5rem;
   display: flex;
   align-items: center;
+  gap: .5rem;
+  padding: 0 .75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, .06);
 }
-.brand { font-weight: 700; font-size: 16px; white-space: nowrap; transition: opacity .15s; }
-.collapsed .brand { opacity: 0; }
 
-/* grupos */
-.group { padding: 6px; }
-.groupHeader {
+.brandLogo {
+  width: 1.6rem;
+  height: 1.6rem;
+  object-fit: contain;
+}
+
+/* Texto del logo: oculto al estar colapsado */
+.brandText {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--txt);
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.menu.collapsed .brandText {
+  opacity: 0;
+  transform: translateX(-.4rem);
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* -------- Lista -------- */
+.list {
+  list-style: none;
+  margin: .5rem 0;
+  padding: 0;
+}
+
+.item {
+  position: relative;
+}
+
+/* Enlaces */
+.link,
+.parentBtn {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
   width: 100%;
-  height: 38px;
+  padding: .625rem .875rem;
+  /* 10px 14px */
+  color: var(--txt-dim);
+  text-decoration: none;
   border: 0;
   background: transparent;
-  color: #cbd5e1;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
+  text-align: left;
   cursor: pointer;
-  transition: background .15s;
-}
-.groupHeader:hover { background: rgba(255,255,255,.06); }
-.collapsed .groupHeader { justify-content: center; }
-
-.chev {
-  width: 8px; height: 8px;
-  border-right: 2px solid #94a3b8;
-  border-bottom: 2px solid #94a3b8;
-  transform: rotate(-45deg);
-  transition: transform .15s ease;
-  margin-left: 8px;
-}
-.chevOpen { transform: rotate(45deg); }
-
-.subList {
-  list-style: none;
-  margin: 4px 0 8px;
-  padding: 0;
-  overflow: hidden;
-  transition: grid-template-rows .2s ease, opacity .15s ease;
-  display: grid;
-}
-.subOpen   { grid-template-rows: 1fr; opacity: 1; }
-.subClosed { grid-template-rows: 0fr; opacity: .8; }
-.subList > * { min-height: 0; } /* para el grid-accordion */
-
-.item { width: 100%; }
-.link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 36px;
-  padding: 6px 10px 6px 8px;
-  border-radius: 10px;
-  color: #cbd5e1;
-  text-decoration: none;
-  transition: background .15s, color .15s;
-}
-.link:hover, .link:focus-visible { background: rgba(255,255,255,.06); color:#fff; outline: none; }
-.active { background: #1e293b; color: #fff; font-weight: 600; }
-
-.bullet {
-  width: 6px; height: 6px; border-radius: 999px; background: #64748b;
-  flex: 0 0 6px;
+  font-size: .95rem;
+  border-radius: .5rem;
 }
 
-/* mostrar/ocultar textos en colapsado/expandido */
-.linkText {
+.link:hover,
+.parentBtn:hover {
+  background: var(--hover);
+  color: var(--txt);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-grid;
+  place-items: center;
+  color: --txt-dim;
+}
+
+.text {
   white-space: nowrap;
   overflow: hidden;
-  display: inline-block;
-  max-width: 0;
+  text-overflow: ellipsis;
   opacity: 0;
-  transition: max-width .2s ease, opacity .15s ease;
+  transform: translateX(-.25rem);
+  transition: opacity .2s ease, transform .2s ease;
 }
-.expanded .linkText { max-width: 180px; opacity: 1; }
+
+.menu.expanded .text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Activo principal: fondo + borde izq para que no se pierda */
+.active {
+  color: #0f172a !important;
+  background: rgba(99, 102, 241, .14) !important;
+  box-shadow: inset .2rem 0 0 var(--accent);
+}
+
+/* -------- Submenú -------- */
+.hasChildren .caret {
+  margin-left: auto;
+  opacity: .6;
+  transition: transform .2s ease;
+}
+
+.menu.expanded .hasChildren:hover>.submenu {
+  display: block;
+}
+
+.hasChildren.open>.submenu {
+  display: block;
+}
+
+.hasChildren.open>.parentBtn .caret {
+  transform: rotate(90deg);
+}
+
+.menu.expanded .hasChildren:hover>.parentBtn .caret {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 14rem;
+  background: rgba(255, 255, 255, .85);
+  /* 👈 translúcido */
+  backdrop-filter: blur(.6rem);
+  /* 👈 blur */
+  -webkit-backdrop-filter: blur(.6rem);
+  border: 1px solid rgba(0, 0, 0, .06);
+  border-radius: .625rem;
+  padding: .5rem;
+  box-shadow: 0 .625rem 1.875rem rgba(0, 0, 0, .15);
+  z-index: 30;
+  /* por encima del layout */
+}
+
+.subItem {
+  margin: 0;
+}
+
+.subLink {
+  display: block;
+  color: var(--txt-dim);
+  text-decoration: none;
+  padding: .5rem .625rem;
+  border-radius: .5rem;
+  white-space: nowrap;
+  font-size: .9rem;
+}
+
+.subLink:hover {
+  background: var(--hover);
+  color: var(--txt);
+}
+
+.activeSub {
+  color: #0f172a;
+  background: rgba(99, 102, 241, .14);
+}
+
+/* Colapsado: oculta textos, mantiene sólo iconos */
+.menu.collapsed .text {
+  display: none;
+}
