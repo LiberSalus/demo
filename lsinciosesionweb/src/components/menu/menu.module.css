@@ -3,13 +3,13 @@
   /* colapsado */
   --menu-w-open: 15rem;
   /* expandido */
-  --bg: rgba(255, 255, 255, .7);
-  --bg-2: rgba(245, 245, 245, .7);
+  --bg:   rgba(255, 255, 255, .2);
+  --bg-2: rgba(245, 245, 245, .2);
   --txt: #1f2937;
   --txt-dim: #4b5563;
-  --brand: #4f46e5;
-  --accent: #6366f1;
-  --hover: rgba(99, 102, 241, .08);
+  --brand: #a4a4a5;
+  --accent: #49494b;
+  --hover: rgba(170, 170, 173, 0.08);
   --radius: .875rem;
 }
 
@@ -21,7 +21,7 @@
   height: 100vh;
   width: var(--menu-w);
   background: var(--bg);
-  backdrop-filter: blur(.8rem);
+  backdrop-filter: blur(.3rem);
   /* 👈 blur */
   -webkit-backdrop-filter: blur(.8rem);
   color: var(--txt);
@@ -133,8 +133,8 @@
 /* Activo principal: fondo + borde izq para que no se pierda */
 .active {
   color: #0f172a !important;
-  background: rgba(99, 102, 241, .14) !important;
-  box-shadow: inset .2rem 0 0 var(--accent);
+  background: rgba(134, 134, 134, 0.14) !important;
+  /* box-shadow: inset .2rem 0 0 var(--accent); */
 }
 
 /* -------- Submenú -------- */
@@ -166,11 +166,11 @@
   top: 0;
   left: 100%;
   min-width: 14rem;
-  background: rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .8);
   /* 👈 translúcido */
-  backdrop-filter: blur(.6rem);
+  backdrop-filter: blur(2.3rem);
   /* 👈 blur */
-  -webkit-backdrop-filter: blur(.6rem);
+  -webkit-backdrop-filter: blur(.3rem);
   border: 1px solid rgba(0, 0, 0, .06);
   border-radius: .625rem;
   padding: .5rem;
@@ -200,7 +200,7 @@
 
 .activeSub {
   color: #0f172a;
-  background: rgba(99, 102, 241, .14);
+  background: rgba(138, 138, 139, 0.14);
 }
 
 /* Colapsado: oculta textos, mantiene sólo iconos */
