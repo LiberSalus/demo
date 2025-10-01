@@ -1,0 +1,7 @@
+.cntCarru {
+    /* border: 2px dashed lightcoral; */
+    height:80vh;
+    display: flex;
+    align-items: center;
+
+}

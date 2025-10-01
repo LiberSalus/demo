@@ -71,7 +71,7 @@ const Cuestionarios = () => {
   const [valor, setValor] = useState(5);
 
   return (
-    <Principal>
+    
       <div className={styles.cntCuestionarios}>
         <div className={styles.cntInfo}>
           <h2>Cuestionarios</h2>
@@ -292,7 +292,7 @@ const Cuestionarios = () => {
           </div>
         </div>
       </div>
-    </Principal>
+    
   );
 };
 

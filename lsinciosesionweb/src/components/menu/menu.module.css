@@ -25,7 +25,7 @@
   /* 👈 blur */
   -webkit-backdrop-filter: blur(.8rem);
   color: var(--txt);
-  transition: width .25s ease, background .3s ease;
+  transition: width .8s cubic-bezier(0.165, 0.84, 0.44, 1), background .3s ease;
   overflow: visible;
   border-right: 1px solid rgba(0, 0, 0, .06);
 }
@@ -141,7 +141,7 @@
 .hasChildren .caret {
   margin-left: auto;
   opacity: .6;
-  transition: transform .2s ease;
+  transition: transform .5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .menu.expanded .hasChildren:hover>.submenu {
@@ -166,10 +166,8 @@
   top: 0;
   left: 100%;
   min-width: 14rem;
-  background: rgba(255, 255, 255, .8);
-  /* 👈 translúcido */
+  background: rgba(255, 255, 255, .9);
   backdrop-filter: blur(2.3rem);
-  /* 👈 blur */
   -webkit-backdrop-filter: blur(.3rem);
   border: 1px solid rgba(0, 0, 0, .06);
   border-radius: .625rem;

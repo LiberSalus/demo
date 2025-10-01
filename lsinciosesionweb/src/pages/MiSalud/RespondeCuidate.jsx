@@ -1,10 +1,18 @@
 import React from 'react'
+import Cuestionarios from '../Cuestionarios/Cuestionarios'
+
+
+
+
 
 const RespondeCuidate = () => {
   return (
-    <div>
-      RESPONDE Y CUIDATE
-    </div>
+
+      <div>
+        Responde y cuidate
+
+        
+      </div>
   )
 }
 
