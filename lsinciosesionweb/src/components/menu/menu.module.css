@@ -1,5 +1,5 @@
 :root {
-  --menu-w: 4rem;
+  --menu-w: 3rem;
   /* colapsado */
   --menu-w-open: 15rem;
   /* expandido */
@@ -27,7 +27,8 @@
   color: var(--txt);
   transition: width .8s cubic-bezier(0.165, 0.84, 0.44, 1), background .3s ease;
   overflow: visible;
-  border-right: 1px solid rgba(0, 0, 0, .06);
+  /* border-right: 1px solid rgba(0, 0, 0, .06); */
+  box-shadow: 5px 0px 20px 1px rgba(0,0,0,0.1);
 }
 
 .menu.expanded {
@@ -142,6 +143,7 @@
   margin-left: auto;
   opacity: .6;
   transition: transform .5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: translate(-0.75rem, -0.25rem);
 }
 
 .menu.expanded .hasChildren:hover>.submenu {

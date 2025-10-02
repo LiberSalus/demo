@@ -8,13 +8,14 @@
 .shell {
   position: relative;
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
     "sidebar header"
     "sidebar content";
+    
 }
 
 .bg {
@@ -31,7 +32,8 @@
   top: 0;
   height: 100vh;
   z-index: 3;
-  box-shadow: 3px 0px 15px 1px rgba(0,0,0,0.1);
+  
+  
 }
 
 /* Header arriba */
@@ -41,22 +43,42 @@
   justify-content: end;
   border: 1px dashed lightgray;
   border-radius: var(--radius);
-  margin: var(--gap) var(--gap) var(--gap) var(--sidebar-w);
+  width: calc(100vw - 6rem );
+  margin: 1rem 0rem 1rem 4rem;
+  
   box-sizing: border-box;
 }
 
 /* Main */
 .content {
+  width: calc(100vw - 6rem );
+  margin: 0rem 0rem 1rem 4rem;
+  height: calc(100vh - 9rem);
   grid-area: content;
   position: relative;
   z-index: 1;
   padding: 16px 24px;
   border: 1px dashed lightgray;
   border-radius: var(--radius);
-  margin: 0 var(--gap) var(--gap) var(--sidebar-w);
+  
   box-sizing: border-box;
-  overflow: auto;           /* si el contenido crece, hace scroll aquí */
-  min-height: calc(100vh - (var(--gap) * 2) - 56px); /* opcional */
+  overflow-y: auto;
+  scrollbar-width: thin;          /* hace más delgado el scrollbar */
+  scrollbar-color: #C1D7FB transparent; 
 }
 
+.content::-webkit-scrollbar {
+  width: 8px; /* Puedes ajustar el ancho */
+  background: transparent; /* Quita el fondo */
+}
 
+.content::-webkit-scrollbar-thumb {
+  background: #ecebeb;       /* Cambia por el color que quieras */
+  border-radius: 4px; 
+}
+
+.content::-webkit-inner-spin-button {
+  display: none;
+  height: 0;
+  width: 0;
+}

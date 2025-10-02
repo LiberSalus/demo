@@ -9,6 +9,7 @@ import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundP
 export default function Principal() {
   return (
     <div className={styles.shell}>
+      
       <div className={styles.bg}>
         <BackgroundPanel />
       </div>
