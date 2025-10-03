@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import './App.css'
 import V1Registro from './components/V1Registro/V1Registro'
 import V2Confirmacion from './components/V2Confirmacion/V2Confirmacion'

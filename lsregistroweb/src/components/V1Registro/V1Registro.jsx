@@ -10,19 +10,19 @@ import { ROUTES } from '@/routes/AppRouter';
 import styles from './v1registro.module.css';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg';
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg';
-import Logo       from '@/components/ElementosVista/Logo/Logo';
-import BotonA     from '@/components/Botones/BotonA';
-import Switch     from '@/components/Seleccion/Switch';
-import Derechos   from './Derechos';
+import Logo from '@/components/ElementosVista/Logo/Logo';
+import BotonA from '@/components/Botones/BotonA';
+import Switch from '@/components/Seleccion/Switch';
+import Derechos from './Derechos';
 import LiberSalusPoly from './LiberSalusLowPoly/LiberSalusPoly'
 
 /* ---------- Validación ---------- */
 const schema = z.object({
-  correo:    z.string().email('Correo no válido'),
-  telefono:  z.string().regex(/^\d{10}$/, 'Debe tener 10 dígitos'),
-  contrasena:z.string().regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,'8+, 1 mayús., 1 minús., 1 número, 1 símbolo'),
+  correo: z.string().email('Correo no válido'),
+  telefono: z.string().regex(/^\d{10}$/, 'Debe tener 10 dígitos'),
+  contrasena: z.string().regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/, '8+, 1 mayús., 1 minús., 1 número, 1 símbolo'),
   confirmContra: z.string(),
-  politicas: z.literal(true, 'Lee los terminos y condiciones y activa la casilla' ),
+  politicas: z.literal(true, 'Lee los terminos y condiciones y activa la casilla'),
 }).refine((d) => d.contrasena === d.confirmContra, {
   path: ['confirmContra'],
   message: 'Las contraseñas no coinciden',
@@ -56,10 +56,10 @@ const Registro = () => {
   const onSubmit = (data) => {
     const payload = {
       rol: 1,
-      correo:        data.correo,
-      telefono:      data.telefono,
+      correo: data.correo,
+      telefono: data.telefono,
       code_telefono: '52',
-      contrasena:    data.contrasena,
+      contrasena: data.contrasena,
     };
     navigate(ROUTES.CONFIRMACION, { state: payload });
   };
@@ -70,13 +70,13 @@ const Registro = () => {
       <div className={styles.cntBienvenida}>
         <div className={styles.fondo}>
           <LiberSalusPoly
-         autoMorph={true}        // morph automático
-        morphEveryMs={3000}     // intervalo de morph
-        spray={false}            // triángulos sueltos
-        curveAlpha={1}        // opacidad ola superior
-        dirGlow={0.16}          // vignette/glow
-        className="w-full h-full"
-        />
+            autoMorph={true}        // morph automático
+            morphEveryMs={3000}     // intervalo de morph
+            spray={false}            // triángulos sueltos
+            curveAlpha={1}        // opacidad ola superior
+            dirGlow={0.16}          // vignette/glow
+            className="w-full h-full"
+          />
         </div>
         <div className={styles.cntSaludo}>
           <div>
@@ -102,7 +102,7 @@ const Registro = () => {
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
           </div>
 
-          
+
         </div>
 
         <div className={styles.cntDerechosInfo}>
@@ -192,14 +192,21 @@ const Registro = () => {
                 }}
               >
                 <img src={showConf ? srcCerrado : srcAbierto} className={styles.ojos} alt="" />
-              </span> 
+              </span>
               {errors.confirmContra && <span className={styles.error}>{errors.confirmContra.message}</span>}
             </div>
 
             {/* Políticas */}
             <div className={styles.cntPoliticas}>
-              <input id="politicas" type="checkbox" {...register('politicas')} />
-              <label htmlFor="politicas"> 
+              <input id="politicas" type="checkbox" {...register('politicas')}
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();              // evita scroll o submit
+                    e.currentTarget.click();         // dispara toggle de forma nativa
+                  }
+                }}
+              />
+              <label htmlFor="politicas">
                 He leído y acepto <a href="#">Términos</a> y <a href="#">Privacidad</a>
               </label>
               {errors.politicas && touchedFields.politicas && <span className={styles.error}>{errors.politicas.message}</span>}
