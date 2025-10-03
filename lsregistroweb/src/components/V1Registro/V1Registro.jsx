@@ -15,6 +15,7 @@ import BotonA from '@/components/Botones/BotonA';
 import Switch from '@/components/Seleccion/Switch';
 import Derechos from './Derechos';
 import LiberSalusPoly from './LiberSalusLowPoly/LiberSalusPoly'
+import lineas from './line.svg'
 
 /* ---------- Validación ---------- */
 const schema = z.object({
@@ -111,6 +112,9 @@ const Registro = () => {
       </div>
 
       <div className={styles.cntFormulario}>
+        <div className={styles.cntLineas}>
+          <img src={lineas}></img>
+        </div>
         <div className={styles.formulario}>
           <div className={styles.logoForm}><Logo /></div>
 

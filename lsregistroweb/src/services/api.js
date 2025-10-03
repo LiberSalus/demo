@@ -2,13 +2,13 @@
 import axios from "axios";
 
 const baseURL = import.meta.env.DEV
-  ? "/api"                                // fuerza proxy en dev
-  : (import.meta.env.VITE_API_URL || "/api");
+  ? "/api" // proxy en dev → 8040
+  : (import.meta.env.VITE_PREREG_API || "https://libersalus.com/api/preregistro");
 
 const api = axios.create({
   baseURL,
-  withCredentials: true,
   timeout: 30000,
+  withCredentials: false, // en registro, por ahora sin cookies
 });
 
 let _accessToken = null;

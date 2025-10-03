@@ -1,76 +1,54 @@
-// vite.config.js (raíz)
-import { defineConfig, loadEnv } from "vite";
+// vite.config.js (lsregistroweb)
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
 
-export default defineConfig(({ mode }) => {
-  
-  const env = loadEnv(mode, process.cwd());
+export default defineConfig({
+  base: "/registro/",
+  plugins: [react()],
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  server: {
+    proxy: {
+      // === 8040 :: PRE-REGISTRO ===
+      "/api": {
+        target: "https://libersalus.com/api/preregistro",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/api/, ""),
+      },
 
-  return {
-    base: '/registro/',
-    //base: env.VITE_BASE || "/",
-    plugins: [react()],
-    resolve: {
-      alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
-    },
-    // vite.config.js
-    server: {
-      proxy: {
-        // --- 8060: reglas específicas primero ---
-        "/api/preregistro/direccion": {
-          // 👈 esta ruta
-          target: "http://192.168.100.100:8060",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (p) =>
-            p.replace(
-              /^\/api\/preregistro\/direccion/,
-              "/preregistro/direccion"
-            ),
-        },
+      // === 8060 :: SESIÓN (si algo de registro pega auth temporalmente) ===
+      "/auth": {
+        target: "https://libersalus.com/api/sesion",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/auth/, ""),
+      },
 
-        "/api/ine": {
-          target: "http://192.168.100.100:8060",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (p) => p.replace(/^\/api\/ine/, ""),
-        },
+      // === 8060 :: CURP extractor si corre ahí (ajusta si queda en otro) ===
+      "/ine": {
+        target: "https://libersalus.com/api/sesion",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/ine/, ""),
+      },
 
-        "/api/auth": {
-          target: "http://192.168.100.100:8060",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (p) => p.replace(/^\/api/, ""), // /api/auth/token -> /auth/token
-        },
+      // === 8020 :: ARCHIVOS (si subes PDFs/imagenes en registro) ===
+      "/file": {
+        target: "https://libersalus.com/api/file",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/file/, ""),
+      },
 
-        // --- 8040: el resto ---
-        "/api": {
-          target: "http://192.168.100.100:8040",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (p) => p.replace(/^\/api/, ""),
-        },
-
-        // Servicio CP externo (ya lo tienes)
-        "/cp": {
-          target:
-            "https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app",
-          changeOrigin: true,
-          secure: false,
-          rewrite: (p) => p.replace(/^\/cp/, ""),
-        },
-
-        // al panel
-        "/panel": {
-          target: "http://localhost:5174", // o 192.168.100.34:5174 como pusiste
-          changeOrigin: true,
-          secure: false,
-          ws: true, // 👈 HMR del panel a través del proxy
-          //rewrite: (p) => p.replace(/^\/panel/, ""),
-        },
-        // ... tus reglas /api, /cp, etc
+      // === CP externo (como ya lo tenías) ===
+      "/cp": {
+        target:
+          "https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/cp/, ""),
       },
     },
-  };
+  },
 });

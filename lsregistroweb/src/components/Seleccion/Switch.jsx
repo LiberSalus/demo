@@ -12,7 +12,7 @@ const Switch = () => (
 
     {/* 3️⃣  etiquetas */}
     <span className={`${styles.lbl} ${styles.lblPaciente}`}>Paciente</span>
-    <span className={`${styles.lbl} ${styles.lblSalud}`}>Personal&nbsp;de&nbsp;salud</span>
+    <span className={`${styles.lbl} ${styles.lblSalud}`}>Médico</span>
   </div>
 );
 

@@ -1,31 +1,24 @@
 // src/services/auth.js
-import api from './apiClient';
+import api from "./apiClient";
 
-/** Login: deja la cookie access_token en el navegador (HttpOnly) */
-export async function login({ username, password, role = 'paciente' }) {
+export async function login({ username, password, role = "paciente" }) {
   const body = new URLSearchParams();
-  body.set('grant_type', 'password');
-  body.set('username', username);
-  body.set('password', password);
-  body.set('role', role);
+  body.set("grant_type", "password");
+  body.set("username", username);
+  body.set("password", password);
+  body.set("role", role);
 
-  const { data } = await api.post('/auth/token', body, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  const { data } = await api.post("/auth/token", body, {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
-  return data; // el backend ya setea cookies
-}
-
-export async function decodeToken() {
-  const { data } = await api.get('/auth/decode-token');
-  return data; // { message, user: {...} }
-}
-
-export async function refreshToken() {
-  const { data } = await api.post('/auth/refresh-token');
+  // si el backend te devuelve access_token en body:
+  if (data?.access_token) {
+    // guardas en memoria/localStorage para el bearer
+    // setAuthToken(data.access_token) si lo usas
+  }
   return data;
 }
 
-export async function logout() {
-  const { data } = await api.post('/auth/logout');
-  return data;
-}
+export const decodeToken   = () => api.get("/auth/decode-token").then(r=>r.data);
+export const refreshToken  = () => api.post("/auth/refresh-token").then(r=>r.data);
+export const logout        = () => api.post("/auth/logout").then(r=>r.data);

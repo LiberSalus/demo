@@ -145,7 +145,18 @@
     height: 100vh;
     overflow-y: scroll;
     z-index: 2;
-    background-color: white;
+    background: linear-gradient(90deg, #fff 0%, #b1bfff 100% );
+    position: relative;
+    overflow: hidden;
+}
+
+.cntLineas {
+    width: 300%;
+    margin-top: 70%;
+    position: absolute;
+    transform: translateX(-25%);
+    z-index: -1;
+    
 }
 
 .logoForm {
@@ -159,7 +170,8 @@
 /*  */
 
 .formulario {
-    width: 60%;
+    width: 35rem;
+    min-width: 35rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -181,15 +193,20 @@
     margin-top: 1rem;
     flex-direction: column;
     
+    & > label {
+        display: none;
+    }
+
     & input {
         margin-bottom: 0.25rem;
         appearance: none;
-        border: 1px solid #8f8f8f;
+        border: 1px solid #e7e7e7;
         padding: 0.65rem;
         width: 55%;
-        border-radius: 6px;
+        border-radius: 3rem;
         outline: none;
         outline-color: #5981c6;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.14) inset ;
         /* border: 2px dashed; */
         
     }
@@ -211,6 +228,7 @@
 input::placeholder {
     color: lightgray;
     margin: 0.5rem;
+    padding-left: 0.5rem;
 }
 
 .error {
@@ -283,8 +301,8 @@ input::placeholder {
     right: 23%;
     cursor: pointer;
     display: flex;
-    top:1.85rem
-    
+    top:30%;
+    filter: opacity(0.5);
 }
 .ojos {
     width: 13px;
@@ -301,6 +319,12 @@ input::placeholder {
 }
 
 @media (max-width: 950px) {
+
+    .cntV1Registro {
+        
+        height: 100vh;
+        overflow-y: scroll;
+    }
 
     .cntBienvenida {
         display: none;
@@ -319,9 +343,7 @@ input::placeholder {
             display: inline-block;
             width: 100%;
             max-width: 250px;
-            
             text-align: center;
-            
         }
     }
 
@@ -395,12 +417,15 @@ input::placeholder {
         min-width: 100%;
         height: auto;
         padding: 2rem 0;
+        overflow-y: scroll;
     }
 
 
     .formulario {
         width: 90%;
+        max-width: 30rem;
         /* color: white; */
+        height: 100%;
     }
 
     .error {

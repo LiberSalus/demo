@@ -1,14 +1,16 @@
 .cntSwitch {
   position: relative;
   width: 60%;
-  height: 32px;
-  margin: 0 auto;
-  background: #d7eafb;        /* pista */
-  border-radius: 8px;
+  height: 2.5rem;
+  margin: 1rem auto 3rem auto;
+  
+  background: #fff;        /* pista */
+  border-radius: 3rem;
   display: flex;
   align-items: center;
   font-size: 0.75rem;
   font-weight: 600;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.14) inset ;
 }
 
 /* -------- checkbox oculto -------- */
@@ -27,8 +29,8 @@
   top: 0;
   width: 50%;
   height: 100%;
-  background: #5981c6;        /* color activo */
-  border-radius: 8px;
+  background: #007CBA;        /* color activo */
+  border-radius: 3rem;
   transition: left 0.25s;
   z-index: 1;
 }
@@ -51,6 +53,9 @@
 .lblSalud    { color: #cecece; }
 
 /* Cambia colores cuando check → Personal activo */
-.input:checked ~ .lblPaciente { color: #cecece; }
+.input:checked ~ .lblPaciente { 
+  color: #cecece;
+    
+}
 .input:checked ~ .lblSalud    { color: #fff; }
 
