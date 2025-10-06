@@ -1,6 +1,5 @@
 .cntV1Registro {
     width: 100%;
-    /* height: 100%; */
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -16,8 +15,8 @@
     background-image: url(./Mask.png);
     background-size: cover;
     z-index: 1;
-    color: white;
-    width: 55%;
+    color: var(--color-bco);
+    width: 80%;
     height: 100dvh;
     position: relative;
     
@@ -29,12 +28,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: -3;
+    z-index: -2;
 }
 
-
 .cntBienvenida::after {
-    /* border: 2px dashed; */
     position: absolute;
     z-index: -2;
     content: '';
@@ -44,15 +41,22 @@
     bottom: 0;
     width:  100%;
     min-width: 320px;
-    background-color: #3b63a8 ;
+    background-color: rgba(238, 235, 235, 0.85) ;
     filter: opacity(0.6);
-
+    box-shadow: -25px 0px 35px rgba(126, 124, 124, 0.75) inset;
 }
 
 
 .cntSaludo {
+    /* border: 2px dashed lawngreen; */
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    padding-top: 1rem;
+    min-height: 50vh;
+    width: 80%;
+    margin: 0 auto;
+
     & .cntLogo {
         display: none;
     }
@@ -60,16 +64,37 @@
 }
 
 .cntSaludo div > :nth-child(1) {
-    font-size: 2rem;
+    font-family: var(--font-tit);
+    font-size: 2.75rem;
+    font-weight: 900;
+    text-align: center;
+    color: var(--color-prn);
+    padding-bottom: 2rem;
+    padding-bottom: 2rem;
+}
+
+.cntSaludo div > :nth-child(2) {
+    font-family: var(--font-tit);
+    font-size: 2.0rem;
+    font-weight: 900;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-txt);
+    padding-bottom: 2rem;
 }
 
 
+.cntSaludo div > :nth-child(3) {
+    color: var(--color-txt);
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+}
 
 .cntPasos {
     margin: 0 auto;
-    width: 50%;
-    margin-left: 5rem ;
-    font-size: 0.8rem;
+    width: 90%;
+    margin-left: 25% ;
+    color: var(--color-txt);
 }
 
 .elementoPaso {
@@ -77,42 +102,60 @@
     flex-direction: row;
     position: relative;
     line-height: 1.2;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
+    
 }
 
 .cntPasos > :nth-child(1)::before, 
 .cntPasos > :nth-child(2)::before, 
 .cntPasos > :nth-child(3)::before { 
     /* border: 2px dashed; */
+    width:  5rem;
+    height: 5rem;
     position: absolute;
-    width:  3rem;
-    height: 3rem;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    left: -4rem;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #5981c6;
+    content: '';
+    top: 0;
+    left: 0;
+    color: var(--color-bco);
+    top: 0.75rem;
+    left: -3rem;
+    z-index: 1;
+    font-family: var(--font-tit);
+
+    
 }
+.cntPasos > :nth-child(1)::after, 
+.cntPasos > :nth-child(2)::after, 
+.cntPasos > :nth-child(3)::after { 
+    /* border: 2px dashed; */
+    content: '';
+    width:  5rem;
+    height: 5rem;
+    position: absolute;
+    background-image: url('./Union.svg');
+    background-repeat: no-repeat;
+    top: -1rem;
+    left: -5rem;
+    
+}
+
+.cntPasos > :nth-child(2)::after, 
+.cntPasos > :nth-child(3)::after {
+    filter: grayscale(1) brightness(5);
+    color: var(--color-txt);
+} 
+.cntPasos > :nth-child(2)::before, 
+.cntPasos > :nth-child(3)::before {
+    color: var(--color-txt);
+} 
+
+
+
 .cntPasos > :nth-child(1)::before {content: '1';}
 .cntPasos > :nth-child(2)::before {content: '2';}
 .cntPasos > :nth-child(3)::before {content: '3';}
 
-.cntPasos > :nth-child(1)::after,
-.cntPasos > :nth-child(2)::after {
-    position: absolute;
-    content: '';
-    width: 0.3rem;
-    height:  5rem;
-    background-color: white;
-    left: calc(-4rem - (-1.35rem));
-    bottom: -2rem;
-    z-index: -1;
-}
+
 
 
 
@@ -170,8 +213,8 @@
 /*  */
 
 .formulario {
-    width: 35rem;
-    min-width: 35rem;
+    width: 40rem;
+    min-width: 40rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -372,7 +415,7 @@ input::placeholder {
 
     .cntBienvenida{
         background-image: none;
-        width: 100%;
+        width: 100vh;
         margin: 0 auto;
         padding: 0;
         z-index: 2;
@@ -414,10 +457,13 @@ input::placeholder {
     }
 
     .cntFormulario {
-        min-width: 100%;
-        height: auto;
+        
         padding: 2rem 0;
         overflow-y: scroll;
+    }
+
+    .formulario {
+        height: 100vh;
     }
 
 
@@ -425,7 +471,7 @@ input::placeholder {
         width: 90%;
         max-width: 30rem;
         /* color: white; */
-        height: 100%;
+        
     }
 
     .error {

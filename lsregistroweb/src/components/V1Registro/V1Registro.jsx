@@ -81,15 +81,15 @@ const Registro = () => {
         </div>
         <div className={styles.cntSaludo}>
           <div>
-            <p>¡Bienvenido a Liber Salus!</p>
-            <p >Afíliate y toma el control de tu bienestar</p>
-          </div>
-          <div className={styles.cntLogo}>
-            <Logo />
+            <p>¡Bienvenido a <br/> Liber Salus!</p>
+            <p >Afíliate y toma el control de <br/> tu bienestar</p>
+        <p>
+          Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.<br />
+          Este proceso es sencillo y sólo toma 3 pasos:
+        </p>
           </div>
         </div>
-        <p>Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.<br />
-          Este proceso es sencillo y sólo toma tres pasos:</p>
+        
         <div className={styles.cntPasos}>
           <div className={styles.elementoPaso}>
             <p className={styles.paso}>Crea tu usuario: <br />
@@ -102,13 +102,9 @@ const Registro = () => {
           <div className={styles.elementoPaso}>
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
           </div>
-
-
         </div>
 
-        <div className={styles.cntDerechosInfo}>
-          <Derechos />
-        </div>
+        
       </div>
 
       <div className={styles.cntFormulario}>
