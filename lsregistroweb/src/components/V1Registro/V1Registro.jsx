@@ -134,7 +134,7 @@ const Registro = () => {
               <label className={styles.label}>Teléfono</label>
               <input
                 type="text"
-                placeholder="Teléfono celular"
+                placeholder="+52 | Teléfono celular"
                 maxLength={10}
                 {...register('telefono')}
                 className={errors.telefono ? styles.errorInput : ''}
