@@ -28,6 +28,7 @@ body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased; 
   font-family:var(--font-txt);
+  font-size: 100%;
 }
 
 body{ font-family: var(--font-txt); }
@@ -110,5 +111,13 @@ h1,h2,h3{ font-family: var(--font-tit); }
   .container { 
     width:min(1100px, 92vw); 
     margin-inline:auto; 
+  }
+}
+
+@media (max-width: 1360px) {
+  .app-root{
+    transform: scale(.8);
+    transform-origin: top left;
+    width: calc(100% / .8);  /* 125% para ocupar el viewport */
   }
 }
