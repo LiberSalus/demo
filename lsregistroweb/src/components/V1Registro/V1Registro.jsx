@@ -68,14 +68,15 @@ const Registro = () => {
   /* ---------- UI ---------- */
   return (
     <div className={styles.cntV1Registro}>
+
       <div className={styles.cntBienvenida}>
         <div className={styles.fondo}>
           <LiberSalusPoly
             autoMorph={true}        // morph automático
-            morphEveryMs={3000}     // intervalo de morph
+            morphEveryMs={30}     // intervalo de morph
             spray={false}            // triángulos sueltos
-            curveAlpha={1}        // opacidad ola superior
-            dirGlow={0.16}          // vignette/glow
+            curveAlpha={0}        // opacidad ola superior
+            dirGlow={0.006}          // vignette/glow
             className="w-full h-full"
           />
         </div>
@@ -145,12 +146,6 @@ const Registro = () => {
             {/* Contraseña */}
             <div className={styles.cntImput}>
               <label className={styles.label}>Contraseña</label>
-              <input
-                type={showPass ? 'text' : 'password'}
-                placeholder="Contraseña"
-                {...register('contrasena')}
-                className={errors.contrasena ? styles.errorInput : ''}
-              />
               <span
                 className={styles.passwordToggle}
                 onClick={() => setShowPass(!showPass)}
@@ -166,6 +161,12 @@ const Registro = () => {
               >
                 <img src={showPass ? srcCerrado : srcAbierto} className={styles.ojos} alt="" />
               </span>
+              <input
+                type={showPass ? 'text' : 'password'}
+                placeholder="Contraseña"
+                {...register('contrasena')}
+                className={errors.contrasena ? styles.errorInput : ''}
+              />
               {errors.contrasena && <span className={styles.error}>{errors.contrasena.message}</span>}
             </div>
 

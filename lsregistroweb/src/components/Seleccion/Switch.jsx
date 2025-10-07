@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from './switch.module.css';
 
+
 const Switch = () => (
   <div className={styles.cntSwitch}>
     {/* 1️⃣  checkbox oculto */}

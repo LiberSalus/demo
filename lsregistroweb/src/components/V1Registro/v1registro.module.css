@@ -1,25 +1,18 @@
 .cntV1Registro {
-    width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    overflow: hidden;
+    align-items: stretch;
+    height:100dvh;
+    
     
 }
 
 .cntBienvenida{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex: 1 1 55%;
+    width: auto;
+    min-width: 0;
     padding: 0 5%;
-    background-image: url(./Mask.png);
-    background-size: cover;
-    z-index: 1;
-    color: var(--color-bco);
-    width: 80%;
     height: 100dvh;
     position: relative;
-    
 }
 
 .fondo {
@@ -48,18 +41,13 @@
 
 
 .cntSaludo {
-    /* border: 2px dashed lawngreen; */
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding-top: 1rem;
-    min-height: 50vh;
     width: 80%;
     margin: 0 auto;
-
-    & .cntLogo {
-        display: none;
-    }
 
 }
 
@@ -69,7 +57,6 @@
     font-weight: 900;
     text-align: center;
     color: var(--color-prn);
-    padding-bottom: 2rem;
     padding-bottom: 2rem;
 }
 
@@ -86,15 +73,15 @@
 
 .cntSaludo div > :nth-child(3) {
     color: var(--color-txt);
-    padding-left: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3.5rem;
 }
 
 .cntPasos {
     margin: 0 auto;
-    width: 90%;
-    margin-left: 25% ;
+    width: 80%;
+    
     color: var(--color-txt);
+    
 }
 
 .elementoPaso {
@@ -102,9 +89,9 @@
     flex-direction: row;
     position: relative;
     line-height: 1.2;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     padding-top: 0.75rem;
-    padding-left: 0.75rem;
+    padding-left: 5%;
     
 }
 
@@ -194,17 +181,18 @@
 
 
 .cntFormulario {
-    display: flex;
-    flex-direction: column;
+    border: 2px dashed lawngreen;
+    flex: 1 1 50%;
+    width: auto;
+    min-width: 0;
+    height: 100dvh;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100vh;
-    overflow-y: scroll;
+    position: relative;
     z-index: 2;
     background: linear-gradient(90deg, #fff 0%, #b1bfff 100% );
-    position: relative;
-    overflow: hidden;
+    overflow-y:auto;
+    overflow-x: hidden;
 }
 
 .cntLineas {
@@ -213,6 +201,7 @@
     position: absolute;
     transform: translateX(-25%);
     z-index: -1;
+    pointer-events: none;
     
 }
 
@@ -227,13 +216,12 @@
 /*  */
 
 .formulario {
-    width: 40rem;
-    min-width: 40rem;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    min-width: 330px;
+    
 }
 
 .cntDerechosForm {
@@ -250,16 +238,16 @@
     margin-top: 1rem;
     flex-direction: column;
     
-    & > label {
+    /* & > label {
         display: none;
-    }
+    } */
 
     & input {
         margin-bottom: 0.25rem;
         appearance: none;
         border: 1px solid #e7e7e7;
         padding: 0.65rem;
-        width: 55%;
+        width: 80%;
         border-radius: 3rem;
         outline: none;
         outline-color: #5981c6;
@@ -355,7 +343,7 @@ input::placeholder {
 
 .passwordToggle {
     position: absolute;
-    right: 23%;
+    right: 3rem;
     cursor: pointer;
     display: flex;
     top:30%;
@@ -367,7 +355,8 @@ input::placeholder {
 }
 .label {
     display: inline-block;
-    width: 55%;
+    width: 70%;
+    padding-left: 0.75rem;
     /* border: 2px dashed; */
     text-align: start;
     transform: translateX(-0.5rem);

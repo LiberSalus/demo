@@ -1,3 +1,4 @@
+
 .cntSwitch {
   position: relative;
   width: 45%;
@@ -8,6 +9,7 @@
   border-radius: 3rem;
   display: flex;
   align-items: center;
+  
   font-size: 0.75rem;
   font-weight: 600;
   box-shadow: 2px 2px 4px rgba(0,0,0,0.14) inset ;
@@ -45,7 +47,8 @@
   flex: 1;
   text-align: center;
   transition: color 0.25s;
-  z-index: 3;                 /* encima del slider */
+  z-index: 3;
+  font-family: Arial, Helvetica, sans-serif;                 /* encima del slider */
 }
 
 /* Colores por defecto (Paciente activo) */
