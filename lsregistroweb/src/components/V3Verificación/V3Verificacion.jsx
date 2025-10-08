@@ -1,98 +1,94 @@
-// src/components/V3Verificacion/V3Verificacion.jsx
 import React, { useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import { ROUTES } from '@/routes/AppRouter';
-
 import styles from './v3verificacion.module.css';
-import Logo            from '@/components/ElementosVista/Logo/Logo';
-import BotonA          from '@/components/Botones/BotonA';
-import TextoPrincipal  from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
+import Logo from '@/components/ElementosVista/Logo/Logo';
+import BotonA from '@/components/Botones/BotonA';
+import TextoPrincipal from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
 import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
 
-const Verificacion = () => {
-  const { state } = useLocation();          // { metodo:'correo'|'telefono', correo / telefono }
-  const navigate  = useNavigate();
+const getIdPre = (data, headers) => (
+  data?.id_pre ??
+  data?.id ??
+  data?.result?.id_pre ??
+  data?.result?.id ??
+  (Number((headers?.location || '').split('/').pop()) || null)
+);
 
-  const [digits,   setDigits] = useState(['', '', '', '', '', '']);
-  const [loading,  setLoading] = useState(false);
-  const [errorMsg, setError]  = useState('');
+
+const V3Verificacion = () => {
+  const { state } = useLocation(); // { correo, telefono, metodo, ... }
+  const navigate = useNavigate();
+
+  const [digits, setDigits] = useState(['','','','','','']);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setError] = useState('');
   const inputsRef = useRef([]);
 
-  /* ─── manejo de inputs ───────────────────────────────────── */
   const handleChange = (idx, val) => {
-    if (!/^\d?$/.test(val)) return;               // acepta solo dígito o vacío
-    const copy = [...digits];
-    copy[idx] = val;
-    setDigits(copy);
-    if (val && idx < 5) inputsRef.current[idx + 1].focus();
-    setError('');                                 // limpia error al escribir
+    if (!/^\d?$/.test(val)) return;
+    const copy = [...digits]; copy[idx] = val; setDigits(copy);
+    if (val && idx < 5) inputsRef.current[idx+1].focus();
+    setError('');
   };
-
   const handleKeyDown = (idx, e) => {
-    if (e.key === 'Backspace' && !digits[idx] && idx > 0)
-      inputsRef.current[idx - 1].focus();
+    if (e.key==='Backspace' && !digits[idx] && idx>0) inputsRef.current[idx-1].focus();
   };
 
-  /* ─── verificar código ───────────────────────────────────── */
-  const verificar = async () => {
-    const codigo = digits.join('');
-    if (codigo.length !== 6) {
-      setError('Ingresa los 6 dígitos.');
-      return;
-    }
+ const verificar = async () => {
+  const codigo = digits.join('');
+  if (codigo.length !== 6) { setError('Ingresa los 6 dígitos.'); return; }
 
-    try {
-      setLoading(true);
-      //puerto 8040
-      await api.post(`/preregistro/preregistro/validar-${state.metodo}/`, {
-        identificador: state[state.metodo], // correo o teléfono
-        codigo,
-      });
+  try {
+    setLoading(true);
 
-      await api.post('/preregistro/preregistro/registro/', state);
+    await api.post(`/preregistro/preregistro/validar-${state.metodo}/`, {
+      identificador: state[state.metodo],
+      codigo,
+    });
 
-      navigate(ROUTES.CONFIRMACION_EXITO, { state });       // éxito ✔️
-    } catch (err) {
-      console.error(err);
-      /* convierte cualquier estructura a string */
-      let msg = 'Código incorrecto o expirado';
-      if (err?.response?.data?.detail) {
-        const d = err.response.data.detail;
-        msg = Array.isArray(d) ? d.map((e) => e.msg).join(' · ') : String(d);
-      }
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const { data, headers } = await api.post(
+      '/preregistro/preregistro/registro/',
+      state
+    );
 
-  /* ─── reenviar código ────────────────────────────────────── */
+    // ⬇️ AQUÍ creas el id
+    const id = getIdPre(data, headers);
+    if (!id) throw new Error('No llegó el id del preregistro.');
+
+    // respaldo y navegación usando ese id
+    sessionStorage.setItem('ls:id_pre', String(id));
+    navigate(ROUTES.CONFIRMACION_EXITO, { state: { ...state, id } });
+
+  } catch (err) {
+    const d = err?.response?.data?.detail;
+    const msg = d ? (Array.isArray(d) ? d.map(e=>e?.msg).join(' · ') : String(d))
+                  : (err?.message || 'Error en verificación');
+    setError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
+
   const reenviar = () =>
     api.post('/preregistro/preregistro/reenviar-codigo/', {
       identificador: state[state.metodo],
     });
 
-  /* ─── UI ─────────────────────────────────────────────────── */
   return (
     <div className={styles.cntVerificacion}>
       <div className={styles.cntLogo}><Logo /></div>
+      <TextoPrincipal textoPrincipal="Ingresar el código de verificación" />
+      <TextoSecundario textoSecundario="Ingresa el código de 6 dígitos que te enviamos." />
 
-      <TextoPrincipal  textoPrincipal="Ingresar el código de verificación" />
-      <TextoSecundario textoSecundario="Ingresa el código de verificación de 6 dígitos que te hemos enviado." />
-
-      <form className={styles.form} onSubmit={(e) => { e.preventDefault(); verificar(); }}>
+      <form className={styles.form} onSubmit={(e)=>{e.preventDefault(); verificar();}}>
         <div className={styles.cntInputs}>
           {digits.map((d, idx) => (
-            <input
-              key={idx}
-              ref={(el) => (inputsRef.current[idx] = el)}
-              className={styles.inputs}
-              type="text"
-              maxLength={1}
-              value={d}
-              onChange={(e) => handleChange(idx, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(idx, e)}
+            <input key={idx} ref={el => inputsRef.current[idx]=el}
+              className={styles.inputs} type="text" maxLength={1} value={d}
+              onChange={e=>handleChange(idx, e.target.value)}
+              onKeyDown={e=>handleKeyDown(idx, e)}
             />
           ))}
         </div>
@@ -113,5 +109,4 @@ const Verificacion = () => {
     </div>
   );
 };
-
-export default Verificacion;
+export default V3Verificacion;

@@ -21,13 +21,25 @@ const schema = z.object({
   sexo: z.enum(["H", "M", "X"], { message: "Selecciona un sexo" }),
 });
 
-const toInputDate = (s = "") => {
-  // admite dd/mm/yyyy o yyyy-mm-dd
-  if (!s) return "";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  const [d, m, y] = s.split("/");
-  return y && m && d ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
+//const toInputDate = (s = "") => {
+//  // admite dd/mm/yyyy o yyyy-mm-dd
+//  if (!s) return "";
+//  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+//  const [d, m, y] = s.split("/");
+//  return y && m && d ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
+//};
+const toDMY = (v="") => {
+  // acepta "yyyy-mm-dd" o "dd/mm/yyyy" y devuelve "dd/mm/yyyy"
+  if (!v) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    const [y,m,d] = v.split("-");
+    return `${d}/${m}/${y}`;
+  }
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return v;
+  return "";
 };
+
+
 
 const normSexo = (v = "") => {
   const up = String(v).trim().toUpperCase();
@@ -39,7 +51,9 @@ const normSexo = (v = "") => {
 
 const FormularioINE = ({ onSuccess }) => {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state:state_react } = useLocation();
+
+  console.log("formINE", state_react);
 
   const {
     register,
@@ -84,7 +98,7 @@ const FormularioINE = ({ onSuccess }) => {
       setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
       setValue("apellido1", data?.primer_apellido ?? data?.apellido_paterno ?? "", { shouldDirty: true });
       setValue("apellido2", data?.segundo_apellido ?? data?.apellido_materno ?? "", { shouldDirty: true });
-      setValue("fechaNac", toInputDate(data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine), { shouldDirty: true });
+      setValue("fechaNac", toDMY(data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine), { shouldDirty: true });
       setValue("sexo", normSexo(data?.sexo), { shouldDirty: true });
 
       setCurpOk(true);
@@ -111,14 +125,15 @@ const onSubmit = async (formData) => {
     const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
 
     const payload = {
+      id: state_react.id,
       curp: formData.curp,                         // ABCD820101H...
-      nombre: formData.nombre,                     // Nombres
-      primer_apellido: formData.apellido1,         // Paterno
-      segundo_apellido: formData.apellido2 || "",  // Materno
-      sexo: formData.sexo,                         // H|M|X
-      fecha_nacimiento: formData.fechaNac,         // yyyy-mm-dd (del input)
+      first_name: formData.nombre,                     // Nombres
+      last_name: formData.apellido1,         // Paterno
+      second_last_name: formData.apellido2 || "",  // Materno
+      sex_curp: formData.sexo,                         // H|M|X
+      birthdate: formData.fechaNac,         // yyyy-mm-dd (del input)
       nacionalidad: resCurp?.nacionalidad || "MEXICO",
-      entidad_nacimiento: entInfo.ent,             // "CIUDAD DE MEXICO"
+      state: entInfo.ent,             // "CIUDAD DE MEXICO"
       abr_entidad: entInfo.abr,                    // "CMX"
       municipio_registro: resCurp?.municipio_registro || "017 VENUSTIANO CARRANZA",
       // Si el backend requiere id_user, descomenta:
@@ -142,7 +157,7 @@ const onSubmit = async (formData) => {
     }
 
     // Continua al formulario de domicilio
-    navigate(ROUTES.COMPLETAR_DOMICILIO, { state });
+    navigate(ROUTES.COMPLETAR_DOMICILIO, { state: state_react });
     onSuccess?.();
   } catch (err) {
     alert(prettyApiError(err)); // muestra los campos exactos que fallaron

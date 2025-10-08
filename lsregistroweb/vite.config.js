@@ -32,6 +32,12 @@ export default defineConfig({
         secure: false,
         rewrite: (p) => p.replace(/^\/ine/, ""), // /ine/x -> /x
       },
+      "/cp": {
+        target: `https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app/`,
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/cp/, ""), // /cp/x -> /x
+      },
 
       // === 8020 :: ARCHIVOS ===
       "/file": {

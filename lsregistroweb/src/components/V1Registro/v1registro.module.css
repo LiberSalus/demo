@@ -13,6 +13,13 @@
     padding: 0 5%;
     height: 100dvh;
     position: relative;
+    background-image: url('./Artboard.png');
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
 }
 
 .fondo {
@@ -45,10 +52,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 1rem;
     width: 80%;
     margin: 0 auto;
-
+    
 }
 
 .cntSaludo div > :nth-child(1) {
@@ -73,15 +79,15 @@
 
 .cntSaludo div > :nth-child(3) {
     color: var(--color-txt);
-    margin-bottom: 3.5rem;
+    
 }
 
 .cntPasos {
+    
     margin: 0 auto;
     width: 80%;
-    
     color: var(--color-txt);
-    
+    margin-left: 30%;
 }
 
 .elementoPaso {
@@ -118,8 +124,8 @@
 { 
     /* border: 2px dashed; */
     content: '';
-    width:  5rem;
-    height: 5rem;
+    width:  7rem;
+    height: 7rem;
     position: absolute;
     background-image: url('./Union.svg');
     background-repeat: no-repeat;

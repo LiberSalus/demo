@@ -89,7 +89,9 @@ h1,h2,h3{ font-family: var(--font-tit); }
   body {
     font-family: var(--font-txt);
     color: var(--color-fg);
-    background: var(--color-bg);
+    background-image: url('./Artboard.png');
+    background-size: cover;
+    
   }
   a { color: var(--primary); text-decoration: none; }
   img, picture, video, canvas { display:block; max-width:100%; }
