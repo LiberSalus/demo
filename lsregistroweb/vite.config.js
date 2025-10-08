@@ -1,7 +1,9 @@
-// vite.config.js (lsregistroweb)
+// vite.config.js (solo local)
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
+
+const LOCAL_HOST = "http://192.168.100.100";
 
 export default defineConfig({
   base: "/registro/",
@@ -11,43 +13,32 @@ export default defineConfig({
     proxy: {
       // === 8040 :: PRE-REGISTRO ===
       "/api": {
-        target: "https://libersalus.com/api/preregistro",
+        target: `${LOCAL_HOST}:8040`,
         changeOrigin: true,
         secure: false,
-        rewrite: (p) => p.replace(/^\/api/, ""),
+        rewrite: (p) => p.replace(/^\/api/, ""), // /api/x -> /x   (raíz 8040)
       },
 
-      // === 8060 :: SESIÓN (si algo de registro pega auth temporalmente) ===
+      // === 8060 :: SESIÓN / INE extractor (ajústalo si cambiara) ===
       "/auth": {
-        target: "https://libersalus.com/api/sesion",
+        target: `${LOCAL_HOST}:8060`,
         changeOrigin: true,
         secure: false,
-        rewrite: (p) => p.replace(/^\/auth/, ""),
+        rewrite: (p) => p.replace(/^\/auth/, ""), // /auth/x -> /x
       },
-
-      // === 8060 :: CURP extractor si corre ahí (ajusta si queda en otro) ===
       "/ine": {
-        target: "https://libersalus.com/api/sesion",
+        target: `${LOCAL_HOST}:8060`,
         changeOrigin: true,
         secure: false,
-        rewrite: (p) => p.replace(/^\/ine/, ""),
+        rewrite: (p) => p.replace(/^\/ine/, ""), // /ine/x -> /x
       },
 
-      // === 8020 :: ARCHIVOS (si subes PDFs/imagenes en registro) ===
+      // === 8020 :: ARCHIVOS ===
       "/file": {
-        target: "https://libersalus.com/api/file",
+        target: `${LOCAL_HOST}:8020`,
         changeOrigin: true,
         secure: false,
-        rewrite: (p) => p.replace(/^\/file/, ""),
-      },
-
-      // === CP externo (como ya lo tenías) ===
-      "/cp": {
-        target:
-          "https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (p) => p.replace(/^\/cp/, ""),
+        rewrite: (p) => p.replace(/^\/file/, ""), // /file/x -> /x
       },
     },
   },
