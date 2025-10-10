@@ -1,22 +1,21 @@
 
 .cntSwitch {
+  margin: 0 auto;
   position: relative;
-  width: 45%;
-  height: 2.5rem;
-  margin: 1rem auto 3rem auto;
-  
+  width: 15rem;
+  height: 2rem;
+  /* border: 2px dashed darkblue; */
   background: #fff;        /* pista */
   border-radius: 3rem;
   display: flex;
   align-items: center;
-  
   font-size: 0.75rem;
   font-weight: 600;
   box-shadow: 2px 2px 4px rgba(0,0,0,0.14) inset ;
 }
 
 /* -------- checkbox oculto -------- */
-.input {
+.input {        
   position: absolute;
   inset: 0;
   opacity: 0;

@@ -5,8 +5,10 @@ import srcLogo from './Isólogo LS.svg'
 
 const Logo = () => {
   return (
-    <div className={styles.cntLogo}><img src={srcLogo}></img></div>
+    <div className={styles.cntLogo}>
+      <img src={srcLogo}></img>
+    </div>
   )
 }
 
-export default Logo
+export default Logo 

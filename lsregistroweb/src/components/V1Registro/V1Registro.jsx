@@ -25,7 +25,7 @@ const schema = z
       .string()
       .regex(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
-        "8+, 1 mayús., 1 minús., 1 número, 1 símbolo"
+        "Mínimo 8 caracteres, 1 mayús., 1 minús., 1 número, 1 símbolo"
       ),
     confirmContra: z.string(),
     politicas: z.literal(
@@ -127,12 +127,17 @@ const Registro = () => {
         <div className={styles.cntLineas}>
           <img src={lineas}></img>
         </div>
-        <div className={styles.formulario}>
-          <div className={styles.logoForm}>
-            <Logo />
-          </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className={styles.logoForm}>
+          <Logo />
+        </div>
+
+        <div className={styles.formulario}>
+          <form
+            className={styles.frm}
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
             <Switch />
 
             {/* Correo */}
@@ -152,9 +157,10 @@ const Registro = () => {
             {/* Teléfono */}
             <div className={styles.cntImput}>
               <label className={styles.label}>Teléfono</label>
+
               <input
                 type="text"
-                placeholder="+52 | Teléfono celular"
+                placeholder="Teléfono celular"
                 maxLength={10}
                 {...register("telefono")}
                 className={errors.telefono ? styles.errorInput : ""}
@@ -167,6 +173,12 @@ const Registro = () => {
             {/* Contraseña */}
             <div className={styles.cntImput}>
               <label className={styles.label}>Contraseña</label>
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="Contraseña"
+                {...register("contrasena")}
+                className={errors.contrasena ? styles.errorInput : ""}
+              />
               <span
                 className={styles.passwordToggle}
                 onClick={() => setShowPass(!showPass)}
@@ -188,12 +200,7 @@ const Registro = () => {
                   alt=""
                 />
               </span>
-              <input
-                type={showPass ? "text" : "password"}
-                placeholder="Contraseña"
-                {...register("contrasena")}
-                className={errors.contrasena ? styles.errorInput : ""}
-              />
+
               {errors.contrasena && (
                 <span className={styles.error}>
                   {errors.contrasena.message}
@@ -252,8 +259,8 @@ const Registro = () => {
                 }}
               />
               <label htmlFor="politicas">
-                He leído y acepto <a href="#">Términos</a> y{" "}
-                <a href="#">Privacidad</a>
+                He leído y acepto los <a href="#">Términos y condiciones</a> y
+                las <a href="#">Políticas de Privacidad</a>
               </label>
               {errors.politicas && touchedFields.politicas && (
                 <span className={styles.error}>{errors.politicas.message}</span>
@@ -269,9 +276,7 @@ const Registro = () => {
             </BotonA>
           </form>
         </div>
-        <div className={styles.cntDerechosForm}>
-          <Derechos />
-        </div>
+        <Derechos />
       </div>
     </div>
   );

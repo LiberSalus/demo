@@ -1,7 +1,16 @@
+:root {
+    --font-resp-tit: clamp(2.75rem, 1.5171rem + 1.444vw, 3.25rem);
+    --font-resp-sbt: clamp(2rem, 0.7671rem + 1.444vw, 2.5rem);
+    --font-resp-txt: clamp(0.75rem, 0.1336rem + 0.722vw, 1rem);
+    --font-resp-075: clamp(0.7rem, -0.8527rem + 1.8773vw, .85rem);
+    --font-resp-050: clamp(0.5rem, 0.0069rem + 0.5776vw, 0.7rem);
+}
+
 .cntV1Registro {
     display: flex;
     align-items: stretch;
-    height:100dvh;
+    height:100%;
+    min-height: 700px;
     
     
 }
@@ -59,7 +68,7 @@
 
 .cntSaludo div > :nth-child(1) {
     font-family: var(--font-tit);
-    font-size: 2.75rem;
+    font-size: var(--font-resp-tit);
     font-weight: 900;
     text-align: center;
     color: var(--color-prn);
@@ -68,7 +77,7 @@
 
 .cntSaludo div > :nth-child(2) {
     font-family: var(--font-tit);
-    font-size: 2.0rem;
+    font-size: var(--font-resp-sbt);
     font-weight: 900;
     text-align: center;
     font-weight: bold;
@@ -98,7 +107,7 @@
     margin-bottom: 3rem;
     padding-top: 0.75rem;
     padding-left: 5%;
-    
+    font-size: var(--font-resp-txt);
 }
 
 .cntPasos > :nth-child(1)::before, 
@@ -187,16 +196,18 @@
 
 
 .cntFormulario {
-    border: 2px dashed lawngreen;
+    /* border: 2px dashed rgb(252, 0, 176); */
     flex: 1 1 50%;
     width: auto;
     min-width: 0;
     height: 100dvh;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
     z-index: 2;
-    background: linear-gradient(90deg, #fff 0%, #b1bfff 100% );
+    background: linear-gradient(90deg, #fff 0%, #90d0de 100% );
     overflow-y:auto;
     overflow-x: hidden;
 }
@@ -212,8 +223,11 @@
 }
 
 .logoForm {
-    margin: 0rem auto 2rem;
-    width: 100%;
+    margin: 0rem auto;
+    width: fit-content;
+    
+    
+    
 }
 
 
@@ -222,7 +236,9 @@
 /*  */
 
 .formulario {
-    margin: 0 auto;
+
+    /* border: 2px dashed red; */
+    margin: 2.75rem auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -234,8 +250,11 @@
     display: none;
 }
 
+
+
+
 .cntImput {
-    
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,28 +262,34 @@
     /* border: 2px dashed; */
     margin-top: 1rem;
     flex-direction: column;
+    width: 80%;
+    max-width: 30rem;
     
     /* & > label {
         display: none;
     } */
 
     & input {
-        margin-bottom: 0.25rem;
+        position: relative;
+        width: 100%;
         appearance: none;
         border: 1px solid #e7e7e7;
-        padding: 0.65rem;
-        width: 80%;
+        padding: 0.65rem 1rem;
+        border: 0.5px solid darkgray;
         border-radius: 3rem;
         outline: none;
         outline-color: #5981c6;
-        box-shadow: 2px 2px 4px rgba(0,0,0,0.14) inset ;
+        
         /* border: 2px dashed; */
+        font-size: var(--font-resp-075);
         
     }
     
     & input:focus {
+        padding-left: 1rem;
         outline: none;
         outline-color: #5981c6;
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.30) inset ;
         
     }
 
@@ -276,6 +301,9 @@
     
 }
 
+
+
+
 input::placeholder {
     color: lightgray;
     margin: 0.5rem;
@@ -283,12 +311,15 @@ input::placeholder {
 }
 
 .error {
+    position: absolute;
+    bottom: -25%;
     color: #ec3b3b;
-    font-size: 0.6rem;
+    font-size: var(--font-resp-050);
     display: block;
-    margin: 0.4em auto;
-    width: 80%;
+    margin: 0em auto;
+    width: 90%;
     text-decoration: none;
+    text-align: end;
     
     
 }
@@ -303,15 +334,25 @@ input::placeholder {
     
 }
 
+.formulario > form:nth-child(2) > input {
+    padding-left: 4rem;
+}
+
 .cntPoliticas {
-    margin: 2rem auto;
+    /* border: 2px dashed red; */
+    margin: 1rem auto;
     display: flex;
-    flex-direction: column;
+    
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 60%;
     gap: 1rem;
+
+    & > label {
+        font-size: var(--font-resp-075);
+        text-align: start;
+    }
     
 }
 .cntChk {
@@ -321,7 +362,7 @@ input::placeholder {
 .iniciarSesion > p {
     width: 100%;
     text-wrap: balance;
-    font-size: 0.6rem;
+    font-size: var(--font-resp-050);
     text-align: left;
     margin-left: 1rem;
     line-height: 1.2;
@@ -349,25 +390,33 @@ input::placeholder {
 
 .passwordToggle {
     position: absolute;
-    right: 3rem;
+    top:calc(50% );
+    right: 1rem;
     cursor: pointer;
     display: flex;
-    top:30%;
     filter: opacity(0.5);
 }
 .ojos {
-    width: 13px;
+    width: 1rem;
     filter: opacity(0.6);
 }
 .label {
+    
     display: inline-block;
-    width: 70%;
+    width: 100%;
     padding-left: 0.75rem;
-    /* border: 2px dashed; */
     text-align: start;
     transform: translateX(-0.5rem);
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
+    margin-bottom: 0.1rem;
+    font-size: var(--font-resp-075);
+}
+
+.cntDerechosForm {
+    position: absolute;
+    /* border: 2px dashed red; */
+    display: block;
+    width: 100%;
+    bottom: 1rem;
 }
 
 @media (max-width: 950px) {
@@ -403,12 +452,7 @@ input::placeholder {
         display: none;
     }
 
-    .cntDerechosForm {
-        display: block;
-        
-        width: 80%;
-    }
-
+    
     .logoForm {
         display: block;
     }

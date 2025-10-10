@@ -1,11 +1,11 @@
 
 .cntLogo {
-    margin: 0 auto;
-    width: 35%;
-
+    
+    /* border: 1px dashed lawngreen; */
+    padding: 1.5rem;
     & img {
         
         margin: 0 auto;
-        width: 100%;
+        width: 11.25rem;
     }   
 }

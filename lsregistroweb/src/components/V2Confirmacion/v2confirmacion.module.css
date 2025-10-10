@@ -1,149 +1,63 @@
-.cntConfirmacion {
-  /* background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%); */
-  color: rgb(70, 69, 69);
-  width: 100%;
-  height: 100dvh;
-  margin: 0 auto;
+
+@import url('../V1Registro/v1registro.module.css');
+
+.cntV2Confirmacion {
+  display: flex;
+  align-items: stretch;
+  height:100%;
+  min-height: 700px;
+  position: relative;
+}
+
+
+.cntFormulario {
+  position: relative;
+  justify-content: center;
+}
+
+
+.cntLineas {
+  position: absolute;
+}
+
+.cntTextos {
+  margin: 0rem auto;
+  /* border: 2px dashed red; */
+  width: 90%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
+  gap: 2rem;
   
-}
-
-.cntConfirmacion > :nth-child(2),
-.cntConfirmacion > :nth-child(3) {
-  
-  width: 55%;
-  text-align: center;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-
-.cntConfirmacion > :nth-child(2) {
-  font-size: 2rem;
-  width: 80%;
-  font-weight: 500;
-  margin: 1rem;
-  padding-top: 0;
-}
-
-.cntConfirmacion > :nth-child(1) {
-  margin-top: 3rem;
-  min-width: 40%;
 }
 
 .fieldset {
+  display: flex;
+  flex-direction: column;
+
   border: none;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+
+  & > :nth-child(3) {
+    margin: 3rem auto;
+  }
 }
 
-.fieldset> :nth-child(3) {
-  text-align: center;
-  margin: 2rem auto;
-  border: none;
+.form {
+  margin-top: 2rem;
+  width: 90%;
+  /* border: 2px dashed red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
-.input>label {
-  padding-left: 5%;
-  line-height: 1.5;
+.input {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-size: var(--font-resp-txt);
+  margin-bottom: 0.25rem;
 }
 
 .datos {
-  text-align: center;
-  font-weight: 800;
-  color: rgb(2, 2, 66);
-  padding-left: 2rem;
-
-}
-
-form>fieldset:nth-child(3) {
-  display: inline-block;
-  text-align: center;
-  text-decoration: underline;
-  color: rgb(89, 89, 202);
-  width: 100%;
-}
-
-.volver {
-  color: blue;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-@media (max-width: 950px) {
-
-  .cntConfirmacion {
-    margin: 0 auto;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .logoCnt {
-    min-width: 100%;
-  }
-
-  .cntConfirmacion> :nth-child(2),
-  .cntConfirmacion> :nth-child(3) {
-
-    width: 80%;
-    text-align: center;
-    font-weight: 500;
-    line-height: 1;
-  }
-
-  .cntConfirmacion> :nth-child(2) {
-    font-size: 1.75rem;
-  }
-
-  .cntConfirmacion> :nth-child(1) {
-    margin-top: 3rem;
-    min-width: 40%;
-  }
-
-  .fieldset {
-    border: none;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .fieldset> :nth-child(3) {
-    text-align: center;
-    margin: 2rem auto;
-    border: none;
-  }
-
-  .input>label {
-    padding-left: 5%;
-    line-height: 1.5;
-  }
-
-  .datos {
-    text-align: center;
-    font-weight: 800;
-    color: rgb(2, 2, 66);
-    padding-left: 2rem;
-
-  }
-
-  /* form> :nth-child(3) {
-    display: inline-block;
-    text-align: center;
-    text-decoration: underline;
-    color: rgb(89, 89, 202);
-    width: 100%;
-    cursor: pointer;
-  } */
-
+  color: var(--color-prn);
 }
