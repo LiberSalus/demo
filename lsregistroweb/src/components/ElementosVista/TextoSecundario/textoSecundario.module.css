@@ -7,7 +7,6 @@
 .textoSecundario{
     margin: 0 auto;
     text-align: center;
-    font-size: 1rem;
-    line-height: 1.2;
+    font-size: var(--font-resp-txt);
 
 }

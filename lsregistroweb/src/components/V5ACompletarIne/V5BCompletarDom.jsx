@@ -15,6 +15,9 @@ const V5BCompletarDom = () => {
   const handleSuccess = () => navigate(ROUTES.INVITACION_DOC);
 
   return (
+
+    <>
+    <div className={styles.bienvenida}></div>
     <div className={styles.cntV5ACompletarIne}>
       <div className={styles.cntLogo}><Logo /></div>
 
@@ -27,6 +30,7 @@ const V5BCompletarDom = () => {
         <FormularioDom onSuccess={handleSuccess} />
       </div>
     </div>
+    </>
   );
 };
 export default V5BCompletarDom;

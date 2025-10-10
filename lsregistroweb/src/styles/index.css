@@ -64,6 +64,15 @@ h1,h2,h3{ font-family: var(--font-tit); }
     --space-4:    1.5rem;
     --radius:  12px;
     --shadow-1: 0 4px 12px rgba(0,0,0,.08);
+
+    
+    --font-resp-tit: clamp(2.75rem, 1.5171rem + 1.444vw, 3.25rem);
+    --font-resp-sbt: clamp(2rem, 0.7671rem + 1.444vw, 2.5rem);
+    --font-resp-txt: clamp(0.75rem, 0.1336rem + 0.722vw, 1rem);
+    --font-resp-075: clamp(0.7rem, -0.8527rem + 1.8773vw, .85rem);
+    --font-resp-050: clamp(0.5rem, 0.0069rem + 0.5776vw, 0.7rem);
+
+
   }
 }
 
@@ -89,7 +98,9 @@ h1,h2,h3{ font-family: var(--font-tit); }
   body {
     font-family: var(--font-txt);
     color: var(--color-fg);
-    background: var(--color-bg);
+    background-image: url('./Artboard.png');
+    background-size: cover;
+    
   }
   a { color: var(--primary); text-decoration: none; }
   img, picture, video, canvas { display:block; max-width:100%; }

@@ -1,8 +1,21 @@
+@import url('../V1Registro/v1registro.module.css');
+.cntV3Verificacion {
+    display: flex;
+    align-items: stretch;
+    height:100%;
+    min-height: 700px;
+    
+}
+
+.cntFormulario {
+  
+}
+
 .cntVerificacion {
 
     /* background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%); */
     color: rgb(70, 69, 69);
-    width: 100vw;
+    flex: 1 1 50%;
     height: 100dvh;
     margin: 0 auto;
     display: flex;
@@ -27,6 +40,7 @@
     width: 100%;
     margin: 2rem auto;
     justify-content: center;
+    position: relative;
     
 }
 .error {
@@ -34,7 +48,7 @@
     text-align: center;
     color: #ec3e3e;
     font-size: 0.8rem;
-    margin-top: 4px;
+    transform: translateY(1.25rem);
     display: block;   
 }
 .inputs {
@@ -60,6 +74,14 @@
     color: #5981c6;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.reenviarWrap {
+    margin-top: 1rem;
+}
+
+.derechosPie {
+    margin-top: 3rem;
 }
 
 

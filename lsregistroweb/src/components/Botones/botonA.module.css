@@ -14,7 +14,7 @@
   justify-content: center;
   font-weight: 400;
   border: none;
-  border-radius: 0.4rem;
+  border-radius: 3rem;
   padding: .5rem 1.25rem;
   cursor: pointer;
   transition: background-color .3s ease, transform .3s ease;
@@ -29,9 +29,9 @@
 .danger:hover    { background: #c53030; }
 
 /* Tamaños */
-.sm { font-size: .75rem; padding: .375rem .875rem; }
-.md { font-size: .875rem; }
-.lg { font-size: 1rem;   padding: .75rem 1.5rem; }
+.sm {width: 14.25rem; font-size: .75rem; padding: .375rem .875rem; }
+.md {width: 14.25rem; font-size: .875rem; }
+.lg {width: 14.25rem; font-size: 1rem;   padding: .75rem 1.5rem; }
 
 .loading { cursor: progress; opacity: .6; }
 
@@ -50,9 +50,10 @@
 }
 
 .disabled {
-  opacity: 0.5;
+  opacity: 0.8;
   cursor: not-allowed;
   pointer-events: none;
+  background-color: darkgray;
 }
 
 /* botonA.module.css */

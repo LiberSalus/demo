@@ -1,3 +1,7 @@
 https://libersalus.com/api/preregistro/docs ----> /8040
 https://libersalus.com/api/sesion/docs ---------> /8060	    	
-https://libersalus.com/api/file/docs -----------> /80206
+https://libersalus.com/api/file/docs -----------> /8020
+
+
+codigo postal
+https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app/
