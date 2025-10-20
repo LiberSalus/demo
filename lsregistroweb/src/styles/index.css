@@ -2,13 +2,48 @@
 
 @font-face{
   font-family:"Inter";
-  src:url("../assets/font/Inter/static/Inter_18pt-ExtraBold.ttf") format("truetype");
-  font-weight:400; font-style:normal; font-display:swap;
+  src:url("../assets/font/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
+  font-weight:400; 
+  font-style:normal; 
+  font-display:swap;
 }
+@font-face{
+  font-family:"Inter";
+  src:url("../assets/font/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
+  font-weight:700; 
+  font-style:normal; 
+  font-display:swap;
+}
+@font-face{
+  font-family:"Inter";
+  src:url("../assets/font/Inter/static/Inter_18pt-ExtraBold.ttf") format("truetype");
+  font-weight:800; 
+  font-style:normal; 
+  font-display:swap;
+}
+
+
+
 @font-face{
   font-family:"Roboto";
   src:url("../assets/font/Roboto/static/Roboto-Regular.ttf") format("truetype");
-  font-weight:400; font-style:normal; font-display:swap;
+  font-weight:400; 
+  font-style:normal; 
+  font-display:swap;
+}
+@font-face{
+  font-family:"Roboto";
+  src:url("../assets/font/Roboto/static/Roboto-Bold.ttf") format("truetype");
+  font-weight:700; 
+  font-style:normal; 
+  font-display:swap;
+}
+@font-face{
+  font-family:"Roboto";
+  src:url("../assets/font/Roboto/static/Roboto-ExtraBold.ttf") format("truetype");
+  font-weight:800; 
+  font-style:normal; 
+  font-display:swap;
 }
 
 :root{

@@ -11,9 +11,9 @@ const TarjetaBase = ({ accion, descripcion, srcIcon, textoBoton, onClick }) => {
       <div className={styles.cntTxt}>
         <p>{accion}</p>
         <p>{descripcion}</p>
-        <button type="button" onClick={onClick} className={styles.btn}>
+        <a type="button" onClick={onClick} className={styles.btn}>
           {textoBoton}
-        </button>
+        </a>
       </div>
     </div>
   );

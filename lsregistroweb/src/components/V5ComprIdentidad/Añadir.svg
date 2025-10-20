@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.44 359.51">
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 310" >
   <defs>
     <style>
       .cls-1 {
         stroke-width: 0px;
+        transform: scale(0.8) translate(30px, 20px);
       }
     </style>
   </defs>

@@ -7,6 +7,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import BotonA from "@/components/Botones/BotonA";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
+import lineas from '../V1Registro/line.svg'
 
 const getIdPre = (data, headers) =>
   data?.id_pre ??
@@ -136,6 +137,10 @@ const V3Verificacion = () => {
           <Logo />
         </div>
 
+        <div className={styles.Lineas}>
+          <img src={lineas}></img>
+        </div>
+
         <div className={styles.cntTextos}>
           <TextoPrincipal textoPrincipal="Ingresar el código de verificación" />
           <TextoSecundario textoSecundario="Ingresa el código de 6 dígitos que te enviamos." />
@@ -161,14 +166,14 @@ const V3Verificacion = () => {
                 onKeyDown={(e) => handleKeyDown(idx, e)}
               />
             ))}
-          {errorMsg && <span className={styles.error}>{errorMsg}</span>}
+            {errorMsg && <span className={styles.error}>{errorMsg}</span>}
           </div>
 
 
           <div className={styles.cntBoton}>
             <BotonA type="submit" disabled={loading} onClick={verificar}>
-  {loading ? "Verificando…" : "Verificar y continuar"}
-</BotonA>
+              {loading ? "Verificando…" : "Verificar y continuar"}
+            </BotonA>
           </div>
         </form>
         <p className={styles.reenviarWrap}>¿No recibiste el código? </p>

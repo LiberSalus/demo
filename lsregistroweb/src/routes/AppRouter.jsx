@@ -1,4 +1,4 @@
- src/router/AppRoutes.jsx
+ //src/router/AppRoutes.jsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // --- Páginas --- */
 import V1Registro       from '@/components/V1Registro/V1Registro';
@@ -15,7 +15,7 @@ import V7RevisarDoc     from '@/components/V7Revisar/V7RevisarDoc';
 import V7InvitacionDoc  from '@/components/V7InvitacionDoc/V7InvitacionDoc';
 import V8Opciones       from '@/components/V8Opciones/V8Opciones';
 // --- Rutas --- */
-export const ROUTES = {
+const ROUTES = {
   REGISTRO:            '/',
   CONFIRMACION:        '/confirmacion',
   VERIFICACION:        '/verificacion',
@@ -30,9 +30,11 @@ export const ROUTES = {
   INVITACION_DOC:      '/invitacion-documentos',
   OPCIONES:            '/opciones',
 };
+export { ROUTES };
 
-export const AppRoutes = () => (
-  <BrowserRouter basename="/registro">
+
+const AppRouter = () => (
+  
     <Routes>
       {/* Raíz → redirige al primer paso del flujo */}
 
@@ -47,15 +49,16 @@ export const AppRoutes = () => (
       <Route path={ROUTES.CAPTURAR_DOCUMENTOS}    element={<V6Capturar />} />
       <Route path={ROUTES.RECIBIDOS}              element={<V7Recibidos />} />
       <Route path={ROUTES.REVISAR_DOCUMENTOS}     element={<V7RevisarDoc />} />
-      <Route path={ROUTES.INVITACION_DOC}         element={<V7RevisarDoc />} />
+      <Route path={ROUTES.INVITACION_DOC} element={<V7InvitacionDoc />} />
       <Route path={ROUTES.OPCIONES}               element={<V8Opciones />} />
 
       {/* 404 – cualquier otra ruta */}
       <Route path="*" element={<p>404 – Página no encontrada</p>} />
     </Routes>
-  </BrowserRouter>
+  
 );
 
+export default AppRouter;
 
 //---------------------------------------
 

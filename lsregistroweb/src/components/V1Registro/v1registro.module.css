@@ -1,3 +1,5 @@
+@import url('../../styles/index.css');
+
 :root {
     --font-resp-tit: clamp(2.75rem, 1.5171rem + 1.444vw, 3.25rem);
     --font-resp-sbt: clamp(2rem, 0.7671rem + 1.444vw, 2.5rem);
@@ -12,7 +14,7 @@
     height:100%;
     min-height: 700px;
     
-    
+                                
 }
 
 .cntBienvenida{
@@ -136,7 +138,7 @@
     width:  7rem;
     height: 7rem;
     position: absolute;
-    background-image: url('./Union.svg');
+    background-image: url('./paso1.svg');
     background-repeat: no-repeat;
     top: -1rem;
     left: -5rem;
@@ -167,7 +169,7 @@
 
 
 
-.cntPasos > :nth-child(1)::before {content: '1';}
+.cntPasos > :nth-child(1)::before {content: '';}
 .cntPasos > :nth-child(2)::before {content: '2';}
 .cntPasos > :nth-child(3)::before {content: '3';}
 
@@ -188,6 +190,9 @@
     font-size: 0.6rem;
     text-align: center;
 }
+.derechosPie {
+    margin-top: 3rem;
+}
 
 .liga {
     text-decoration: underline;
@@ -196,7 +201,6 @@
 
 
 .cntFormulario {
-    /* border: 2px dashed rgb(252, 0, 176); */
     flex: 1 1 50%;
     width: auto;
     min-width: 0;
@@ -213,13 +217,17 @@
 }
 
 .cntLineas {
+    /* border: 2px dashed rgb(252, 0, 176); */
     width: 300%;
-    margin-top: 70%;
+    height: 100vh;
     position: absolute;
     transform: translateX(-25%);
     z-index: -1;
     pointer-events: none;
-    
+    overflow-y: hidden;
+    & > img {
+        margin-top: 0%;
+    }
 }
 
 .logoForm {

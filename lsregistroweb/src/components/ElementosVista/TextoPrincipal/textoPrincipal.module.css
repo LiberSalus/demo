@@ -1,4 +1,4 @@
-
+@import url('../../../styles/index.css');
 .cntTextoPrincipal {
     margin: 1.5rem auto;
     width: fit-content;
@@ -8,8 +8,8 @@
     display: inline-block;
     text-align: center;
     width: 100%;
-    font-weight: 800;
-    font-family: var(--font-txt);
+    
+    font-family: var(--font-tit);
     font-size: var(--font-resp-sbt);
     
 }
