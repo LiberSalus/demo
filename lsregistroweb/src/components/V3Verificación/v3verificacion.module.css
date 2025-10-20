@@ -4,12 +4,19 @@
     align-items: stretch;
     height:100%;
     min-height: 700px;
+    position: relative;
     
 }
 
 .cntFormulario {
-  
+    position: relative;
 }
+.Lineas {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
 
 .cntVerificacion {
 

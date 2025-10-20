@@ -71,47 +71,47 @@ const V5ComprIdentidad = () => {
           <Logo />
         </div>
 
-      {/* Título y descripción */}
-      <div className={styles.cntTexto}>
-        <TextoPrincipal textoPrincipal="Completa tu perfil" />
-        
-        <p>Llena tus datos o sube tus documentos</p>
-        <p>identificación oficial y comprobante de domicilio</p>
-        <p>Así podremos confirmar tu identidad y ofrecerte una experiencia segura y personalizada.</p>
-      </div>
+        {/* Título y descripción */}
+        <div className={styles.cntTexto}>
+          <TextoPrincipal textoPrincipal="Completa tu perfil" />
 
-      {/* Tarjetas de acción */}
-      <div className={styles.cntTarjeta}>
-        <TarjetaBase
-          srcIcon={escanear}
-          accion="Llena tus datos"
-          descripcion="Completa los formularios de forma manual con tus datos para continuar."
-          textoBoton="Escanear documentos"
-          onClick={() => navigate(ROUTES.CAPTURAR_DOCUMENTOS)}
-        />
+          <p>Llena tus datos o sube tus documentos</p>
+          <p>identificación oficial y comprobante de domicilio</p>
+          <p>Así podremos confirmar tu identidad y ofrecerte una experiencia segura y personalizada.</p>
+        </div>
 
-        <TarjetaBase
-          srcIcon={anadir}
-          accion="Adjuntar archivos"
-          descripcion="Adjunta una imagen o PDF.  
+        {/* Tarjetas de acción */}
+        <div className={styles.cntTarjeta}>
+          <TarjetaBase
+            srcIcon={escanear}
+            accion="Llena tus datos"
+            descripcion="Completa los formularios de forma manual con tus datos para continuar."
+            textoBoton="Escanear documentos"
+            onClick={() => navigate(ROUTES.CAPTURAR_DOCUMENTOS)}
+          />
+
+          <TarjetaBase
+            srcIcon={anadir}
+            accion="Adjuntar archivos"
+            descripcion="Adjunta una imagen o PDF.  
 Asegúrate que sea legible y esté completo."
-          textoBoton="Subir archivos"
-          onClick={() => navigate(ROUTES.ADJUNTAR_DOCUMENTOS)}
-        />
-      </div>
-      <div className={styles.opciones}>
-        <a
-          className={styles.enlace}
-          onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
-          Llenar datos manualmente
-        </a>
+            textoBoton="Subir archivos"
+            onClick={() => navigate(ROUTES.ADJUNTAR_DOCUMENTOS)}
+          />
+        </div>
+        <div className={styles.opciones}>
+          <a
+            className={styles.enlace}
+            onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
+            Llenar datos manualmente
+          </a>
 
-        <a
-          className={styles.enlace}
-          onClick={() => navigate(ROUTES.OPCIONES)}>
-          Subir más tarde desde tu perfil
-        </a>
-      </div>
+          <a
+            className={styles.enlace}
+            onClick={() => navigate(ROUTES.OPCIONES)}>
+            Subir más tarde desde tu perfil
+          </a>
+        </div>
       </div>
 
 

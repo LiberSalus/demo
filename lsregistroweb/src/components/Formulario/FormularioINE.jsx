@@ -28,11 +28,11 @@ const schema = z.object({
 //  const [d, m, y] = s.split("/");
 //  return y && m && d ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
 //};
-const toDMY = (v="") => {
+const toDMY = (v = "") => {
   // acepta "yyyy-mm-dd" o "dd/mm/yyyy" y devuelve "dd/mm/yyyy"
   if (!v) return "";
   if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
-    const [y,m,d] = v.split("-");
+    const [y, m, d] = v.split("-");
     return `${d}/${m}/${y}`;
   }
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return v;
@@ -51,7 +51,7 @@ const normSexo = (v = "") => {
 
 const FormularioINE = ({ onSuccess }) => {
   const navigate = useNavigate();
-  const { state:state_react } = useLocation();
+  const { state: state_react } = useLocation();
 
   console.log("formINE", state_react);
 
@@ -98,7 +98,22 @@ const FormularioINE = ({ onSuccess }) => {
       setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
       setValue("apellido1", data?.primer_apellido ?? data?.apellido_paterno ?? "", { shouldDirty: true });
       setValue("apellido2", data?.segundo_apellido ?? data?.apellido_materno ?? "", { shouldDirty: true });
-      setValue("fechaNac", toDMY(data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine), { shouldDirty: true });
+
+      
+      //limpia fecha
+      setValue("fechaNac", ""); // limpia
+      setTimeout(() => {
+        setValue("fechaNac", fecha, { shouldDirty: true });
+      }, 0);
+
+      setValue("fechaNac", data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "", { shouldDirty: true });
+      
+      //imprime
+      const fecha = data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "";
+      console.log("📅 Fecha recibida:", fecha);
+      setValue("fechaNac", fecha, { shouldDirty: true });
+      
+      
       setValue("sexo", normSexo(data?.sexo), { shouldDirty: true });
 
       setCurpOk(true);
@@ -117,76 +132,76 @@ const FormularioINE = ({ onSuccess }) => {
     }
   };
 
- // === Reemplaza tu onSubmit por este ===
-const onSubmit = async (formData) => {
-  try {
-    // Normaliza campos a lo que espera el backend
-    const entTxt = (resCurp?.entidad_nacimiento || "").toUpperCase().trim();
-    const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
-
-    const payload = {
-      id: state_react.id,
-      curp: formData.curp,                         // ABCD820101H...
-      first_name: formData.nombre,                     // Nombres
-      last_name: formData.apellido1,         // Paterno
-      second_last_name: formData.apellido2 || "",  // Materno
-      sex_curp: formData.sexo,                         // H|M|X
-      birthdate: formData.fechaNac,         // yyyy-mm-dd (del input)
-      nacionalidad: resCurp?.nacionalidad || "MEXICO",
-      state: entInfo.ent,             // "CIUDAD DE MEXICO"
-      abr_entidad: entInfo.abr,                    // "CMX"
-      municipio_registro: resCurp?.municipio_registro || "017 VENUSTIANO CARRANZA",
-      // Si el backend requiere id_user, descomenta:
-      // id_user: state?.id_user ?? state?.idUser ?? undefined,
-    };
-
-    // Log para depurar (puedes borrarlo)
-    console.log("➡️ guardar-curp payload:", payload);
-
-    const endpoint = "/preregistro/preregistro/guardar-curp";
-
+  // === Reemplaza tu onSubmit por este ===
+  const onSubmit = async (formData) => {
     try {
-      await api.post(endpoint, payload);           // 8040 via /api proxy
-    } catch (e1) {
-      // Algunos endpoints exigen "/" al final
-      if (e1?.response?.status === 404 && !endpoint.endsWith("/")) {
-        await api.post(`${endpoint}/`, payload);
-      } else {
-        throw e1;
-      }
-    }
+      // Normaliza campos a lo que espera el backend
+      const entTxt = (resCurp?.entidad_nacimiento || "").toUpperCase().trim();
+      const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
 
-    // Continua al formulario de domicilio
-    navigate(ROUTES.COMPLETAR_DOMICILIO, { state: state_react });
-    onSuccess?.();
-  } catch (err) {
-    alert(prettyApiError(err)); // muestra los campos exactos que fallaron
-  }
-};
+      const payload = {
+        id: state_react.id,
+        curp: formData.curp,                         // ABCD820101H...
+        first_name: formData.nombre,                     // Nombres
+        last_name: formData.apellido1,         // Paterno
+        second_last_name: formData.apellido2 || "",  // Materno
+        sex_curp: formData.sexo,                         // H|M|X
+        birthdate: formData.fechaNac,         // yyyy-mm-dd (del input)
+        nacionalidad: resCurp?.nacionalidad || "MEXICO",
+        state: entInfo.ent,             // "CIUDAD DE MEXICO"
+        abr_entidad: entInfo.abr,                    // "CMX"
+        municipio_registro: resCurp?.municipio_registro || "017 VENUSTIANO CARRANZA",
+        // Si el backend requiere id_user, descomenta:
+        // id_user: state?.id_user ?? state?.idUser ?? undefined,
+      };
+
+      // Log para depurar (puedes borrarlo)
+      console.log("➡️ guardar-curp payload:", payload);
+
+      const endpoint = "/preregistro/preregistro/guardar-curp";
+
+      try {
+        await api.post(endpoint, payload);           // 8040 via /api proxy
+      } catch (e1) {
+        // Algunos endpoints exigen "/" al final
+        if (e1?.response?.status === 404 && !endpoint.endsWith("/")) {
+          await api.post(`${endpoint}/`, payload);
+        } else {
+          throw e1;
+        }
+      }
+
+      // Continua al formulario de domicilio
+      navigate(ROUTES.COMPLETAR_DOMICILIO, { state: state_react });
+      onSuccess?.();
+    } catch (err) {
+      alert(prettyApiError(err)); // muestra los campos exactos que fallaron
+    }
+  };
 
 
   // helpers arriba del componente (o dentro, como prefieras)
-const prettyApiError = (err) => {
-  const detail = err?.response?.data?.detail ?? err?.response?.data ?? err?.message;
-  if (Array.isArray(detail)) {
-    // FastAPI suele mandar: [{loc:[...], msg:"...", type:"..."}]
-    return detail.map(d => {
-      const loc = Array.isArray(d?.loc) ? d.loc.join(".") : "";
-      return `${loc ? `[${loc}] ` : ""}${d?.msg || JSON.stringify(d)}`;
-    }).join("\n");
-  }
-  if (typeof detail === "object") return JSON.stringify(detail, null, 2);
-  return String(detail || "Error");
-};
+  const prettyApiError = (err) => {
+    const detail = err?.response?.data?.detail ?? err?.response?.data ?? err?.message;
+    if (Array.isArray(detail)) {
+      // FastAPI suele mandar: [{loc:[...], msg:"...", type:"..."}]
+      return detail.map(d => {
+        const loc = Array.isArray(d?.loc) ? d.loc.join(".") : "";
+        return `${loc ? `[${loc}] ` : ""}${d?.msg || JSON.stringify(d)}`;
+      }).join("\n");
+    }
+    if (typeof detail === "object") return JSON.stringify(detail, null, 2);
+    return String(detail || "Error");
+  };
 
-// mapa mínimo para la entidad (ajusta con tus catálogos si quieres)
-const ENT_MAP = {
-  "DISTRITO FEDERAL": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
-  "CIUDAD DE MEXICO": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
-};
+  // mapa mínimo para la entidad (ajusta con tus catálogos si quieres)
+  const ENT_MAP = {
+    "DISTRITO FEDERAL": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
+    "CIUDAD DE MEXICO": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
+  };
 
   return (
-    <div className={styles.cntFormulario}>
+    <div className={styles.Formu}>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.formulario} noValidate>
         {/* CURP */}
         <div className={styles.cntValCurp}>

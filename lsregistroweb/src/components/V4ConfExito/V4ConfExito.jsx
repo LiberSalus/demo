@@ -75,6 +75,7 @@ const V4ConfExito = () => {
       </div>
 
       <div className={styles.cntConfExito}>
+        
         <div className={styles.cntLogo}><Logo /></div>
         <TextoPrincipal textoPrincipal="¡Tu cuenta esta casi lista!" />
         <p>Completa tus formularios con tus datos para activar tu perfil y disfrutar una experiencia segura y personalizada.</p>

@@ -226,7 +226,7 @@
     pointer-events: none;
     overflow-y: hidden;
     & > img {
-        margin-top: 10%;
+        margin-top: 0%;
     }
 }
 
