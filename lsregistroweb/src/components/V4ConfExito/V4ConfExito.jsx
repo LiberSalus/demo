@@ -13,13 +13,18 @@ const V4ConfExito = () => {
   const navigate = useNavigate();
   const [state, setState] = useState(locationState);
 
-  useEffect(() => {
-    if (!locationState?.id) {
-      const backup = Number(sessionStorage.getItem('ls:id_pre'));
-      if (!backup) return navigate(ROUTES.REGISTRO, { replace: true });
-      setState(prev => ({ ...prev, id: backup }));
-    }
-  }, [locationState, navigate]);
+ useEffect(() => {
+  if (locationState?.id) {
+    // ✔️ si viene por state, persístelo y sincroniza el state local
+    sessionStorage.setItem('ls:id_pre', String(locationState.id));
+    setState(prev => ({ ...prev, id: locationState.id }));
+    return;
+  }
+  // ❗ si NO viene por state, intenta recuperar el backup
+  const backup = Number(sessionStorage.getItem('ls:id_pre'));
+  if (!backup) return navigate(ROUTES.REGISTRO, { replace: true });
+  setState(prev => ({ ...prev, id: backup }));
+}, [locationState, navigate]);
 
   const handleContinuar = () => {
     navigate(ROUTES.COMPROBAR_IDENTIDAD, { state, replace: true });

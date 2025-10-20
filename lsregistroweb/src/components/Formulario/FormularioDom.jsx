@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import api from "@/services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/routes/AppRouter"; // <-- usa "@/" alias
 
 const schema = z.object({
@@ -28,6 +28,7 @@ const CP_API = "/cp/codigos_postales?codigo_postal=";
 
 const FormularioDom = () => {
   const navigate = useNavigate();               // <-- declara ANTES de usar
+  const { state } = useLocation(); // puede venir { id } o { id_pre }
   const [ciudad, setCiudad] = useState("");     // <-- declara ANTES de usar
 
   const {
@@ -68,6 +69,22 @@ const FormularioDom = () => {
     if (isOpen) setShow(true);
     else setTimeout(() => setShow(false), 300);
   }, [isOpen]);
+
+  useEffect(() => {
+  const candidates = [
+    state?.id_pre,
+    state?.id,
+    Number(sessionStorage.getItem("id_pre")),
+    Number(localStorage.getItem("id_pre")),
+    Number((sessionStorage.getItem("location") || "").split("/").pop()),
+  ].filter((n) => Number.isFinite(n) && n > 0);
+
+  if (candidates.length) {
+    sessionStorage.setItem("id_pre", String(candidates[0]));
+  }
+}, [state]);
+
+
 
   // Llamada al servicio externo de C.P.
   const obtenerCP = async () => {
@@ -138,46 +155,59 @@ const FormularioDom = () => {
     setIsOpen(false);
   };
 
-  const onSubmit = async (form) => {
-    try {
-      const payload = {
-        calle: form.calle,
-        numero_int: form.numeroInt || "",
-        numero_ext: form.numeroExt,
-        codigo_postal: form.codigoPostal,
-        delegacion: form.alcaldiaMunicipio,
-        colonia: form.colonia,
-        estado: form.estado,
-        ciudad: ciudad || "",
-        referencia: form.referencia || "",
-      };
+  const getIdPre = () => {
+  const raw = sessionStorage.getItem("id_pre");
+  const n = raw ? Number(raw) : null;
+  return Number.isFinite(n) ? n : null;
+};
 
-      await api.post("/preregistro/direccion/guardar", payload);
-      navigate(ROUTES.RECIBIDOS);
-    } catch (err) {
-      const d =
-        err?.response?.data?.detail ??
-        err?.response?.data?.message ??
-        err?.message;
-      const msg = Array.isArray(d)
-        ? d.map((x) => x.msg || JSON.stringify(x)).join(" · ")
-        : d;
-      if (err?.response?.status === 401) {
-        alert("Sesión no válida. Inicia sesión de nuevo.");
-        return;
-      }
-      alert(msg || "Error al guardar dirección");
+  const onSubmit = async (form) => {
+
+    
+
+  try {
+    const id = getIdPre();
+    if (!id) {
+      alert("Falta el identificador del preregistro. Vuelve a iniciar el flujo.");
+      return;
     }
-  };
+
+    const payload = {
+      id,
+      calle: form.calle,
+      numero_int: form.numeroInt || "",
+      numero_ext: form.numeroExt,
+      codigo_postal: form.codigoPostal,
+      delegacion: form.alcaldiaMunicipio,
+      colonia: form.colonia,
+      estado: form.estado,
+      ciudad: ciudad || "",       // <- viene de la consulta de CP
+      referencia: form.referencia || ""
+    };
+
+    await api.post("/preregistro/guardar-direccion", payload);
+    navigate(ROUTES.RECIBIDOS);
+  } catch (err) {
+    const d = err?.response?.data?.detail ?? err?.response?.data?.message ?? err?.message;
+    const msg = Array.isArray(d)
+      ? d.map((x) => x.msg || JSON.stringify(x)).join(" · ")
+      : d;
+    if (err?.response?.status === 401) {
+      alert("Sesión no válida. Inicia sesión de nuevo.");
+      return;
+    }
+    alert(msg || "Error al guardar dirección");
+  }
+};
+
 
   return (
     <div className={styles.cntFormulario}>
       {/* Modal elección de colonia */}
       {show && (
         <div
-          className={`${styles.capaModal} ${
-            isOpen ? styles.capaModalVisible : ""
-          }`}
+          className={`${styles.capaModal} ${isOpen ? styles.capaModalVisible : ""
+            }`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="titulo-modal-colonia"

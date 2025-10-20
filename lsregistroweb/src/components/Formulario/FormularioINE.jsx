@@ -28,17 +28,15 @@ const schema = z.object({
 //  const [d, m, y] = s.split("/");
 //  return y && m && d ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
 //};
-const toDMY = (v = "") => {
-  // acepta "yyyy-mm-dd" o "dd/mm/yyyy" y devuelve "dd/mm/yyyy"
-  if (!v) return "";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
-    const [y, m, d] = v.split("-");
-    return `${d}/${m}/${y}`;
-  }
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return v;
-  return "";
-};
 
+const toISO = (v = "") => {
+  if (!v) return "";
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) {
+    const [d, m, y] = v.split("/");
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+  return v; // si ya está en formato ISO, lo deja igual
+};
 
 
 const normSexo = (v = "") => {
@@ -52,8 +50,9 @@ const normSexo = (v = "") => {
 const FormularioINE = ({ onSuccess }) => {
   const navigate = useNavigate();
   const { state: state_react } = useLocation();
+  const safeId = state_react?.id ?? sessionStorage.getItem("ls:id_pre");
 
-  console.log("formINE", state_react);
+
 
   const {
     register,
@@ -98,22 +97,12 @@ const FormularioINE = ({ onSuccess }) => {
       setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
       setValue("apellido1", data?.primer_apellido ?? data?.apellido_paterno ?? "", { shouldDirty: true });
       setValue("apellido2", data?.segundo_apellido ?? data?.apellido_materno ?? "", { shouldDirty: true });
+      const fechaRaw = data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "";
+      const fechaISO = toISO(fechaRaw);
+      console.log("📅 Fecha convertida:", fechaISO);
+      setValue("fechaNac", fechaISO, { shouldDirty: true });
 
-      
-      //limpia fecha
-      setValue("fechaNac", ""); // limpia
-      setTimeout(() => {
-        setValue("fechaNac", fecha, { shouldDirty: true });
-      }, 0);
 
-      setValue("fechaNac", data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "", { shouldDirty: true });
-      
-      //imprime
-      const fecha = data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "";
-      console.log("📅 Fecha recibida:", fecha);
-      setValue("fechaNac", fecha, { shouldDirty: true });
-      
-      
       setValue("sexo", normSexo(data?.sexo), { shouldDirty: true });
 
       setCurpOk(true);
@@ -138,15 +127,30 @@ const FormularioINE = ({ onSuccess }) => {
       // Normaliza campos a lo que espera el backend
       const entTxt = (resCurp?.entidad_nacimiento || "").toUpperCase().trim();
       const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
+      if (!safeId) {
+        alert("No se pudo recuperar el ID. Regresa al paso anterior.");
+        return;
+      }
+
+      const toDMY = (v = "") => {
+  if (!v) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    const [y, m, d] = v.split("-");
+    return `${d}/${m}/${y}`;
+  }
+  return v; // si ya está en formato correcto, lo deja igual
+};
+
+
 
       const payload = {
-        id: state_react.id,
+        id: safeId,
         curp: formData.curp,                         // ABCD820101H...
         first_name: formData.nombre,                     // Nombres
         last_name: formData.apellido1,         // Paterno
         second_last_name: formData.apellido2 || "",  // Materno
         sex_curp: formData.sexo,                         // H|M|X
-        birthdate: formData.fechaNac,         // yyyy-mm-dd (del input)
+        birthdate: toDMY(formData.fechaNac),         // yyyy-mm-dd (del input)
         nacionalidad: resCurp?.nacionalidad || "MEXICO",
         state: entInfo.ent,             // "CIUDAD DE MEXICO"
         abr_entidad: entInfo.abr,                    // "CMX"
