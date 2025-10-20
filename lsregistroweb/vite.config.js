@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// vite.config.js
-=======
-// vite.config.js
->>>>>>> 0764d56f8b8e8ccd41735ab4419c54a9e105bb12
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "node:url";
