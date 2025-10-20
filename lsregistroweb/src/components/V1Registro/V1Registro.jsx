@@ -13,15 +13,23 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import BotonA from "@/components/Botones/BotonA";
 import Switch from "@/components/Seleccion/Switch";
 import Derechos from "./Derechos";
-import LiberSalusPoly from "./LiberSalusLowPoly/LiberSalusPoly";
 import lineas from "./line.svg";
 
+/* ---------- Utils ---------- */
+const onlyDigits = (v = "") => (v || "").replace(/\D+/g, "");
+const toLowerTrim = (v = "") => (v || "").trim().toLowerCase();
 
 /* ---------- Validación ---------- */
 const schema = z
   .object({
-    correo: z.string().email("Correo no válido"),
-    telefono: z.string().regex(/^\d{10}$/, "Debe tener 10 dígitos"),
+    correo: z
+      .string()
+      .transform(toLowerTrim)
+      .pipe(z.string().email("Correo no válido")),
+    telefono: z
+      .string()
+      .transform(onlyDigits)
+      .refine((v) => /^\d{10}$/.test(v), { message: "Debe tener 10 dígitos" }),
     contrasena: z
       .string()
       .regex(
@@ -29,10 +37,11 @@ const schema = z
         "Mínimo 8 caracteres, 1 mayús., 1 minús., 1 número, 1 símbolo"
       ),
     confirmContra: z.string(),
-    politicas: z.literal(
-      true,
-      "Lee los terminos y condiciones y activa la casilla"
-    ),
+    politicas: z
+      .boolean()
+      .refine((v) => v, {
+        message: "Lee los terminos y condiciones y activa la casilla",
+      }),
   })
   .refine((d) => d.contrasena === d.confirmContra, {
     path: ["confirmContra"],
@@ -64,6 +73,7 @@ const Registro = () => {
 
   /* ---------- Submit ---------- */
   const onSubmit = (data) => {
+    // data.correo y data.telefono ya vienen normalizados por Zod (.transform)
     const payload = {
       rol: 1,
       correo: data.correo,
@@ -73,21 +83,11 @@ const Registro = () => {
     };
     navigate(ROUTES.CONFIRMACION, { state: payload });
   };
-  console.log(errors);
+
   /* ---------- UI ---------- */
   return (
     <div className={styles.cntV1Registro}>
       <div className={styles.cntBienvenida}>
-        {/* <div className={styles.fondo}>
-          <LiberSalusPoly
-            autoMorph={true}        // morph automático
-            morphEveryMs={30}     // intervalo de morph
-            spray={false}            // triángulos sueltos
-            curveAlpha={0}        // opacidad ola superior
-            dirGlow={0.006}          // vignette/glow
-            className="w-full h-full"
-          />
-        </div> */}
         <div className={styles.cntSaludo}>
           <div>
             <p>
@@ -126,7 +126,7 @@ const Registro = () => {
 
       <div className={styles.cntFormulario}>
         <div className={styles.cntLineas}>
-          <img src={lineas}></img>
+          <img src={lineas} alt="" />
         </div>
 
         <div className={styles.logoForm}>
@@ -143,10 +143,14 @@ const Registro = () => {
 
             {/* Correo */}
             <div className={styles.cntImput}>
-              <label className={styles.label}>Correo electrónico</label>
+              <label className={styles.label} htmlFor="correo">
+                Correo electrónico
+              </label>
               <input
+                id="correo"
                 type="email"
                 placeholder="Correo electrónico"
+                autoComplete="email"
                 {...register("correo")}
                 className={errors.correo ? styles.errorInput : ""}
               />
@@ -157,13 +161,20 @@ const Registro = () => {
 
             {/* Teléfono */}
             <div className={styles.cntImput}>
-              <label className={styles.label}>Teléfono</label>
-
+              <label className={styles.label} htmlFor="telefono">
+                Teléfono
+              </label>
               <input
-                type="text"
+                id="telefono"
+                type="tel"
+                inputMode="numeric"
                 placeholder="Teléfono celular"
                 maxLength={10}
+                autoComplete="tel"
                 {...register("telefono")}
+                onInput={(e) => {
+                  e.currentTarget.value = onlyDigits(e.currentTarget.value).slice(0, 10);
+                }}
                 className={errors.telefono ? styles.errorInput : ""}
               />
               {errors.telefono && (
@@ -173,72 +184,63 @@ const Registro = () => {
 
             {/* Contraseña */}
             <div className={styles.cntImput}>
-              <label className={styles.label}>Contraseña</label>
-              <input
-                type={showPass ? "text" : "password"}
-                placeholder="Contraseña"
-                {...register("contrasena")}
-                className={errors.contrasena ? styles.errorInput : ""}
-              />
-              <span
-                className={styles.passwordToggle}
-                onClick={() => setShowPass(!showPass)}
-                role="button"
-                tabIndex={0}
-                aria-label={
-                  showPass ? "Ocultar contraseña" : "Mostrar contraseña"
-                }
-                onKeyDown={(e) => {
-                  if (e.key === " " || e.key === "Enter") {
-                    e.preventDefault(); // evita que el espacio haga scroll
-                    setShowPass((p) => !p);
-                  }
-                }}
-              >
-                <img
-                  src={showPass ? srcCerrado : srcAbierto}
-                  className={styles.ojos}
-                  alt=""
+              <label className={styles.label} htmlFor="contrasena">
+                Contraseña
+              </label>
+              <div className={styles.inputWithBtn}>
+                <input
+                  id="contrasena"
+                  type={showPass ? "text" : "password"}
+                  placeholder="Contraseña"
+                  autoComplete="new-password"
+                  {...register("contrasena")}
+                  className={errors.contrasena ? styles.errorInput : ""}
                 />
-              </span>
-
+                <button
+                  type="button"
+                  className={styles.passwordToggle}
+                  onClick={() => setShowPass((p) => !p)}
+                  aria-label={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  <img
+                    src={showPass ? srcCerrado : srcAbierto}
+                    className={styles.ojos}
+                    alt=""
+                  />
+                </button>
+              </div>
               {errors.contrasena && (
-                <span className={styles.error}>
-                  {errors.contrasena.message}
-                </span>
+                <span className={styles.error}>{errors.contrasena.message}</span>
               )}
             </div>
 
             {/* Confirmar */}
             <div className={styles.cntImput}>
-              <label className={styles.label}>Confirmar contraseña</label>
-              <input
-                type={showConf ? "text" : "password"}
-                placeholder="Confirmar contraseña"
-                {...register("confirmContra")}
-                className={errors.confirmContra ? styles.errorInput : ""}
-              />
-              <span
-                className={styles.passwordToggle}
-                onClick={() => setShowConf(!showConf)}
-                role="button"
-                tabIndex={0}
-                aria-label={
-                  showPass ? "Ocultar contraseña" : "Mostrar contraseña"
-                }
-                onKeyDown={(e) => {
-                  if (e.key === " " || e.key === "Enter") {
-                    e.preventDefault(); // evita que el espacio haga scroll
-                    setShowConf((p) => !p);
-                  }
-                }}
-              >
-                <img
-                  src={showConf ? srcCerrado : srcAbierto}
-                  className={styles.ojos}
-                  alt=""
+              <label className={styles.label} htmlFor="confirmContra">
+                Confirmar contraseña
+              </label>
+              <div className={styles.inputWithBtn}>
+                <input
+                  id="confirmContra"
+                  type={showConf ? "text" : "password"}
+                  placeholder="Confirmar contraseña"
+                  autoComplete="new-password"
+                  {...register("confirmContra")}
+                  className={errors.confirmContra ? styles.errorInput : ""}
                 />
-              </span>
+                <button
+                  type="button"
+                  className={styles.passwordToggle}
+                  onClick={() => setShowConf((p) => !p)}
+                  aria-label={showConf ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  <img
+                    src={showConf ? srcCerrado : srcAbierto}
+                    className={styles.ojos}
+                    alt=""
+                  />
+                </button>
+              </div>
               {errors.confirmContra && (
                 <span className={styles.error}>
                   {errors.confirmContra.message}
@@ -254,8 +256,8 @@ const Registro = () => {
                 {...register("politicas")}
                 onKeyDown={(e) => {
                   if (e.key === " " || e.key === "Enter") {
-                    e.preventDefault(); // evita scroll o submit
-                    e.currentTarget.click(); // dispara toggle de forma nativa
+                    e.preventDefault();
+                    e.currentTarget.click();
                   }
                 }}
               />
@@ -269,10 +271,7 @@ const Registro = () => {
             </div>
 
             {/* Botón */}
-            <BotonA
-              type="submit"
-              disabled={!isValid || !isDirty || isSubmitting}
-            >
+            <BotonA type="submit" disabled={!isValid || !isDirty || isSubmitting}>
               {isSubmitting ? "Creando…" : "Crear cuenta"}
             </BotonA>
           </form>

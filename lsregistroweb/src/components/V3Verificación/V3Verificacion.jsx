@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "@/services/api";
 import { ROUTES } from "@/routes/AppRouter";
@@ -7,7 +7,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import BotonA from "@/components/Botones/BotonA";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
-import lineas from '../V1Registro/line.svg'
+import lineas from "../V1Registro/line.svg";
 
 const getIdPre = (data, headers) =>
   data?.id_pre ??
@@ -16,13 +16,39 @@ const getIdPre = (data, headers) =>
   data?.result?.id ??
   (Number((headers?.location || "").split("/").pop()) || null);
 
-const V3Verificacion = () => {
-  const { state } = useLocation(); // { correo, telefono, metodo, ... }
+function V3Verificacion() {
+  const { state } = useLocation(); // { correo, telefono, metodo, expiresAt?, ... }
   const navigate = useNavigate();
 
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setError] = useState("");
+
+  // ===================== TIMER por fecha real de expiración =====================
+  // 1) Obtenemos expiresAt del state o de sessionStorage (en caso de refresh).
+  const initialExpires = useMemo(() => {
+    const fromState = Number(state?.expiresAt);
+    if (Number.isFinite(fromState) && fromState > 0) return fromState;
+    const fromSS = Number(sessionStorage.getItem("ls:code_expires_at"));
+    return Number.isFinite(fromSS) && fromSS > 0 ? fromSS : Date.now() + 5 * 60 * 1000;
+  }, [state?.expiresAt]);
+
+  // 2) Lo guardamos en estado para poder actualizarlo cuando se reenvíe.
+  const [expiresAt, setExpiresAt] = useState(initialExpires);
+  // 3) Remaining se calcula respecto a expiresAt.
+  const [remaining, setRemaining] = useState(0);
+
+  useEffect(() => {
+    const tick = () => {
+      const sec = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+      setRemaining(sec);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [expiresAt]);
+  // ============================================================================
+
   const inputsRef = useRef([]);
 
   const handleChange = (idx, val) => {
@@ -30,13 +56,17 @@ const V3Verificacion = () => {
     const copy = [...digits];
     copy[idx] = val;
     setDigits(copy);
-    if (val && idx < 5) inputsRef.current[idx + 1].focus();
+    if (val && idx < 5) inputsRef.current[idx + 1]?.focus();
     setError("");
   };
+
   const handleKeyDown = (idx, e) => {
     if (e.key === "Backspace" && !digits[idx] && idx > 0)
-      inputsRef.current[idx - 1].focus();
+      inputsRef.current[idx - 1]?.focus();
   };
+
+  const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
+  const ss = String(remaining % 60).padStart(2, "0");
 
   const verificar = async () => {
     const codigo = digits.join("");
@@ -44,25 +74,29 @@ const V3Verificacion = () => {
       setError("Ingresa los 6 dígitos.");
       return;
     }
+    if (remaining <= 0) {
+      setError("El código ha expirado. Reenviar para continuar.");
+      return;
+    }
 
     try {
       setLoading(true);
 
+      // 1) Validar código
       await api.post(`/preregistro/preregistro/validar-${state.metodo}/`, {
         identificador: state[state.metodo],
         codigo,
       });
 
+      // 2) Crear preregistro
       const { data, headers } = await api.post(
         "/preregistro/preregistro/registro/",
         state
       );
 
-      // ⬇️ AQUÍ creas el id
       const id = getIdPre(data, headers);
       if (!id) throw new Error("No llegó el id del preregistro.");
 
-      // respaldo y navegación usando ese id
       sessionStorage.setItem("ls:id_pre", String(id));
       navigate(ROUTES.CONFIRMACION_EXITO, { state: { ...state, id } });
     } catch (err) {
@@ -78,32 +112,39 @@ const V3Verificacion = () => {
     }
   };
 
-  const reenviar = () =>
-    api.post("/preregistro/preregistro/reenviar-codigo/", {
-      identificador: state[state.metodo],
-    });
+  const reenviar = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.post(
+        "/preregistro/preregistro/reenviar-codigo/",
+        { identificador: state[state.metodo] }
+      );
+      // Actualizamos el timer con la nueva fecha del backend
+      const newExpires = Date.parse(data?.expira) || Date.now() + 5 * 60 * 1000;
+      sessionStorage.setItem("ls:code_expires_at", String(newExpires));
+      setExpiresAt(newExpires);
+      setDigits(["", "", "", "", "", ""]);
+      inputsRef.current[0]?.focus?.();
+      setError("");
+    } catch (err) {
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "No se pudo reenviar el código.";
+      setError(String(msg));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.cntV3Verificacion}>
       <div className={styles.cntBienvenida}>
-        {/* <div className={styles.fondo}>
-                      <LiberSalusPoly
-                        autoMorph={true}        // morph automático
-                        morphEveryMs={30}     // intervalo de morph
-                        spray={false}            // triángulos sueltos
-                        curveAlpha={0}        // opacidad ola superior
-                        dirGlow={0.006}          // vignette/glow
-                        className="w-full h-full"
-                      />
-                    </div> */}
         <div className={styles.cntSaludo}>
           <div>
-            <p>
-              ¡Bienvenido a <br /> Liber Salus!
-            </p>
-            <p>
-              Afíliate y toma el control de <br /> tu bienestar
-            </p>
+            <p>¡Bienvenido a <br /> Liber Salus!</p>
+            <p>Afíliate y toma el control de <br /> tu bienestar</p>
             <p>
               Para comenzar a usar nuestra plataforma, necesitas crear un
               usuario y afiliarte.
@@ -115,16 +156,10 @@ const V3Verificacion = () => {
 
         <div className={styles.cntPasos}>
           <div className={styles.elementoPaso}>
-            <p className={styles.paso}>
-              Crea tu usuario: <br />
-              Llena tus datos personales.
-            </p>
+            <p className={styles.paso}>Crea tu usuario: <br /> Llena tus datos personales.</p>
           </div>
           <div className={styles.elementoPaso}>
-            <p className={styles.paso}>
-              Sube tus documentos: <br />
-              CURP, INE y comprobante de domicilio
-            </p>
+            <p className={styles.paso}>Sube tus documentos: <br /> CURP, INE y comprobante de domicilio</p>
           </div>
           <div className={styles.elementoPaso}>
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
@@ -138,7 +173,7 @@ const V3Verificacion = () => {
         </div>
 
         <div className={styles.Lineas}>
-          <img src={lineas}></img>
+          <img src={lineas} alt="" />
         </div>
 
         <div className={styles.cntTextos}>
@@ -160,37 +195,64 @@ const V3Verificacion = () => {
                 ref={(el) => (inputsRef.current[idx] = el)}
                 className={styles.inputs}
                 type="text"
+                inputMode="numeric"
                 maxLength={1}
                 value={d}
                 onChange={(e) => handleChange(idx, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(idx, e)}
               />
             ))}
+
+            {/* Timer */}
+            <div className={styles.timerWrap}>
+              {remaining > 0 ? (
+                <span className={styles.timer}>
+                  El código expira en <strong>{mm}:{ss}</strong>
+                </span>
+              ) : (
+                <span className={styles.timerExpired}>
+                  El código expiró.{" "}
+                  <button
+                    type="button"
+                    className={styles.reenviarBtnInline}
+                    onClick={reenviar}
+                  >
+                    Reenviar código
+                  </button>
+                </span>
+              )}
+            </div>
+
             {errorMsg && <span className={styles.error}>{errorMsg}</span>}
           </div>
 
-
           <div className={styles.cntBoton}>
-            <BotonA type="submit" disabled={loading} onClick={verificar}>
+            <BotonA
+              type="submit"
+              disabled={loading || remaining <= 0}
+              onClick={verificar}
+            >
               {loading ? "Verificando…" : "Verificar y continuar"}
             </BotonA>
           </div>
         </form>
+
         <p className={styles.reenviarWrap}>¿No recibiste el código? </p>
         <a className={styles.reenviar} onClick={reenviar}>
           Reenviar código
         </a>
+
         <div className={styles.der}></div>
 
         <div className={styles.derechosPie}>
           <p className={styles.derechos}>
-            © 2025 Liber Salus. Este sitio está protegido por derechos de autor.{" "}
-            <br />
+            © 2025 Liber Salus. Este sitio está protegido por derechos de autor. <br />
             Todos los derechos reservados.
           </p>
         </div>
       </div>
     </div>
   );
-};
+}
+
 export default V3Verificacion;

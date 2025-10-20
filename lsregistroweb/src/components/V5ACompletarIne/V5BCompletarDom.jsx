@@ -1,13 +1,13 @@
 // src/components/V5BCompletarDom/V5BCompletarDom.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/routes/AppRouter';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/AppRouter";
 
-import styles from '@/components/V5ACompletarIne/v5completarDom.module.css';   /* crea o reutiliza */
-import Logo from '@/components/ElementosVista/Logo/Logo';
-import TextoPrincipal from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
-import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
-import FormularioDom from '@/components/Formulario/FormularioDom';
+import styles from "@/components/V5ACompletarIne/v5completarDom.module.css"; /* crea o reutiliza */
+import Logo from "@/components/ElementosVista/Logo/Logo";
+import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
+import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
+import FormularioDom from "@/components/Formulario/FormularioDom";
 
 const V5BCompletarDom = () => {
   const navigate = useNavigate();
@@ -15,20 +15,18 @@ const V5BCompletarDom = () => {
   const handleSuccess = () => navigate(ROUTES.INVITACION_DOC);
 
   return (
-
     <div className={styles.cntV5ACompletarDom}>
-
       <div className={styles.cntBienvenida}>
         {/* <div className={styles.fondo}>
-                                                <LiberSalusPoly
-                                                  autoMorph={true}        // morph automático
-                                                  morphEveryMs={30}     // intervalo de morph
-                                                  spray={false}            // triángulos sueltos
-                                                  curveAlpha={0}        // opacidad ola superior
-                                                  dirGlow={0.006}          // vignette/glow
-                                                  className="w-full h-full"
-                                                />
-                                              </div> */}
+            <LiberSalusPoly
+              autoMorph={true}        // morph automático
+              morphEveryMs={30}     // intervalo de morph
+              spray={false}            // triángulos sueltos
+              curveAlpha={0}        // opacidad ola superior
+              dirGlow={0.006}          // vignette/glow
+              className="w-full h-full"
+            />
+          </div> */}
         <div className={styles.cntSaludo}>
           <div>
             <p>
@@ -61,16 +59,18 @@ const V5BCompletarDom = () => {
               </p>
             </div>
             <div className={styles.elementoPaso}>
-              <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
+              <p className={styles.paso}>
+                Completa tus cuestionarios de saliud
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-
-      
       <div className={styles.cntFormulario}>
-        <div className={styles.cntLogo}><Logo /></div>
+        <div className={styles.cntLogo}>
+          <Logo />
+        </div>
 
         <div className={styles.cntTexto}>
           <TextoPrincipal textoPrincipal="Completa tus datos" />

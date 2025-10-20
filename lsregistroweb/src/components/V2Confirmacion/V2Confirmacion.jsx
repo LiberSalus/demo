@@ -28,10 +28,14 @@ const V2Confirmacion = () => {
     if (!metodo) return;
     try {
       setLoading(true);
-      await api.post(`/preregistro/preregistro/enviar-codigo-${metodo}/`, {
-        identificador: state?.[metodo],
-      });
-      navigate(ROUTES.VERIFICACION, { state: { ...state, metodo } });
+      const { data } = await api.post(
+        `/preregistro/preregistro/enviar-codigo-${metodo}/`,
+        { identificador: state?.[metodo] }
+      );
+      // Normalizamos a timestamp (ms). Si por algo no viniera, usamos +5 min como fallback.
+      const expiresAt = Date.parse(data?.expira) || Date.now() + 5 * 60 * 1000;
+      sessionStorage.setItem("ls:code_expires_at", String(expiresAt));
+      navigate(ROUTES.VERIFICACION, { state: { ...state, metodo, expiresAt } });
     } catch (err) {
       const msg =
         err?.response?.data?.detail ||
