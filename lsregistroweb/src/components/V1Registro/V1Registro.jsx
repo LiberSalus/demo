@@ -16,6 +16,7 @@ import Derechos from "./Derechos";
 import LiberSalusPoly from "./LiberSalusLowPoly/LiberSalusPoly";
 import lineas from "./line.svg";
 
+
 /* ---------- Validación ---------- */
 const schema = z
   .object({

@@ -4,7 +4,7 @@ import styles from "./tarjetaAlerta.module.css";
 
 export default function TarjetaAlertas({ areas = ["a1", "a2",  "a3", "a4", "a5"] }) {
   // Quitamos duplicados y descartamos códigos desconocidos
-  const unicas = Array.from(new Set(areas)).filter((a) => AREAS[a]);
+  const unicas  = Array.from(new Set(areas)).filter((a) => AREAS[a]);
 
   return (
     <div className={styles.cntTarjetaAlerta}>

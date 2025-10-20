@@ -1,14 +1,17 @@
-.cntV5ACompletarIne {
-  /* background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%); */
-  color: rgb(70, 69, 69);
-  width: 100%;
-  min-height: 100dvh;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
+@import url('../V1Registro/v1registro.module.css');
 
+.cntV5ACompletarIne {
+  display: flex;
+  
+  height:100%;
+  position: relative;
+}
+
+
+.cntFormulario {
+  position: relative;
+  justify-content: center;
+  width: 50%;
 }
 
 
@@ -23,9 +26,4 @@
 
 }
 
-.cntFormulario {
-  margin: 2rem auto;
-  width: 90%;
-  /* border: 2px dashed greenyellow; */
-}
 

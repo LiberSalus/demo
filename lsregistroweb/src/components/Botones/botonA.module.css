@@ -14,14 +14,14 @@
   justify-content: center;
   font-weight: 400;
   border: none;
-  border-radius: 3rem;
+  border-radius: 3rem; 
   padding: .5rem 1.25rem;
   cursor: pointer;
   transition: background-color .3s ease, transform .3s ease;
 }
 
 /* Variantes */
-.primary   { background: #5981c6; color: #fff; }
+.primary   { background: #007CBA; color: #fff; }
 .secondary { background: #e2e8f0; color: #1a202c; }
 .danger    { background: #e53e3e; color: #fff; }
 .primary:hover   { background: #3666d6; }
@@ -41,9 +41,12 @@
 }
 
 .primary:hover {
-  background-color: #2566d6 ;
+  background-color: #006293 ;
 }
 
+.primary:checked {
+  background-color: #004D73;
+}
 
 .boton {
   transition: opacity 0.2s;

@@ -1,15 +1,40 @@
+@import url('../V1Registro/v1registro.module.css');
+
+.cntV4ConfExito {
+  display: flex;
+  align-items: stretch;
+  height:100%;
+  min-height: 700px;
+  position: relative;
+}
+
+
+.cntFormulario {
+  position: relative;
+  justify-content: center;
+}
+
+
 .cntConfExito {
   /* background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%); */
   color: rgb(70, 69, 69);
-  width: 100%;
+  width: 50%;
   height: 100dvh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  
+  & > :nth-child(3) {
+    width: 80%;
+    text-align: center;
+  }
 }
+
+.cntPaloma{
+margin: 3rem auto;
+}
+
 
 .cntLogo {
     margin-top: 3rem;
@@ -17,73 +42,8 @@
     
 }
 
-.cntPaloma {
-    margin-top: 5rem;
-    width:  100px;
-    height: 100px;
-    background-image:linear-gradient(135deg,#4FB9F9, #4eb4f3);
-    border-radius: 50%;
-    position: relative;
-    outline: 1rem solid rgb(86, 252, 10);
-    outline-offset: 2rem;
-}
 
-.cntPaloma::before {
-    position: absolute;
-    content: '';
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.7rem;
-    color: white;
-    text-shadow: 
-    4px 4px 6px rgb(65, 53, 235),
-    53px 13px 18px rgb(83, 149, 224);
-    font-weight: 900;
-}
 
-.cntPaloma::after {
-    position: absolute;
-    content: '';
-    border-radius: 50%;
-    width:  108%;
-    height: 108%;
-    background-image: linear-gradient(135deg, #b8fafd 0%, #b8fafd 40%, #3967ac 80%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-}
 
-.paloma {
-    width:  100%;
-    height: 100%;
-    position: relative;
-}
 
-.paloma::before {
-    position: absolute;
-    content: '';
-    width: 50px;
-    height: 13px;
-    background-color: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-40%, -30%) rotate(-45deg);
-    box-shadow: 
-        0px 4px 6px rgb(54, 48, 138),
-        13px 13px 18px rgb(83, 149, 224);
-}
-
-.paloma::after {
-    position: absolute;
-    content: '';
-    width: 20px;
-    height: 13px;
-    background-color: white;
-    top: 50%;
-    left: 23%;
-    transform: translate(0%, 0%) rotate(45deg);
-    
-}
 
