@@ -9,6 +9,13 @@ import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrin
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import lineas from "../V1Registro/line.svg";
 
+// Day.js + plugins
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const getIdPre = (data, headers) =>
   data?.id_pre ??
   data?.id ??
@@ -17,37 +24,36 @@ const getIdPre = (data, headers) =>
   (Number((headers?.location || "").split("/").pop()) || null);
 
 function V3Verificacion() {
-  const { state } = useLocation(); // { correo, telefono, metodo, expiresAt?, ... }
+  const { state } = useLocation(); // { correo, telefono, metodo, expiresAt(ms)?, ... }
   const navigate = useNavigate();
 
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setError] = useState("");
 
-  // ===================== TIMER por fecha real de expiración =====================
-  // 1) Obtenemos expiresAt del state o de sessionStorage (en caso de refresh).
-  const initialExpires = useMemo(() => {
+  // ========= Expiración: creamos un dayjs a partir de ms (state o sessionStorage) =========
+  const initialExpiresMs = useMemo(() => {
     const fromState = Number(state?.expiresAt);
     if (Number.isFinite(fromState) && fromState > 0) return fromState;
     const fromSS = Number(sessionStorage.getItem("ls:code_expires_at"));
-    return Number.isFinite(fromSS) && fromSS > 0 ? fromSS : Date.now() + 5 * 60 * 1000;
+    if (Number.isFinite(fromSS) && fromSS > 0) return fromSS;
+    // fallback: ahora + 5 min
+    return Date.now() + 5 * 60 * 1000;
   }, [state?.expiresAt]);
 
-  // 2) Lo guardamos en estado para poder actualizarlo cuando se reenvíe.
-  const [expiresAt, setExpiresAt] = useState(initialExpires);
-  // 3) Remaining se calcula respecto a expiresAt.
-  const [remaining, setRemaining] = useState(0);
+  const [expiresAt, setExpiresAt] = useState(() => dayjs(initialExpiresMs)); // dayjs local
+  const [remaining, setRemaining] = useState(0); // segundos restantes
 
+  // Timer único
   useEffect(() => {
     const tick = () => {
-      const sec = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-      setRemaining(sec);
+      const diffSec = Math.max(0, expiresAt.diff(dayjs(), "second"));
+      setRemaining(diffSec);
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [expiresAt]);
-  // ============================================================================
 
   const inputsRef = useRef([]);
 
@@ -61,12 +67,13 @@ function V3Verificacion() {
   };
 
   const handleKeyDown = (idx, e) => {
-    if (e.key === "Backspace" && !digits[idx] && idx > 0)
+    if (e.key === "Backspace" && !digits[idx] && idx > 0) {
       inputsRef.current[idx - 1]?.focus();
+    }
   };
 
-  const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
-  const ss = String(remaining % 60).padStart(2, "0");
+  const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+  const seconds = String(remaining % 60).padStart(2, "0");
 
   const verificar = async () => {
     const codigo = digits.join("");
@@ -119,20 +126,22 @@ function V3Verificacion() {
         "/preregistro/preregistro/reenviar-codigo/",
         { identificador: state[state.metodo] }
       );
-      // Actualizamos el timer con la nueva fecha del backend
-      const newExpires = Date.parse(data?.expira) || Date.now() + 5 * 60 * 1000;
-      sessionStorage.setItem("ls:code_expires_at", String(newExpires));
-      setExpiresAt(newExpires);
+
+      // Backend manda expira en UTC sin zona → convertir a local
+      const newExpiresLocal = dayjs.utc(data?.expira).local(); // o .tz(dayjs.tz.guess())
+      setExpiresAt(newExpiresLocal);
+      sessionStorage.setItem("ls:code_expires_at", String(newExpiresLocal.valueOf()));
+
+      // Reset inputs
       setDigits(["", "", "", "", "", ""]);
       inputsRef.current[0]?.focus?.();
       setError("");
     } catch (err) {
       const msg =
         err?.response?.data?.detail ||
-        err?.response?.data?.message ||
         err?.message ||
-        "No se pudo reenviar el código.";
-      setError(String(msg));
+        "Error al reenviar el código.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -203,28 +212,30 @@ function V3Verificacion() {
               />
             ))}
 
-            {/* Timer */}
-            <div className={styles.timerWrap}>
-              {remaining > 0 ? (
-                <span className={styles.timer}>
-                  El código expira en <strong>{mm}:{ss}</strong>
-                </span>
-              ) : (
-                <span className={styles.timerExpired}>
-                  El código expiró.{" "}
-                  <button
-                    type="button"
-                    className={styles.reenviarBtnInline}
-                    onClick={reenviar}
-                  >
-                    Reenviar código
-                  </button>
-                </span>
-              )}
-            </div>
+            
 
             {errorMsg && <span className={styles.error}>{errorMsg}</span>}
           </div>
+          {/* Timer */}
+            {remaining > 0 ? (
+              <p className={styles.timer}>
+                El código expira en <strong>{minutes}:{seconds}</strong>
+              </p>
+            ) : (
+              <p className={styles.timerExp}>
+                ⚠️ El código ha expirado.{" "}
+                <button type="button" className={styles.reenviar} onClick={reenviar}>
+                  Reenviar código
+                </button>
+              </p>
+            )}
+
+            {/* Hora local de expiración */}
+            {expiresAt && (
+              <p className={styles.horaLocal}>
+                (Expira a las {expiresAt.format("HH:mm:ss")} hora local)
+              </p>
+            )}
 
           <div className={styles.cntBoton}>
             <BotonA

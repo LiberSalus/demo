@@ -1,3 +1,4 @@
+//src\components\V2Confirmacion\V2Confirmacion.jsx
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "@/services/api";
@@ -9,6 +10,10 @@ import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrin
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import lineas from "../V1Registro/line.svg";
 import Derechos from "../V1Registro/Derechos";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
 const V2Confirmacion = () => {
   const { state } = useLocation(); // { correo, telefono, ... }
   const navigate = useNavigate();
@@ -32,10 +37,17 @@ const V2Confirmacion = () => {
         `/preregistro/preregistro/enviar-codigo-${metodo}/`,
         { identificador: state?.[metodo] }
       );
-      // Normalizamos a timestamp (ms). Si por algo no viniera, usamos +5 min como fallback.
-      const expiresAt = Date.parse(data?.expira) || Date.now() + 5 * 60 * 1000;
-      sessionStorage.setItem("ls:code_expires_at", String(expiresAt));
-      navigate(ROUTES.VERIFICACION, { state: { ...state, metodo, expiresAt } });
+
+      // Convertir UTC (del backend) → local
+      const expiresAtMs = dayjs.utc(data?.expira).local().valueOf();
+
+      // Guardar para la vista V3
+      sessionStorage.setItem("ls:code_expires_at", String(expiresAtMs));
+
+      // Navegar con estado actualizado
+      navigate(ROUTES.VERIFICACION, {
+        state: { ...state, metodo, expiresAt: expiresAtMs },
+      });
     } catch (err) {
       const msg =
         err?.response?.data?.detail ||
