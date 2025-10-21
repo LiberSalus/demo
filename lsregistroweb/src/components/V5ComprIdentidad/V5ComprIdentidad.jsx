@@ -11,6 +11,8 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import TarjetaBase from "@/components/ElementosVista/TarjetaBase/TarjetaBase";
+import { motion } from "framer-motion";
+
 
 const V5ComprIdentidad = () => {
   const { state: locationState } = useLocation(); // { id, ... }
@@ -97,7 +99,12 @@ const V5ComprIdentidad = () => {
           />
         </div>
 
-        <div className={styles.cntTarjeta}>
+        <motion.div
+        initial={{ opacity: 0, y: 30 }} // cuando entra
+          animate={{ opacity: 1, y: 0 }} // animación activa
+          exit={{ opacity: 0, y: -30 }} // cuando sale
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        className={styles.cntTarjeta}>
           <TarjetaBase
             srcIcon={escanear}
             iconAlt="Capturar datos"
@@ -125,7 +132,7 @@ const V5ComprIdentidad = () => {
               navigate(ROUTES.ADJUNTAR_DOCUMENTOS, { state })
             }
           />
-        </div>
+        </motion.div>
 
         {/* Solo en dev, muestra el id para pruebas */}
         {import.meta.env.DEV && state?.id && (
