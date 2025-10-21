@@ -37,7 +37,7 @@ const V5ACompletarIne = () => {
 
   // El propio FormularioINE hará navigate a DOMICILIO (te dejo callback igual)
   const handleSuccess = () =>
-    navigate(ROUTES.COMPLETAR_DOMICILIO, { state });
+    navigate(ROUTES.COMPLETAR_DOMICILIO, { state: { id: state.id } });
 
   return (
     <div className={styles.cntV5ACompletarIne}>

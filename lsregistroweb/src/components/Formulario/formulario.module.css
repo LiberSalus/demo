@@ -7,7 +7,7 @@
   justify-content: center;
 }
 .formulario {
-  margin: 2.75rem auto;
+  margin: 0rem auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,7 +17,7 @@
 /* Fila CURP (input + botón Validar) */
 .cntValCurp {
   margin: 0 auto;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   width: 80%;
   max-width: 30rem;
   display: flex;
@@ -90,8 +90,12 @@
   margin: 1.25rem auto 0;
 }
 .volver {
-  text-decoration: underline;
+  margin-top: 2rem;
+  font-weight: 700;
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Responsive similar al de V1 (lo esencial) */

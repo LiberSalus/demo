@@ -117,7 +117,7 @@ const V5ComprIdentidad = () => {
             descripcion={
               <>
                 Adjunta una imagen o PDF. <br />
-                Asegúrate de que sea legible y esté completo.
+                Asegúrate que sea legible y completo.
               </>
             }
             textoBoton="Subir archivos"

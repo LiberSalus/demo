@@ -172,7 +172,7 @@ const FormularioINE = ({ onSuccess }) => {
         }
       }
 
-      navigate(ROUTES.COMPLETAR_DOMICILIO, { state: state_react });
+      navigate(ROUTES.COMPLETAR_DOMICILIO, { state: { id: Number(safeId) } });
       onSuccess?.();
     } catch (err) {
       alert(prettyApiError(err));
@@ -257,10 +257,10 @@ const FormularioINE = ({ onSuccess }) => {
         </label>
 
         <div className={styles.cntBoton}>
-          <a className={styles.volver} onClick={() => navigate(-1)}>Volver</a>
           <BotonA variant="secondary" onClick={() => reset()}>Limpiar</BotonA>
           <BotonA type="submit" disabled={isSubmitting || !curpOk}>Continuar</BotonA>
         </div>
+          <a className={styles.volver} onClick={() => navigate(-1)}>Volver</a>
       </form>
     </div>
   );

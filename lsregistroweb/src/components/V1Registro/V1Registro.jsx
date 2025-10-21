@@ -86,8 +86,11 @@ const Registro = () => {
 
   /* ---------- UI ---------- */
   return (
+
     <div className={styles.cntV1Registro}>
+      
       <div className={styles.cntBienvenida}>
+        
         <div className={styles.cntSaludo}>
           <div>
             <p>
@@ -125,9 +128,9 @@ const Registro = () => {
       </div>
 
       <div className={styles.cntFormulario}>
-        <div className={styles.cntLineas}>
+        {/* {<div className={styles.cntLineas}>
           <img src={lineas} alt="" />
-        </div>
+        </div>} */}
 
         <div className={styles.logoForm}>
           <Logo />

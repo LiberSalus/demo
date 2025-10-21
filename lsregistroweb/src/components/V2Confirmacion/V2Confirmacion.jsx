@@ -12,6 +12,7 @@ import lineas from "../V1Registro/line.svg";
 import Derechos from "../V1Registro/Derechos";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { LifeLine } from 'react-loading-indicators';
 dayjs.extend(utc);
 
 const V2Confirmacion = () => {
@@ -110,9 +111,9 @@ const V2Confirmacion = () => {
       </div>
 
       <div className={styles.cntFormulario}>
-        <div className={styles.cntLineas}>
+        {/* <div className={styles.cntLineas}>
           <img src={lineas}></img>
-        </div>
+        </div> */}
 
         <div className={styles.logoForm}>
           <Logo />
@@ -167,7 +168,7 @@ const V2Confirmacion = () => {
 
             <div>
               <BotonA type="submit" disabled={!metodo || loading}>
-                {loading ? "Enviando…" : "Enviar código"}
+                {loading ? <LifeLine width={16} height={10} color="#007CBA" size="10" /> : "Enviar código"}
               </BotonA>
             </div>
           </fieldset>

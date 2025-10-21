@@ -38,4 +38,12 @@
         padding-bottom: 1rem;
         
     }
+    & > a {
+        font-weight: 700;
+        cursor: pointer;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
+

@@ -2,28 +2,33 @@
 
 .cntV5ACompletarIne {
   display: flex;
-  
-  height:100%;
-  position: relative;
-}
+    align-items: stretch;
+    min-height: 100vh;
+    height: auto;
 
+    position: relative;
+}
 
 .cntFormulario {
   position: relative;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
   width: 50%;
 }
 
 
 .cntLogo {
-  margin-top: 3rem;
+  
+  text-align: center;
+  align-items: center;
   min-width: 40%;
 }
 
 .cntTexto {
   width: 70%;
   /* border: 2px dashed; */
-
+  
 }
+
 
 

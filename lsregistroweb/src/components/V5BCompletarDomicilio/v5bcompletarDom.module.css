@@ -1,10 +1,12 @@
 @import url('../V1Registro/v1registro.module.css');
 
-.cntV5ACompletarIne {
+.cntV5BCompletarDom {
   display: flex;
-  
-  height:100%;
-  position: relative;
+    align-items: stretch;
+    min-height: 100vh;
+    height: auto;
+
+    position: relative;
 }
 
 
@@ -16,7 +18,7 @@
 
 
 .cntLogo {
-  margin-top: 3rem;
+  text-align: center;
   min-width: 40%;
 }
 
