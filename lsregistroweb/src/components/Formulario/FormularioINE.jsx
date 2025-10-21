@@ -5,15 +5,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import api from "@/services/api";        // 8040 (preregistro) -> /api
-import apiIne from "@/services/apiIne";  // 8060 (sesión/INE) -> /ine
+import api from "@/services/api";        // 8040 (/api)
+import apiIne from "@/services/apiIne";  // 8060 (/ine)
 
 import styles from "./formulario.module.css";
 import BotonA from "../Botones/BotonA";
 import { ROUTES } from "@/routes/AppRouter";
 
+/* ----------------- Validación ----------------- */
 const schema = z.object({
-  curp: z.string().regex(/^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z\d]\d$/, "CURP inválida"),
+  curp: z.string().regex(/^[A-Z]{4}\d{6}[HMX][A-Z]{5}[A-Z\d]\d$/, "CURP inválida"),
   nombre: z.string().min(1, "Nombre requerido"),
   apellido1: z.string().min(1, "Primer apellido requerido"),
   apellido2: z.string().optional(),
@@ -21,23 +22,24 @@ const schema = z.object({
   sexo: z.enum(["H", "M", "X"], { message: "Selecciona un sexo" }),
 });
 
-//const toInputDate = (s = "") => {
-//  // admite dd/mm/yyyy o yyyy-mm-dd
-//  if (!s) return "";
-//  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-//  const [d, m, y] = s.split("/");
-//  return y && m && d ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}` : "";
-//};
-
+/* ----------------- Helpers ----------------- */
 const toISO = (v = "") => {
   if (!v) return "";
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) {
     const [d, m, y] = v.split("/");
     return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
   }
-  return v; // si ya está en formato ISO, lo deja igual
+  return v;
 };
 
+const toDMY = (v = "") => {
+  if (!v) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    const [y, m, d] = v.split("-");
+    return `${d}/${m}/${y}`;
+  }
+  return v;
+};
 
 const normSexo = (v = "") => {
   const up = String(v).trim().toUpperCase();
@@ -47,12 +49,31 @@ const normSexo = (v = "") => {
   return "X";
 };
 
+const prettyApiError = (err) => {
+  const detail = err?.response?.data?.detail ?? err?.response?.data ?? err?.message;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((d) => {
+        const loc = Array.isArray(d?.loc) ? d.loc.join(".") : "";
+        return `${loc ? `[${loc}] ` : ""}${d?.msg || JSON.stringify(d)}`;
+      })
+      .join("\n");
+  }
+  if (typeof detail === "object") return JSON.stringify(detail, null, 2);
+  return String(detail || "Error");
+};
+
+// Mapa simple de entidad
+const ENT_MAP = {
+  "DISTRITO FEDERAL": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
+  "CIUDAD DE MEXICO": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
+};
+
+/* ----------------- Componente ----------------- */
 const FormularioINE = ({ onSuccess }) => {
   const navigate = useNavigate();
   const { state: state_react } = useLocation();
   const safeId = state_react?.id ?? sessionStorage.getItem("ls:id_pre");
-
-
 
   const {
     register,
@@ -79,32 +100,28 @@ const FormularioINE = ({ onSuccess }) => {
   const [curpOk, setCurpOk] = useState(false);
   const [resCurp, setResCurp] = useState({});
 
-  const validarCurp = async () => {
-    const curp = (watch("curp") || "").toUpperCase();
-    const ok = schema.shape.curp.safeParse(curp).success;
-    if (!ok) return;
+  const curpValue = (watch("curp") || "").toUpperCase();
+  const curpFormatoOK = schema.shape.curp.safeParse(curpValue).success;
 
+  const validarCurp = async () => {
+    if (!curpFormatoOK) return;
     try {
       setLoadingCurp(true);
-      // 8060 (sesión): GET /preregistro/curp/extraer/:curp
-      const url = `/preregistro/curp/extraer/${encodeURIComponent(curp)}`;
+      const url = `/preregistro/curp/extraer/${encodeURIComponent(curpValue)}`;
       const res = await apiIne.get(url);
       const data = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 
       setResCurp(data);
 
-      setValue("curp", curp, { shouldDirty: true });
+      setValue("curp", curpValue, { shouldDirty: true });
       setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
       setValue("apellido1", data?.primer_apellido ?? data?.apellido_paterno ?? "", { shouldDirty: true });
       setValue("apellido2", data?.segundo_apellido ?? data?.apellido_materno ?? "", { shouldDirty: true });
-      const fechaRaw = data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "";
-      const fechaISO = toISO(fechaRaw);
-      console.log("📅 Fecha convertida:", fechaISO);
-      setValue("fechaNac", fechaISO, { shouldDirty: true });
 
+      const fechaRaw = data?.fecha_nacimiento ?? data?.fecha_nacimiento_ine ?? "";
+      setValue("fechaNac", toISO(fechaRaw), { shouldDirty: true });
 
       setValue("sexo", normSexo(data?.sexo), { shouldDirty: true });
-
       setCurpOk(true);
     } catch (err) {
       setCurpOk(false);
@@ -121,53 +138,33 @@ const FormularioINE = ({ onSuccess }) => {
     }
   };
 
-  // === Reemplaza tu onSubmit por este ===
   const onSubmit = async (formData) => {
     try {
-      // Normaliza campos a lo que espera el backend
-      const entTxt = (resCurp?.entidad_nacimiento || "").toUpperCase().trim();
-      const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
       if (!safeId) {
         alert("No se pudo recuperar el ID. Regresa al paso anterior.");
         return;
       }
 
-      const toDMY = (v = "") => {
-  if (!v) return "";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
-    const [y, m, d] = v.split("-");
-    return `${d}/${m}/${y}`;
-  }
-  return v; // si ya está en formato correcto, lo deja igual
-};
-
-
+      const entTxt = (resCurp?.entidad_nacimiento || "").toUpperCase().trim();
+      const entInfo = ENT_MAP[entTxt] || { abr: "CMX", ent: "CIUDAD DE MEXICO" };
 
       const payload = {
-        id: safeId,
-        curp: formData.curp,                         // ABCD820101H...
-        first_name: formData.nombre,                     // Nombres
-        last_name: formData.apellido1,         // Paterno
-        second_last_name: formData.apellido2 || "",  // Materno
-        sex_curp: formData.sexo,                         // H|M|X
-        birthdate: toDMY(formData.fechaNac),         // yyyy-mm-dd (del input)
+        id: Number(safeId),
+        curp: formData.curp,
+        first_name: formData.nombre,
+        last_name: formData.apellido1,
+        second_last_name: formData.apellido2 || "",
+        sex_curp: formData.sexo,
+        birthdate: toDMY(formData.fechaNac), // dd/mm/yyyy
         nacionalidad: resCurp?.nacionalidad || "MEXICO",
-        state: entInfo.ent,             // "CIUDAD DE MEXICO"
-        abr_entidad: entInfo.abr,                    // "CMX"
-        municipio_registro: resCurp?.municipio_registro || "017 VENUSTIANO CARRANZA",
-        // Si el backend requiere id_user, descomenta:
-        // id_user: state?.id_user ?? state?.idUser ?? undefined,
+        state: entInfo.ent,
+        abr_entidad: entInfo.abr,
       };
 
-      // Log para depurar (puedes borrarlo)
-      console.log("➡️ guardar-curp payload:", payload);
-
       const endpoint = "/preregistro/preregistro/guardar-curp";
-
       try {
-        await api.post(endpoint, payload);           // 8040 via /api proxy
+        await api.post(endpoint, payload);
       } catch (e1) {
-        // Algunos endpoints exigen "/" al final
         if (e1?.response?.status === 404 && !endpoint.endsWith("/")) {
           await api.post(`${endpoint}/`, payload);
         } else {
@@ -175,33 +172,11 @@ const FormularioINE = ({ onSuccess }) => {
         }
       }
 
-      // Continua al formulario de domicilio
       navigate(ROUTES.COMPLETAR_DOMICILIO, { state: state_react });
       onSuccess?.();
     } catch (err) {
-      alert(prettyApiError(err)); // muestra los campos exactos que fallaron
+      alert(prettyApiError(err));
     }
-  };
-
-
-  // helpers arriba del componente (o dentro, como prefieras)
-  const prettyApiError = (err) => {
-    const detail = err?.response?.data?.detail ?? err?.response?.data ?? err?.message;
-    if (Array.isArray(detail)) {
-      // FastAPI suele mandar: [{loc:[...], msg:"...", type:"..."}]
-      return detail.map(d => {
-        const loc = Array.isArray(d?.loc) ? d.loc.join(".") : "";
-        return `${loc ? `[${loc}] ` : ""}${d?.msg || JSON.stringify(d)}`;
-      }).join("\n");
-    }
-    if (typeof detail === "object") return JSON.stringify(detail, null, 2);
-    return String(detail || "Error");
-  };
-
-  // mapa mínimo para la entidad (ajusta con tus catálogos si quieres)
-  const ENT_MAP = {
-    "DISTRITO FEDERAL": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
-    "CIUDAD DE MEXICO": { abr: "CMX", ent: "CIUDAD DE MEXICO" },
   };
 
   return (
@@ -213,10 +188,10 @@ const FormularioINE = ({ onSuccess }) => {
             CURP:
             <input
               {...register("curp")}
-              className={styles.input}
-              placeholder="Ingresa tu CURP"
-              maxLength={18}
-              onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
+  className={`${styles.input} ${errors.curp ? styles.inputError : ""}`}
+  placeholder="Ingresa tu CURP"
+  maxLength={18}
+  onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
             />
           </label>
 
@@ -226,7 +201,7 @@ const FormularioINE = ({ onSuccess }) => {
             loading={loadingCurp}
             variant="secondary"
             onClick={validarCurp}
-            disabled={loadingCurp}
+            disabled={loadingCurp || !curpFormatoOK}
           >
             {loadingCurp ? "Validando..." : curpOk ? "Validada" : "Validar"}
           </BotonA>
@@ -236,14 +211,20 @@ const FormularioINE = ({ onSuccess }) => {
         {/* Campos */}
         <label className={styles.label}>
           Nombre(s):
-          <input {...register("nombre")} className={styles.input} />
-          {errors.nombre && <span className={styles.errors}>{errors.nombre.message}</span>}
+          <input
+  {...register("nombre")}
+  className={`${styles.input} ${errors.nombre ? styles.inputError : ""}`}
+/>
+{errors.nombre && <span className={styles.errors}>{errors.nombre.message}</span>}
         </label>
 
         <label className={styles.label}>
           Primer Apellido:
-          <input {...register("apellido1")} className={styles.input} />
-          {errors.apellido1 && <span className={styles.errors}>{errors.apellido1.message}</span>}
+          <input
+  {...register("apellido1")}
+  className={`${styles.input} ${errors.apellido1 ? styles.inputError : ""}`}
+/>
+{errors.apellido1 && <span className={styles.errors}>{errors.apellido1.message}</span>}
         </label>
 
         <label className={styles.label}>
@@ -253,19 +234,26 @@ const FormularioINE = ({ onSuccess }) => {
 
         <label className={styles.label}>
           Fecha de nacimiento:
-          <input type="date" {...register("fechaNac")} className={styles.input} />
-          {errors.fechaNac && <span className={styles.errors}>{errors.fechaNac.message}</span>}
+          <input
+  type="date"
+  {...register("fechaNac")}
+  className={`${styles.input} ${errors.fechaNac ? styles.inputError : ""}`}
+/>
+{errors.fechaNac && <span className={styles.errors}>{errors.fechaNac.message}</span>}
         </label>
 
         <label className={styles.label}>
           Sexo:
-          <select {...register("sexo")} className={styles.select}>
-            <option value="" disabled>Selecciona tu sexo</option>
-            <option value="H">HOMBRE</option>
-            <option value="M">MUJER</option>
-            <option value="X">NO BINARIO</option>
-          </select>
-          {errors.sexo && <span className={styles.errors}>{errors.sexo.message}</span>}
+          <select
+  {...register("sexo")}
+  className={`${styles.select} ${errors.sexo ? styles.selectError : ""}`}
+>
+  <option value="" disabled>Selecciona tu sexo</option>
+  <option value="H">HOMBRE</option>
+  <option value="M">MUJER</option>
+  <option value="X">NO BINARIO</option>
+</select>
+{errors.sexo && <span className={styles.errors}>{errors.sexo.message}</span>}
         </label>
 
         <div className={styles.cntBoton}>

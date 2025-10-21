@@ -218,15 +218,15 @@ function V3Verificacion() {
           </div>
           {/* Timer */}
             {remaining > 0 ? (
-              <p className={styles.timer}>
+              <p className={styles.timer}><br/>
                 El código expira en <strong>{minutes}:{seconds}</strong>
               </p>
             ) : (
               <p className={styles.timerExp}>
-                ⚠️ El código ha expirado.{" "}
-                <button type="button" className={styles.reenviar} onClick={reenviar}>
+                El código ha expirado.{" "}
+                {/* <button type="button" className={styles.reenviar} onClick={reenviar}>
                   Reenviar código
-                </button>
+                </button> */}
               </p>
             )}
 

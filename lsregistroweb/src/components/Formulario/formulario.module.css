@@ -1,340 +1,105 @@
-@import url("../V1Registro/v1registro.module.css");
 
+@import url('../../styles/index.css');
+
+/* Contenedor general del formulario */
 .Formu {
-    margin: 0 auto;
-    width: 90%;
-    
-    display: flex;
-    flex-direction: column;
-    
-    position: relative;
-  }
+  display: flex;
+  justify-content: center;
+}
+.formulario {
+  margin: 2.75rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
 
-  .formulario {
-    width: 100%;
-    flex-direction: column;
-    display: flex;
-  }
+/* Fila CURP (input + botón Validar) */
+.cntValCurp {
+  margin: 0 auto;
+  margin-top: 1rem;
+  width: 80%;
+  max-width: 30rem;
+  display: flex;
+  gap: .75rem;
+  align-items: end;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-  .label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-weight: 700;
-    font-size: 0.75rem;
-    
-  }
-  
-  .input {
-    outline: none;
-    border: 1px solid #8f8f8f;
-    appearance: none;
-    height: 2rem;
-    border-radius: 6px;
-    padding-left: 0.5rem;
-    transition: 0.1s ease;
-  }
+/* Etiqueta de cada campo (hace de “wrapper” tipo .cntImput de V1) */
+.label {
+  display: block;
+  width: 80%;
+  max-width: 30rem;
+  margin: 1rem auto 0;
+  text-align: start;
+  transform: translateX(-0.5rem);
+  font-size: var(--font-resp-075);
+}
 
-  .input:focus {
-    outline: 1px solid #5981c6;
-    border-color: #5981c6;
-  }
+/* Inputs y selects con el mismo estilo de V1 */
+.input,
+.select {
+  position: relative;
+  width: 100%;
+  appearance: none;
+  padding: 0.65rem 1rem;
+  border-radius: 3rem;
+  border: 0.5px solid darkgray;
+  outline: none;
+  font-size: var(--font-resp-075);
+  background: #fff;
+}
 
-  .select {
-    appearance: none;
-    border: 1px solid #484848;
-    height: 2rem;
-    padding-left: 0.5rem;
-    background-color: #fff;
-    transition: 0.3s ease;
-  }
+.input:focus,
+.select:focus {
+  outline: none;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.30) inset;
+}
 
-  .select:focus {
-    border-color: #5981c6;
-    border: 2px solid #5981c6;
-  }
+/* Estado de error (equiv. .errorInput de V1) */
+.inputError,
+.selectError {
+  background-color: rgb(252, 236, 236);
+  border: 1px solid #e95757 !important;
+}
 
-  .input::placeholder,
-  .formulario .input[type="date"] {
-    filter: opacity(0.7);
-  }
+/* Placeholders */
+.input::placeholder {
+  color: lightgray;
+}
 
-  .formulario .input[type="date"] {
-    max-width: 15rem;
-  }
-  .formulario .input[type="date"] {
-    max-width: 15rem;
-  }
-  
+/* Mensaje de error (equiv. .error de V1) */
+.errors {
+  display: block;
+  width: 80%;
+  max-width: 30rem;
+  margin: .25rem auto 0;
+  color: #ec3b3b;
+  font-size: var(--font-resp-050);
+  text-align: end;
+}
 
-  .formulario .select {
-    appearance: none;
-    outline: none;
-    border: 1px solid #484848;
-    height: 2rem;
-    border-radius: 6px;
-    padding-left: 0.5rem;
-  }
+/* Botonera */
+.cntBoton {
+  display: flex;
+  gap: .75rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1.25rem auto 0;
+}
+.volver {
+  text-decoration: underline;
+  cursor: pointer;
+}
 
-  .select option[value=""] {
-    color: #888;
-    
-  }
-
-  .select option:disabled {
-    color: #888;
-  }
-
-  .select {
-    border: 1px solid #484848;
-    
-  }
-  .select:focus {
-    border-color: none;
-    box-shadow: 0 0 0 2px #5981c6;
-    outline: none;
-  }
-
-  .cntBoton {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: start;
-    align-items: center;
-  }
-  
-  .volver {
-    display: block;
-    width: fit-content;
-    text-align: center;
-    color: #5981c6;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .errors {
-    color: red;
-    font-size: 0.65rem;
-  }
-
-  .btnLimpiar {
-    display: none;
-  }
-
-  .BotonA {
-    margin-top: 0.5rem;
-  }
-
-  .cntSolCodigo {
-    display: flex;
-    align-items: end;
-    gap: 1rem;
-  }
-
-  .cntInput > :nth-child(1) {
-    padding-bottom: 0.5rem;
-  }
-
-  .cntNumeros {
-    display: flex;
-    gap: 0.5rem;
-    
-    label{
-      width: 100%;
-      padding-bottom: 0.5rem;
-    }
-  }
-
-  .instruccion > :nth-child(2) {
-    font-size: 0.85rem;
-    color: rgba(68, 70, 68, 0.533);
-    font-style: italic;
-  }
-
-  textarea:placeholder-shown {
-    font-family: Arial, Helvetica, sans-serif;
-    
-  }
-  textarea {
-    font-family: Arial, Helvetica, sans-serif;
-    resize: vertical;
-    height: 80px !important;
-  }
-
-  .capaModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-    transition: opacity 0.4s;
-  }
-
-  .capaModalVisible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .modal {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    min-width: 20rem;
-    text-align: center;
-    transform: scale(0.92) translateY(-30px);
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .modalVisible {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .modalTitulo {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-  
-  .listaColonias {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-    padding-left: 1rem;
-    padding-bottom: 1rem;
-    & label > span {
-      padding-left: 0.5rem;
-    }
-  }
-
-  .modalAcciones {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-
-  }
-
+/* Responsive similar al de V1 (lo esencial) */
 @media (max-width: 950px) {
-  .cntFormulario {
-    margin: 0 auto;
+  .cntValCurp,
+  .label,
+  .errors {
     width: 90%;
     max-width: 30rem;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
   }
-
-  .formulario {
-    width: 100%;
-    flex-direction: column;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-weight: 700;
-    font-size: 0.75rem;
-  }
-
-  .input {
-    outline: none;
-    border: 1px solid #8f8f8f;
-    appearance: none;
-    height: 2rem;
-    border-radius: 6px;
-    padding-left: 0.5rem;
-    transition: 0.1s ease;
-  }
-
-  .input:focus {
-    outline: 1px solid #5981c6;
-    border-color: #5981c6;
-  }
-
-  .select {
-    appearance: none;
-    border: 1px solid #484848;
-    height: 2rem;
-    padding-left: 0.5rem;
-    background-color: #fff;
-    transition: 0.3s ease;
-  }
-
-  .select:focus {
-    outline: none;
-    border: 3px solid #5981c6;
-  }
-
-  .input::placeholder,
-  .formulario .input[type="date"] {
-    filter: opacity(0.7);
-  }
-
-  .formulario .input[type="date"] {
-    max-width: 15rem;
-  }
-  .formulario .input[type="date"] {
-    max-width: 15rem;
-  }
-
-  .formulario .select {
-    appearance: none;
-    outline: none;
-    border: 1px solid #484848;
-    height: 2rem;
-    border-radius: 6px;
-    padding-left: 0.5rem;
-  }
-
-  .select option[value=""] {
-    color: #888;
-  }
-
-  .select option:disabled {
-    color: #888;
-  }
-
-  .select {
-    border: 1px solid #484848;
-    
-  }
-  .select:focus {
-    border-color: none;
-    box-shadow: 0 0 0 2px #5981c6;
-    outline: none;
-  }
-
-  .cntBoton {
-    text-align: center;
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .volver {
-    margin-top: 2rem;
-    width: 100%;
-    text-align: center;
-    color: #5981c6;
-  }
-
-.errors {
-  color: red;
-  font-size: 0.65rem;
 }
-}
-

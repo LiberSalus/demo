@@ -1,0 +1,27 @@
+@import url('../V1Registro/v1registro.module.css');
+
+.cntV5ACompletarIne {
+  display: flex;
+  
+  height:100%;
+  position: relative;
+}
+
+
+.cntFormulario {
+  position: relative;
+  justify-content: center;
+  width: 50%;
+}
+
+
+.cntLogo {
+  margin-top: 3rem;
+  min-width: 40%;
+}
+
+.cntTexto {
+  width: 70%;
+  /* border: 2px dashed; */
+
+}

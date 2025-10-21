@@ -1,34 +1,50 @@
 // src/components/V5ComprIdentidad/V5ComprIdentidad.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/routes/AppRouter';
+import React, { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/AppRouter";
 
-import escanear from '../V5ComprIdentidad/Escanear.svg'
-import anadir from '../V5ComprIdentidad/Añadir.svg'
+import escanear from "../V5ComprIdentidad/Escanear.svg";
+import anadir from "../V5ComprIdentidad/Añadir.svg";
 
-import styles from './v5comprIdentidad.module.css';
-import Logo from '@/components/ElementosVista/Logo/Logo';
-import TextoPrincipal from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
-import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
-import TarjetaBase from '@/components/ElementosVista/TarjetaBase/TarjetaBase';
+import styles from "./v5comprIdentidad.module.css";
+import Logo from "@/components/ElementosVista/Logo/Logo";
+import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
+import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
+import TarjetaBase from "@/components/ElementosVista/TarjetaBase/TarjetaBase";
 
 const V5ComprIdentidad = () => {
+  const { state: locationState } = useLocation(); // { id, ... }
   const navigate = useNavigate();
+
+  // Normaliza estado con prioridad: state.id → sessionStorage → null
+  const initial = useMemo(() => {
+    const fromState = Number(locationState?.id);
+    const fromSS = Number(sessionStorage.getItem("ls:id_pre"));
+    const id =
+      Number.isFinite(fromState) && fromState > 0
+        ? fromState
+        : Number.isFinite(fromSS) && fromSS > 0
+        ? fromSS
+        : null;
+    return { ...(locationState || {}), id };
+  }, [locationState]);
+
+  const [state, setState] = useState(initial);
+
+  useEffect(() => {
+    if (Number.isFinite(initial.id) && initial.id > 0) {
+      sessionStorage.setItem("ls:id_pre", String(initial.id));
+      setState((prev) => ({ ...prev, id: initial.id }));
+    } else {
+      // Si no hay id, vuelve al inicio de registro
+      navigate(ROUTES.REGISTRO, { replace: true });
+    }
+  }, [initial.id, navigate]);
 
   return (
     <div className={styles.cntV5ComprIdentidad}>
-
+      {/* Columna izquierda */}
       <div className={styles.cntBienvenida}>
-        {/* <div className={styles.fondo}>
-                                  <LiberSalusPoly
-                                    autoMorph={true}        // morph automático
-                                    morphEveryMs={30}     // intervalo de morph
-                                    spray={false}            // triángulos sueltos
-                                    curveAlpha={0}        // opacidad ola superior
-                                    dirGlow={0.006}          // vignette/glow
-                                    className="w-full h-full"
-                                  />
-                                </div> */}
         <div className={styles.cntSaludo}>
           <div>
             <p>
@@ -60,64 +76,74 @@ const V5ComprIdentidad = () => {
             </p>
           </div>
           <div className={styles.elementoPaso}>
-            <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
+            <p className={styles.paso}>Completa tus cuestionarios de salud</p>
           </div>
         </div>
       </div>
 
-
+      {/* Columna derecha */}
       <div className={styles.cntFormulario}>
         <div className={styles.logoForm}>
           <Logo />
         </div>
 
-        {/* Título y descripción */}
         <div className={styles.cntTexto}>
           <TextoPrincipal textoPrincipal="Completa tu perfil" />
-
-          <p>Llena tus datos o sube tus documentos</p>
-          <p>identificación oficial y comprobante de domicilio</p>
-          <p>Así podremos confirmar tu identidad y ofrecerte una experiencia segura y personalizada.</p>
+          <TextoSecundario
+            textoSecundario={[
+              "Llena tus datos o sube tus documentos (identificación oficial y comprobante de domicilio). ",
+              "Así podremos confirmar tu identidad y ofrecerte una experiencia segura y personalizada.",
+            ]}
+          />
         </div>
 
-        {/* Tarjetas de acción */}
         <div className={styles.cntTarjeta}>
           <TarjetaBase
             srcIcon={escanear}
+            iconAlt="Capturar datos"
             accion="Llena tus datos"
             descripcion="Completa los formularios de forma manual con tus datos para continuar."
-            textoBoton="Escanear documentos"
-            onClick={() => navigate(ROUTES.CAPTURAR_DOCUMENTOS)}
+            textoBoton="Capturar datos"
+            onClick={() =>
+                {const id = state?.id ?? Number(sessionStorage.getItem("ls:id_pre"));
+              navigate(ROUTES.COMPLETAR_INE, { state: {...state, id} })/* 👈 */
+            }}
           />
 
           <TarjetaBase
             srcIcon={anadir}
+            iconAlt="Subir archivos"
             accion="Adjuntar archivos"
-            descripcion="Adjunta una imagen o PDF.  
-Asegúrate que sea legible y esté completo."
+            descripcion={
+              <>
+                Adjunta una imagen o PDF. <br />
+                Asegúrate de que sea legible y esté completo.
+              </>
+            }
             textoBoton="Subir archivos"
-            onClick={() => navigate(ROUTES.ADJUNTAR_DOCUMENTOS)}
+            onClick={() =>
+              navigate(ROUTES.ADJUNTAR_DOCUMENTOS, { state })
+            }
           />
         </div>
-        <div className={styles.opciones}>
-          <a
-            className={styles.enlace}
-            onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
-            Llenar datos manualmente
-          </a>
 
-          <a
-            className={styles.enlace}
-            onClick={() => navigate(ROUTES.OPCIONES)}>
-            Subir más tarde desde tu perfil
-          </a>
-        </div>
+        {/* Solo en dev, muestra el id para pruebas */}
+        {import.meta.env.DEV && state?.id && (
+          <p
+            style={{
+              marginTop: "1rem",
+              fontSize: "0.9rem",
+              color: "#777",
+              textAlign: "center",
+              fontFamily: "monospace",
+            }}
+          >
+            🧩 ID de preregistro: <strong>{state.id}</strong>
+          </p>
+        )}
       </div>
-
-
     </div>
   );
 };
 
 export default V5ComprIdentidad;
-

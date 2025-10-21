@@ -133,7 +133,7 @@ h1,h2,h3{ font-family: var(--font-tit); }
   body {
     font-family: var(--font-txt);
     color: var(--color-fg);
-    background-image: url('./Artboard.png');
+    /* background-image: url('./Artboard.png'); */
     background-size: cover;
     
   }

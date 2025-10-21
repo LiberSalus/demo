@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/AppRouter";
 
-import styles from "@/components/V5ACompletarIne/v5completarDom.module.css"; /* crea o reutiliza */
+import styles from "@/components/V5ACompletarIne/v5bcompletarDom.module.css"; /* crea o reutiliza */
 import Logo from "@/components/ElementosVista/Logo/Logo";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
