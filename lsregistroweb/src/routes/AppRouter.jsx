@@ -1,5 +1,7 @@
  //src/router/AppRoutes.jsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AnimatePresence, motion } from "framer-motion";
+
 // --- Páginas --- */
 import V1Registro       from '@/components/V1Registro/V1Registro';
 import V2Confirmacion   from '@/components/V2Confirmacion/V2Confirmacion';
@@ -35,7 +37,8 @@ export { ROUTES };
 
 const AppRouter = () => (
   
-    <Routes>
+    <AnimatePresence mode="wait">
+      <Routes>
       {/* Raíz → redirige al primer paso del flujo */}
 
       <Route path={ROUTES.REGISTRO}               element={<V1Registro />} />
@@ -55,6 +58,7 @@ const AppRouter = () => (
       {/* 404 – cualquier otra ruta */}
       <Route path="*" element={<p>404 – Página no encontrada</p>} />
     </Routes>
+    </AnimatePresence>
   
 );
 

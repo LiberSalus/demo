@@ -1,18 +1,8 @@
 // src/components/Botones/BotonA.jsx
 import React, { forwardRef } from 'react';
-import clsx from 'clsx';                // npm i clsx
+import clsx from 'clsx';
 import styles from './botonA.module.css';
 
-/**
- * Botón reutilizable.
- *
- * @param {string}   variant    'primary' | 'secondary' | 'danger' ...
- * @param {string}   size       'sm' | 'md' | 'lg'
- * @param {boolean}  loading    Muestra spinner y deshabilita click
- * @param {boolean}  disabled   Inhabilita el botón (se fusiona con loading)
- * @param {string}   className  Clases extras
- * @param {...rest}  resto de props nativos: onClick, type, aria-label…
- */
 const BotonA = forwardRef(
   (
     {
@@ -27,7 +17,6 @@ const BotonA = forwardRef(
     },
     ref
   ) => {
-    /* Estado final del botón */
     const disabled = loading || propDisabled;
 
     return (
@@ -35,16 +24,19 @@ const BotonA = forwardRef(
         ref={ref}
         type={type}
         className={clsx(
-          styles.boton,                // base
-          styles[variant],             // variante (colores)
-          styles[size],                // tamaño
-          disabled && styles.disabled, // estilo gris / no-click
-          className                    // clases extra opcionales
+          styles.boton,
+          styles[variant],
+          styles[size],
+          disabled && styles.disabled,
+          loading && styles.loading,   // 👈 activa el spinner
+          className
         )}
         disabled={disabled}
+        aria-disabled={disabled || undefined}
+        aria-busy={loading || undefined}
         {...rest}
       >
-        {loading ? '...' : children}
+        {children}
       </button>
     );
   }

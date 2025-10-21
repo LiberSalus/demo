@@ -12,7 +12,8 @@ import lineas from "../V1Registro/line.svg";
 import Derechos from "../V1Registro/Derechos";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { LifeLine } from 'react-loading-indicators';
+import { motion } from "framer-motion";
+
 dayjs.extend(utc);
 
 const V2Confirmacion = () => {
@@ -130,7 +131,14 @@ const V2Confirmacion = () => {
           />
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <motion.form 
+        className={styles.form} 
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, x: 30 }} // cuando entra
+        animate={{ opacity: 1, x: 0 }} // animación activa
+        exit={{ opacity: 0, x: -30 }} // cuando sale
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <fieldset className={styles.fieldset}>
             <div className={styles.input}>
               <input
@@ -167,8 +175,8 @@ const V2Confirmacion = () => {
             </div>
 
             <div>
-              <BotonA type="submit" disabled={!metodo || loading}>
-                {loading ? <LifeLine width={16} height={10} color="#007CBA" size="10" /> : "Enviar código"}
+              <BotonA type="submit" disabled={!metodo} loading={loading}>
+                {loading ? "Enviando…" : "Enviar código"}
               </BotonA>
             </div>
           </fieldset>
@@ -177,7 +185,7 @@ const V2Confirmacion = () => {
           <a onClick={() => navigate(-1)} className={styles.volver}>
             Volver a registro
           </a> */}
-        </form>
+        </motion.form>
         <Derechos />
       </div>
     </div>

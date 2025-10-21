@@ -199,6 +199,7 @@ const FormularioINE = ({ onSuccess }) => {
             className={styles.BotonA}
             type="button"
             loading={loadingCurp}
+            loading={loadingCurp} 
             variant="secondary"
             onClick={validarCurp}
             disabled={loadingCurp || !curpFormatoOK}

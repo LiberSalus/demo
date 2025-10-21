@@ -8,6 +8,7 @@ import BotonA from "@/components/Botones/BotonA";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import lineas from "../V1Registro/line.svg";
+import { motion } from "framer-motion";
 
 // Day.js + plugins
 import dayjs from "dayjs";
@@ -190,7 +191,11 @@ function V3Verificacion() {
           <TextoSecundario textoSecundario="Ingresa el código de 6 dígitos que te enviamos." />
         </div>
 
-        <form
+        <motion.form
+          initial={{ opacity: 0, x: 30 }} // cuando entra
+          animate={{ opacity: 1, x: 0 }} // animación activa
+          exit={{ opacity: 0, x: -30 }} // cuando sale
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className={styles.form}
           onSubmit={(e) => {
             e.preventDefault();
@@ -246,7 +251,7 @@ function V3Verificacion() {
               {loading ? "Verificando…" : "Verificar y continuar"}
             </BotonA>
           </div>
-        </form>
+        </motion.form>
 
         <p className={styles.reenviarWrap}>¿No recibiste el código? </p>
         <a className={styles.reenviar} onClick={reenviar}>

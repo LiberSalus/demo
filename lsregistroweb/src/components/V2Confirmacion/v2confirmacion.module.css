@@ -6,7 +6,7 @@
     align-items: stretch;
     min-height: 100vh;
     height: auto;
-
+    overflow: hidden;
     position: relative;
 }
 

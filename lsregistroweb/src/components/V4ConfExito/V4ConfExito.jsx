@@ -7,6 +7,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import srcPaloma from "./confirmacion.svg";
 import BotonA from "../Botones/BotonA";
+import { motion } from "framer-motion";
 
 const V4ConfExito = () => {
   const { state: locationState } = useLocation(); // { id, correo, telefono, ... }
@@ -48,8 +49,12 @@ const V4ConfExito = () => {
       <div className={styles.cntBienvenida}>
         <div className={styles.cntSaludo}>
           <div>
-            <p>¡Bienvenido a <br /> Liber Salus!</p>
-            <p>Afíliate y toma el control de <br /> tu bienestar</p>
+            <p>
+              ¡Bienvenido a <br /> Liber Salus!
+            </p>
+            <p>
+              Afíliate y toma el control de <br /> tu bienestar
+            </p>
             <p>
               Para comenzar a usar nuestra plataforma, necesitas crear un
               usuario y afiliarte.
@@ -77,8 +82,16 @@ const V4ConfExito = () => {
       </div>
 
       {/* 💎 Columna derecha */}
-      <div className={styles.cntConfExito}>
-        <div className={styles.cntLogo}><Logo /></div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }} // cuando entra
+        animate={{ opacity: 1, y: 0 }} // animación activa
+        exit={{ opacity: 0, y: -30 }} // cuando sale
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className={styles.cntConfExito}
+      >
+        <div className={styles.cntLogo}>
+          <Logo />
+        </div>
 
         <TextoPrincipal textoPrincipal="¡Tu cuenta está casi lista!" />
         <p>
@@ -87,26 +100,28 @@ const V4ConfExito = () => {
         </p>
 
         <div className={styles.cntPaloma}>
-          <img src={srcPaloma} alt="Confirmación exitosa" className={styles.paloma} />
+          <img
+            src={srcPaloma}
+            alt="Confirmación exitosa"
+            className={styles.paloma}
+          />
         </div>
 
-        <BotonA
-          type="button"
-          onClick={handleContinuar}
-          disabled={!state?.id}
-        >
+        <BotonA type="button" onClick={handleContinuar} disabled={!state?.id}>
           Continuar
         </BotonA>
 
         {/* 👇 Solo visible en modo desarrollo */}
         {import.meta.env.DEV && state?.id && (
-          <p style={{
-            marginTop: "1rem",
-            fontSize: "0.9rem",
-            color: "#777",
-            textAlign: "center",
-            fontFamily: "monospace"
-          }}>
+          <p
+            style={{
+              marginTop: "1rem",
+              fontSize: "0.9rem",
+              color: "#777",
+              textAlign: "center",
+              fontFamily: "monospace",
+            }}
+          >
             🧩 ID de preregistro: <strong>{state.id}</strong>
           </p>
         )}
@@ -118,7 +133,7 @@ const V4ConfExito = () => {
             Todos los derechos reservados.
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

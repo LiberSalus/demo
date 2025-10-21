@@ -13,6 +13,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import BotonA from "@/components/Botones/BotonA";
 import Switch from "@/components/Seleccion/Switch";
 import Derechos from "./Derechos";
+import { motion } from "framer-motion";
 import lineas from "./line.svg";
 
 /* ---------- Utils ---------- */
@@ -37,11 +38,9 @@ const schema = z
         "Mínimo 8 caracteres, 1 mayús., 1 minús., 1 número, 1 símbolo"
       ),
     confirmContra: z.string(),
-    politicas: z
-      .boolean()
-      .refine((v) => v, {
-        message: "Lee los terminos y condiciones y activa la casilla",
-      }),
+    politicas: z.boolean().refine((v) => v, {
+      message: "Lee los terminos y condiciones y activa la casilla",
+    }),
   })
   .refine((d) => d.contrasena === d.confirmContra, {
     path: ["confirmContra"],
@@ -86,11 +85,14 @@ const Registro = () => {
 
   /* ---------- UI ---------- */
   return (
-
-    <div className={styles.cntV1Registro}>
-      
+    <motion.div
+      className={styles.cntV1Registro}
+      initial={{ opacity: 0, y: 0 }} // cuando entra
+      animate={{ opacity: 1, y: 0 }} // animación activa
+      exit={{ opacity: 0, y: 0 }} // cuando sale
+      transition={{ duration: 0.9, ease: "easeOut" }}
+    >
       <div className={styles.cntBienvenida}>
-        
         <div className={styles.cntSaludo}>
           <div>
             <p>
@@ -176,7 +178,9 @@ const Registro = () => {
                 autoComplete="tel"
                 {...register("telefono")}
                 onInput={(e) => {
-                  e.currentTarget.value = onlyDigits(e.currentTarget.value).slice(0, 10);
+                  e.currentTarget.value = onlyDigits(
+                    e.currentTarget.value
+                  ).slice(0, 10);
                 }}
                 className={errors.telefono ? styles.errorInput : ""}
               />
@@ -203,7 +207,9 @@ const Registro = () => {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPass((p) => !p)}
-                  aria-label={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={
+                    showPass ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
                 >
                   <img
                     src={showPass ? srcCerrado : srcAbierto}
@@ -213,7 +219,9 @@ const Registro = () => {
                 </button>
               </div>
               {errors.contrasena && (
-                <span className={styles.error}>{errors.contrasena.message}</span>
+                <span className={styles.error}>
+                  {errors.contrasena.message}
+                </span>
               )}
             </div>
 
@@ -235,7 +243,9 @@ const Registro = () => {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowConf((p) => !p)}
-                  aria-label={showConf ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={
+                    showConf ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
                 >
                   <img
                     src={showConf ? srcCerrado : srcAbierto}
@@ -274,14 +284,17 @@ const Registro = () => {
             </div>
 
             {/* Botón */}
-            <BotonA type="submit" disabled={!isValid || !isDirty || isSubmitting}>
+            <BotonA
+              type="submit"
+              disabled={!isValid || !isDirty || isSubmitting}
+            >
               {isSubmitting ? "Creando…" : "Crear cuenta"}
             </BotonA>
           </form>
         </div>
         <Derechos />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
