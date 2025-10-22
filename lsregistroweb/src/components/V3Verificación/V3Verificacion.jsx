@@ -192,10 +192,10 @@ function V3Verificacion() {
         </div>
 
         <motion.form
-          initial={{ opacity: 0, x: 30 }} // cuando entra
+          initial={{ opacity: 0, x: 10 }} // cuando entra
           animate={{ opacity: 1, x: 0 }} // animación activa
           exit={{ opacity: 0, x: -30 }} // cuando sale
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className={styles.form}
           onSubmit={(e) => {
             e.preventDefault();

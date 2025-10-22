@@ -2,6 +2,14 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
+import { useSearchParams } from "react-router-dom";
+
+
+const [params] = useSearchParams();
+useEffect(() => {
+  const qpEmail = params.get("email");
+  if (qpEmail) setForm((f) => ({ ...f, email: qpEmail }));
+}, [params]);
 
 export default defineConfig({
   base: "/panel/",

@@ -7,6 +7,7 @@ import Logo from "../ElementosVista/Logo/Logo";
 import TextoPrincipal from "../ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "../ElementosVista/TextoSecundario/TextoSecundario";
 import srcLupa from "./lupa.png";
+import { motion } from "framer-motion";
 
 const V7Recibidos = () => {
   const navigate = useNavigate();
@@ -18,16 +19,28 @@ const V7Recibidos = () => {
   const irOpciones = () => navigate(ROUTES.OPCIONES, { state });
 
   return (
-    <div className={styles.cntV7Recibidos}>
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }} // cuando entra
+      animate={{ opacity: 1, y: 0 }} // animación activa
+      exit={{ opacity: 0, y: -30 }} // cuando sale
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={styles.cntV7Recibidos}>
       <div className={styles.cntLogo}>
         <Logo />
       </div>
 
       <div className={styles.cntTexto}>
-        <TextoPrincipal textoPrincipal="Hemos recibido tus documentos" />
+        <TextoPrincipal textoPrincipal="Hemos recibido tus datos" />
         <TextoSecundario
-          textoSecundario="Tus documentos se han recibido correctamente. Ahora estamos verificando su autenticidad. Esto puede tardar hasta 48 horas hábiles."
-        />
+  textoSecundario={[
+    <span key="t1">Tus datos se han cargado correctamente.</span>,
+    <br key="b1" />,
+    <span key="t2">
+      Estamos revisando su validez. Este proceso puede demorar hasta 48 horas hábiles.
+    </span>,
+  ]}
+/>
+
       </div>
 
       <div className={styles.cntImg}>
@@ -37,14 +50,11 @@ const V7Recibidos = () => {
       <div className={styles.acciones}>
         <BotonA onClick={irOpciones}>Continuar</BotonA>
 
-        {/* Opción 1: Link (recomendado) */}
-        <Link to={-1} className={styles.volver} role="button">
-          Volver
-        </Link>
+        
 
         
       </div>
-    </div>
+    </motion.div>
   );
 };
 

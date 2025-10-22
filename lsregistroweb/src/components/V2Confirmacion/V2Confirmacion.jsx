@@ -8,7 +8,6 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import BotonA from "@/components/Botones/BotonA";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
-import lineas from "../V1Registro/line.svg";
 import Derechos from "../V1Registro/Derechos";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -134,10 +133,10 @@ const V2Confirmacion = () => {
         <motion.form 
         className={styles.form} 
         onSubmit={handleSubmit}
-        initial={{ opacity: 0, x: 30 }} // cuando entra
+        initial={{ opacity: 0, x: 10 }} // cuando entra
         animate={{ opacity: 1, x: 0 }} // animación activa
         exit={{ opacity: 0, x: -30 }} // cuando sale
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <fieldset className={styles.fieldset}>
             <div className={styles.input}>

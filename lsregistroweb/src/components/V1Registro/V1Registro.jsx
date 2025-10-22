@@ -14,7 +14,7 @@ import BotonA from "@/components/Botones/BotonA";
 import Switch from "@/components/Seleccion/Switch";
 import Derechos from "./Derechos";
 import { motion } from "framer-motion";
-import lineas from "./line.svg";
+
 
 /* ---------- Utils ---------- */
 const onlyDigits = (v = "") => (v || "").replace(/\D+/g, "");

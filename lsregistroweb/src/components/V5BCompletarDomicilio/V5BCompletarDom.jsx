@@ -8,6 +8,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import FormularioDom from "@/components/Formulario/FormularioDom";
+import { motion } from "framer-motion";
 
 const V5BCompletarDom = () => {
   const { state: locState } = useLocation(); // { id } opcional
@@ -29,7 +30,8 @@ const V5BCompletarDom = () => {
     sessionStorage.setItem("ls:id_pre", String(preregId));
   }, [preregId, navigate]);
 
-  const handleSuccess = () => navigate(ROUTES.INVITACION_DOC, { state: { id: preregId } });
+  const handleSuccess = () =>
+  navigate(ROUTES.RECIBIDOS, { state: { id: preregId }, replace: true });
 
   return (
     <div className={styles.cntV5BCompletarDom}>
@@ -56,9 +58,14 @@ const V5BCompletarDom = () => {
         </div>
 
         {/* Le pasamos el id por state para que el form no dependa de variables globales */}
-        <div className={styles.cntFormulario}>
+        <motion.div
+        initial={{ opacity: 0, x: 10 }} // cuando entra
+        animate={{ opacity: 1, x: 0 }} // animación activa
+        exit={{ opacity: 0, y: -30 }} // cuando sale
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={styles.cntFormulario}>
           <FormularioDom onSuccess={handleSuccess} state={{ id: preregId }} />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import Logo from "@/components/ElementosVista/Logo/Logo";
 import TextoPrincipal from "@/components/ElementosVista/TextoPrincipal/TextoPrincipal";
 import TextoSecundario from "@/components/ElementosVista/TextoSecundario/TextoSecundario";
 import FormularioINE from "@/components/Formulario/FormularioINE";
+import { motion } from "framer-motion";
 
 const V5ACompletarIne = () => {
   const { state: locationState } = useLocation(); // { id, ... }
@@ -73,9 +74,14 @@ const V5ACompletarIne = () => {
           <TextoPrincipal textoPrincipal="Completa tus datos" />
           <TextoSecundario textoSecundario="Datos de tu identificación oficial" />
         </div>
-        <div className={styles.formulario}>
+        <motion.div
+        initial={{ opacity: 0, y: 10 }} // cuando entra
+        animate={{ opacity: 1, y: 0 }} // animación activa
+        exit={{ opacity: 0, x: -30 }} // cuando sale
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={styles.formulario}>
           <FormularioINE onSuccess={handleSuccess} />
-        </div>
+        </motion.div>
 
         {import.meta.env.DEV && state?.id && (
           <p style={{ marginTop: 12, textAlign: "center", color: "#777", fontFamily: "monospace" }}>
