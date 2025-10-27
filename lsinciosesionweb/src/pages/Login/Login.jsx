@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/config/routes";
 import styles from "./login.module.css";
-import logo from "@/images/Capa_1-2.png";
+import logo from "./Logo.svg";
+import google from './google.svg'
 import eyeIcon from "@/images/Icons _ eye-empty.png";
 import Derechos from "@/components/Derechos/Derechos";
 import { login } from "@/services/auth";
@@ -94,13 +95,11 @@ const Login = () => {
         <img className={styles.logo} src={logo} alt="Liber Salus Logo" />
       </div>
 
-      <h2 className={styles.h2}>
-        Bienvenido a <br /> Liber Salus
-      </h2>
+      <button className={styles.google}><img className={styles.icngle} src={google}></img>Iniciar sesión con Googel</button>
 
       <form className={styles.formulario} onSubmit={onSubmit} noValidate>
         {/* Switch Paciente/Médico */}
-        <div
+        {/* <div
           className={
             form.role === "medico"
               ? `${styles.cntSwitch} ${styles.switchActivo}`
@@ -115,7 +114,7 @@ const Login = () => {
             onChange={onChange}
             aria-label="Cambiar a perfil Médico"
           />
-          <div className={styles.cntSwitch}>
+          {<div className={styles.cntSwitch}>
             <div
               className={
                 form.role === "medico"
@@ -139,9 +138,13 @@ const Login = () => {
                 Médico
               </span>
             </div>
-          </div>
+          </div>}
+        </div> */}
+        <div className={styles.cntHr}>
+          <hr/>
+          <p>o</p>
+          <hr/>
         </div>
-
         {/* Email */}
         <div className={styles.cntInput}>
           <label htmlFor="email">Correo electrónico</label>

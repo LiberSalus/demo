@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from 'url'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    base: '/',
+    base: env.VITE_BASE || '/',
     plugins: [react()],
     resolve: {
       alias: {
