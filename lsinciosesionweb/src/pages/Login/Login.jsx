@@ -95,11 +95,11 @@ const Login = () => {
         <img className={styles.logo} src={logo} alt="Liber Salus Logo" />
       </div>
 
-      <button className={styles.google}><img className={styles.icngle} src={google}></img>Iniciar sesión con Googel</button>
+      <button className={styles.google}><img className={styles.icngle} src={google}></img>Iniciar sesión con Google</button>
 
       <form className={styles.formulario} onSubmit={onSubmit} noValidate>
         {/* Switch Paciente/Médico */}
-        {/* <div
+        <div
           className={
             form.role === "medico"
               ? `${styles.cntSwitch} ${styles.switchActivo}`
@@ -139,7 +139,7 @@ const Login = () => {
               </span>
             </div>
           </div>}
-        </div> */}
+        </div>
         <div className={styles.cntHr}>
           <hr/>
           <p>o</p>
@@ -152,7 +152,7 @@ const Login = () => {
             id="email"
             name="email"
             type="email"
-            placeholder="ejemplo@mail.com"
+            placeholder="Tu correo electrónico"
             value={form.email}
             onChange={onChange}
             autoComplete="username"
@@ -178,7 +178,7 @@ const Login = () => {
               id="password"
               name="password"
               type={showPwd ? "text" : "password"}
-              placeholder="Contraseña"
+              placeholder="Tu contraseña"
               value={form.password}
               onChange={onChange}
               autoComplete="current-password"
@@ -194,18 +194,18 @@ const Login = () => {
           </div>
         )}
 
-        <a className={styles.olvida} href="/recuperar">¿Olvidaste tu contraseña?</a>
-
         <input
           className={styles.btn}
           type="submit"
-          value={loading ? "Iniciando..." : "Iniciar Sesión"}
+          value={loading ? "Iniciando..." : "Iniciar sesión"}
           disabled={loading}
         />
+        <a className={styles.olvida} href="/recuperar">Olvide mi contraseña</a>
+
       </form>
 
       <div className={styles.cntRegistro}>
-        <p>¿Aún no tienes cuenta? <a href="/registro">Registrarme</a></p>
+        <p>Aún no tienes cuenta <a href="/registro">Registrarme</a></p>
       </div>
       <Derechos />
     </div>

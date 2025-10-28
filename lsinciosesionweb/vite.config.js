@@ -15,10 +15,10 @@ export default defineConfig(({ mode }) => {
       // Previene duplicados de React si trabajas con workspaces / links
       dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom'],
     },
-    server: {
+   /*  server: {
       port: 5173,
       // si usas proxy, configúralo aquí SIN importar nada de src
-      // proxy: { '/api': { target: env.VITE_API, changeOrigin: true } }
-    },
+       proxy: { '/api': { target: env.VITE_API, changeOrigin: true } }
+    }, */
   }
 })

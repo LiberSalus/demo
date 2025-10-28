@@ -1,9 +1,9 @@
 // src/services/apiClient.js
 import axios from "axios";
 
-const baseURL = import.meta.env.DEV
-  ? "/api"
-  : (import.meta.env.VITE_SESION_API || "https://libersalus.com/api/sesion");
+const baseURL = import.meta.env.VITE_API
+  /* ? "/api" */
+//  : (import.meta.env.VITE_SESION_API || "https://libersalus.com/api/sesion");
 
 const api = axios.create({
   baseURL,
