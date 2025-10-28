@@ -3,7 +3,8 @@
 
 .cntTarjeta {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,6 +72,7 @@
 /* Estilos para el contenedor del switch */
 .cntSwitch {
   display: flex;
+  display: none;
   justify-content: center;
   position: relative;
   width: 18rem;
