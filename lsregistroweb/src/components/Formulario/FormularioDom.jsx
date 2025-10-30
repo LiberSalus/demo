@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "@/services/api";   // /api -> preregistro
 import apiCp from "@/services/apiCp"; // /cp  -> catálogos CP
+import apiSesion from "@/services/apiSesion"; 
 import styles from "./formulario.module.css";
 import BotonA from "@/components/Botones/BotonA";
 import { ROUTES } from "@/routes/AppRouter";
@@ -88,43 +89,45 @@ const FormularioDom = ({ onSuccess }) => {
   };
 
   const onSubmit = async (form) => {
-    try {
-      if (!safeId) throw new Error("No se encontró el id del preregistro.");
-      setSaving(true);
+  try {
+    setSaving(true);
 
-      // ✅ payload que espera el backend
-      const payload = {
-        id: safeId, // (no es obligatorio en el body si ya va en query, pero no estorba)
-        calle: (form.calle || "").trim(),
-        numero_int: String(form.numero_int || "").trim(),      // opcional
-        numero_ext: String(form.numero_ext || "").trim(),
-        codigo_postal: String(form.codigoPostal || "").trim(),
-        delegacion: (form.municipio || "").trim(),
-        colonia: (form.colonia || "").trim(),
-        estado: (form.estado || "").trim(),
-        ciudad: (form.ciudad || "").trim(),
-        referencia: (form.referencia || "").trim(),
-      };
+    // helper para NO mandar strings vacíos
+    const compact = (obj) =>
+      Object.fromEntries(
+        Object.entries(obj).filter(([_, v]) =>
+          v !== undefined && v !== null && String(v).trim() !== ""
+        )
+      );
 
-      // ✅ NUEVO endpoint: /preregistro/direccion/registrar?id=:id
-      await api.post("/preregistro/direccion/registrar", payload, {
-        params: { id: safeId },
-      });
+    const payload = compact({
+      calle: (form.calle || "").trim(),
+      numero_int: (form.numero_int || "").trim(),        // opcional -> si queda "", se omite
+      numero_ext: (form.numero_ext || "").trim(),
+      codigo_postal: String(form.codigoPostal || "").trim(), // "07918"
+      delegacion: (form.municipio || "").trim(),
+      colonia: (form.colonia || "").trim(),
+      estado: (form.estado || "").trim(),
+      ciudad: (form.ciudad || "").trim(),
+      referencia: (form.referencia || "").trim(),        // opcional
+    });
 
-      // ➜ RECIBIDOS
-      navigate(ROUTES.RECIBIDOS, { state: { id: safeId }, replace: true });
-      onSuccess?.();
-    } catch (err) {
-      const msg =
-        err?.response?.data?.detail ||
-        err?.response?.data?.message ||
-        err?.message ||
-        "No se pudo guardar la dirección.";
-      alert(String(msg));
-    } finally {
-      setSaving(false);
-    }
-  };
+    // ✅ NUEVA ruta en servicio de sesión
+    await apiSesion.post("/preregistro/direccion/guardar", payload);
+
+    navigate(ROUTES.RECIBIDOS, { replace: true });
+    onSuccess?.();
+  } catch (err) {
+    const msg =
+      err?.response?.data?.detail ||
+      err?.response?.data?.message ||
+      err?.message ||
+      "No se pudo guardar la dirección.";
+    alert(String(msg));
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <div className={styles.Formu}>

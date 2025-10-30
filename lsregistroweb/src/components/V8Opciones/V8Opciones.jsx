@@ -53,7 +53,7 @@ const V8Opciones = () => {
       // Prefill opcional del email:
       const email = sessionStorage.getItem("ls:correo") || "";
       const url =
-        `${PANEL_BASE}/login` +
+        `https://libersalus.com/panel` +
         (email ? `?email=${encodeURIComponent(email)}` : "");
       // Redirección “dura” para salir del flujo de registro
       window.location.replace(url);

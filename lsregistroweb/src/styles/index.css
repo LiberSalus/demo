@@ -133,7 +133,14 @@ h1,h2,h3{ font-family: var(--font-tit); }
   body {
     font-family: var(--font-txt);
     color: var(--color-fg);
-    /* background-image: url('./Artboard.png'); */
+    
+    background:
+
+    
+    url('../components/V1Registro/line.svg'), 
+    linear-gradient(116deg, #fff 50%, #aad0ed 100%);
+
+
     background-size: cover;
     
   }

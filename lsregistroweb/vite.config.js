@@ -21,3 +21,9 @@ export default defineConfig(() => ({
  
   },
 }));
+
+
+/**
+ * 
+ * https://libersalus.com/api/sesion/preregistro/direccion/guardar
+ */

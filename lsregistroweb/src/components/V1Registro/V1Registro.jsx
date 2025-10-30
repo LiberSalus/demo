@@ -16,6 +16,52 @@ import Derechos from "./Derechos";
 import { motion } from "framer-motion";
 
 
+
+
+/* ---------- Modal Términos ---------- */
+
+const ModalTerminos = () => {
+  return (
+    <div className={styles.cntModalTerminos}>
+      <h2>Aviso de Privacidad Integral </h2>
+      <p><span>Última actualización:</span> 04 - Julio - 2025</p>
+
+      <hr/>
+      <div className={styles.termios}>
+        <h3> Identidad y domicilio del responsable</h3>
+        <p>Liber SAlus S.A de C.V (Liber Salus) con domicilio en Fernando Lizardi 42, Colonia Iztapalapa, Alcaldía Iztapalapa, C.P. 09270, Ciudad de México, CDMX, es responsable del tratamiento, uso, almacenamiento y protección de los datos personales que nos proporciones el usuario, incluidos  datos personales sensibles, en el cumplimiento con la <b>Ley Federal de Protección de Datos Personales en Posesión de los Particulares</b> (de ahora en adelante “Ley”) y su Reglamento (de ahora en adelante “Reglamento”). El tratamiento de sus datos personales y datos sensibles también se rige  por la <b>Ley General de Salud, NOM-024-SSA3-2012 y demás disposiciones aplicables en materia de salud, tecnologías de la información y protección de datos.</b>
+<br/><br/>
+Al acceder y utilizar nuestra plataforma www. libersalus.com, así como al proporcionarnos su información a través de diversos medios, usted acepta y otorga su consentimiento expreso para que “Liber Salus” recabe, procese, almacene y en su caso, transfiera sus datos personales sensibles conforme a los términos establecidos en este <b>aviso de privacidad.</b><br/><br/>
+
+“Liber Salus” se compromete a tratar sy información con la estricta confidencialidad, implementando las medidas de seguridad necesarias para evitar sy perdida, alteración, accesos no autorizado o divulgación indebida. 
+</p>
+<h3>Uso de tecnologías de seguimiento en nuestra plataforma</h3>
+<p>
+ Informaremos a nuestros usuarios que esta plataforma emplea cookies, web beacons y tecnologías similares con el propósito de analizar la interacción del usuario con la plataforma y mejorar su experiencia de navegación.<br/><br/>
+
+El uso de estas tecnologías puede ser gestionado o deshabilitado desde la configuración del navegado que utilice.
+</p>
+
+<h3>Cambios en el aviso de privacidad</h3>
+<p>“Liber Salus” se reserva el derecho de modifica este Aviso de Privacidad en cualquier momento para cumplir cambios legislativos, requisitos internos o mejoras en nuestros servicios.
+
+Las modificaciones estarán disponibles en nuestra plataforma o pueden ser consultadas directamente en la pagina: www.libersalus.com 
+</p>
+
+<h3>Consentimiento informado</h3>
+<p>
+  Al registrarse y utilizar nuestra plataforma esta aceptando este aviso de privacidad. Pude manifestar sy negativa para finalidades secundarias marcando la casillas correspondiente.
+</p>
+
+      </div>
+
+
+    </div>
+  )
+}
+
+ 
+
 /* ---------- Utils ---------- */
 const onlyDigits = (v = "") => (v || "").replace(/\D+/g, "");
 const toLowerTrim = (v = "") => (v || "").trim().toLowerCase();
@@ -48,6 +94,11 @@ const schema = z
   });
 
 const Registro = () => {
+
+  /* ---------- abrir modal ---------- */
+
+  const [abrirModal, setAbrirModal] = useState(false);
+
   const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [showConf, setShowConf] = useState(false);
@@ -67,8 +118,9 @@ const Registro = () => {
   /* Re-validar confirmación al cambiar la contraseña */
   const pwd = watch("contrasena");
   useEffect(() => {
+    console.log("ABRIR MODAL",abrirModal)
     if (pwd) trigger("confirmContra");
-  }, [pwd, trigger]);
+  }, [pwd, trigger, abrirModal]);
 
   /* ---------- Submit ---------- */
   const onSubmit = (data) => {
@@ -276,24 +328,26 @@ const Registro = () => {
               />
               <label htmlFor="politicas">
                 He leído y acepto los <a href="#">Términos y condiciones</a> y
-                las <a href="#">Políticas de Privacidad</a>
+                las <a href="#" onClick={() => setAbrirModal(true)}>Políticas de Privacidad</a>
               </label>
               {errors.politicas && touchedFields.politicas && (
                 <span className={styles.error}>{errors.politicas.message}</span>
               )}
             </div>
 
+
             {/* Botón */}
             <BotonA
               type="submit"
               disabled={!isValid || !isDirty || isSubmitting}
-            >
+              >
               {isSubmitting ? "Creando…" : "Crear cuenta"}
             </BotonA>
           </form>
         </div>
         <Derechos />
       </div>
+      {abrirModal ? <ModalTerminos/> : null }
     </motion.div>
   );
 };
