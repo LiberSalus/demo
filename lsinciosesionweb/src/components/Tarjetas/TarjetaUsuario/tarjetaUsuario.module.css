@@ -1,20 +1,27 @@
 .cntTarjetaUsuario {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
     gap: 1rem;
     padding: 1rem;
     width:100%;
-
+    
     & .imgUsuario {
         border-radius: 50%;
-        width: 3rem;
-        height: 3rem;
+        width:  4.5rem;
+        height: 4.5rem;
         object-fit: cover;
     }
 }
 
+.hola {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-left: 3rem;
+}
+
 .datosUsuario {
+    /* border: 1px dashed red; */
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -23,8 +30,8 @@
 
 .idPerfil {
     display: flex;
-    flex-direction: column;
-    align-items: end;
+    align-items: center;
+    gap: 2rem;
     & .nombreUsuario {
         font-weight: bold;
     }

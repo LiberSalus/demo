@@ -1,0 +1,261 @@
+/* mesat\src\components\TarjetaUsuaio\tarjetaLateral.module.css */
+
+/* estado en linea */
+.verde   {color: #1b1}
+.gris    {color: #ccc}
+.naranja {color: #FF8904}
+.rojo    {color: #C11007}
+
+.porDefecto { color: var(--color-prn)}
+
+.cntTarjetaLateral {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 18rem;
+  height: 100vh;
+  /* border: 1px dashed lightgray; */
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 15px rgba(39, 10, 167, 0.1);
+  
+}
+
+.pill {
+  font-size: .85rem;
+  position: relative;
+  display: flex;
+  justify-content: end;
+}
+
+.txto {
+  position: relative;
+  padding-right: 1.5rem;
+}
+
+.bola {
+  position: absolute;
+  font-size: 4.5rem;
+  line-height: 0;
+  transform: translateY(.6rem);
+  
+}
+
+/* Progreso y Foto perfil*/
+
+.cntFoto {
+  width:  14rem;
+  height: 14rem;
+  margin: 0 auto;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px dashed red; */
+}
+
+.baseProgres{
+  transform: rotate(10deg);
+  transform-origin: 50%;
+}
+
+.foto {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-3px);
+}
+
+.lapizBtn {
+  position: absolute;
+  width:  1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  appearance: none;
+  background-color: transparent;
+  
+  border-radius: 50%;
+  bottom: 1rem;
+  right:  1rem;
+}
+
+.lapiz {
+  position: absolute;
+  width:  1.4 rem;
+  height: 1.4 rem;
+  background-color: white;
+  border-radius: 50%;
+  border: 0.125rem solid #374957 ;
+  top:  50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.cntInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  
+  & > :nth-child(1){
+    font-size: 0.65rem;
+    color: #ccc;
+    
+  }
+  & > :nth-child(2){
+    font-size: 0.75rem;
+    color: #616060;
+    padding-bottom: 0.5rem;
+  }
+  & > :nth-child(3){
+    font-weight: bold;
+    color: #007cba;
+
+  }
+  & > :nth-child(4){
+    font-size: 0.75rem;
+    padding-bottom: 0.5rem;
+    
+    color: #ccc;
+  }
+  & > :nth-child(5){
+    font-size: 0.75rem;
+    padding-bottom: 0.5rem;
+    
+    color: #ccc;
+  }
+  
+}
+
+hr {
+  appearance: none;
+  border: 0.1px solid rgb(241, 240, 240);
+  margin: 0.5rem;
+  
+}
+
+.cntOpciones {
+  
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    & > li {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      padding-right: 1rem;
+      background: none;
+      gap: 1rem;;
+      padding: 0.5rem 1rem 0.5rem 0 ;
+      transition: background 0.3s ease;
+      border-radius: 0.5rem;
+      transform: scale(1);
+      & > a { 
+        color: lightgray; 
+        transition: color 0.3s ease;
+      }
+      & > img{ 
+        width: 1rem;
+        filter: opacity(0.5);
+        transition: transform 0.3s ease, filter 0.3s ease;
+        
+      }
+      &:hover {
+        transform: scale(1.01);
+        background: #f4f2f2;
+        & > a {color:var(--color-txt)}
+        & > img{ filter: opacity(1); transform: scale(1.1) }
+      }
+      
+    }
+  }
+}
+
+.cntAccesos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height:auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.cntCierre {
+  padding-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+
+
+/* === Overlay y Panel fijo (NUEVO) === */
+:root {
+  /* si ya tienes tokens globales, puedes omitir esto */
+  --ls-panel-w: 22rem;            /* ancho del panel */
+  --ls-panel-w-max: 92vw;
+  --ls-overlay: rgba(0,0,0,.45);
+  --ls-z-overlay: 1050;
+  --ls-z-panel: 1051;
+}
+
+/* Capa oscura detrás del panel */
+.overlay {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease;
+  z-index: var(--ls-z-overlay);
+}
+.overlay.open {
+  background: white;
+  background: var(--ls-overlay);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Contenedor del panel que se desliza */
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh; /* SIEMPRE toda la altura */
+  width: min(var(--ls-panel-w), var(--ls-panel-w-max));
+  transform: translateX(100%); /* fuera de pantalla a la derecha */
+  transition: transform .32s cubic-bezier(.22,.61,.36,1);
+  z-index: var(--ls-z-panel);
+  display: flex;
+  flex-direction: column;
+  /* sin fondo ni padding: el contenido es tu .cntTarjetaLateral */
+}
+
+/* Estado abierto */
+.panel.open {
+  transform: translateX(0);
+}
+
+
+/* En móviles: casi full width (opcional) */
+@media (max-width: 520px) {
+  :root { --ls-panel-w: 26rem; }
+  .panel { width: 100vw; }
+}
+
+/* Accesibilidad: reduce animación si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .panel { transition: none; }
+  .overlay { transition: none; }
+}
+
+.closeBtn {
+  position: absolute;
+  appearance: none;
+  background-color: transparent;
+  outline: none;
+  border: none;
+}

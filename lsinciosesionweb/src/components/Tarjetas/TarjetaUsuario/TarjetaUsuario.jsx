@@ -1,10 +1,20 @@
 // src/components/Tarjetas/TarjetaUsuario/TarjetaUsuario.jsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './tarjetaUsuario.module.css';
-import defaultAvatar from './foto-perfil.png';
-import ModalUsuario from './ModalUsuario';
-import { logout } from '@/services/auth'; // ya lo tienes
-// import { uploadProfilePhoto } from '@/services/perfil'; // cuando el back esté listo
+import defaultAvatar from './Usuario.png';
+import noti from './noti.svg';
+import TarjetaLateral from './TarjetaLateral';
+import { logout } from '@/services/auth';
+
+// --- Hook simple para bloquear el scroll del body ---
+function useLockBodyScroll(locked) {
+  useEffect(() => {
+    if (!locked) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [locked]);
+}
 
 const TarjetaUsuario = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,78 +23,71 @@ const TarjetaUsuario = () => {
   const [correo, setCorreo] = useState('');
   const inputFileRef = useRef(null);
 
-  // lee nombre/correo del storage que guardaste al hacer login
+  useLockBodyScroll(isOpen);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem('perfil_min');
       if (raw) {
         const p = JSON.parse(raw);
-        // nombre y apellido (si vienen)
         const fullName =
           (p?.first_name && p?.last_name && `${p.first_name} ${p.last_name}`) ||
-          p?.nombre ||
-          'Usuario';
+          p?.nombre || 'Usuario';
         setNombre(fullName);
         if (p?.email) setCorreo(p.email);
       }
     } catch {}
   }, []);
 
-  // abre modal al hacer click en la foto
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  // accesibilidad: cerrar con ESC
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setIsOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
 
-  // cambiar foto → abre selector
-  const onChangePhotoClick = () => {
-    inputFileRef.current?.click();
-  };
+  const openPanel  = () => setIsOpen(true);
+  const closePanel = () => setIsOpen(false);
 
-  // recibe archivo (cuando back esté listo lo subimos)
+  const onChangePhotoClick = () => inputFileRef.current?.click();
+
   const onSelectFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // 🔜 cuando el back esté ok:
-    // try {
-    //   await uploadProfilePhoto(file);
-    //   // refrescar foto si tu servicio la regresa por GET
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    // subir cuando el back esté listo
   };
 
   const onLogout = async () => {
-    try {
-      await logout();
-    } catch {
-      // si falla, igual limpiamos
-    } finally {
+    try { await logout(); } catch {}
+    finally {
       localStorage.removeItem('auth_ready');
       localStorage.removeItem('perfil_min');
-      window.location.assign('/panel/login'); // regresa al login del panel
+      window.location.assign('/panel/login');
     }
   };
 
   return (
     <div className={styles.cntTarjetaUsuario}>
+      <p className={styles.hola}>Hola, Usuario1</p>
       <div className={styles.datosUsuario}>
         <div className={styles.idPerfil}>
+          <img src={noti} alt="noticia" />
           <span className={styles.nombreUsuario}>{nombre}</span>
-          <span className={styles.estado}>Perfil</span>
         </div>
 
-        {/* FOTO: al clicar abre el modal */}
+        {/* FOTO → abre panel lateral */}
         <button
           type="button"
           className={styles.imgUsuarioBtn}
-          onClick={openModal}
+          onClick={openPanel}
           aria-haspopup="dialog"
           aria-expanded={isOpen ? 'true' : 'false'}
-          title="Abrir opciones de perfil"
+          title="Abrir panel de usuario"
         >
           <img className={styles.imgUsuario} src={avatarUrl} alt="Foto de perfil" />
         </button>
 
-        {/* input oculto para subir foto (lo dispara el modal) */}
         <input
           ref={inputFileRef}
           type="file"
@@ -94,18 +97,16 @@ const TarjetaUsuario = () => {
         />
       </div>
 
-      {/* MODAL */}
-      {isOpen && (
-        <ModalUsuario
-          onClose={closeModal}
-          nombre={nombre}
-          correo={correo}
-          // si quieres mostrar última sesión más adelante, pásala como prop:
-          ultimaSesion={null}
-          onChangePhoto={onChangePhotoClick}
-          onLogout={onLogout}
-        />
-      )}
+      {/* PANEL LATERAL + OVERLAY */}
+      <TarjetaLateral
+        isOpen={isOpen}
+        onClose={closePanel}
+        estados={['e1']}           // puedes pasar dinámico
+        nombre={nombre}
+        correo={correo}
+        onLogout={onLogout}
+        onChangePhoto={onChangePhotoClick}
+      />
     </div>
   );
 };

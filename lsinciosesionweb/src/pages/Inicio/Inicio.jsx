@@ -26,15 +26,12 @@ export default function Inicio() {
 
   return (
     <div className={styles?.wrap || ""} style={{ padding: "24px" }}>
-      <h2 style={{ marginBottom: 8 }}>¡Hola, {nombre}!</h2>
-      <p>Bienvenido a tu panel. Aquí verás tu resumen y accesos rápidos.</p>
-      <div className={styles.cntCarru}>
-        <TarjetaCarrucel/>
-      </div>
-      <TarjetaBienestar/>
-      <TarjetaAlertas/>
-      <TarjetaCuestionario/>
-      <TarjetaEvaluacion/>
+      
+      
+      
+      
+      
+      
 
     </div>
   );
