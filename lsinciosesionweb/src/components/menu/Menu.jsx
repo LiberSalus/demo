@@ -12,11 +12,18 @@ import FiberSmartRecordIcon from '@mui/icons-material/FiberSmartRecord';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import IconMenu from './LSlogoMenu.png'
 
+import inicio from './icoInicio.svg'
+import salud from './icoSalud.svg'
+import consultas from './icoConsultas.svg'
+import any from './icoAny.svg'
+import franky from './icoFranky.svg'
+import dudas from './icoDudas.svg'
+
 const links = [
-  { to: ROUTES.INICIO, label: "Inicio", icon: <HomeIcon/> },
+  { to: ROUTES.INICIO, label: "Inicio", icon: <img className={styles.imgIco} src={inicio} alt="Inicio"/> },
   {
     label: "Mi Salud",
-    icon: <HealthAndSafetyIcon/>,
+    icon: <img className={styles.imgIco} src={salud} alt="Mi Salud"/>,
     children: [
       { to: ROUTES.SOBRE_MI, label: "Sobre mí" },
       { to: ROUTES.HISTORIA_SALUD, label: "Mi historia con la salud" },
@@ -27,7 +34,7 @@ const links = [
   },
   {
     label: "Mis Consultas",
-    icon: <ManageSearchIcon/>,
+    icon: <img className={styles.imgIco} src={consultas} alt="Mis Consultas"/>,
     children: [
       { to: ROUTES.SUSURROS, label: "Susurros Salud" },
       { to: ROUTES.COMPRENSION, label: "Comprensión de mi situación" },
@@ -38,9 +45,9 @@ const links = [
       { to: ROUTES.AREAS, label: "Áreas" },
     ],
   },
-  { to: ROUTES.ANY, label: "Any", icon: <MotionPhotosAutoIcon/> },
-  { to: ROUTES.FRANKY, label: "Franky", icon: <FiberSmartRecordIcon/> },
-  { to: ROUTES.DUDAS, label: "Dudas frecuentes", icon: <HelpCenterIcon/> },
+  { to: ROUTES.ANY, label: "Any", icon: <img className={styles.imgIco} src={any} alt="Any"/> },
+  { to: ROUTES.FRANKY, label: "Franky", icon: <img className={styles.imgIco} src={franky} alt="Franky"/> },
+  { to: ROUTES.DUDAS, label: "Dudas frecuentes", icon: <img className={styles.imgIco} src={dudas} alt="Dudas"/> },
 ];
 
 export default function Menu() {

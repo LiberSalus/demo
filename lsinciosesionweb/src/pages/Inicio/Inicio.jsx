@@ -6,6 +6,8 @@ import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarruc
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
+import mono from './mono.png'
+
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
@@ -25,9 +27,9 @@ export default function Inicio() {
   }, []);
 
   return (
-    <div className={styles?.wrap || ""} style={{ padding: "24px" }}>
+    <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       
-      
+      <img className={styles.mono} src={mono}></img>
       
       
       

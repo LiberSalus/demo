@@ -110,11 +110,15 @@
 }
 
 .icon {
-  width: 1.5rem;
+  width:  1.5rem;
   height: 1.5rem;
   display: inline-grid;
   place-items: center;
   color: --txt-dim;
+  & > .imgIco {
+    width: 1.25rem;
+  }
+  
 }
 
 .text {
