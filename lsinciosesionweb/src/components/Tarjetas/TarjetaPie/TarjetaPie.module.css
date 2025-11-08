@@ -1,0 +1,26 @@
+.TarjetaPie {
+  margin: 0.8vw auto;
+  padding: 0.8vw;
+  width: 26vw;
+  border: 1px solid lightblue;
+  border-radius: 0.8vw;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.datos {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vw;
+  font-size: 0.8vw;
+
+}
+
+.edad,.estatura, .peso, .sangre {
+  font-size: 1.2vw;
+  line-height: 0.5vw;
+  font-weight: 700;
+}

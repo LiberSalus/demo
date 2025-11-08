@@ -6,8 +6,14 @@ import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarruc
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
-import mono from './mono.png'
+import mono from "./mono.png";
+import ProgCora from "@/components/ProgresoCorazon/ProgCora";
+import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
@@ -26,15 +32,50 @@ export default function Inicio() {
     } catch {}
   }, []);
 
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
+
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
-      
-      <img className={styles.mono} src={mono}></img>
-      
-      
-      
-      
+      <div className={styles.seccSuperior}>
+        <div className={styles.cntMono}>
+          <div className={styles.cntCora}>
+            <ProgCora porcentaje="100" />
+            <div className={styles.mensaje}>
+              Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
+            </div>
+          </div>
 
+          <img className={styles.mono} src={mono}></img>
+
+          <div className={styles.cntPie}>
+            <TarjetaPie edad="50" peso="90" sangre="A+" estatura="177" />
+          </div>
+        </div>
+
+        <div className={styles.cntAccion}>
+          <div className={styles.cntLogros}></div>
+          <hr className={styles.hr} />
+          <div className={styles.cntAccesos}>
+            <div className={styles.acceso}></div>
+            <div className={styles.acceso}></div>
+            <div className={styles.acceso}></div>
+          </div>
+        </div>
+
+        <div className={styles.cntAgenda}>
+          <div className={styles.agenda}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                value={fechaSeleccionada}
+                onChange={(newValue) => setFechaSeleccionada(newValue)}
+                showDaysOutsideCurrentMonth
+                displayWeekNumber
+              />
+            </LocalizationProvider>
+          </div>
+          <hr className={styles.hr} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,11 +1,93 @@
-.cntCarru {
-    /* border: 2px dashed lightcoral; */
-    height:80vh;
+.seccSuperior {
     display: flex;
-    align-items: center;
-
+    gap: 1.5vw;
+    margin: 0 auto;
 }
 
-.mono {
-    filter: invert(0) sepia();
+.cntMono {
+    /* border: 2px dashed red; */
+    width: 27vw;
+    height: 30vw;
+    position: relative;
+    & > img {
+        z-index: -1;
+        position: absolute;
+        /* border: 1px dashed darkgoldenrod; */
+        width: 12vw;
+        top:  50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cntCora {
+    width: 100%;
+    /* border: 2px dashed green; */
+    display: flex;
+}
+
+.mensaje {
+    border: 1px solid lightskyblue;
+    margin: 0.8vw;
+    height: max-content;
+    border-radius: 0.8vw;
+    width: 60%;
+    padding: 0.4vw;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(6px);
+    font-size: 0.8vw;
+}
+
+/* Contenedor Acción */
+
+.cntAccion, .cntAgenda {
+    /* border: 1px dashed darkorange; */
+    width: 21.3vw;
+    height: 29vw;
+}
+
+.cntLogros {
+    width: 21.3vw;
+    height: 7.6vw;
+    border: 1px dashed rgb(255, 196, 0);
+    border-radius: 0.8vw;
+}
+.hr {
+    appearance: none;
+    border: none;
+    
+    height: 0.5px;
+    margin: 2.3vw;
+    background-color: rgb(208, 206, 206);
+}
+
+.cntAccesos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vw;
+}
+.acceso {
+    width: 21.3vw;
+    height: 5vw;
+    border: 1px dashed rgb(255, 196, 0);
+    border-radius: 0.8vw;
+}
+
+.cntAgenda {
+    border: 1px dashed darkorange;
+    width: 50.3vw;
+    height: 29vw;
+    border-radius: 1vw;
+}
+
+.calendarBox {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  padding: 1rem;
 }
