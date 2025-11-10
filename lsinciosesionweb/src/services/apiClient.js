@@ -7,7 +7,7 @@ const baseURL = import.meta.env.VITE_API
 
 const api = axios.create({
   baseURL,
-  timeout: 15000,
+  timeout: 300000,
   withCredentials: false, // aquí vienes usando JWT en body, si cambias a cookie => true
 });
 

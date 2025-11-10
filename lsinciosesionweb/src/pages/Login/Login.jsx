@@ -194,12 +194,16 @@ const Login = () => {
           </div>
         )}
 
-        <input
-          className={styles.btn}
-          type="submit"
-          value={loading ? "Iniciando..." : "Iniciar sesión"}
-          disabled={loading}
-        />
+        <button className={styles.btn} type="submit" disabled={loading}>
+  {loading ? (
+    <>
+      <span className={styles.spinner}></span> Iniciando...
+    </>
+  ) : (
+    "Iniciar sesión"
+  )}
+</button>
+
         <a className={styles.olvida} href="/recuperar">Olvide mi contraseña</a>
 
       </form>
