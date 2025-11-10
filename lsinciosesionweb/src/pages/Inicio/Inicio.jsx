@@ -14,6 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import Box from '@mui/material/Box';
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
@@ -29,7 +30,7 @@ export default function Inicio() {
           setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
         }
       }
-    } catch {}
+    } catch { }
   }, []);
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
@@ -39,7 +40,7 @@ export default function Inicio() {
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
           <div className={styles.cntCora}>
-            <ProgCora porcentaje="100" />
+            <ProgCora porcentaje="65" />
             <div className={styles.mensaje}>
               Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
             </div>
@@ -61,17 +62,20 @@ export default function Inicio() {
             <div className={styles.acceso}></div>
           </div>
         </div>
-
+        
         <div className={styles.cntAgenda}>
           <div className={styles.agenda}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar
-                value={fechaSeleccionada}
-                onChange={(newValue) => setFechaSeleccionada(newValue)}
-                showDaysOutsideCurrentMonth
-                displayWeekNumber
-              />
-            </LocalizationProvider>
+            <Box sx={{ width: '100%', height: '100%' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  value={fechaSeleccionada}
+                  onChange={(newValue) => setFechaSeleccionada(newValue)}
+                  showDaysOutsideCurrentMonth
+                  displayWeekNumber
+                  sx={{ width: '100%', height: '100%' }}
+                />
+              </LocalizationProvider>
+            </Box>
           </div>
           <hr className={styles.hr} />
         </div>
