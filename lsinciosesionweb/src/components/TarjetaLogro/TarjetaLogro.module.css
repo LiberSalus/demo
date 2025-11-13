@@ -1,0 +1,69 @@
+.TarjetaLogro {
+  margin: 0vw auto;
+  padding: 0.8vw;
+  width: 21.3vw;
+  height: 7.65vw;
+  border: 1px solid #ACCCEB;
+  border-radius: 0.8vw;
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;  
+  position: relative;
+}
+
+.inf {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.4vw;
+}
+
+.txt {font-size: 0.6vw;}
+.tit {font-weight: bold; font-size: 0.7vw;}
+.inf {text-align: center; font-size: 0.6vw;}
+.cta {font-weight: 600; font-size: 0.85vw;}
+.pasos {font-weight: 0.7vw;}
+
+.config {
+  position: absolute;
+  right: 0.3vw;
+  top:   0.3vw;
+  width: 4.5%;
+  filter: brightness(4.5);
+}
+
+/* .izquierda {
+  transform-origin: center;
+  animation: hojaPulse 2s ease-in-out infinite;
+}
+
+@keyframes hojaPulse {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.5) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+} */
+
+/* .iconoAnimado {
+  animation: flotar 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes flotar {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+} */
+
+

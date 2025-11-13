@@ -16,6 +16,8 @@ import dayjs from "dayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Box from '@mui/material/Box';
 
+import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
+
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
 
@@ -54,7 +56,9 @@ export default function Inicio() {
         </div>
 
         <div className={styles.cntAccion}>
-          <div className={styles.cntLogros}></div>
+          <div className={styles.cntLogros}>
+            <TarjetaLogro id="reto1"/>
+          </div>
           <hr className={styles.hr} />
           <div className={styles.cntAccesos}>
             <div className={styles.acceso}></div>

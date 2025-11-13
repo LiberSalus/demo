@@ -1,0 +1,221 @@
+.copa {
+  transform-origin: center;
+  animation: moveCopa 3s ease-in-out infinite alternate;
+}
+
+@keyframes moveCopa {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(1deg);
+  }
+}
+
+.adns {
+  transform-origin: center;
+  animation: moveAdns 3s ease-in-out infinite alternate;
+}
+@keyframes moveAdns {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(1deg);
+  }
+}
+
+.numero {
+  animation: numero 3s ease infinite;
+  transform-origin: center;
+}
+@keyframes numero {
+  0%{transform: scale(1);}
+  50%{transform: scale(1.8) translateY(0.6vw);}
+  100%{transform: scale(1);}
+}
+
+.hizq {
+  
+  transform-origin: 50% 80%;
+  animation: hizq 3s ease infinite;
+}
+@keyframes hizq {
+  0%{transform: rotate(0deg);}
+  50%{transform: rotate(10deg);}
+  100%{transform: rotate(0deg);}
+}
+
+.hder {
+  
+  transform-origin: 50% 80%;
+  animation: hder 3s ease infinite;
+}
+@keyframes hder {
+  0%{transform: rotate(0deg);}
+  50%{transform: rotate(-10deg);}
+  100%{transform: rotate(0deg);}
+}
+
+
+.orbi {
+  transform-origin: center;
+  animation: gira 6s linear infinite;
+}
+@keyframes gira {
+  to{transform: rotate(360deg);}
+}
+
+.posup {
+  transform-origin: center;
+  animation: desgira 6s ease infinite;
+}
+@keyframes desgira {
+  to{transform: rotate(-360deg);}
+}
+
+.estrellas {
+  transform-origin: 70% 100%;
+  animation: estrellas 4s ease infinite alternate;
+}
+@keyframes estrellas {
+  to{transform: scale(3) translate(0);}
+}
+
+.peinf {
+  transform-origin: center;
+  animation: peinf 6s ease infinite;
+}
+@keyframes peinf {
+  to{transform: rotate(360deg);}
+}
+
+.pesup {
+  transform-origin: center;
+  animation: pesup 7s ease infinite;
+}
+
+@keyframes pesup {
+  to{transform: rotate(360deg);}
+}
+
+
+.mosca {
+  animation: moscaMove 3s infinite ease-in-out;
+  transform-origin: center;
+
+}
+
+@keyframes moscaMove {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(1px, -1px); }
+  20%  { transform: translate(-1.5px, 1.5px); }
+  30%  { transform: translate(2px, 0.5px); }
+  40%  { transform: translate(-2px, -1px); }
+  50%  { transform: translate(1px, 2px); }
+  60%  { transform: translate(-1px, -2px); }
+  70%  { transform: translate(0.5px, 1px); }
+  80%  { transform: translate(-0.5px, -1px); }
+  90%  { transform: translate(1px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+
+.titila {
+  animation: titila 1s ease infinite;
+}
+
+@keyframes titila {
+  0%{filter: opacity(1);}
+  25%{filter: opacity(0.5);}
+  50%{filter: opacity(0.7);}
+  75%{filter: opacity(0.2);}
+  100%{filter: opacity(1);}
+}
+
+/* segundo lugar */
+
+.orb2inf{
+  transform-origin: center;
+  animation: orb2inf 7s ease infinite alternate;
+}
+
+@keyframes orb2inf {
+  to{transform: rotate(-15deg);}
+}
+
+.ext2sup {
+  transform-origin: center;
+  animation: ext2sup 7s ease infinite alternate;
+}
+
+@keyframes ext2sup {
+  to{transform: rotate(35deg);}
+}
+
+.ext2inf {
+  transform-origin: center;
+  animation: ext2inf 9s ease infinite alternate;
+}
+
+@keyframes ext2inf {
+  to{transform: rotate(-58deg);}
+}
+
+.orb2sup{
+  transform-origin: center;
+  animation: orb2sup 7s ease infinite alternate;
+}
+
+@keyframes orb2sup {
+  to{transform: rotate(-75deg);}
+}
+
+.estrellas2 {
+  transform-origin: 70% 90%;
+  animation: estrellas2 4s ease infinite alternate;
+}
+@keyframes estrellas2 {
+  to{transform:scale(1.5)}
+}
+
+/* tercer lugar */
+
+.copa3 {
+  transform-origin: center;
+  animation: copa 05s ease infinite alternate;
+}
+
+@keyframes copa  {
+  to {transform: scale(0.85);}
+}
+
+.orb3sup {
+  transform-origin: center;
+  animation: orb3sup 10s ease infinite alternate;
+}
+@keyframes orb3sup {
+  to {transform: rotate(-45deg);}
+}
+
+.ext3sup {
+  transform-origin: center;
+  animation: ext3sup 7s ease infinite alternate;
+}
+@keyframes ext3sup {
+  to {transform: translateY(-0.7vw);}
+}
+
+.ext3inf {
+  transform-origin: center;
+  animation: ext3inf 7s ease infinite alternate;
+}
+@keyframes ext3inf {
+  to {transform: translateX(0.7vw);}
+}

@@ -54,7 +54,7 @@
 .cntLogros {
     width: 21.3vw;
     height: 7.6vw;
-    border: 1px dashed rgb(255, 196, 0);
+    /* border: 1px dashed rgb(255, 196, 0); */
     border-radius: 0.8vw;
 }
 .hr {
