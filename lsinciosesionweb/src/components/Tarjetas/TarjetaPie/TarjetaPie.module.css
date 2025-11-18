@@ -1,13 +1,15 @@
 .TarjetaPie {
   margin: 0.8vw auto;
   padding: 0.8vw;
-  width: 26vw;
+  width: 6vw;
   border: 1px solid lightblue;
   border-radius: 0.8vw;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(6px);
+  gap: 2.4vw;
 }
 
 .datos {

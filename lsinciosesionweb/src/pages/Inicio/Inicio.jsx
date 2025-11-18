@@ -6,7 +6,8 @@ import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarruc
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
-import mono from "./mono.png";
+import mono from "./monoP.png";
+import mancha from "./mancha.svg";
 import ProgCora from "@/components/ProgresoCorazon/ProgCora";
 import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
 
@@ -39,34 +40,39 @@ export default function Inicio() {
 
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
-      <div className={styles.seccSuperior}>
-        <div className={styles.cntMono}>
-          <div className={styles.cntCora}>
-            <ProgCora porcentaje="65" />
-            <div className={styles.mensaje}>
-              Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
-            </div>
-          </div>
 
+      <div className={styles.seccSuperior}>
+
+
+        <div className={styles.cntMono}>
+          <img className={styles.mancha} src={mancha}></img>
           <img className={styles.mono} src={mono}></img>
 
           <div className={styles.cntPie}>
             <TarjetaPie edad="50" peso="90" sangre="A+" estatura="177" />
           </div>
+          <div className={styles.cntCora}>
+            <ProgCora porcentaje="65" />
+            <div className={styles.mensaje}>
+              Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
+            </div>
+            <div className={styles.cntLogros}>
+              <TarjetaLogro id="reto4" />
+            </div>
+          </div>
+
+
         </div>
 
-        <div className={styles.cntAccion}>
-          <div className={styles.cntLogros}>
-            <TarjetaLogro id="reto1"/>
-          </div>
+        {/* <div className={styles.cntAccion}>
           <hr className={styles.hr} />
           <div className={styles.cntAccesos}>
             <div className={styles.acceso}></div>
             <div className={styles.acceso}></div>
             <div className={styles.acceso}></div>
           </div>
-        </div>
-        
+        </div> */}
+
         <div className={styles.cntAgenda}>
           <div className={styles.agenda}>
             <Box sx={{ width: '100%', height: '100%' }}>
@@ -84,6 +90,8 @@ export default function Inicio() {
           <hr className={styles.hr} />
         </div>
       </div>
+
+      <div className={styles}></div>
     </div>
   );
 }
