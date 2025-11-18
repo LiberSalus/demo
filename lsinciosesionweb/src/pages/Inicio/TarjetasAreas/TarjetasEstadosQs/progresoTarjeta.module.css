@@ -1,0 +1,20 @@
+.cntProgreso {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progreso {
+ /*  position: absolute; */
+  transform: rotate(126deg);
+  
+}
+
+.prstxt {
+    position: absolute;
+    font-weight: bold;
+    color: var(--color-prn);
+    font-size: 100%;
+}

@@ -1,0 +1,42 @@
+.cntBotonesQs {
+    margin: 1rem auto;
+    width: 22rem;
+    border: 1px solid #dcdcdd;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.info {
+    width: 90%;
+    border-left: 3.5px solid ;
+    padding-left: 1rem;
+    & :nth-child(2) {
+        font-size: 0.85rem;
+        color: #A7A8A9;
+    }
+}
+
+.titulo {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: var(--color-prn);
+}
+
+.cntBarraProgreso {
+    display: flex;
+    align-items: center;
+}
+
+.val {
+  
+  font-size: 0.5rem;
+  width: 20%;
+}
+
+.activo {
+  box-shadow: 0 0 0 3px #007CBA33;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}

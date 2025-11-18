@@ -1,71 +1,87 @@
-.seccSuperior {
-    display: flex;
-    gap: 1.5vw;
+.wrap {
+    width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.seccSuperior {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 1rem;
 }
 
 .cntMono {
-    /* border: 2px dashed red; */
-    width: 47.55vw;
-    height: 30vw;
+    border: 1px solid #ACCCEB;
+    width: 58rem;
+    min-width: 40.37rem;
+    height: 35rem;
     background-color: white;
     position: relative;
     border-radius: 0.8vw;
     display: flex;
-    
+    overflow: hidden;
     align-items: center;
+    justify-content: space-evenly;
+    & .cuadro {
+        position: absolute;
+        top: 6.5%;
+        left: 3%;
+        width: 13%;
+    }
     & .mancha {
         position: absolute;
-        width: 18vw;
-        top: 6vw;
-        left: 1vw;
+        width: 20rem;
+        top: 25%;
+        left: 3%;
         opacity: 0.3;
         
     }
-    & .mono {
+    & .cntImgMono {
         /* border: 1px dashed darkgoldenrod; */
-        width: 13vw;
-        margin: 0.8vw 2.5vw;
+        width: 30%;
+        margin: 1rem;
         z-index: 1;
+        text-align: center;
+        & > img  {
+            margin-top: 2.5rem;
+            width: 15rem;
+        }
     }
-    position: relative;
-    display: flex;
-    
-    justify-content: space-between;
+}
+
+.cntPie {
+    width: 10%;
 }
 
 .cntCora {
-    width: 100%;
+    width: 40%;
     height: 80%;
     /* border: 2px dashed green; */
     display: flex;
     flex-direction: column;
-    padding: 0.8vw;
+    
     align-items: center;
     justify-content: space-between;
     
 }
 
 .mensaje {
-    border: 1px solid lightskyblue;
-    margin: 0.8vw 0 5.4vw 0;
-    height: max-content;
-    border-radius: 0.8vw;
-    width: 90%;
-    padding: 0.4vw;
+    border: 1px solid #ACCCEB;
+    margin: 1rem 0 5.4rem 0;
+    border-radius: 1rem;
+    width: 22rem;
+    max-width: 25rem;
+    padding: 0.5rem;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(6px);
-    font-size: 0.8vw;
+    font-size: 1.15rem;
 }
 
-/* Contenedor Acción */
 
-.cntAccion, .cntAgenda {
-    /* border: 1px dashed darkorange; */
-    width: 21.3vw;
-    height: 29vw;
-}
 
 .cntLogros {
     
@@ -75,30 +91,48 @@
 .hr {
     appearance: none;
     border: none;
-    
     height: 0.5px;
-    margin: 2.3vw;
     background-color: rgb(208, 206, 206);
 }
 
 .cntAccesos {
     display: flex;
     flex-direction: column;
-    gap: 0.8vw;
+    
 }
 .acceso {
     width: 21.3vw;
     height: 5vw;
-    border: 1px dashed rgb(255, 196, 0);
     border-radius: 0.8vw;
 }
 
 .cntAgenda {
-    border: 1px dashed darkorange;
-    width: 50.3vw;
-    height: 29vw;
+    border: 1px solid #ACCCEB;
+    /* border: 1px dashed rgb(51, 0, 255); */
+    width: 28rem;
+    min-width: 15rem;
+    height: 35rem;
     border-radius: 1vw;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    & > p {
+        margin-left: 2rem;
+        font-weight: bold;
+    }
 }
+
+.agenda {
+    
+
+    transform: scale(0.9);
+    /* border: 1px dashed rgb(255, 196, 0); */
+    padding: 1rem;
+    gap: 1rem;
+}
+
+
 
 .calendarBox {
   background: rgba(255, 255, 255, 0.2);
@@ -107,4 +141,31 @@
   padding: 1rem;
 }
 
+.cntAlertas {
+    overflow: hidden;
+    overflow-x: scroll;
+    zoom: 70%;
+}
 
+.seccCentro {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+
+
+@media (max-width: 1360px ) {
+
+    .seccSuperior {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 1rem auto;
+    gap: 1rem;
+}
+}

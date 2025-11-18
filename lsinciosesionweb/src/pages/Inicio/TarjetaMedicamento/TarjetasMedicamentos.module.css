@@ -1,0 +1,11 @@
+.cntTarjetasMedicamentos {
+  width: fit-content;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  /* flex-wrap: wrap; */
+  gap: 1rem;
+  padding: 0 0.5rem;
+  
+  
+}

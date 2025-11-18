@@ -1,0 +1,33 @@
+/* tableta */
+.tableta {
+  transform-origin: center;
+  animation: tableta 6s ease infinite alternate;
+}
+@keyframes tableta {
+  to{transform: rotate(90deg);}
+}
+
+/* capsula */
+/* .super {
+  transform-origin: center;
+  animation: super 3s ease infinite alternate;
+}
+@keyframes super {
+  to{transform: rotate(-15deg)}
+} */
+
+
+
+/* inyeccion */
+
+.embolo {
+  animation: embolo 4s ease infinite;
+}
+
+@keyframes embolo {
+  0%,30%,50%,100% {transform:   translate(0px, 0px);}
+  10%, 40%{transform:  translate(-1px, 5px);}
+  
+}
+
+

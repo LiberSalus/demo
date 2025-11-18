@@ -1,13 +1,13 @@
 .TarjetaLogro {
   margin: 0vw auto;
   padding: 0.8vw;
-  width: 21.3vw;
-  height: 7.65vw;
+  width: 23rem;
+  height: 8rem;
   border: 1px solid #ACCCEB;
-  border-radius: 0.8vw;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.8vw;  
+  gap: 1rem;  
   position: relative;
 }
 
@@ -15,14 +15,14 @@
   width: 70%;
   display: flex;
   flex-direction: column;
-  row-gap: 0.4vw;
+  row-gap: 0.5rem;
 }
 
-.txt {font-size: 0.6vw;}
-.tit {font-weight: bold; font-size: 0.7vw;}
-.inf {text-align: center; font-size: 0.6vw;}
-.cta {font-weight: 600; font-size: 0.85vw;}
-.pasos {font-weight: 0.7vw;}
+.txt {font-size: 0.65rem;}
+.tit {font-weight: bold; font-size: 1rem;}
+.inf {text-align: center; font-size: 0.5rem;}
+.cta {font-weight: 600; font-size: 1rem;}
+.pasos {font-weight: 0.75rem;}
 
 .config {
   position: absolute;

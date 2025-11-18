@@ -1,0 +1,79 @@
+.TarjetaMedicamento{
+  margin: 1rem auto;
+  background: white;
+  /* border: 1.5px solid white; */
+  border-radius: 1.5rem;
+  width: 12rem;
+  min-height: 19rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.encabezado {
+  background-color: #5CB1DC;
+  color: white;
+  padding: 1rem 0 0 0 ;
+  text-align: center;
+}
+
+.medicamento {
+  font-weight: 600;
+}
+
+.dosis {
+  font-size: 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-txt);
+}
+
+.padecimiento {
+  padding-bottom: 0.5rem;
+}
+
+.hora {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-bottom: 0.25rem;
+}
+
+.timer {
+  
+}
+
+.alerta {
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-bco);
+  font-weight: 500;
+}
+
+.cntBtn {
+  padding-top: 1rem;
+  text-align: center;
+}
+.btn {
+  appearance: none;
+  outline: none;
+  border: none;
+  width: 10rem;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 3rem;
+  background-color: #C3E1F3;
+  cursor: pointer;
+  transition: background-color 0.3s ease ;
+  &:hover {
+    background-color: #9dc3db;
+  }
+}

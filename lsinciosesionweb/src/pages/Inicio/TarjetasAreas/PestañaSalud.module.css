@@ -1,0 +1,32 @@
+
+.encabezado {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin: 1rem auto;
+}
+
+.boton {
+  appearance: none;
+  outline: none;
+  border: 1px solid lightskyblue;
+  background: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  
+
+  &:hover{
+    outline: 2px solid var(--color-prn);
+    font-weight: bold;
+    color: var(--color-prn);
+  }
+
+}
+
+.activa {
+  outline: 2px solid var(--color-prn);
+  font-weight: bold;
+  color: var(--color-prn);
+}
+

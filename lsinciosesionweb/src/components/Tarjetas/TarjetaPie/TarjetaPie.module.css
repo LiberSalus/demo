@@ -1,28 +1,40 @@
 .TarjetaPie {
   margin: 0.8vw auto;
   padding: 0.8vw;
-  width: 6vw;
-  border: 1px solid lightblue;
+  width: 5rem;
+  height: 30rem;
+  border: 1px solid #ACCCEB;
   border-radius: 0.8vw;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(6px);
-  gap: 2.4vw;
+  overflow: hidden;
 }
 
 .datos {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.8vw;
-  font-size: 0.8vw;
-
+  gap: 1rem;
+  font-size: 0.75rem;
+  position: relative;
+}
+.datos:not(:last-child)::after {
+  position: absolute;
+  content: '';
+  width: 3.5rem;
+  left: 50%;
+  transform: translate(-50%);
+  height: 1px;
+  background-color: #ACCCEB;
+  bottom: -1.5rem;
 }
 
 .edad,.estatura, .peso, .sangre {
-  font-size: 1.2vw;
-  line-height: 0.5vw;
+  font-size: 1.2rem;
+  line-height: 0.5;
   font-weight: 700;
+  text-align: center;
 }

@@ -1,0 +1,19 @@
+
+.cntDin {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.cntStd {
+  flex: 1;
+  min-width: 300px;
+  padding: 1rem;
+  
+}
+
+.cntCmp {
+  width: 24.5rem;
+  max-height: 19.5rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

@@ -1,0 +1,73 @@
+.TarjetaCita{
+  margin: 1rem auto;
+  background: white;
+  border: 1px solid #accceb;
+  border-radius: 1rem;
+  width: 9.5rem;
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.encabezado {
+  background-color: #5CB1DC;
+  color: white;
+  padding: 0.25rem 0 0 0;
+  text-align: center;
+}
+
+.nombre {
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.especialidad {
+  background-color: #007cba;
+  font-size: 0.75rem;
+  opacity: 0.9;
+  width: 100%;
+  margin: 0;
+  padding: 0.25rem;
+}
+
+.cuerpo {
+  display: flex;
+  padding: 0.5rem 0.25rem ;
+  font-weight: 600;
+  position: relative;
+  text-align: center;
+  color: var(--color-txt);
+  row-gap: 1rem;
+  & > p {
+    width: 50%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+  }
+  &::before {
+    position: absolute;
+    content: '';
+    width:  1px;
+    height: 2rem;
+    right: 50%;
+    top: calc(50% - 1rem);
+    background: #8b8989;
+  }
+  
+}
+
+.estado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 2.5rem;
+  color: white;
+  font-size: .75rem;
+  font-weight: 400;
+}
