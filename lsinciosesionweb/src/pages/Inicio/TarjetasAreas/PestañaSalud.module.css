@@ -3,7 +3,10 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
-  margin: 1rem auto;
+  margin: 0 auto 0.5rem;
+  border: 1px solid #ACCCEB;
+  padding: 0.5rem;
+  border-radius: 1rem;
 }
 
 .boton {
@@ -18,7 +21,7 @@
 
   &:hover{
     outline: 2px solid var(--color-prn);
-    font-weight: bold;
+    
     color: var(--color-prn);
   }
 
@@ -30,3 +33,36 @@
   color: var(--color-prn);
 }
 
+.boton {
+  border: 2px solid transparent;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Estilos únicos por tab activo */
+.fisica {
+  border-color: #4caf50;
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.emocional {
+  border-color: #2196f3;
+  color: #2196f3;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.nutricional {
+  border-color: #ff9800;
+  color: #ff9800;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.social {
+  border-color: #9c27b0;
+  color: #9c27b0;
+  background-color: rgba(156, 39, 176, 0.1);
+}

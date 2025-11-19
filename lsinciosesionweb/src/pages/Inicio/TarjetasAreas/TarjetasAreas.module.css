@@ -1,19 +1,25 @@
 .cntTarjetaAreas {
   margin: 0 auto;
   width: 52.5rem;
-  height: auto;
-  border: 1px dashed lightgray;
+  height: 28.625rem;
+  border: 1px solid lightgray;
   border-radius: 1rem;
   padding: 1rem;
   background-color: white;
+  & > h3 { margin: 0.5rem; }
+  & > p  { 
+    font-size: 0.75rem; 
+    padding-left: 0.5rem;
+  } 
 }
 
+
 .cntPestañas {
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   width: 100%;
   height: auto;
   padding: 0.5rem;
-  border: 1px dashed lightgreen;
+  /* border: 1px dashed lightgreen; */
   border-radius: 1rem;
 
 }

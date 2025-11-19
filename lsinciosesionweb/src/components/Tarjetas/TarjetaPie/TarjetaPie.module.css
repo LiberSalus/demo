@@ -1,7 +1,7 @@
 .TarjetaPie {
   margin: 0.8vw auto;
   padding: 0.8vw;
-  width: 5rem;
+  width: 6.25rem;
   height: 30rem;
   border: 1px solid #ACCCEB;
   border-radius: 0.8vw;
@@ -11,6 +11,7 @@
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(6px);
   overflow: hidden;
+  color: var(--brand);
 }
 
 .datos {
@@ -20,6 +21,11 @@
   gap: 1rem;
   font-size: 0.75rem;
   position: relative;
+  & > :nth-child(2) {
+    color: var(--txt);
+    font-size: 1.5rem;
+  }
+  
 }
 .datos:not(:last-child)::after {
   position: absolute;

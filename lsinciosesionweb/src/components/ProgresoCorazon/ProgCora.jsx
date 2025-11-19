@@ -38,7 +38,7 @@ const ProgCora = ({porcentaje=100}) => {
           r="45"
           fill="none"
           stroke="url(#gradiente)"
-          strokeWidth=".75rem"
+          strokeWidth=".65rem"
           strokeDasharray="75 25"
           pathLength="100"
           transform="rotate(135)"

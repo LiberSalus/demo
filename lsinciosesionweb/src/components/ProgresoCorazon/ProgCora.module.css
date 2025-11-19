@@ -1,12 +1,12 @@
 .ProgCora {
-  margin: 1rem auto;
+  margin: 0rem auto;
   /* border: 1px dashed red; */
   width:  5rem;
   height: 5rem;
   position: relative;
   display: flex;
   justify-content: center;
-  zoom: 150%;
+  zoom: 180%;
 }
 
 .progreso {

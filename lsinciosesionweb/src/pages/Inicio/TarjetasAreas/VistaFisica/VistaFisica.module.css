@@ -1,3 +1,8 @@
+.VistaFisica {
+  /* border: 1px dashed red; */
+  & > h3 {font-size: 1rem; margin-bottom: 0.25rem;}
+  & > p  {font-size: .75rem;}  
+}
 
 .cntDin {
   display: flex;

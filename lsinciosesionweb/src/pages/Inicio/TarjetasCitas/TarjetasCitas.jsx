@@ -7,7 +7,7 @@ const TarjetasCitas = () => {
   return (
     <div className={styles.cntTarjetasCitas}>
 
-      <h3>Mis Citas</h3>
+      
       {citas.map((cita) => (
         <TarjetaCita key={cita.id} {...cita} />
       ))}

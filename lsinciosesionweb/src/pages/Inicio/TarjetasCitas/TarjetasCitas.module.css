@@ -1,9 +1,9 @@
 .cntTarjetasCitas {
+  width: fit-content;
   display: flex;
-  justify-content: space-around;
   align-items: flex-start;
-  flex-wrap: wrap;
+  padding: 0 0.5rem;
   gap: 1rem;
   
-  padding: 1.5rem;
+  
 }

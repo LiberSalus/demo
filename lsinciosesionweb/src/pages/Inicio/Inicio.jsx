@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./inicio.module.css";
 import TarjetaAlertas from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
@@ -12,21 +12,46 @@ import cuadro from "./cuadro.svg";
 import ProgCora from "@/components/ProgresoCorazon/ProgCora";
 import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
 
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+dayjs.locale("es");
+import Box from "@mui/material/Box";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import Box from "@mui/material/Box";
+
 
 import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetasMedicamentosIco from "./TarjetaMedicamento/TarjetasMedicamentosIco";
 import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
 import TarjetaNoticias from "./TarjetaNoticias/TarjetaNoticias";
+import TarjetasCitas from "./TarjetasCitas/TarjetasCitas";
 
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
+
+  useEffect(() => {
+    const elements = document.querySelectorAll(".scroll-container");
+
+    const handleWheel = (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        e.currentTarget.scrollLeft += e.deltaY;
+      }
+    };
+
+    elements.forEach((el) => {
+      el.addEventListener("wheel", handleWheel, { passive: false });
+    });
+
+    return () => {
+      elements.forEach((el) => {
+        el.removeEventListener("wheel", handleWheel);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -39,7 +64,9 @@ export default function Inicio() {
           setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
         }
       }
-    } catch {null}
+    } catch {
+      null;
+    }
   }, []);
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
@@ -87,17 +114,53 @@ export default function Inicio() {
                 showDaysOutsideCurrentMonth
                 /* displayWeekNumber */
                 sx={{
-                  width: " 100%",
-                  height: "100%",
+                  width: "22.75rem",
+                  // Contenedor de cada semana (fila)
                   "& .MuiDayCalendar-weekContainer": {
-                    minHeight: "1.5rem", // reduce altura de las filas
+                    minHeight: "1.2rem", // aún más compacto
+                    marginBottom: "0.1rem", // reduce espacio entre filas
+                    width: "100%",
                   },
+
+                  // Cada día (célula)
+                  "& .MuiPickersDay-root": {
+                    height: "1.6rem", // reduce altura del botón
+                    width: "1.6rem", // opcional: para mantener proporción
+                    padding: 0, // elimina espacio interno
+                    margin: "0px  12px", // reduce separación entre días
+                    fontSize: "0.7rem",
+                  },
+
+                  // Texto del día
                   "& .MuiTypography-root": {
-                    fontSize: "0.75rem", // reduce texto
+                    fontSize: "0.7rem",
+                    margin: "0px  7px",
                   },
+
+                  // Encabezado del mes
                   "& .MuiPickersCalendarHeader-label": {
-                    fontSize: "0.85rem",
+                    fontSize: "0.95rem",
                     fontWeight: "bold",
+                    /* transform: "translateY(0.5rem)", */
+                  },
+                  // Botones de navegación
+                  // Contenedor de las flechas
+                  "& .MuiPickersArrowSwitcher-root": {
+                    justifyContent: "space-between", // o "center" si querés alinearlas distinto
+                    marginBottom: "0.5rem",
+                    transform: "translateY(0.5rem)",
+                  },
+
+                  // Botones de flecha
+                  "& .MuiPickersArrowSwitcher-button": {
+                    color: "#1976d2", // color del ícono
+                    padding: "4px",
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                    "& svg": {
+                      fontSize: "2rem", // tamaño del ícono
+                    },
                   },
                 }}
               />
@@ -106,8 +169,12 @@ export default function Inicio() {
           <hr className={styles.hr} />
 
           <p>Mis Medicamentos</p>
-          <div className={styles.cntAlertas}>
+          <div className={`${styles.cntAlertas} scroll-container`}>
             <TarjetasMedicamentosIco />
+          </div>
+          <p>Mis Citas</p>
+          <div className={`${styles.cntCitas} scroll-container`}>
+            <TarjetasCitas />
           </div>
         </div>
       </div>
@@ -119,9 +186,9 @@ export default function Inicio() {
       </div>
 
       <div className={styles.seccInfe}>
-        <TarjetaAreas/>
-        
-        <TarjetaNoticias/>
+        <TarjetaAreas />
+
+        <TarjetaNoticias />
       </div>
 
       <div className={styles}></div>

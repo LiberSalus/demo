@@ -1,5 +1,5 @@
 .cntBotonesQs {
-    margin: 1rem auto;
+    margin: 0.5rem auto;
     width: 22rem;
     border: 1px solid #dcdcdd;
     border-radius: 0.5rem;
@@ -35,7 +35,7 @@
   width: 20%;
 }
 
-.activo {
+.activa {
   box-shadow: 0 0 0 3px #007CBA33;
   transform: scale(1.02);
   transition: all 0.2s ease;

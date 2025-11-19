@@ -131,7 +131,7 @@ const TarjetaSalud = ({ tipo }) => {
       <div className={styles.cntWds}>
         <div className={styles.cntTarjetas}>
           {tarjetas.map((titulo, i) => (
-            <TarjetaMedicion key={i} titulo={titulo} valor={"--"} />
+            <TarjetaMedicion key={i} titulo={titulo} valor={"118/68"} />
           ))}
           {tarjetas.length < 4 && <BotonAñadir />}
         </div>
