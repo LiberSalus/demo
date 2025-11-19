@@ -22,6 +22,7 @@ import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetasMedicamentosIco from "./TarjetaMedicamento/TarjetasMedicamentosIco";
 import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
+import TarjetaNoticias from "./TarjetaNoticias/TarjetaNoticias";
 
 
 export default function Inicio() {
@@ -38,7 +39,7 @@ export default function Inicio() {
           setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
         }
       }
-    } catch {}
+    } catch {null}
   }, []);
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
@@ -119,6 +120,8 @@ export default function Inicio() {
 
       <div className={styles.seccInfe}>
         <TarjetaAreas/>
+        
+        <TarjetaNoticias/>
       </div>
 
       <div className={styles}></div>

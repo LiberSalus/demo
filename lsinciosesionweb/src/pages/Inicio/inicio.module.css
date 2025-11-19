@@ -15,9 +15,9 @@
 
 .cntMono {
     border: 1px solid #ACCCEB;
-    width: 58rem;
+    width: 58.25rem;
     min-width: 40.37rem;
-    height: 35rem;
+    height: 35.5rem;
     background-color: white;
     position: relative;
     border-radius: 0.8vw;
@@ -47,7 +47,8 @@
         text-align: center;
         & > img  {
             margin-top: 2.5rem;
-            width: 15rem;
+            width: 15.5rem;
+            height: 32.8125rem;
         }
     }
 }
@@ -148,10 +149,22 @@
 }
 
 .seccCentro {
+    /* border: 2px dashed green; */
     margin: 0 auto;
     display: flex;
+    justify-content: start;
+    max-width: 96rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.seccInfe {
+    /* border: 2px dashed green; */
+    margin: 0rem auto;
+    display: flex;
     justify-content: center;
-    width: 100%;
+    
+    flex-wrap: wrap;
     gap: 1rem;
 }
 

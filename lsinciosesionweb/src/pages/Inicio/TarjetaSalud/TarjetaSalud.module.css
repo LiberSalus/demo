@@ -1,6 +1,6 @@
 .cntTarjetaSalud {
-  margin: 2rem auto;
-  min-width: 22.5rem;
+  margin: 1rem auto;
+  width: 28.3rem;
   max-width: 30rem;
   height: auto;
   border: 1px solid #ACCCEB;
@@ -31,7 +31,7 @@
   width: 90%;
   margin: 1rem auto;
   display: flex;
-  gap: 10%;
+  gap: 1rem;
   flex-wrap: wrap;
   justify-content: center;
 }
