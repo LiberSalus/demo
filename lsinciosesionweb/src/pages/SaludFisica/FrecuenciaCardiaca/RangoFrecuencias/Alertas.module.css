@@ -1,0 +1,26 @@
+.Alertas {
+  margin: 1rem auto;
+  width: 22.5rem;
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+
+  & > :nth-child(1) {
+    font-weight: bold;
+    width: 80%;
+    text-align: left;
+  }
+  & > :nth-child(4) {
+    margin: 1rem auto;
+    width: 80%;
+    font-size: 0.75rem;
+    color: gray;
+  }
+}

@@ -1,0 +1,32 @@
+.ComparacionSemanal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 1rem auto;
+  width: 23rem;
+  height: 6.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  & > :nth-child(1){
+    width: 80%;
+    font-weight: 800;
+    text-align: left;
+  }
+}
+.info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: end;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  
+  & > :nth-child(1) {font-size: 0.75rem;}
+  & > :nth-child(2), & > :nth-child(3) {text-align: center;}
+  & > :nth-child(4) {color: red;}
+}
+
+.valor {
+    font-weight: bold;
+}

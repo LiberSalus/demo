@@ -1,0 +1,44 @@
+.cnt {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.tit {
+  margin: 3rem 0 1rem 3rem;
+  padding-left: 2rem;
+  font-size: 1.5rem;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.alver {
+  display: flex;
+  width: 23rem;
+  gap: 1rem;
+  flex-direction: column;
+  /* border: 2px dashed lawngreen; */
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgb(125, 122, 122);
+  & > :nth-child(2) {
+    margin-left: 15%;
+  }
+}
+.sup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  & > p {
+    width: 75%;
+    font-style: italic;
+  }
+  & > img {
+    width: 
+    10%;
+  }
+}

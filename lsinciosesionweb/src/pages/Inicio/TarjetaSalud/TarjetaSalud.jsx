@@ -1,19 +1,23 @@
-import React, { useState } from "react";
-import styles from "./TarjetaSalud.module.css";
-import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
-
-import { GridStack } from "gridstack";
+//src\pages\Inicio\TarjetaSalud\TarjetaSalud.jsx
 import "gridstack/dist/gridstack.min.css";
-
-import mental from "./icoBienMental.svg";
-import fisica from "./icoBienFisico.svg";
-import nutricional from "./icoBienNutri.svg";
+import Modal from "react-modal";
 import config from "./icoConfig.svg";
 import añadir from "./icoAnadir.svg";
+import mental from "./icoBienMental.svg";
+import fisica from "./icoBienFisico.svg";
+import styles from "./TarjetaSalud.module.css";
+import { ROUTES } from "@/config/routes"
+import nutricional from "./icoBienNutri.svg";
+import { GridStack } from "gridstack";
+import { useNavigate } from "react-router-dom";
+import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
+import React, { useState, useEffect } from "react";
 
-import Modal from "react-modal";
 
 const TarjetaSalud = ({ tipo }) => {
+  
+  const navigate = useNavigate();
+
   const [modalAbierto, setModalAbierto] = React.useState(false);
   const [tarjetas, setTarjetas] = React.useState([]);
   const [rango, setRango] = useState(50);
@@ -27,13 +31,62 @@ const TarjetaSalud = ({ tipo }) => {
       iconoTrj: nutricional,
     },
   };
+
+
   const { tituloTrj, iconoTrj } = salud[tipo] || {};
+  
+  const STORAGE_KEYS = {
+    "Salud Física": "ls_panel_salud_fisica",
+    "Salud Mental": "ls_panel_salud_mental",
+    "Salud Nutricional": "ls_panel_salud_nutricional",
+  };
+  
+  const storageKey = STORAGE_KEYS[tipo];
+  
+  useEffect(() => {
+    if (!storageKey) return;
+    
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr)) {
+        setTarjetas(arr);
+        setSeleccionadas(arr); // para que también aparezcan como seleccionadas en el modal
+      }
+    } catch (err) {
+      console.error("Error leyendo métricas guardadas:", err);
+    }
+  }, [storageKey]);
+  
+
+  //  decide a qué ruta ir según el tipo
+  const irADetalle = (metrica) => {
+    if (tipo === "Salud Física") {
+      navigate(
+        `${ROUTES.SALUD_FISICA}?metric=${encodeURIComponent(metrica)}`
+      );
+    } else if (tipo === "Salud Mental") {
+      navigate(
+        `${ROUTES.SALUD_MENTAL}?metric=${encodeURIComponent(metrica)}`
+      );
+    } else if (tipo === "Salud Nutricional") {
+      navigate(
+        `${ROUTES.SALUD_NUTRICIONAL}?metric=${encodeURIComponent(metrica)}`
+      );
+    }
+  };
+
+
+  
+
+  
 
   const frase = {
     "Salud Física": "Moverte un poco más cada día hace la diferencia.",
     "Salud Mental": "Tu bienestar emocional también merece atención.",
-    "Salud Nutricional":
-      "Un poco más de equilibrio en tu dieta marcará la diferencia.",
+    "Salud Nutricional": "Un poco más de equilibrio en tu dieta marcará la diferencia.",
   };
 
   const catalogoMetricas = [
@@ -56,16 +109,16 @@ const TarjetaSalud = ({ tipo }) => {
       <p>Añadir</p>
     </div>
   );
-  
+
   const ModalMetricas = () => (
     <Modal
-    isOpen={modalAbierto}
-    onRequestClose={() => setModalAbierto(false)}
-    className={styles.modalContenido}
-    overlayClassName={styles.modalFondo}
+      isOpen={modalAbierto}
+      onRequestClose={() => setModalAbierto(false)}
+      className={styles.modalContenido}
+      overlayClassName={styles.modalFondo}
     >
 
-      <h3 className={styles.mdTit}>Personaliza tu panel de <br/> Salud Física</h3>
+      <h3 className={styles.mdTit}>Personaliza tu panel de <br /> Salud Física</h3>
       <p className={styles.mdIns}>Elige hasta 4 indicadores para ver en tu pantalla principal</p>
       <p className={styles.mdActivos}>Tus indicadores activos ({seleccionadas.length}/4)</p>
       <div className={styles.seleccionadas}>
@@ -83,7 +136,7 @@ const TarjetaSalud = ({ tipo }) => {
         ))}
       </div>
 
-      
+
       <h3>Selecciona tus indicadores</h3>
       <div className={styles.catalogoTarjetas}>
         {catalogoMetricas.map((m, i) => (
@@ -108,6 +161,13 @@ const TarjetaSalud = ({ tipo }) => {
         disabled={seleccionadas.length === 0}
         onClick={() => {
           setTarjetas(seleccionadas);
+          if (storageKey) {
+            try {
+              localStorage.setItem(storageKey, JSON.stringify(seleccionadas));
+            } catch (err) {
+              console.error("Error guardando métricas:", err);
+            }
+          }
           setModalAbierto(false);
         }}
       >
@@ -131,10 +191,19 @@ const TarjetaSalud = ({ tipo }) => {
       <div className={styles.cntWds}>
         <div className={styles.cntTarjetas}>
           {tarjetas.map((titulo, i) => (
-            <TarjetaMedicion key={i} titulo={titulo} valor={"118/68"} />
+            <button
+              key={i}
+              type="button"
+              className={styles.botonTarjeta}   // crea la clase si quieres estilos
+              onClick={() => irADetalle(titulo)}
+            >
+              <TarjetaMedicion titulo={titulo} valor={"118/68"} />
+            </button>
           ))}
+
           {tarjetas.length < 4 && <BotonAñadir />}
         </div>
+
       </div>
 
       <input

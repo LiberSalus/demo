@@ -34,6 +34,7 @@ const dashProgress = useMemo(() => `${progresoVisible} ${100 - progresoVisible}`
           </defs>
 
           <circle
+            
             cx="145"
             cy="145"
             r="142"
@@ -42,7 +43,7 @@ const dashProgress = useMemo(() => `${progresoVisible} ${100 - progresoVisible}`
             strokeWidth=".25rem"
             strokeDasharray="80 20"
             pathLength="100"
-            transform="rotate(0deg)"
+            transform="rotate(0)"
             transformOrigin="50%"
           />
 

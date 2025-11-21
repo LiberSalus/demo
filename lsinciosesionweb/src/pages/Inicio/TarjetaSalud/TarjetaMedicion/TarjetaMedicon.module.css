@@ -1,5 +1,5 @@
 .TarjetaMedicion {
-  margin: 1rem auto;
+  margin: 0rem auto;
   width: 9.5rem;
   border: 1px solid lightblue;
   border-radius: 0.75rem;
@@ -28,3 +28,15 @@
   }
 }
 
+.botonTarjeta {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  display: block;      /* Deja que la TarjetaMedicion mande */
+  cursor: pointer;
+}
+
+.botonTarjeta:focus {
+  outline: none;
+}

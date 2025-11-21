@@ -1,0 +1,37 @@
+/* src\pages\SaludFisica\PestañasFisica.module.css */
+.PestañasFisica {
+  border: 1px dashed lightgray;
+  border-radius: 1rem;
+  margin: 1rem auto;
+  min-height: 80vh;
+  height: auto;
+  & > h3 {
+    margin: 3rem;
+    font-size: 1.75rem;
+  }
+}
+
+.cntBotones {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+}
+
+.tabBtn {
+  appearance: none;
+  outline: none;
+  border: 1px solid lightblue;
+  border-radius: 0.6vw;
+  background-color: transparent;
+  padding: 0.8vw 1.2vw;
+  font-size: 0.8vw;
+}
+
+.tabBtnActiva {
+  /* puedes ajustar estos valores a tu paleta */
+  background-color: white;
+  color: #3498db;
+  font-weight: 600;
+  border-color: #3498db;
+}

@@ -1,0 +1,18 @@
+.RangoFrecuencias {
+  margin: 1rem auto;
+  padding: 1rem;
+  width: 440px;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+}
+
+.txt {
+  text-align: center;
+  & > :nth-child(2) {
+    font-weight: bold;
+  }
+}
