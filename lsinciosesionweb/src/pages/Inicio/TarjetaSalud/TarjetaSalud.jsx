@@ -12,6 +12,7 @@ import { GridStack } from "gridstack";
 import { useNavigate } from "react-router-dom";
 import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
 import React, { useState, useEffect } from "react";
+import { METRICAS_SALUD } from "@/config/metricasSalud";
 
 
 const TarjetaSalud = ({ tipo }) => {
@@ -89,19 +90,7 @@ const TarjetaSalud = ({ tipo }) => {
     "Salud Nutricional": "Un poco más de equilibrio en tu dieta marcará la diferencia.",
   };
 
-  const catalogoMetricas = [
-    "Peso",
-    "Pasos",
-    "Estrés",
-    "Energía",
-    "Calorías",
-    "Descanso",
-    "Hidratación",
-    "Oxigenación",
-    "Presión arterial",
-    "Glucosa en sangre",
-    "Frecuencia cardiaca",
-  ];
+  const catalogoMetricas = METRICAS_SALUD[tipo] || [];
 
   const BotonAñadir = () => (
     <div className={styles.contenedor} onClick={() => setModalAbierto(true)}>
