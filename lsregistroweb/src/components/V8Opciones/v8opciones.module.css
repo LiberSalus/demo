@@ -8,6 +8,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    padding-bottom: 3rem;
 }
 
 .cntLogo{
@@ -25,10 +26,12 @@
 }
 
 .cntTarjetas {
-    margin: 1rem auto 3rem;
+    /* border: 2px dashed red; */
+    margin: 1rem auto 3rem auto;
     width: 90%;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    align-items: center;
     justify-content: center;
 }

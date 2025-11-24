@@ -483,21 +483,18 @@ input::placeholder {
     
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1024px) {
 
     .cntV1Registro {
-        
-        height: 100vh;
+        height: auto;
         overflow-y: scroll;
     }
 
-    .cntBienvenida {
-        display: none;
+    .cntBienvenida { 
+        display: none; 
+        background-image: none;
     }
-    .fondo {
-        
-        display: none;
-    }
+    .fondo { display: none; }
 
     .cntSaludo {
         display: flex;
@@ -546,10 +543,11 @@ input::placeholder {
     .cntV1Registro {
         flex-direction: column;
         width: 100%;
-        
+        background-color: white;
         margin: 0;
         padding: 0;
-        background-image: url(./Mask.png);
+        /* background-image: url(./Mask.png); */
+        background: linear-gradient(116deg, #fff 50%, #aad0ed 100%);;
         position: relative;
         z-index: 1;
     }
@@ -568,34 +566,37 @@ input::placeholder {
         right: 0;
         bottom: 0;
         width:  100%;
-        background-color: #3b63a8 ;
+        
         filter: opacity(0.6);
         z-index: -1;
     }
 
     .cntFormulario {
-        
         padding: 2rem 0;
         overflow-y: scroll;
     }
-
+    
     .formulario {
-        height: 100vh;
+        /* border: 2px dashed red; */
+        height: auto;
     }
-
-
+    
+    
+    
     .formulario {
+        justify-content: start;
         width: 90%;
         max-width: 30rem;
         /* color: white; */
         
     }
-
+    
     .error {
         color: #aa2020;
-
+        
+        padding-top: 0;
     }
-
+    
     .cntImput > input:focus-visible {
         appearance: none;
         outline-color: #5981c6;

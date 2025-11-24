@@ -13,7 +13,8 @@
   position: relative;
   justify-content: start;
   align-items: center;
-  width: 50%;
+  width: 80%;
+  /* border: 2px dashed red; */
 }
 
 
