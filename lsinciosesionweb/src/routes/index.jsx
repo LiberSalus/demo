@@ -30,8 +30,8 @@ import Franky from "@/pages/Franky/Franky";
 import DudasFrecuentes from "@/pages/Ayuda/DudasFrecuentes";
 
 import SaludFisica from "@/pages/SaludFisica/SaludFisica";
-//import SaludMental from "@/pages/SaludMental/SaludMental"
-//import SaludNutricional from "@/pages/SaludNutricional/SaludNutricional"
+import SaludMental from "@/pages/SaludMental/SaludMental"
+import SaludNutricional from "@/pages/SaludNutricional/SaludNutricional"
 
 
 // (Opcional) re-export para compatibilidad vieja
@@ -59,8 +59,8 @@ export const AppRouter = () => (
 
           {/* 🆕 Salud Física */}
           <Route path={ROUTES.SALUD_FISICA} element={<SaludFisica />} />
-          {/* <Route path={ROUTES.SALUD_MENTAL} element={<SaludMental />} />
-          <Route path={ROUTES.SALUD_NUTRICIONAL} element={<SaludNutricional />} /> */}
+          <Route path={ROUTES.SALUD_MENTAL} element={<SaludMental />} />
+          <Route path={ROUTES.SALUD_NUTRICIONAL} element={<SaludNutricional />} />
 
           {/* Mis Consultas */}
           <Route path={ROUTES.AREAS} element={<Areas />} />
