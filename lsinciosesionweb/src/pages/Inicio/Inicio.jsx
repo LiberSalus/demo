@@ -6,8 +6,10 @@ import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarruc
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
+import mona from "./monaP.png";
 import mono from "./monoP.png";
-import mancha from "./mancha.svg";
+import manchaA from "./manchaA.svg";
+import manchaR from "./manchaR.svg";
 import cuadro from "./cuadro.svg";
 import ProgCora from "@/components/ProgresoCorazon/ProgCora";
 import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
@@ -20,7 +22,6 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-
 import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetasMedicamentosIco from "./TarjetaMedicamento/TarjetasMedicamentosIco";
@@ -28,9 +29,10 @@ import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
 import TarjetaNoticias from "./TarjetaNoticias/TarjetaNoticias";
 import TarjetasCitas from "./TarjetasCitas/TarjetasCitas";
 
-
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
+  const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
+  
 
   useEffect(() => {
     const elements = document.querySelectorAll(".scroll-container");
@@ -58,10 +60,22 @@ export default function Inicio() {
       const raw = localStorage.getItem("perfil_min");
       if (raw) {
         const p = JSON.parse(raw);
+
+        // nombre
         if (p?.nombre) setNombre(p.nombre);
-        // si guardas first/last_name:
         if (!p?.nombre && p?.first_name) {
           setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
+        }
+
+        // género / sexo (ajusta al nombre real que tengan en backend)
+        // ejemplos que cubrimos: "M", "F", "Hombre", "Mujer", etc.
+        const sexo = p?.sexo || p?.genero || p?.gender;
+        if (sexo) {
+          const s = String(sexo).toLowerCase();
+          const mujer =
+            s === "f" || s === "mujer" || s === "femenino" || s === "female";
+
+          setEsMujer(mujer);
         }
       }
     } catch {
@@ -71,14 +85,17 @@ export default function Inicio() {
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
 
+  const avatarImg = esMujer ? mona : mono;
+  const manchaImg = esMujer ? manchaR : manchaA;
+
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
-          <img className={styles.cuadro} src={cuadro}></img>
-          <img className={styles.mancha} src={mancha}></img>
+          <img className={styles.cuadro} src={cuadro} />
+          <img className={styles.mancha} src={manchaImg} />
           <div className={styles.cntImgMono}>
-            <img className={styles.mono} src={mono}></img>
+            <img className={styles.mono} src={avatarImg} />
           </div>
 
           <div className={styles.cntPie}>

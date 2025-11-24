@@ -1,3 +1,4 @@
+//src\pages\SaludNutricional\SaludNutricional.jsx
 import React from "react";
 import { METRICAS_SALUD } from "@/config/metricasSalud";
 import PestañasSalud from "../SaludCompartida/PestañasSalud";
@@ -10,12 +11,9 @@ import KcalConsumidas from "./KcalConsumidas/KcalConsumidas";
 
 const mapComponentByMetric = {
   "Peso": Peso,
-  "kCal Consumidas": Peso,
-  "kCal Quemadas": KcalQuemadas,
-  "Hidratación": Hidratacion, 
-  
-  
-  
+  "kCal consumidas": KcalConsumidas,
+  "kCal quemadas": KcalQuemadas,
+  "Hidratación": Hidratacion,
 };
 
 const SaludNutricional = () => {

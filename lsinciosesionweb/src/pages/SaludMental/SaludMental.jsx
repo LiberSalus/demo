@@ -1,3 +1,4 @@
+//src\pages\SaludMental\SaludMental.jsx
 import React from "react";
 import { METRICAS_SALUD } from "@/config/metricasSalud";
 import PestañasSalud from "../SaludCompartida/PestañasSalud";

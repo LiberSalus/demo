@@ -30,37 +30,72 @@ const itemVariants = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
+//base panel (lsinciosesion)
 
 const PANEL_BASE = import.meta.env.DEV
-  ? "http://localhost:5174/panel"
+  ? "http://192.168.100.14:5174/panel/"
   : (import.meta.env.VITE_PANEL_URL || "/panel"); // fallback
 
 const V8Opciones = () => {
   const { state } = useLocation();
   const [loading, setLoading] = useState(false);
 
+// Nombre para el saludo (viene del state o de sessionStorage)
   const nombre = useMemo(() => {
-    const s = state?.first_name || state?.nombre || state?.name;
-    const ss = sessionStorage.getItem("ls:first_name") || sessionStorage.getItem("ls:nombre");
+    const s =
+      state?.first_name ||
+      state?.nombre ||
+      state?.name;
+    const ss =
+      sessionStorage.getItem("ls:first_name") ||
+      sessionStorage.getItem("ls:nombre");
     return (s || ss || "").toString().trim();
   }, [state]);
 
+   // 👉 Ir al panel de inicio de sesión, mandando email (y opcionalmente nombre)
   const irAlPanel = () => {
-    try {
-      setLoading(true);
-      // Si tu Login del panel es una ruta explícita:
-      // const loginPath = "/login";  // o "/" si el index ya es el login
-      // Prefill opcional del email:
-      const email = sessionStorage.getItem("ls:correo") || "";
-      const url =
-        `https://libersalus.com/panel` +
-        (email ? `?email=${encodeURIComponent(email)}` : "");
-      // Redirección “dura” para salir del flujo de registro
-      window.location.replace(url);
-    } catch {
-      setLoading(false);
+  try {
+    setLoading(true);
+
+    // 1) Leemos de state y de sessionStorage
+    const emailFromState =
+      state?.email ||
+      state?.correo ||
+      state?.username ||
+      "";
+
+    const emailFromSession =
+      sessionStorage.getItem("ls:correo") || "";
+
+    const email = (emailFromState || emailFromSession).trim();
+
+    const nombreFromSession =
+      sessionStorage.getItem("ls:first_name") ||
+      sessionStorage.getItem("ls:nombre") ||
+      nombre;
+
+    // Debug para ver qué está llegando
+    console.log("[V8] email:", email, "nombre:", nombreFromSession);
+
+    const params = new URLSearchParams();
+    if (email) {
+      params.set("email", email);
     }
-  };
+    if (nombreFromSession) {
+      params.set("name", nombreFromSession);
+    }
+
+    const base = PANEL_BASE;
+    const url = params.toString()
+      ? `${base}?${params.toString()}`
+      : base;
+
+    window.location.replace(url);
+  } catch {
+    setLoading(false);
+  }
+};
+
 
 
   return (
