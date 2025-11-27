@@ -67,11 +67,11 @@ import ActividadFisica from "./ActividadFisica/ActividadFisica";
 import CicloMenstrual from "./CicloMenstrual/CicloMenstrual";
 
 const mapComponentByMetric = {
-  "Presión arterial": PresionArterial,
   "Glucosa en sangre": GlucosaEnSangre,
+  "Presión arterial": PresionArterial,
   "Ciclo menstrual": CicloMenstrual,
   "SpO2": Oxigenacion,
-  "Actividad Física": ActividadFisica,
+  "Pasos": ActividadFisica,
   "Frecuencia cardiaca": FrecuenciaCardiaca,
 };
 
