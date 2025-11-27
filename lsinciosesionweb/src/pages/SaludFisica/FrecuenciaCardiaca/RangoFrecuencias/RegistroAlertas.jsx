@@ -6,7 +6,7 @@ const formatRangoDia = (minDia, maxDia) => {
   if (typeof minDia !== "number" || typeof maxDia !== "number") {
     return "-- -- ppm";
   }
-  return `${maxDia} - ${minDia} ppm`;
+  return `${minDia} - ${maxDia} ppm`;
 };
 
 const formatValor = (valor) => {

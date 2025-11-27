@@ -4,7 +4,9 @@
   border-radius: 1rem;
   margin: 1rem auto;
   min-height: 80vh;
+  min-width: 58.75rem;
   height: auto;
+  background-color: white;
   & > h3 {
     margin: 3rem;
     font-size: 1.75rem;
@@ -12,9 +14,14 @@
 }
 
 .cntBotones {
-  width: 100%;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  width: 90%;
   display: flex;
   justify-content: space-evenly;
+  border: 1px solid #ACCCEB;
+  border-radius: 1rem;
+  gap: 0.25rem;
 
 }
 
@@ -22,16 +29,19 @@
   appearance: none;
   outline: none;
   border: 1px solid lightblue;
-  border-radius: 0.6vw;
+  border-radius: 1rem;
   background-color: transparent;
-  padding: 0.8vw 1.2vw;
+  padding: 0.5rem 1rem;
   font-size: 0.8vw;
+  width: 11.25rem;
+  
 }
 
 .tabBtnActiva {
   /* puedes ajustar estos valores a tu paleta */
   background-color: white;
-  color: #3498db;
+  color: #007CBA;
   font-weight: 600;
-  border-color: #3498db;
+  border-color: #007CBA;
+  border-width: 0.2rem;
 }

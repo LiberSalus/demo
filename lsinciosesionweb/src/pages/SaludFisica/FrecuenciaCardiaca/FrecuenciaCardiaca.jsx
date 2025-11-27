@@ -1,28 +1,28 @@
-//mesat\src\components\SaludFisica\FrecuenciaCardiaca\FrecuenciaCardiaca.jsx
+// src/pages/SaludFisica/FrecuenciaCardiaca/FrecuenciaCardiaca.jsx
 
 import React, { useState, useMemo } from "react";
 import { buildDailyMetrics } from "./RangoFrecuencias/FrecuenciaUtils";
 
-import sytles from "./FrecuenciaCardiaca.module.css";
-import Alertas from "./RangoFrecuencias/Alertas";
-import RegistroAlertas from "./RangoFrecuencias/RegistroAlertas";
-import FrecuenciaDiaria from "./RangoFrecuencias/FrecuenicaDiaria";
-import RangoFrecuencias from "./RangoFrecuencias/RangoFrecuencias";
-import ComparacionSemanal from "./RangoFrecuencias/ComparacionSemanal";
-import GraficaFrecuenciaCardiaca from "../../../components/GraficaFrecuenciaCardiaca/GraficaFrecuenciaCardiaca";
+import styles from "./FrecuenciaCardiaca.module.css";
 
-//import icoAzul from "./icoAzul.svg";
+import RangoFrecuencias from "./RangoFrecuencias/RangoFrecuencias";
+import GraficaFrecuenciaCardiaca from "./GraficaFrecuenciaCardiaca/GraficaFrecuenciaCardiaca";
+import FrecuenciaDiaria from "./RangoFrecuencias/FrecuenicaDiaria";
+import RegistroAlertas from "./RangoFrecuencias/RegistroAlertas";
+import ComparacionSemanal from "./RangoFrecuencias/ComparacionSemanal";
+import Alertas from "./RangoFrecuencias/Alertas";
+
 import alver from "./icoAlver.svg";
-import icoRojo from "./icoRojo.svg";
 
 const FrecuenciaCardiaca = () => {
+  // Lecturas base (de momento mock para probar)
   const [readings, setReadings] = useState([
     { ts: new Date(), bpm: 72 },
     { ts: new Date(new Date().setHours(8, 15)), bpm: 68 },
     { ts: new Date(new Date().setHours(12, 45)), bpm: 88 },
   ]);
 
-  // Día que se muestra (de momento, hoy)
+  // Día que se está visualizando (hoy)
   const [date] = useState(new Date());
 
   // Cuando el modal de FrecuenciaDiaria confirme una lectura
@@ -30,22 +30,33 @@ const FrecuenciaCardiaca = () => {
     setReadings((prev) => [...prev, { bpm, ts }]);
   };
 
-  // Métricas para la tarjeta de alertas
+  // Métricas para el día (min, max, alertas, etc.)
   const metrics = useMemo(
     () => buildDailyMetrics(readings, date),
     [readings, date]
   );
 
+  // Saber si el rango del día está fuera de 60–100 ppm
+  const fueraDeRango =
+    typeof metrics.minDia === "number" &&
+    typeof metrics.maxDia === "number" &&
+    (metrics.minDia < 60 || metrics.maxDia > 100);
+
   return (
-    <div className={sytles.FrecuenciaCardiaca}>
-      <h3 className={sytles.tit}>Frecuencia Cardiaca</h3>
-      <div className={sytles.cnt}>
-        <div className={sytles.col}>
+    <div className={styles.FrecuenciaCardiaca}>
+      <h3 className={styles.tit}>Frecuencia cardiaca</h3>
+
+      <div className={styles.cnt}>
+        {/* Columna 1: rango + gráfica histórica */}
+        <div className={styles.col}>
           <RangoFrecuencias minDia={metrics.minDia} maxDia={metrics.maxDia} />
-          <GraficaFrecuenciaCardiaca />
+
+          {/* Si quieres que la gráfica use estas mismas lecturas, pásalas */}
+          <GraficaFrecuenciaCardiaca readings={readings} />
         </div>
 
-        <div className={sytles.col}>
+        {/* Columna 2: frecuencia diaria + registro de alertas */}
+        <div className={styles.col}>
           <FrecuenciaDiaria
             readings={readings}
             date={date}
@@ -60,15 +71,18 @@ const FrecuenciaCardiaca = () => {
           />
         </div>
 
-        <div className={sytles.col}>
-          <ComparacionSemanal />
+        {/* Columna 3: comparación semanal + alertas + texto educativo */}
+        <div className={styles.col}>
+          <ComparacionSemanal readings={readings} today={date} />
+
           <Alertas
-            icono={icoRojo}
-            txtA="Tu Frecuencia cardiaca está por encima del promedio de las 2 semanas."
-            txtB="Podría deberse a estrés o falta de sueño."
+            fueraDeRango={fueraDeRango}
+            minDia={metrics.minDia}
+            maxDia={metrics.maxDia}
           />
-          <div className={sytles.alver}>
-            <div className={sytles.sup}>
+
+          <div className={styles.alver}>
+            <div className={styles.sup}>
               <img src={alver} alt="Información" />
               <p>
                 Recuerda que tu frecuencia cardiaca puede cambiar según tu nivel

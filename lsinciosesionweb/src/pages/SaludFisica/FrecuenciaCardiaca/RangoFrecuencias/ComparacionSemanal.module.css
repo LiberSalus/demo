@@ -3,30 +3,101 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+
   margin: 1rem auto;
   width: 23rem;
   height: 6.5rem;
+
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
-  & > :nth-child(1){
-    width: 80%;
-    font-weight: 800;
-    text-align: left;
-  }
+  box-shadow: 0 6px 16px rgba(31, 41, 55, 0.06);
 }
+
+/* Título */
+.ComparacionSemanal > :nth-child(1) {
+  width: 80%;
+  font-weight: 800;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #111827;
+}
+
+/* Contenedor principal */
 .info {
   display: flex;
   gap: 1.5rem;
   align-items: end;
   font-size: 0.75rem;
   line-height: 1.8;
-  
-  & > :nth-child(1) {font-size: 0.75rem;}
-  & > :nth-child(2), & > :nth-child(3) {text-align: center;}
-  & > :nth-child(4) {color: red;}
+}
+
+/* Columna 1: PP media */
+.info > :nth-child(1) {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Actual y semana anterior: centrado */
+.info > :nth-child(2),
+.info > :nth-child(3) {
+  text-align: center;
 }
 
 .valor {
-    font-weight: bold;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+/* Columna del icono / estado */
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+/* Icono (↑ ↓ ✓) */
+.icono {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Estados */
+.icono.ok {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.icono.alta {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.icono.baja {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* Delta (+3, -2, igual) */
+.delta {
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+/* Mensaje opcional */
+.mensaje {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0;
+  width: 90%;
+  text-align: center;
 }
