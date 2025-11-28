@@ -1,4 +1,5 @@
-// mesat/src/components/RangoFrecuencias/FrecuenciaDiaria.jsx
+// src/pages/SaludFisica/FrecuenciaCardiaca/RangoFrecuencias/FrecuenciaDiaria.jsx
+
 import { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
@@ -11,15 +12,20 @@ import {
   Scatter,
   Line,
 } from "recharts";
+
 import styles from "./FrecuenciaDiaria.module.css";
 import ModalFrecuenciaDiaria from "./ModalFrecuenciaDiaria";
+import { buildDailyMetrics, FREC_MIN } from "./FrecuenciaUtils";
 
-import { buildDailyMetrics, FREC_MIN } from "./frecuenciaUtils";
-
-
-
+/**
+ * Frecuencia cardiaca diaria
+ * Props:
+ *  - readings: [{ ts, bpm }]
+ *  - date: Date (día que se muestra)
+ *  - onAddReading: fn({ bpm, ts })
+ */
 const FrecuenciaDiaria = ({
-  readings = [], // [{ ts, bpm }]
+  readings = [],
   onAddReading = () => {},
   date = new Date(),
   title = "Frecuencia cardiaca diaria",
@@ -35,35 +41,33 @@ const FrecuenciaDiaria = ({
   const [open, setOpen] = useState(false);
 
   const formatFecha = (ts) => {
-  if (!ts) return "—";
-  const d = new Date(ts);
-  return d.toLocaleDateString("es-MX", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-};
+    if (!ts) return "—";
+    const d = new Date(ts);
+    return d.toLocaleDateString("es-MX", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
-const formatHora = (ts) => {
-  if (!ts) return "—";
-  return new Date(ts).toLocaleTimeString("es-MX", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+  const formatHora = (ts) => {
+    if (!ts) return "—";
+    return new Date(ts).toLocaleTimeString("es-MX", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   return (
     <div className={styles.card}>
+      {/* HEADER */}
       <div className={styles.header}>
         <div className={styles.cntTxt}>
           <h3>{title}</h3>
+
           <div className={styles.medi}>
             <p>
-              <b>
-                {ultimoRegistro
-                  ? `${ultimoRegistro.bpm} ppm`
-                  : "—"}
-              </b>
+              <b>{ultimoRegistro ? `${ultimoRegistro.bpm} ppm` : "—"}</b>
             </p>
 
             <p>Última lectura registrada:</p>
@@ -79,6 +83,7 @@ const formatHora = (ts) => {
         </div>
       </div>
 
+      {/* GRÁFICA */}
       <div className={styles.chart}>
         <ResponsiveContainer>
           <ComposedChart
@@ -99,8 +104,11 @@ const formatHora = (ts) => {
               tick={{ fontSize: 11, fill: "#6B7280" }}
               tickFormatter={(v) => `${v}`}
             />
-            {/* referencia baja teórica */}
+
+            {/* Línea de referencia mínima teórica */}
             <ReferenceLine y={FREC_MIN} stroke="#ef4444" strokeWidth={1.5} />
+
+            {/* Línea del promedio del día */}
             {mean > 0 && (
               <ReferenceLine
                 y={mean}
@@ -109,6 +117,7 @@ const formatHora = (ts) => {
                 ifOverflow="extendDomain"
               />
             )}
+
             <Tooltip
               cursor={{ stroke: "rgba(0,0,0,0.2)", strokeDasharray: "3 3" }}
               formatter={(val, name) =>
@@ -116,6 +125,8 @@ const formatHora = (ts) => {
               }
               labelFormatter={(v) => `Hora: ${v.toFixed(2)} h`}
             />
+
+            {/* Línea suave uniendo lecturas */}
             <Line
               type="monotone"
               dataKey="bpm"
@@ -124,15 +135,19 @@ const formatHora = (ts) => {
               dot={false}
               connectNulls
             />
+
+            {/* Puntos individuales */}
             <Scatter dataKey="bpm" name="Lectura" fill="#007cba" />
           </ComposedChart>
-
-          <button className={styles.addBtn} onClick={() => setOpen(true)}>
-            <span className={styles.dot} /> Añadir
-          </button>
         </ResponsiveContainer>
+
+        {/* BOTÓN AÑADIR */}
+        <button className={styles.addBtn} onClick={() => setOpen(true)}>
+          <span className={styles.dot} /> Añadir
+        </button>
       </div>
 
+      {/* MODAL PARA NUEVA LECTURA */}
       {open && (
         <ModalFrecuenciaDiaria
           onClose={() => setOpen(false)}

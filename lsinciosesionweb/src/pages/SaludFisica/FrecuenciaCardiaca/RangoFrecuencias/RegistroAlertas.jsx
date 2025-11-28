@@ -6,7 +6,7 @@ const formatRangoDia = (minDia, maxDia) => {
   if (typeof minDia !== "number" || typeof maxDia !== "number") {
     return "-- -- ppm";
   }
-  return `${maxDia} - ${minDia} ppm`;
+  return `${minDia} - ${maxDia} ppm`;
 };
 
 const formatValor = (valor) => {
@@ -17,7 +17,7 @@ const formatValor = (valor) => {
 const RegistroAlertas = ({ minDia, maxDia, alertaAlta, alertaBaja }) => {
   return (
     <div className={styles.RegistroAlertas}>
-      <div className={styles.rango}>
+      {/* <div className={styles.rango}>
         <p>Rango de frecuencia cardiaca</p>
         <p>{formatRangoDia(minDia, maxDia)}</p>
       </div>
@@ -28,7 +28,24 @@ const RegistroAlertas = ({ minDia, maxDia, alertaAlta, alertaBaja }) => {
       <div className={styles.rango}>
         <p>Alerta de frecuencia cardiaca baja</p>
         <p>{formatValor(alertaBaja)}</p>
+      </div> */}
+
+      <p className={styles.tit}>Rangos de frecuencia cardiaca</p>
+      <div className={styles.container}>
+
+      <div className={styles.cntValores}>
+        <p> {`>`} 100</p>
+        <p>80 - 100</p>
+        <p> {`< `} 80</p>
       </div>
+      <div className={styles.cntDescrip}>
+        <p>Taquicardia</p>
+        <p>Frecuencia cardiaca normal</p>
+        <p>Bradicardia</p>
+      </div>
+      </div>
+
+
     </div>
   );
 };

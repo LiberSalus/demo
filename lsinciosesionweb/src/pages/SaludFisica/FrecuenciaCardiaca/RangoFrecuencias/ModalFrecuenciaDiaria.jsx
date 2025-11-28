@@ -45,6 +45,7 @@ const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }
           <label>Pulsaciones por minuto:</label>
           <div className={styles.inline}>
             <input
+              className="inputNumber"
               type="number"
               min={30}
               max={220}

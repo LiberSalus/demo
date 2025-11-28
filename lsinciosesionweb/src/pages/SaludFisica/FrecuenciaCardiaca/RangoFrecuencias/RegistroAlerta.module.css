@@ -1,4 +1,4 @@
-.RegistroAlertas {
+/* .RegistroAlertas {
   margin: 1rem auto;
   width: 27.5rem;
   height: 7.5rem;
@@ -18,4 +18,43 @@
   width: 80%;
   font-size: 0.75rem;
 
+} */
+
+
+.RegistroAlertas {
+  margin: 1rem auto;
+  width: 27.5rem;
+  height: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb ;
+  border-radius: 1rem;
+  gap: 1rem;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+}
+
+.container {
+  display: flex;
+  gap: 3rem;
+}
+
+.tit {
+  font-weight: bold;
+}
+
+.cntValores {
+  text-align: end;
+  &>:nth-child(1),
+  &>:nth-child(3) {
+    color: red;
+  }
+  &>:nth-child(2) {
+    color: #62D247;
+  }
+}
+
+.cntDescrip {
+  text-align: end;
 }
