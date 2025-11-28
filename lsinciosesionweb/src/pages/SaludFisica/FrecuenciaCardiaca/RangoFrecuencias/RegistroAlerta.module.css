@@ -23,8 +23,9 @@
 
 .RegistroAlertas {
   margin: 1rem auto;
+  padding: 1rem 0;
   width: 27.5rem;
-  height: 7.5rem;
+  height: 8.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,15 +38,21 @@
 
 .container {
   display: flex;
-  gap: 3rem;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .tit {
+  width: 80%;
+  margin-top: 0.5rem;
   font-weight: bold;
+  text-align: left;
 }
 
 .cntValores {
+  font-size: 0.85rem;
   text-align: end;
+  line-height: 1.7;
   &>:nth-child(1),
   &>:nth-child(3) {
     color: red;
@@ -56,5 +63,12 @@
 }
 
 .cntDescrip {
+  font-size: 0.85rem;
   text-align: end;
+  line-height: 1.7;
+}
+
+.icos {
+  display: flex;
+  flex-direction: column;
 }

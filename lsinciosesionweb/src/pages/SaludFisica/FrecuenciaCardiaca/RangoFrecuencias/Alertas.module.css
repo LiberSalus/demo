@@ -37,6 +37,7 @@
   align-items: center;
   text-align: center;
   gap: 0.6rem;
+  margin-bottom: 2.5rem;
 }
 
 /* Contenedor del ícono (lo centra y le da aire) */

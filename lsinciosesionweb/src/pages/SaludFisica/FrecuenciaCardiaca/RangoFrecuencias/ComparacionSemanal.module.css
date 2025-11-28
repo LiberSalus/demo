@@ -4,9 +4,9 @@
   align-items: center;
   justify-content: space-evenly;
 
-  margin: 1rem auto;
+  margin: 0rem auto 1rem auto;
   width: 23rem;
-  height: 6.5rem;
+  height: 9.5rem;
 
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
