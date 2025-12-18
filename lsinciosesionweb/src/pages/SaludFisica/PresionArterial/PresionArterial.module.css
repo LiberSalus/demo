@@ -1,0 +1,10 @@
+.PresionArterial {
+  margin: 1rem auto;
+  width: 58.5rem;
+  
+  display: flex;
+  justify-content: space-around;
+  border: 1px dashed var(--color-lbs);
+  border-radius: 1rem;
+  flex-wrap: wrap;
+}

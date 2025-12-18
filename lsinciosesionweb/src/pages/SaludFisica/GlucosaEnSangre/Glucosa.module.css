@@ -1,0 +1,21 @@
+.Glucosa {
+  margin: 1rem 0.5rem;
+  min-width: auto;
+  width: 58.5rem;
+  display: flex;
+  align-items: start;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  /* border: 1px dashed rgb(243, 196, 196); */
+  border-radius: 1rem;
+}
+
+.izq, .cen, .der {
+  margin: 0 auto;
+  width: min-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+}
+

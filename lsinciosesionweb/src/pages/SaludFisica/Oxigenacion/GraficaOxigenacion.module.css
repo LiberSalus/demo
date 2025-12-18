@@ -1,0 +1,95 @@
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 14px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 27.5rem;
+  height: 22.875rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  margin: 1rem auto;
+}
+
+/* Tabs de arriba */
+.tabs {
+  display: inline-flex;
+  gap: 1rem;
+  width: 80%;
+  margin: 1rem auto;
+  justify-content: space-around;
+
+}
+
+.tab {
+  border: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid #D9D9D9 ;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  background: transparent;
+  color: #64748b;
+}
+
+.tabActiva {
+  border-color: #0284c7;
+  color: #0284c7;
+  font-weight: bold;
+  background: rgba(2, 132, 199, 0.08);
+}
+
+/* Gráfica */
+.chartArea {
+  width: 100%;
+  height: 190px;
+}
+
+/* Barra inferior */
+.bottomBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem auto;
+  width: 90%;
+}
+
+.fechaSelectWrapper {
+  position: relative;
+}
+
+.fechaSelect {
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  padding: 4px 28px 4px 10px;
+  font-size: 0.78rem;
+  background: #f8fafc;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fechaSelectWrapper::after {
+  content: "⌄";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  pointer-events: none;
+  color: #64748b;
+}
+
+.linkReg {
+  font-size: 0.80rem;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #0284c7;
+  &:hover {
+    color: #016ca2;
+  }
+}
+
+.XAxis {
+  font-size: 0.5rem;
+}

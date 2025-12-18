@@ -2,10 +2,9 @@
   margin: 1rem auto;
   padding: 1rem;
   
-  min-width: 24.5rem;
+  min-width: 29rem;
   width: 29.93rem;
   
-  height: 20.56rem;
   border: 1px solid #ACCCEB;
   border-radius: 1rem;
   display: flex;
@@ -49,10 +48,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   & > :nth-child(2) {
     font-size: 0.75rem;
     color: #334155;
   }
+  
 }
 
 
@@ -80,12 +81,14 @@
   padding: 2rem;
   width: 33.125rem;
   border-radius: 8px;
-  max-width: 35%;
+  width: clamp(20rem, 90%, 40rem);
   height: 70%;
   overflow-y: scroll;
   text-align: center;
   box-shadow: 0 14px 16px rgba(0, 0, 0, 0.1);
-  
+  & > :nth-child(5) {
+    margin-bottom: 1rem;
+  }
 }
 
 .mdTit {
@@ -95,7 +98,7 @@
 
 .mdIns {
   font-size: 1rem;
-  color: var(--color-lbs);
+  color: rgb(174, 170, 170);
 }
 
 .mdActivos {
@@ -156,19 +159,21 @@
   gap: 1rem;
   margin: 1rem auto;
   border: 2px dashed lightgrey;
+  border-radius: 0.5rem;
   justify-content: center;
-  
+  align-items: center;
 }
 
 .itemSeleccionado {
   position: relative;
+  
 }
 
 .itemSeleccionado button {
   position: absolute;
-  top:   4px;
-  right: 4px;
-  background: #f44336;
+  top:   -7px;
+  right: -7px;
+  background: white;
   color: white;
   border: none;
   border-radius: 50%;
@@ -200,3 +205,4 @@
   color:white;
   
 }
+

@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-evenly;
   box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  background-color: white;
 }
 
 .txt {

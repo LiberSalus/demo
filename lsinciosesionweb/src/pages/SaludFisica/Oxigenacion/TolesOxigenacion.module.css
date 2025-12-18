@@ -1,0 +1,51 @@
+.TolesOxigenacion {
+  margin: 1rem auto;
+  width: 27.5rem;
+  height: 10.31rem;
+  display: flex;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  flex-direction: column;
+  color: #505151;
+}
+
+.tit { 
+  font-weight: bold;
+  margin-left: 2rem;
+}
+
+.cntToles {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.item {
+  width: 12rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.circulo {
+  border-radius: 15rem;
+  width:  2rem;
+  height: 2rem;
+}
+
+.dat {
+  display: flex;
+  flex-direction: column;
+  
+  & > .nombre {
+    font-weight: bold;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+}
+

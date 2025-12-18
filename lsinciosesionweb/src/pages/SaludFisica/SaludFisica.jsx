@@ -60,14 +60,14 @@ import { METRICAS_SALUD } from "@/config/metricasSalud";
 import PestañasSalud from "../SaludCompartida/PestañasSalud";
 
 import FrecuenciaCardiaca from "./FrecuenciaCardiaca/FrecuenciaCardiaca";
-import GlucosaEnSangre from "./GlucosaEnSangre/GlucosaEnSangre";
+import Glucosa from "./GlucosaEnSangre/Glucosa";
 import PresionArterial from "./PresionArterial/PresionArterial";
 import Oxigenacion from "./Oxigenacion/Oxigenacion";
 import ActividadFisica from "./ActividadFisica/ActividadFisica";
 import CicloMenstrual from "./CicloMenstrual/CicloMenstrual";
 
 const mapComponentByMetric = {
-  "Glucosa en sangre": GlucosaEnSangre,
+  "Glucosa en sangre": Glucosa,
   "Presión arterial": PresionArterial,
   "Ciclo menstrual": CicloMenstrual,
   "SpO2": Oxigenacion,

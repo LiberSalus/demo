@@ -30,7 +30,7 @@ import { datosPorMedicion } from './datosPorMedicion';
 
 
 const TarjetaMedicion = ({ titulo, valor }) => {
-  const datos = titulo === "Estado de ánimo"
+  const datos = titulo === ""
   ? datosPorMedicion[valor] // usa el estado como clave
   : datosPorMedicion[titulo];
   const icono = datos?.icono;

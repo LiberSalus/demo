@@ -1,0 +1,48 @@
+/* 🟦 Fondo oscuro que cubre toda la pantalla */
+.backdrop {
+  position: fixed;
+  inset: 0; /* top, right, bottom, left = 0 */
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 🟦 Tu estilo ORIGINAL, solo le quitamos margin:auto */
+.ActualizacionOxigenacion {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;                 /* ← le puse un poquito más para respirar */
+  width: 24rem;                  /* ← un tamaño modal más natural */
+  height: auto;                  /* ← deja que crezca según contenido */
+  background: #ffffff;           /* ← importantísimo para que no sea transparente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  color: #505151;
+  text-align: center;
+}
+
+.ActualizacionOxigenacion > :nth-child(2) {
+  font-weight: bold;
+}
+
+.ActualizacionOxigenacion > :nth-child(3) {
+  font-size: 0.75rem;
+}
+
+/* 🟦 Tu botón tal cual */
+.btnPri {
+  border-radius: 999px;
+  padding: 0.5rem 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: #007cba;
+  color: #fff;
+}

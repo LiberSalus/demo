@@ -1,0 +1,170 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 0.75rem 1rem 1rem;
+  width: 880px;
+  max-width: 95vw;
+  max-height: 90vh;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.headerModal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.titulos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnVolver {
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s ease ;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.titulo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cerrar {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Paso selector */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0.5rem auto;
+  width: 27.5rem;
+}
+
+.descripcion {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.campoFecha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-left: 1.5rem;
+}
+
+.campoFecha input {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.cntBotones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin: 1.25rem auto;
+}
+
+.btnSecundario {
+  border-radius: 999px;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.botonDescargar {
+  border-radius: 999px;
+  padding: 0.4rem 1.8rem;
+  border: none;
+  background: #007cba;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Paso tabla */
+
+.contenedorTabla {
+  margin:0.5rem;
+  flex: 1;
+  overflow: auto;
+  border-radius: 12px;
+}
+
+.tabsModo {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  
+  width: fit-content;
+}
+
+.tabModo {
+  border-radius: 999px;
+  border: none;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  background: transparent;
+  color: #64748b;
+}
+
+.tabModoActiva {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+}

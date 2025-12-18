@@ -41,7 +41,7 @@ const ProgCora = ({porcentaje=100}) => {
           strokeWidth=".65rem"
           strokeDasharray="75 25"
           pathLength="100"
-          transform="rotate(135)"
+          transform="rotate(135) translate(-57.5 -130)"
           transformOrigin="50%"
           strokeLinecap="round"
         />

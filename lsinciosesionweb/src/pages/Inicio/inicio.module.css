@@ -189,10 +189,11 @@
 .seccCentro {
     margin: 0 auto;
     display: flex;
-    justify-content: start;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    
-    max-width: 90.1rem;
+    flex-wrap: wrap;
+    /* max-width: 90.1rem; */
     gap: 1rem;
 }
 

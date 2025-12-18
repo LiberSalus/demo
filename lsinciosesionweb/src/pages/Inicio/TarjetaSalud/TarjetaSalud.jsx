@@ -14,6 +14,8 @@ import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
 import React, { useState, useEffect } from "react";
 import { METRICAS_SALUD } from "@/config/metricasSalud";
 
+import eliminar from './icoEliminar.svg'
+
 
 const TarjetaSalud = ({ tipo }) => {
   
@@ -119,7 +121,7 @@ const TarjetaSalud = ({ tipo }) => {
                 setSeleccionadas(seleccionadas.filter((t) => t !== titulo));
               }}
             >
-              ✕
+              <img src={eliminar} alt="eliminar"></img>
             </button>
           </div>
         ))}

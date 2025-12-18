@@ -1,0 +1,120 @@
+.TabMedicamento {
+  width: 27.5rem;
+  
+  margin: 1rem auto;
+  position: relative;
+  display: flex;
+  gap: 1rem;
+}
+
+.medicamento {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  width: 13.43rem;
+  height: 8.875rem;
+  font-size: 0.75rem;
+  background-color: white;
+  &>:nth-child(1) {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem 0rem 1rem;
+    color: var(--color-prn);
+  }
+  &>:nth-child(2), 
+  &>:nth-child(4){
+    padding: 0.5rem 0.75rem 0.1rem;
+  }
+  &>:nth-child(3), 
+  &>:nth-child(5){
+    padding: 0.25rem;
+    /* border: 1px solid #ACCCEB; */
+    border-radius: 0.35rem;
+    width: 90%;
+    text-align: start;
+    margin: 0 auto;
+    /* background-color: #f3f3f3 ; */
+    font-style: italic;
+    color: #A7A8A9;
+
+  }
+}
+
+.derecha {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.campana {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  width: 13rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  background-color: white;
+  & > img  {
+    width: 2rem;
+    margin: 0 0rem 0 2rem;
+  }
+  & > p {
+    font-size: 0.85rem;
+    text-align: center;
+  }
+}
+
+.campana:hover .campanita {
+  animation: agita 0.8s both;
+}
+
+@keyframes agita {
+   0%,
+  100% {
+    -webkit-transform: translateX(0%);
+            transform: translateX(0%);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+  }
+  15% {
+    -webkit-transform: translateX(-1rem) rotate(-6deg);
+            transform: translateX(-1rem) rotate(-6deg);
+  }
+  30% {
+    -webkit-transform: translateX(0.5rem) rotate(6deg);
+            transform: translateX(0.5rem) rotate(6deg);
+  }
+  45% {
+    -webkit-transform: translateX(-0.5rem) rotate(-3.6deg);
+            transform: translateX(-0.5rem) rotate(-3.6deg);
+  }
+  60% {
+    -webkit-transform: translateX(0.25rem) rotate(2.4deg);
+            transform: translateX(0.25rem) rotate(2.4deg);
+  }
+  75% {
+    -webkit-transform: translateX(-0.15rem) rotate(-1.2deg);
+            transform: translateX(-0.15rem) rotate(-1.2deg);
+  }
+}
+
+.prox {
+  width: 13rem;
+  &>:nth-child(1){
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  &>:nth-child(2){
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--color-prn);
+  }
+  &>:nth-child(3){
+    text-align: center;
+    font-size: 0.70rem;
+  }
+}

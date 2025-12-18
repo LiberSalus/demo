@@ -4,6 +4,8 @@
   flex-wrap: wrap;
   height: auto;
   padding-bottom: 3rem;
+  min-width: min-content;
+  /* border: 2px dashed lawngreen; */
 }
 
 .tit {
@@ -23,7 +25,6 @@
   width: 23rem;
   gap: 1rem;
   flex-direction: column;
-  /* border: 2px dashed lawngreen; */
   font-size: 0.75rem;
   line-height: 1.4;
   color: rgb(125, 122, 122);

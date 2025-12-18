@@ -1,0 +1,15 @@
+.Oxigenacion {
+  margin: 1rem auto;
+  width: 58.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  /* border: 1px dashed rgb(243, 196, 196); */
+  border-radius: 1rem;
+}
+
+.izq, .cen, .der {
+  width: 27.5rem
+  
+}
+
