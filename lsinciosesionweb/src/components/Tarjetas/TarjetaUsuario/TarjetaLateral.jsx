@@ -5,7 +5,7 @@ import { ESTADOS } from './estados.config';
 import ProgresoTU from './ProgresoTU';
 import ProgresoCuestionario from './ProgresoCuestionario';
 
-import lapiz from './lapiz.svg';
+import lapiz from './icoLapiz.svg';
 import perfil from './perfil.png';
 import any from './any.svg';
 
@@ -50,7 +50,7 @@ const TarjetaLateral = ({
       >
         {/* Barra superior */}
         <div className={styles.panelHeader}>
-          <h2 className={styles.title}>Tu cuenta</h2>
+          {/* <h2 className={styles.title}>Tu cuenta</h2> */}
           <button
             ref={closeBtnRef}
             className={styles.closeBtn}

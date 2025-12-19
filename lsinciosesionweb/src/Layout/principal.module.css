@@ -58,7 +58,7 @@
   position: relative;
   z-index: 1;
   padding: 16px 24px;
-  border: 1px dashed lightgray;
+  /* border: 1px dashed lightgray; */
   border-radius: var(--radius);
   
   box-sizing: border-box;

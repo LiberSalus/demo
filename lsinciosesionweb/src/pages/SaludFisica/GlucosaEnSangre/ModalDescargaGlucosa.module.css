@@ -9,16 +9,18 @@
 }
 
 .modal {
+  margin-top: 5rem;
   background: #ffffff;
   border-radius: 18px;
   padding: 0.75rem 1rem 1rem;
   width: 880px;
-  max-width: 95vw;
+  max-width: 80vw;
   max-height: 90vh;
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.3);
   position: relative;
   display: flex;
   flex-direction: column;
+  
 }
 
 /* Header */
@@ -135,6 +137,7 @@
 
 .contenedorTabla {
   margin:0.5rem;
+  
   flex: 1;
   overflow: auto;
   border-radius: 12px;

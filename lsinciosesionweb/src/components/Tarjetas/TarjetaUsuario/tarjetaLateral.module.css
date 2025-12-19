@@ -38,7 +38,6 @@
   position: absolute;
   font-size: 4.5rem;
   line-height: 0;
-  transform: translateY(.6rem);
   
 }
 
@@ -83,8 +82,8 @@
 
 .lapiz {
   position: absolute;
-  width:  1.4 rem;
-  height: 1.4 rem;
+  width:  1.4rem;
+  height: 1.4rem;
   background-color: white;
   border-radius: 50%;
   border: 0.125rem solid #374957 ;
@@ -231,7 +230,7 @@ hr {
   z-index: var(--ls-z-panel);
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.541);
+  background-color:white;
   backdrop-filter: blur(4px);
   padding: 0.5rem;
 }
