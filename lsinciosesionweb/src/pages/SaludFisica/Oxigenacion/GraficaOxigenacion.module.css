@@ -85,10 +85,15 @@
   text-decoration: underline;
   cursor: pointer;
   color: #0284c7;
-  &:hover {
-    color: #016ca2;
-  }
+  background: transparent;
+  border: none;
+  padding: 0;
 }
+
+.linkReg:hover {
+  color: #016ca2;
+}
+
 
 .XAxis {
   font-size: 0.5rem;

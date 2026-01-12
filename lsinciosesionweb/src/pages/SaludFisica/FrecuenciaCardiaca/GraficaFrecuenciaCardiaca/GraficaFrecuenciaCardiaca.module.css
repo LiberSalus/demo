@@ -125,3 +125,26 @@
 .controls {
   margin: 0.75rem;
 }
+
+.bottomBar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  margin: 0.75rem;
+}
+
+.linkReg{
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #0284c7;
+  background: transparent;
+  border: none;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.linkReg:hover{
+  color: #016ca2;
+}

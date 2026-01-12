@@ -1,4 +1,5 @@
 // src/components/GraficaFrecuenciaCardiaca/GraficaFrecuenciaCardiaca.jsx
+
 import { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
@@ -26,6 +27,7 @@ import {
 
 import RangeDropdown from "./RangeDropdown";
 import styles from "./GraficaFrecuenciaCardiaca.module.css";
+import ModalDescargaFrecuenciaCardiaca from "./ModalDescargaFrecuenciaCardiaca";
 
 // Tooltip personalizado para semana/mes/año
 function TooltipHR({ active, payload, label }) {
@@ -59,6 +61,8 @@ export default function GraficaFrecuenciaCardiaca({ readings }) {
   // Vista actual
   const [vista, setVista] = useState("mes"); // "dia" | "semana" | "mes" | "anio"
   const [anio, setAnio] = useState(() => new Date().getFullYear());
+
+  const [modalAbierto, setModalAbierto] = useState(false);
 
   // Fechas pivote para cada vista
   const [fechaDia, setFechaDia] = useState(() => new Date());
@@ -386,38 +390,54 @@ export default function GraficaFrecuenciaCardiaca({ readings }) {
         </ResponsiveContainer>
 
         {/* Controles de rango según vista */}
-        <div className={styles.controls}>
-          {vista === "dia" && (
-            <RangeDropdown
-              options={opcionesDia}
-              value={toISODate(fechaDia)}
-              onChange={(v) => setFechaDia(new Date(v))}
-            />
-          )}
+        <div className={styles.bottomBar}>
+          <div className={styles.controls}>
+            {vista === "dia" && (
+              <RangeDropdown
+                options={opcionesDia}
+                value={toISODate(fechaDia)}
+                onChange={(v) => setFechaDia(new Date(v))}
+              />
+            )}
 
-          {vista === "semana" && (
-            <RangeDropdown
-              options={opcionesSemana}
-              value={toISODate(semanaInicio)}
-              onChange={(v) => setSemanaInicio(new Date(v))}
-            />
-          )}
+            {vista === "semana" && (
+              <RangeDropdown
+                options={opcionesSemana}
+                value={toISODate(semanaInicio)}
+                onChange={(v) => setSemanaInicio(new Date(v))}
+              />
+            )}
 
-          {vista === "mes" && (
-            <RangeDropdown
-              options={opcionesMes}
-              value={toISODate(fechaMes)}
-              onChange={(v) => setFechaMes(new Date(v))}
-            />
-          )}
+            {vista === "mes" && (
+              <RangeDropdown
+                options={opcionesMes}
+                value={toISODate(fechaMes)}
+                onChange={(v) => setFechaMes(new Date(v))}
+              />
+            )}
 
-          {vista === "anio" && (
-            <RangeDropdown
-              options={opcionesAnio}
-              value={String(anio)}
-              onChange={(v) => setAnio(Number(v))}
-            />
-          )}
+            {vista === "anio" && (
+              <RangeDropdown
+                options={opcionesAnio}
+                value={String(anio)}
+                onChange={(v) => setAnio(Number(v))}
+              />
+            )}
+          </div>
+
+          <ModalDescargaFrecuenciaCardiaca
+  abierto={modalAbierto}
+  onClose={() => setModalAbierto(false)}
+/>
+
+
+          <button
+            type="button"
+            className={styles.linkReg}
+            onClick={() => setModalAbierto(true)}
+          >
+            Ver registros
+          </button>
         </div>
       </div>
     </div>

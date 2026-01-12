@@ -1,6 +1,9 @@
+// src/pages/SaludFisica/Oxigenacion/GraficaOxigenacion.jsx
 // src/components/Oxigenacion/GraficaOxigenacion.jsx
 import React, { useState, useMemo } from "react";
 import styles from "./GraficaOxigenacion.module.css";
+import ModalDescargaOxigenacion from "./ModalDescargaOxigenacion"; // ✅ ruta a pages
+
 import {
   ResponsiveContainer,
   ScatterChart,
@@ -12,7 +15,6 @@ import {
   ReferenceLine,
 } from "recharts";
 
-// Datos de ejemplo por vista (luego los conectamos al backend)
 const dataDia = [
   { x: 1, spo2: 91 },
   { x: 3, spo2: 93 },
@@ -55,11 +57,10 @@ const dataAnio = [
   { x: 12, spo2: 95 },
 ];
 
-
-
 const GraficaOxigenacion = () => {
   const [vista, setVista] = useState("dia");
   const [fechaSeleccionada, setFechaSeleccionada] = useState("2025-10-21");
+  const [modalAbierto, setModalAbierto] = useState(false); // ✅
 
   const { data, xDomain, xTicks, xLabelFormatter } = useMemo(() => {
     switch (vista) {
@@ -86,13 +87,7 @@ const GraficaOxigenacion = () => {
           xDomain: [1, 12],
           xTicks: [1, 3, 6, 9, 12],
           xLabelFormatter: (v) => {
-            const meses = {
-              1: "Ene",
-              3: "Mar",
-              6: "Jun",
-              9: "Sep",
-              12: "Dic",
-            };
+            const meses = { 1: "Ene", 3: "Mar", 6: "Jun", 9: "Sep", 12: "Dic" };
             return meses[v] || v;
           },
         };
@@ -107,21 +102,14 @@ const GraficaOxigenacion = () => {
     }
   }, [vista]);
 
-    const opcionesFecha = [
+  const opcionesFecha = [
     { value: "2025-10-21", label: "Mar 21, Oct 2025" },
     { value: "2025-10-20", label: "Lun 20, Oct 2025" },
     { value: "2025-10-19", label: "Dom 19, Oct 2025" },
   ];
 
-  const labelFechaActual =
-    opcionesFecha.find((f) => f.value === fechaSeleccionada)?.label ||
-    "Selecciona fecha";
-
-
-
   return (
     <div className={styles.card}>
-      {/* Pills Día / Semana / Mes / Año */}
       <div className={styles.tabs}>
         <button
           type="button"
@@ -132,9 +120,7 @@ const GraficaOxigenacion = () => {
         </button>
         <button
           type="button"
-          className={`${styles.tab} ${
-            vista === "semana" ? styles.tabActiva : ""
-          }`}
+          className={`${styles.tab} ${vista === "semana" ? styles.tabActiva : ""}`}
           onClick={() => setVista("semana")}
         >
           Semana
@@ -148,21 +134,17 @@ const GraficaOxigenacion = () => {
         </button>
         <button
           type="button"
-          className={`${styles.tab} ${
-            vista === "anio" ? styles.tabActiva : ""
-          }`}
+          className={`${styles.tab} ${vista === "anio" ? styles.tabActiva : ""}`}
           onClick={() => setVista("anio")}
         >
           Año
         </button>
       </div>
 
-      {/* Gráfica */}
       <div className={styles.chartArea}>
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 0 }}>
             <CartesianGrid strokeDasharray="3 3" />
-
             <XAxis
               type="number"
               dataKey="x"
@@ -170,9 +152,7 @@ const GraficaOxigenacion = () => {
               ticks={xTicks}
               tickFormatter={xLabelFormatter}
               tick={{ fontSize: "0.85rem", fill: "#333" }}
-
             />
-
             <YAxis
               type="number"
               dataKey="spo2"
@@ -182,43 +162,17 @@ const GraficaOxigenacion = () => {
               tick={{ fontSize: "0.85rem", fill: "#333" }}
             />
 
-            {/* Líneas de rango */}
-            <ReferenceLine
-              y={92}
-              stroke="#16a34a"
-              strokeWidth={2}
-              strokeDasharray="3 0"
-            />
-            <ReferenceLine
-              y={85}
-              stroke="#fbbf24"
-              strokeWidth={2}
-              strokeDasharray="4 4"
-            />
-            <ReferenceLine
-              y={75}
-              stroke="#f97373"
-              strokeWidth={2}
-              strokeDasharray="3 0"
-            />
+            <ReferenceLine y={92} stroke="#16a34a" strokeWidth={2} strokeDasharray="3 0" />
+            <ReferenceLine y={85} stroke="#fbbf24" strokeWidth={2} strokeDasharray="4 4" />
+            <ReferenceLine y={75} stroke="#f97373" strokeWidth={2} strokeDasharray="3 0" />
 
-            <Tooltip
-              formatter={(value) => `${value}%`}
-              labelFormatter={(v) => `Punto: ${v}`}
-            />
+            <Tooltip formatter={(value) => `${value}%`} labelFormatter={(v) => `Punto: ${v}`} />
 
-            <Scatter
-              data={data}
-              fill="#0284c7"
-              stroke="#0284c7"
-              strokeWidth={1.4}
-            />
+            <Scatter data={data} fill="#0284c7" stroke="#0284c7" strokeWidth={1.4} />
           </ScatterChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Fecha y Ver registros */}
-            {/* Fecha y Ver registros */}
       <div className={styles.bottomBar}>
         <div className={styles.fechaSelectWrapper}>
           <select
@@ -234,15 +188,23 @@ const GraficaOxigenacion = () => {
           </select>
         </div>
 
-        <a  className={styles.linkReg}>
+        {/* ✅ aquí ya abre modal */}
+        <button
+          type="button"
+          className={styles.linkReg}
+          onClick={() => setModalAbierto(true)}
+        >
           Ver registros
-        </a>
+        </button>
       </div>
 
+      {/* ✅ aquí renderizamos el modal */}
+      <ModalDescargaOxigenacion
+        abierto={modalAbierto}
+        onClose={() => setModalAbierto(false)}
+      />
     </div>
   );
 };
 
 export default GraficaOxigenacion;
-
-

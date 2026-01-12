@@ -33,7 +33,7 @@ const itemVariants = {
 //base panel (lsinciosesion)
 
 const PANEL_BASE = import.meta.env.DEV
-  ? "http://192.168.100.9:5174/panel/"
+  ? "http://192.168.100.49:5174/panel/"
   : (import.meta.env.VITE_PANEL_URL || "/panel"); // fallback
 
 const V8Opciones = () => {

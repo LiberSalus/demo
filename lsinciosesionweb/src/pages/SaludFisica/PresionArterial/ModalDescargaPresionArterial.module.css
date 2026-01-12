@@ -1,0 +1,215 @@
+/* src/pages/SaludFisica/PresionArterial/ModalDescargaPresionArterial.module.css */
+@import url('../GlucosaEnSangre/ModalDescargaGlucosa.module.css');
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 9999;
+}
+
+/* Modal base */
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: min(720px, calc(100vw - 32px));
+    max-height: min(80vh, 740px);
+
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cuando estás en la tabla: más ancho */
+.modalWide {
+    width: min(1100px, calc(100vw - 32px));
+    max-height: min(86vh, 860px);
+}
+
+/* Header */
+.headerModal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 16px 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.titulos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btnVolver {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+}
+
+.btnVolver:hover {
+    background: #f8fafc;
+}
+
+.titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.cerrar {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.cerrar:hover {
+    background: #f8fafc;
+}
+
+/* ===== Paso selector ===== */
+.form {
+    padding: 16px 18px 18px;
+    overflow: auto;
+}
+
+.descripcion {
+    margin: 0 0 12px;
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.campoFecha {
+    margin: 10px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.campoFecha input[type="date"] {
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    background: #f8fafc;
+}
+
+.cntBotones {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btnSecundario {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #0f172a;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.btnSecundario:hover {
+    background: #f8fafc;
+}
+
+.botonDescargar {
+    border: none;
+    background: #0284c7;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.botonDescargar:hover {
+    background: #016ca2;
+}
+
+/* ===== Paso tabla ===== */
+.contenedorTabla {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    /* clave para que el scroll funcione */
+}
+
+.toolbarTabla {
+    padding: 12px 18px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.btnImprimir {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #0f172a;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btnImprimir:hover {
+    background: #f8fafc;
+}
+
+.printArea {
+    padding: 16px 18px 18px;
+    overflow: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 520px) {
+    .modal {
+        width: calc(100vw - 16px);
+        max-height: 86vh;
+        border-radius: 14px;
+    }
+
+    .cntBotones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btnSecundario,
+    .botonDescargar {
+        width: 100%;
+    }
+}

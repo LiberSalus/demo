@@ -1,0 +1,23 @@
+@import url("../../GlucosaEnSangre/ModalDescargaGlucosa.module.css");
+
+@media print {
+  :global(body.print-hr) * {
+    visibility: hidden !important;
+  }
+
+  :global(body.print-hr) :global(.printArea),
+  :global(body.print-hr) :global(.printArea) * {
+    visibility: visible !important;
+  }
+
+  :global(body.print-hr) :global(.printArea) {
+    position: fixed !important;
+    inset: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}

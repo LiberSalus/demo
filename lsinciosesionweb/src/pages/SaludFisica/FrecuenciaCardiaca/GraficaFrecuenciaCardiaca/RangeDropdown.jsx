@@ -1,3 +1,4 @@
+//src\pages\SaludFisica\FrecuenciaCardiaca\GraficaFrecuenciaCardiaca\RangeDropdown.jsx
 import React from "react";
 import styles from "./RangeDropdown.module.css";
 

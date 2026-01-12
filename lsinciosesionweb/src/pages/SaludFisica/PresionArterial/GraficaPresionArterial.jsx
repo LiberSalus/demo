@@ -15,11 +15,17 @@ import {
 } from "recharts";
 
 import styles from "./GraficaPresionArterial.module.css";
-import DatePill from "./datePill/DatePill"; 
+import DatePill from "./DatePill/DatePill";
+import ModalDescargaPresionArterial from "./ModalDescargaPresionArterial";
+
 // ajusta la ruta según dónde tengas DatePill
 
 // ====== MOCK para pruebas (luego lo cambias por datos reales) ======
-function generarLecturasPresionMock({ dias = 30, porDia = 3, baseDate = new Date() } = {}) {
+function generarLecturasPresionMock({
+  dias = 30,
+  porDia = 3,
+  baseDate = new Date(),
+} = {}) {
   const res = [];
   for (let i = 0; i < dias; i++) {
     for (let j = 0; j < porDia; j++) {
@@ -29,7 +35,7 @@ function generarLecturasPresionMock({ dias = 30, porDia = 3, baseDate = new Date
 
       // valores simulados
       const sist = 100 + Math.round(Math.random() * 50); // 100–150
-      const dias = 60 + Math.round(Math.random() * 25);  // 60–85
+      const dias = 60 + Math.round(Math.random() * 25); // 60–85
 
       res.push({
         ts: d,
@@ -215,8 +221,8 @@ function TooltipPA({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   const pmin = payload.find((p) => p.dataKey === "min");
   const prango = payload.find((p) => p.dataKey === "rango");
-  const min = pmin?.value ?? 0;              // diastólica mínima
-  const max = min + (prango?.value ?? 0);    // sistólica máxima
+  const min = pmin?.value ?? 0; // diastólica mínima
+  const max = min + (prango?.value ?? 0); // sistólica máxima
 
   return (
     <div className={styles.tooltip}>
@@ -238,6 +244,8 @@ export default function GraficaPresionArterial({ readings }) {
   const [vista, setVista] = useState("mes"); // "dia" | "semana" | "mes" | "anio"
   const [anio, setAnio] = useState(() => new Date().getFullYear());
 
+  const [modalAbierto, setModalAbierto] = useState(false);
+
   const [fechaDia, setFechaDia] = useState(() => new Date());
   const [semanaInicio, setSemanaInicio] = useState(() => {
     const d = new Date();
@@ -249,10 +257,14 @@ export default function GraficaPresionArterial({ readings }) {
 
   // Datos base: reales o mock
   const lecturas = useMemo(
-    () => (readings && readings.length
-      ? readings
-      : generarLecturasPresionMock({ dias: 40, porDia: 3, baseDate: new Date() })
-    ),
+    () =>
+      readings && readings.length
+        ? readings
+        : generarLecturasPresionMock({
+            dias: 40,
+            porDia: 3,
+            baseDate: new Date(),
+          }),
     [readings]
   );
 
@@ -363,9 +375,7 @@ export default function GraficaPresionArterial({ readings }) {
         {/* <h3>{titulo}</h3> */}
         <div className={styles.tabs}>
           <button
-            className={`${styles.tab} ${
-              vista === "dia" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${vista === "dia" ? styles.active : ""}`}
             onClick={() => setVista("dia")}
           >
             Día
@@ -379,17 +389,13 @@ export default function GraficaPresionArterial({ readings }) {
             Semana
           </button>
           <button
-            className={`${styles.tab} ${
-              vista === "mes" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${vista === "mes" ? styles.active : ""}`}
             onClick={() => setVista("mes")}
           >
             Mes
           </button>
           <button
-            className={`${styles.tab} ${
-              vista === "anio" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${vista === "anio" ? styles.active : ""}`}
             onClick={() => setVista("anio")}
           >
             Año
@@ -540,27 +546,41 @@ export default function GraficaPresionArterial({ readings }) {
         </ResponsiveContainer>
 
         {/* Controles de fecha */}
-        <div className={styles.controls}>
-          {vista === "dia" && (
-            <DatePill type="date" value={fechaDia} onChange={setFechaDia} />
-          )}
-          {vista === "semana" && (
-            <DatePill
-              type="date"
-              value={semanaInicio}
-              onChange={setSemanaInicio}
-            />
-          )}
-          {vista === "mes" && (
-            <DatePill type="month" value={fechaMes} onChange={setFechaMes} />
-          )}
-          {vista === "anio" && (
-            <DatePill
-              type="year"
-              value={new Date(anio, 0, 1)}
-              onChange={(d) => setAnio(d.getFullYear())}
-            />
-          )}
+        <div className={styles.bottomBar}>
+          <div className={styles.controls}>
+            {vista === "dia" && (
+              <DatePill type="date" value={fechaDia} onChange={setFechaDia} />
+            )}
+            {vista === "semana" && (
+              <DatePill
+                type="date"
+                value={semanaInicio}
+                onChange={setSemanaInicio}
+              />
+            )}
+            {vista === "mes" && (
+              <DatePill type="month" value={fechaMes} onChange={setFechaMes} />
+            )}
+            {vista === "anio" && (
+              <DatePill
+                type="year"
+                value={new Date(anio, 0, 1)}
+                onChange={(d) => setAnio(d.getFullYear())}
+              />
+            )}
+          </div>
+
+          <button
+            type="button"
+            className={styles.linkReg}
+            onClick={() => setModalAbierto(true)}
+          >
+            Ver registros
+          </button>
+          <ModalDescargaPresionArterial
+            abierto={modalAbierto}
+            onClose={() => setModalAbierto(false)}
+          />
         </div>
       </div>
     </div>

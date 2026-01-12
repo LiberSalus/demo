@@ -1,0 +1,210 @@
+.Reporte {
+  margin: 1rem auto;
+  width: 816px;
+  height: 1056px;
+  border: 1px dashed lightgrey;
+  padding: 51.84px 61.12px;
+}
+
+.logo {
+  margin: 0 auto;
+  width: 156.76px;
+}
+
+.header {
+  margin: 32px auto 0.75rem;
+  width: 682.3px;
+  height: 116.39px;
+  border: 1px solid #ACCCEB;
+  border-radius: 14px;
+  padding: 0.5rem 0.5rem 0rem 0.5rem;
+  line-height: 1.8;
+  display: flex;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+
+  
+}
+
+.Izq, .Der {
+  display: flex;
+  width: 50%;
+  & > .datIz { margin-right: 1.5rem; }
+  & > .datDr { margin-right: 1.5rem; }
+}
+.nombreReporte {
+  margin: 0 auto;
+  padding: 0;
+  width: 90%;
+  text-align: center;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+
+
+.tipoReporte {
+  width: 100%;
+  margin: 1rem auto;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* estilos para Oxigenación  */
+
+.tabla {}
+
+.oxigenacion, .filasOxigenacion {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  margin: 0.30rem auto;
+  & > span > img { margin: 0 auto;}
+  
+  & > :nth-child(1) { width: 100px;}
+  & > :nth-child(2) { width: 100px;}
+  & > :nth-child(3) { width:  80px;}
+  & > :nth-child(4) { width:  80px;}
+  & > :nth-child(5) { width:  80px;}
+  & > :nth-child(6) { width:  80px;}
+  & > :nth-child(7) { width: 100px;}
+}
+
+.oxigenacion {
+  background-color: #007CBA;
+  color: white;
+}
+
+.filas {
+
+}
+
+
+
+/* estilos para Glucosa  */
+
+.tabla {
+  & > :nth-child(even):nth-child(n+2) {
+    background-color: #E4F0F7;
+  }
+  & > :nth-child(odd):nth-child(n+2) {
+    background-color: #EBEBEC;
+  }
+}
+
+.glucosa, .filasGlucosa {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  margin: 0.30rem auto;
+  & > span > img { margin: 0 auto;}
+  
+  & > :nth-child(1) { width: 100px;}
+  & > :nth-child(2) { width: 100px;}
+  & > :nth-child(3) { width:  80px;}
+  & > :nth-child(4) { width:  80px;}
+  & > :nth-child(5) { width:  80px;}
+  & > :nth-child(6) { width:  80px;}
+  & > :nth-child(7) { width:  100px;}
+}
+
+.glucosa {
+  background-color: #007CBA;
+  color: white;
+}
+
+.filas {
+
+}
+
+
+/* estilos para Frecuencia  */
+
+.tabla {
+  & > :nth-child(even):nth-child(n+2) {
+    background-color: #E4F0F7;
+  }
+  & > :nth-child(odd):nth-child(n+2) {
+    background-color: #EBEBEC;
+  }
+}
+
+.frecuencia, .filasFrecuencia {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  margin: 0.30rem auto;
+  & > span > img { margin: 0 auto;}
+  
+  & > :nth-child(1) { width: 100px;}
+  & > :nth-child(2) { width: 100px;}
+  & > :nth-child(3) { width:  95px;}
+  & > :nth-child(4) { width:  95px;}
+  & > :nth-child(5) { width:  95px;}
+  & > :nth-child(6) { width: 100px;}
+  & > :nth-child(7) { width: 100px;}
+}
+
+.frecuencia {
+  background-color: #007CBA;
+  color: white;
+}
+
+.filas {
+
+}
+
+
+/* estilos para Presion Arterial  */
+
+.tabla {
+  & > :nth-child(even):nth-child(n+2) {
+    background-color: #E4F0F7;
+  }
+  & > :nth-child(odd):nth-child(n+2) {
+    background-color: #EBEBEC;
+  }
+}
+
+.presion, .filasPresion {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  margin: 0.30rem auto;
+  & > span > img { margin: 0 auto;}
+  
+  & > :nth-child(1) { width: 100px;}
+  & > :nth-child(2) { width: 100px;}
+  & > :nth-child(3) { width: 170px;}
+  & > :nth-child(4) { width: 170px;}
+  & > :nth-child(5) { width: 170px;}
+}
+  
+  
+
+
+.presion {
+  background-color: #007CBA;
+  color: white;
+}
+
+.filas {
+
+}
+
+.pie {
+  margin: 0 auto;
+  margin-top: 2rem;
+  width: 90%;
+  font-size: 0.75rem;
+  text-align: center;
+  color: #6e6e6e;
+}
+
+
