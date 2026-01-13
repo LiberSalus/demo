@@ -157,6 +157,7 @@ const Login = () => {
             onChange={onChange}
             autoComplete="username"
             required
+            className={styles.input}
           />
         </div>
 

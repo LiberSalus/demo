@@ -1,173 +1,315 @@
+/* ModalDescargaGlucosa.module.css */
+
+@import url('../Oxigenacion/ModalDescargaOxigenacion.module.css');
+@import url('../FrecuenciaCardiaca/GraficaFrecuenciaCardiaca/ModalDescargaFrecuenciaCardiaca.module.css');
+
+
 .overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.45);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 60;
+  backdrop-filter: blur(2px);
+  z-index: 9999;
 }
 
+/* Modal base */
 .modal {
-  margin-top: 5rem;
-  background: #ffffff;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  width: min(620px, calc(100vw - 32px));
+  max-height: min(80vh, 740px);
+  background: #fff;
   border-radius: 18px;
-  padding: 0.75rem 1rem 1rem;
-  width: 880px;
-  max-width: 80vw;
-  max-height: 90vh;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.3);
-  position: relative;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  
+}
+
+/* Cuando estás en la tabla: más ancho */
+.modalWide {
+  width: min(1100px, calc(100vw - 32px));
+  max-height: min(70vh, 860px);
 }
 
 /* Header */
-
 .headerModal {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .titulos {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
 }
 
 .btnVolver {
   border: none;
-  border-radius: 999px;
   background: transparent;
-  width: 28px;
-  height: 28px;
-  font-size: 0.9rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.6s ease ;
-  &:hover {
-    transform: scale(1.1);
-  }
+  font-size: 18px;
+  line-height: 1;
+}
+
+.btnVolver:hover {
+  background: #f8fafc;
 }
 
 .titulo {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
+  margin: 0;
 }
 
 .cerrar {
   border: none;
   background: transparent;
-  font-size: 1.1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
 }
 
-/* Paso selector */
+.cerrar:hover {
+  background: #f8fafc;
+}
 
+/* ===== Paso selector ===== */
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin: 0.5rem auto;
-  width: 27.5rem;
+  padding: 14px 18px 18px;
+  overflow: auto;
 }
 
 .descripcion {
-  font-size: 0.85rem;
-  color: #64748b;
-  margin-bottom: 0.25rem;
+  margin: 0 0 12px;
+  color: #334155;
+  font-size: 0.95rem;
+  line-height: 1.35;
 }
 
+/* ====== Switch Ayunas / Comida ====== */
+.switchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  margin-bottom: 14px;
+}
+
+.switchLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.switchTitle {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+.switchHint {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Segmented control */
+.segmented {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: #eef2ff;
+  border: 1px solid #dbeafe;
+}
+
+.segBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: #334155;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.segBtn:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.segActive {
+  background: #ffffff;
+  color: #0284c7;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15);
+}
+
+/* Radios periodo */
 .opcion {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.9rem;
+  gap: 10px;
+  padding: 6px 0;
   color: #0f172a;
+  font-size: 0.95rem;
 }
 
 .campoFecha {
+  margin: 10px 0 0;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #475569;
-  margin-left: 1.5rem;
+  gap: 10px;
+  color: #334155;
+  font-size: 0.9rem;
 }
 
-.campoFecha input {
-  font-size: 0.85rem;
-  padding: 0.2rem 0.5rem;
+.campoFecha input[type="date"] {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #f8fafc;
 }
 
 .cntBotones {
+  margin-top: 16px;
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  margin: 1.25rem auto;
+  gap: 12px;
 }
 
 .btnSecundario {
-  border-radius: 999px;
-  padding: 0.4rem 1.2rem;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
-  font-size: 0.85rem;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  padding: 10px 14px;
+  border-radius: 12px;
   cursor: pointer;
+}
+
+.btnSecundario:hover {
+  background: #f8fafc;
 }
 
 .botonDescargar {
-  border-radius: 999px;
-  padding: 0.4rem 1.8rem;
   border: none;
-  background: #007cba;
-  color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Paso tabla */
-
-.contenedorTabla {
-  margin:0.5rem;
-  
-  flex: 1;
-  overflow: auto;
+  background: #0284c7;
+  color: #fff;
+  padding: 10px 14px;
   border-radius: 12px;
-}
-
-.tabsModo {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-  gap: 0.4rem;
-  margin-bottom: 0.5rem;
-  padding: 0.25rem;
-  border-radius: 999px;
-  background: #f1f5f9;
-  
-  width: fit-content;
-}
-
-.tabModo {
-  border-radius: 999px;
-  border: none;
-  padding: 0.25rem 0.9rem;
-  font-size: 0.8rem;
   cursor: pointer;
-  background: transparent;
-  color: #64748b;
+  font-weight: 600;
 }
 
-.tabModoActiva {
-  background: #ffffff;
+.botonDescargar:hover {
+  background: #016ca2;
+}
+
+/* ===== Paso tabla ===== */
+.contenedorTabla {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 12px;
+  max-height: 70vh;
+}
+
+.toolbarTabla {
+  padding: 12px 18px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.btnImprimir {
+  border: 1px solid #cbd5e1;
+  background: #fff;
   color: #0f172a;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btnImprimir:hover {
+  background: #f8fafc;
+}
+
+.printArea {
+  padding: 16px 18px 18px;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 520px) {
+  .modal {
+    width: calc(100vw - 16px);
+    max-height: 86vh;
+    border-radius: 14px;
+  }
+
+  .cntBotones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnSecundario,
+  .botonDescargar {
+    width: 100%;
+  }
+
+  .switchRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .segmented {
+    justify-content: center;
+  }
+}
+
+/* ✅ SOLO IMPRIMIR EL REPORTE (Glucosa) */
+@media print {
+  /* 1) Oculta TODO */
+  :global(body.print-glu) * {
+    visibility: hidden !important;
+  }
+
+  /* 2) Muestra SOLO el área de impresión */
+  :global(body.print-glu) :global(.printArea),
+  :global(body.print-glu) :global(.printArea) * {
+    visibility: visible !important;
+  }
+
+  /* 3) Pega el reporte arriba y que ocupe página */
+  :global(body.print-glu) :global(.printArea) {
+    position: fixed !important;
+    inset: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  @page {
+    margin: 12mm;
+  }
 }

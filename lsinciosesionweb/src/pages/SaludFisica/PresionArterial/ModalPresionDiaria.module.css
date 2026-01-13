@@ -167,8 +167,8 @@
   font-size: .95rem;
 }
 
-.inputNumber {
-
+.inputNumber::placeholder {
+  text-align: end;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -177,9 +177,6 @@ input[type=number]::-webkit-outer-spin-button {
   color: transparent;
 }
 
-input::placeholder {
-  text-align: end;
-}
 
 .mmhg {
   position: absolute;

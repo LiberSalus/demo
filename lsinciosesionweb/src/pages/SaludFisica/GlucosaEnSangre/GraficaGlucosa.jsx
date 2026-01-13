@@ -82,6 +82,8 @@ const GraficaGlucosa = ({
   const [modalAbierto, setModalAbierto] = useState(false);
   const [vista, setVista] = useState("dia");
 
+  
+
   const data = useMemo(() => {
     switch (vista) {
       case "dia":
@@ -192,7 +194,6 @@ const GraficaGlucosa = ({
         </button>
       </div>
 
-      
       <ModalDescargaGlucosa
         abierto={modalAbierto}
         onClose={() => setModalAbierto(false)}

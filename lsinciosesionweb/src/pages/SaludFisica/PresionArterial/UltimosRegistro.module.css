@@ -12,7 +12,7 @@
   align-items: center;
   gap: 0.5rem;
   color: #505151;
-  background-color: white;
+  /* background-color: white; */
 }
 .UltimosRegistros > :nth-child(1) {
   margin-top: 0.5rem;

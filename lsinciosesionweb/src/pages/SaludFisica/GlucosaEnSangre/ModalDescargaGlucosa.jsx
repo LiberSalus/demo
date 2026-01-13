@@ -1,44 +1,135 @@
 // src/components/Glucosa/ModalDescargaGlucosa.jsx
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./ModalDescargaGlucosa.module.css";
-import RegistrosGlucosa from "./RegistroGlucosa";
 
-import regresar from './icoIzquierda.svg'
+import Reporte from "@/components/Reporte/Reporte";
+import {
+  METRIC_GLUCO_AYUNAS,
+  METRIC_GLUCO_COMIDA,
+} from "@/components/Reporte/metricas";
 
+/**
+ * ModalDescargaGlucosa
+ * Props:
+ * - abierto: boolean
+ * - onClose: function
+ * - modo?: "ayunas" | "comida" (opcional; solo para valor inicial)
+ */
 const ModalDescargaGlucosa = ({ abierto, onClose, modo = "ayunas" }) => {
   const [paso, setPaso] = useState("selector"); // "selector" | "tabla"
-  const [periodo, setPeriodo] = useState("3m");
-  const [fechaSeleccionada, setFechaSeleccionada] = useState("2025-12-05");
+  const [periodo, setPeriodo] = useState("3m"); // "3m" | "6m" | "fecha"
+  const [fechaSeleccionada, setFechaSeleccionada] = useState("2025-10-21");
 
-  // ⭐ nuevo: modo que se está viendo en la tabla
-  const [modoVista, setModoVista] = useState(modo); // "ayunas" | "comida"
+  // ✅ Selector del tipo de reporte dentro del modal
+  const [tipoReporte, setTipoReporte] = useState(
+    modo === "comida" ? "comida" : "ayunas"
+  );
 
-  if (!abierto) return null;
+  // ✅ Limpieza de modo impresión
+  useEffect(() => {
+    const cleanup = () => document.body.classList.remove("print-glu");
+    window.addEventListener("afterprint", cleanup);
+    return () => {
+      cleanup();
+      window.removeEventListener("afterprint", cleanup);
+    };
+  }, []);
 
-  const handleDescargar = (e) => {
-    e.preventDefault();
-    setPaso("tabla");
+  // ✅ Si abren el modal con otro "modo" (opcional), sincroniza el default
+  useEffect(() => {
+    if (!abierto) return;
+    setTipoReporte(modo === "comida" ? "comida" : "ayunas");
+  }, [abierto, modo]);
+
+  const metric = useMemo(() => {
+    return tipoReporte === "comida" ? METRIC_GLUCO_COMIDA : METRIC_GLUCO_AYUNAS;
+  }, [tipoReporte]);
+
+  const tituloModal =
+    paso === "selector" ? "Descarga tus registros" : "Registros de glucosa";
+
+  const perfilMock = useMemo(
+    () => ({
+      nombre: "Usuario1",
+      sexo: "—",
+      edad: 28,
+      usuario: "US001",
+      padecimiento: "—",
+    }),
+    []
+  );
+
+  // ✅ MOCK rows según tipo de reporte
+  const rowsMock = useMemo(() => {
+    if (tipoReporte === "comida") {
+      return [
+        { fecha: "21 Oct 2025", hora: "07:10 am", lectura: 145, estado: "Normal" },
+        { fecha: "21 Oct 2025", hora: "12:30 pm", lectura: 190, estado: "Alta" },
+        { fecha: "20 Oct 2025", hora: "09:20 pm", lectura: 132, estado: "Normal" },
+        { fecha: "19 Oct 2025", hora: "06:05 am", lectura: 210, estado: "Alta" },
+      ];
+    }
+    // ayunas
+    return [
+      { fecha: "21 Oct 2025", hora: "07:10 am", lectura: 85, estado: "Normal" },
+      { fecha: "21 Oct 2025", hora: "12:30 pm", lectura: 115, estado: "Normal" },
+      { fecha: "20 Oct 2025", hora: "09:20 pm", lectura: 130, estado: "Alta" },
+      { fecha: "19 Oct 2025", hora: "06:05 am", lectura: 58, estado: "Baja" },
+    ];
+  }, [tipoReporte]);
+
+  const handlePrint = () => {
+    document.body.classList.add("print-glu");
+    setTimeout(() => window.print(), 50);
+  };
+
+  const resetState = () => {
+    setPaso("selector");
+    setPeriodo("3m");
+    setFechaSeleccionada("2025-10-21");
+    setTipoReporte(modo === "comida" ? "comida" : "ayunas");
   };
 
   const handleCerrar = () => {
-    setPaso("selector");
-    setModoVista(modo); // ⭐ volvemos al modo inicial al cerrar
-    onClose();
+    resetState();
+    onClose?.();
   };
 
   const handleVolver = () => {
     setPaso("selector");
   };
 
-  const tituloModal =
-    paso === "selector"
-      ? "Descarga tus registros"
-      : "Registros de glucosa en sangre";
+  const handleVerRegistros = (e) => {
+    e.preventDefault();
+    setPaso("tabla");
+  };
+
+  // ✅ Cerrar con click afuera
+  const handleClickOverlay = (e) => {
+    // si hacen click en el overlay (y no adentro del modal)
+    if (e.target === e.currentTarget) handleCerrar();
+  };
+
+  // ✅ Cerrar con ESC
+  useEffect(() => {
+    if (!abierto) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") handleCerrar();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [abierto]);
+
+  // ✅ Render condicional AL FINAL (para no romper hooks)
+  if (!abierto) return null;
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        {/* Header */}
+    <div className={styles.overlay} onMouseDown={handleClickOverlay}>
+      <div
+        className={`${styles.modal} ${paso === "tabla" ? styles.modalWide : ""}`}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <header className={styles.headerModal}>
           <div className={styles.titulos}>
             {paso === "tabla" && (
@@ -46,8 +137,9 @@ const ModalDescargaGlucosa = ({ abierto, onClose, modo = "ayunas" }) => {
                 type="button"
                 className={styles.btnVolver}
                 onClick={handleVolver}
+                aria-label="Volver"
               >
-                <img src={regresar} alt="regresar"></img>
+                ←
               </button>
             )}
             <h2 className={styles.titulo}>{tituloModal}</h2>
@@ -57,19 +149,52 @@ const ModalDescargaGlucosa = ({ abierto, onClose, modo = "ayunas" }) => {
             className={styles.cerrar}
             type="button"
             onClick={handleCerrar}
+            aria-label="Cerrar"
           >
             ✕
           </button>
         </header>
 
-        {/* Paso 1: selector */}
         {paso === "selector" && (
-          <form className={styles.form} onSubmit={handleDescargar}>
+          <form className={styles.form} onSubmit={handleVerRegistros}>
             <p className={styles.descripcion}>
               Elige el periodo de tiempo del que deseas obtener tus registros de
-              glucosa en sangre. Podrás descargar o imprimir el formato.
+              glucosa. Podrás descargar o imprimir el formato.
             </p>
 
+            {/* ✅ Switch Ayunas / Comida */}
+            <div className={styles.switchRow}>
+              <div className={styles.switchLabel}>
+                <div className={styles.switchTitle}>Tipo de reporte</div>
+                <div className={styles.switchHint}>
+                  Selecciona si fue en ayunas o después de comer
+                </div>
+              </div>
+
+              <div className={styles.segmented}>
+                <button
+                  type="button"
+                  className={`${styles.segBtn} ${
+                    tipoReporte === "ayunas" ? styles.segActive : ""
+                  }`}
+                  onClick={() => setTipoReporte("ayunas")}
+                >
+                  Ayunas
+                </button>
+
+                <button
+                  type="button"
+                  className={`${styles.segBtn} ${
+                    tipoReporte === "comida" ? styles.segActive : ""
+                  }`}
+                  onClick={() => setTipoReporte("comida")}
+                >
+                  Después de comer
+                </button>
+              </div>
+            </div>
+
+            {/* Periodos */}
             <label className={styles.opcion}>
               <input
                 type="radio"
@@ -122,6 +247,7 @@ const ModalDescargaGlucosa = ({ abierto, onClose, modo = "ayunas" }) => {
               >
                 Cancelar
               </button>
+
               <button type="submit" className={styles.botonDescargar}>
                 Ver registros
               </button>
@@ -129,36 +255,29 @@ const ModalDescargaGlucosa = ({ abierto, onClose, modo = "ayunas" }) => {
           </form>
         )}
 
-        {/* Paso 2: tabla */}
         {paso === "tabla" && (
           <div className={styles.contenedorTabla}>
-            {/* ⭐ Tabs internos para Ayunas / Comida */}
-            <div className={styles.tabsModo}>
+            <div className={styles.toolbarTabla}>
               <button
                 type="button"
-                className={`${styles.tabModo} ${
-                  modoVista === "ayunas" ? styles.tabModoActiva : ""
-                }`}
-                onClick={() => setModoVista("ayunas")}
+                className={styles.btnImprimir}
+                onClick={handlePrint}
               >
-                En ayunas
-              </button>
-              <button
-                type="button"
-                className={`${styles.tabModo} ${
-                  modoVista === "comida" ? styles.tabModoActiva : ""
-                }`}
-                onClick={() => setModoVista("comida")}
-              >
-                Después de comer
+                Imprimir / Guardar PDF
               </button>
             </div>
 
-            <RegistrosGlucosa
-              modo={modoVista}           // ⭐ aquí usamos el modo de la vista
-              periodo={periodo}
-              fecha={fechaSeleccionada}
-            />
+            <div className={`printArea ${styles.printArea}`}>
+              <Reporte
+                perfil={perfilMock}
+                metric={metric}
+                rows={rowsMock}
+                fechaGeneracion={new Date()}
+                showToolbar={false}
+                periodo={periodo}
+                fecha={fechaSeleccionada}
+              />
+            </div>
           </div>
         )}
       </div>

@@ -10,7 +10,8 @@
 }
 
 .modal {
-    width: min(720px, 92vw);
+    width: min(620px, 92vw);
+    padding: 1rem;
     background: #fff;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
@@ -26,7 +27,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 14px;
-    border-bottom: 1px solid #e2e8f0;
+
+    /* border-bottom: 1px solid #e2e8f0; */
 }
 
 .titulo {
@@ -41,6 +43,9 @@
     cursor: pointer;
     font-size: 1.2rem;
     line-height: 1;
+}
+.cerrar:hover {
+    background: #f8fafc;
 }
 
 .body {
@@ -63,23 +68,25 @@
 }
 
 .form{
-  padding:14px;
+  padding:0 36px;
   display:flex;
   flex-direction:column;
   gap:10px;
+  
 }
 
 .descripcion{
-  font-size:0.9rem;
+  font-size:0.95rem;
   color:#334155;
-  margin:0;
+  line-height: 1.35;
+  margin-bottom: 1rem;
 }
 
 .opcion{
   display:flex;
   gap:10px;
   align-items:center;
-  font-size:0.9rem;
+  font-size:0.95rem;
   color:#0f172a;
 }
 

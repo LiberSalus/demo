@@ -14,17 +14,14 @@
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-
-    width: min(720px, calc(100vw - 32px));
+    transform: translate(-50%, -70%);
+    width: min(620px, calc(100vw - 32px));
     max-height: min(80vh, 740px);
-
     background: #fff;
     border-radius: 18px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
     overflow: hidden;
-
     display: flex;
     flex-direction: column;
 }
@@ -32,7 +29,7 @@
 /* Cuando estás en la tabla: más ancho */
 .modalWide {
     width: min(1100px, calc(100vw - 32px));
-    max-height: min(86vh, 860px);
+    max-height: min(70vh, 860px);
 }
 
 /* Header */
@@ -43,7 +40,7 @@
     gap: 12px;
 
     padding: 16px 18px;
-    border-bottom: 1px solid #e5e7eb;
+    /* border-bottom: 1px solid #e5e7eb; */
 }
 
 .titulos {
@@ -53,11 +50,7 @@
 }
 
 .btnVolver {
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    border: 1px solid #e5e7eb;
-    background: #fff;
+    
     cursor: pointer;
 }
 
@@ -73,11 +66,6 @@
 }
 
 .cerrar {
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    border: 1px solid #e5e7eb;
-    background: #fff;
     cursor: pointer;
     font-size: 18px;
 }
@@ -88,12 +76,10 @@
 
 /* ===== Paso selector ===== */
 .form {
-    padding: 16px 18px 18px;
     overflow: auto;
 }
 
 .descripcion {
-    margin: 0 0 12px;
     color: #334155;
     font-size: 0.95rem;
     line-height: 1.35;
@@ -102,8 +88,7 @@
 .opcion {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 10px 0;
+    padding-left: 5px;
     color: #0f172a;
     font-size: 0.95rem;
 }
@@ -164,6 +149,9 @@
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    padding: 12px;
+    max-height: 70vh;
+
     /* clave para que el scroll funcione */
 }
 
@@ -212,4 +200,71 @@
     .botonDescargar {
         width: 100%;
     }
+}
+
+/* ✅ SOLO IMPRIMIR EL REPORTE (Presión Arterial) */
+@media print {
+  /* 1) Oculta TODO en pantalla */
+  :global(body.print-pa) * {
+    visibility: hidden !important;
+  }
+
+  /* 2) Muestra SOLO el área de impresión */
+  :global(body.print-pa) :global(.printArea),
+  :global(body.print-pa) :global(.printArea) * {
+    visibility: visible !important;
+  }
+
+  /* 3) Pega el reporte arriba a la izquierda y que ocupe la página */
+  :global(body.print-pa) :global(.printArea) {
+    position: fixed !important;
+    inset: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  /* 4) Quita márgenes del navegador (opcional) */
+  @page {
+    margin: 12mm;
+  }
+}
+
+@media print {
+  /* ...tu código actual... */
+
+  /* ✅ IMPORTANTÍSIMO: quitar recortes del CSS MODULE (clases locales) */
+  .printArea {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    flex: none !important;
+    min-height: auto !important;
+  }
+
+  .contenedorTabla {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    flex: none !important;
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  .modal,
+  .modalWide {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .overlay {
+    overflow: visible !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  /* (opcional) oculta toolbar de tabla si se llegara a colar */
+  .toolbarTabla {
+    display: none !important;
+  }
 }

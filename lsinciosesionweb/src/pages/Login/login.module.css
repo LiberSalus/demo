@@ -170,7 +170,7 @@ input[type="email"], input[type="password"],input[type="text"] {
   
 }
 
-input::placeholder {
+.input::placeholder {
   font-size: 0.65rem;
   padding-left: .5rem;
 }

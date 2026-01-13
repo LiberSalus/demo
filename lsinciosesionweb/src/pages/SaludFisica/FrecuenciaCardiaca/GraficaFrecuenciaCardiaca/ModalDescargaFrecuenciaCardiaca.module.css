@@ -1,4 +1,8 @@
 @import url("../../GlucosaEnSangre/ModalDescargaGlucosa.module.css");
+@import url("../../Oxigenacion/ModalDescargaOxigenacion.module.css");
+
+
+
 
 @media print {
   :global(body.print-hr) * {
@@ -20,4 +24,31 @@
   @page {
     margin: 12mm;
   }
+}
+
+/* ===== FIX CLICK HEADER (muy común cuando hay @import de otros modales) ===== */
+.headerModal {
+  position: relative;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.titulos {
+  position: relative;
+  z-index: 51;
+  pointer-events: auto;
+}
+
+.btnVolver,
+.cerrar {
+  position: relative;
+  z-index: 52;
+  pointer-events: auto !important;
+}
+
+/* Por si algún import metió algo raro */
+.modal {
+  position: fixed; /* reafirma */
+  z-index: 10000;
+  pointer-events: auto;
 }
