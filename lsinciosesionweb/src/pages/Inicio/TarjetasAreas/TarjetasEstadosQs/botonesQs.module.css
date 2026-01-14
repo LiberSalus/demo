@@ -1,11 +1,12 @@
 .cntBotonesQs {
     margin: 0.5rem auto;
     width: 22rem;
-    border: 1px solid #dcdcdd;
+    /* border: 1px solid #dcdcdd; */
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
+    box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
 }
 
 .info {
@@ -14,7 +15,8 @@
     padding-left: 1rem;
     & :nth-child(2) {
         font-size: 0.85rem;
-        color: #A7A8A9;
+        color: #575858;
+
     }
 }
 

@@ -96,10 +96,10 @@ const BotonesQs = ({edoQs, av, activo, onClick}) => {
 
    const btnbg = (estado) => {
     switch (estado) {
-      case "edo1": return "#DBFFE9";
-      case "edo2": return "#D7EEFF";
-      case "edo3": return "#ffffff"
-      case "edo4": return "#ffffff";
+      case "edo1": return "rgba(98, 210, 71, 0.2)";
+      case "edo2": return "rgba(0, 124, 186, 0.2)";
+      case "edo3": return "rgba(255, 255, 255, 0.35)"
+      case "edo4": return "rgba(255, 255, 255, 0.35)";
       default: "transparent";
         return null;
     }

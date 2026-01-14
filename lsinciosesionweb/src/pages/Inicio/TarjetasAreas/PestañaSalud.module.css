@@ -1,28 +1,37 @@
-
-.encabezado {
+.contenedor {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.encabezado {
+  
   display: flex;
   justify-content: space-around;
   margin: 0 auto 0.5rem;
-  border: 1px solid #ACCCEB;
+  /* border: 1px solid #ACCCEB; */
   padding: 0.5rem;
   border-radius: 1rem;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .boton {
+  margin: 0.5rem;
   appearance: none;
   outline: none;
-  border: 1px solid lightskyblue;
+  /* border: 1px solid lightskyblue; */
   background: none;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  
+  text-wrap: nowrap;
+  width: 11rem;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  transition: box-shadow 0.4s ease;
 
   &:hover{
-    outline: 2px solid var(--color-prn);
-    
-    color: var(--color-prn);
+  box-shadow: 0 8px 20px rgba(31, 41, 55, .22);
   }
 
 }

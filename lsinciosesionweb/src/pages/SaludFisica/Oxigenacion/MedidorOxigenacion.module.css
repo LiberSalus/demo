@@ -63,12 +63,17 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 14px;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
-  border: 1px solid #cbd5f5;
-  background: #f8fafc;
+  /* border: 1px solid #cbd5f5; */
+  background: transparent;
   font-size: 0.8rem;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  transition: box-shadow 0.3s ease;
+  &:hover {
+    box-shadow: 0 8px 20px rgba(31, 41, 55, .12);
+  }
 }
 
 .icoMas {

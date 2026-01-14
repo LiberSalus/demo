@@ -117,6 +117,7 @@ const TarjetaSalud = ({ tipo }) => {
           <div key={i} className={styles.itemSeleccionado}>
             <TarjetaMedicion titulo={titulo} valor={"--"} />
             <button
+            
               onClick={() => {
                 setSeleccionadas(seleccionadas.filter((t) => t !== titulo));
               }}

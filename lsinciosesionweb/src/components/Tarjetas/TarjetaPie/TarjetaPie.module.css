@@ -3,15 +3,16 @@
   padding: 0.8vw;
   width: 6.25rem;
   height: 30rem;
-  border: 1px solid #ACCCEB;
+  /* border: 1px solid #ACCCEB; */
   border-radius: 0.8vw;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: rgba(255, 255, 255, 0.4);
+  /* background-color: rgba(255, 255, 255, 0.4); */
   backdrop-filter: blur(6px);
   overflow: hidden;
   color: var(--brand);
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
 }
 
 .datos {
@@ -21,26 +22,87 @@
   gap: 1rem;
   font-size: 0.75rem;
   position: relative;
-  & > :nth-child(2) {
+
+  &> :nth-child(2) {
     color: var(--txt);
     font-size: 1.5rem;
   }
-  
+
 }
+
 .datos:not(:last-child)::after {
   position: absolute;
   content: '';
   width: 3.5rem;
   left: 50%;
   transform: translate(-50%);
-  height: 1px;
-  background-color: #ACCCEB;
+  height: 2px;
+  /* background-color: #ACCCEB; */
   bottom: -1.5rem;
+  box-shadow: 0px 1px 6px rgba(175, 176, 177, 0.2) inset;
 }
 
-.edad,.estatura, .peso, .sangre {
+.edad,
+.estatura,
+.peso,
+.sangre {
   font-size: 1.2rem;
   line-height: 0.5;
   font-weight: 700;
   text-align: center;
+}
+
+@media (max-width: 968px) {
+  .TarjetaPie {
+    margin: 0vw auto;
+    padding: 1rem;
+    width: 80%;
+    height: auto;
+    /* border: 1px solid #ACCCEB; */
+    border-radius: 0.8vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* background-color: rgba(255, 255, 255, 0.4); */
+    backdrop-filter: blur(6px);
+    overflow: hidden;
+    color: var(--brand);
+    box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  }
+
+  .datos {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 0.75rem;
+    position: relative;
+
+    &> :nth-child(2) {
+      color: var(--txt);
+      font-size: 1.5rem;
+    }
+
+  }
+
+  .datos:not(:last-child)::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    right: -50%;
+    transform: translate(5.9vw, -2.2rem);
+    height: 3.5rem;
+    /* background-color: #ACCCEB; */
+    bottom: -1.5rem;
+  }
+
+  .edad,
+  .estatura,
+  .peso,
+  .sangre {
+    font-size: 1.2rem;
+    line-height: 0.5;
+    font-weight: 700;
+    text-align: center;
+  }
 }

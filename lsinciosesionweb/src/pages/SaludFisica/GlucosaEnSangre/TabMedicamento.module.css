@@ -14,7 +14,7 @@
   width: 13.43rem;
   height: 8.875rem;
   font-size: 0.75rem;
-  background-color: white;
+  /* background-color: white; */
   &>:nth-child(1) {
     font-size: 1rem;
     font-weight: bold;
@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
-  background-color: white;
+  /* background-color: white; */
   cursor: pointer;
   & > img  {
     width: 2rem;

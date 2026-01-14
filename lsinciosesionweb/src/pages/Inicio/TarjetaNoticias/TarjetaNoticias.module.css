@@ -1,11 +1,12 @@
 .TarjetaNoticias {
-  margin: 0rem auto;
+  margin: 2rem auto;
   width: 36.5rem;
   height: 28.625rem;
-  background-color: white;
+  /* background-color: white; */
   border-radius: 1rem;
   overflow: hidden;
-  
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  backdrop-filter: blur(4px);
 }
 
 .cntImg {
@@ -26,4 +27,18 @@
   margin-top: 0.5rem;
   gap: 1rem;
   padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .TarjetaNoticias {
+    width: 90%;
+    height: auto;
+  }
+
+  .cntImg {
+    height: 15rem;
+    & > img {
+      width: 200%;
+    }
+  }
 }

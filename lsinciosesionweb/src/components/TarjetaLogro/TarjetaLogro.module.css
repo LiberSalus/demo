@@ -3,12 +3,13 @@
   padding: 0.8vw;
   width: 23rem;
   height: 8rem;
-  border: 1px solid #ACCCEB;
+  /* border: 1px solid #ACCCEB; */
   border-radius: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;  
   position: relative;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, .16);
 }
 
 .inf {

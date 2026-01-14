@@ -34,7 +34,7 @@
   border-radius: 1rem;
   gap: 1rem;
   box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
-  background-color: white;
+  /* background-color: white; */
 }
 
 .container {

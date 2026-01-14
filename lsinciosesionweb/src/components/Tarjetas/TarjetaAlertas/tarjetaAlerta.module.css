@@ -5,7 +5,7 @@
     width: 100%;
     margin-top: 1rem;
     padding: 1rem;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 8px;
     font-size: 0.85rem;
     gap: 1rem; /* separación entre tarjetas sugerencia */
