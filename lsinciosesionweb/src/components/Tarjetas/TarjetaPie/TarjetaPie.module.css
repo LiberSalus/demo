@@ -90,7 +90,7 @@
     content: '';
     width: 3px;
     right: -50%;
-    transform: translate(5.9vw, -2.2rem);
+    transform: translate(calc(100%*10), -2.2rem);
     height: 3.5rem;
     /* background-color: #ACCCEB; */
     bottom: -1.5rem;

@@ -1,6 +1,7 @@
 /* src/Layout/principal.module.css */
-:root{
-  --sidebar-w: 5rem;       /* ancho del menú colapsado */
+:root {
+  --sidebar-w: 5rem;
+  /* ancho del menú colapsado */
   --gap: 1rem;
   --radius: 12px;
 }
@@ -15,7 +16,7 @@
   grid-template-areas:
     "sidebar header"
     "sidebar content";
-    
+
 }
 
 .bg {
@@ -32,8 +33,8 @@
   top: 0;
   height: 100vh;
   z-index: 3;
-  
-  
+
+
 }
 
 /* Header arriba */
@@ -43,15 +44,15 @@
   justify-content: end;
   /* border: 1px dashed lightgray; */
   border-radius: var(--radius);
-  width: calc(100vw - 6rem );
+  width: calc(100vw - 6rem);
   margin: 1rem 0rem 1rem 4rem;
-  
+
   box-sizing: border-box;
 }
 
 /* Main */
 .content {
-  width: calc(100vw - 6rem );
+  width: calc(100vw - 6rem);
   margin: 0rem 0rem 1rem 4rem;
   height: calc(100vh - 9rem);
   grid-area: content;
@@ -60,25 +61,94 @@
   padding: 16px 24px;
   /* border: 1px dashed lightgray; */
   border-radius: var(--radius);
-  
+
   box-sizing: border-box;
   overflow-y: auto;
-  scrollbar-width: thin;          /* hace más delgado el scrollbar */
-  scrollbar-color: #C1D7FB transparent; 
+  scrollbar-width: thin;
+  /* hace más delgado el scrollbar */
+  scrollbar-color: #C1D7FB transparent;
 }
 
 .content::-webkit-scrollbar {
-  width: 8px; /* Puedes ajustar el ancho */
-  background: transparent; /* Quita el fondo */
+  width: 8px;
+  /* Puedes ajustar el ancho */
+  background: transparent;
+  /* Quita el fondo */
 }
 
 .content::-webkit-scrollbar-thumb {
-  background: #ecebeb;       /* Cambia por el color que quieras */
-  border-radius: 4px; 
+  background: #ecebeb;
+  /* Cambia por el color que quieras */
+  border-radius: 4px;
 }
 
 .content::-webkit-inner-spin-button {
   display: none;
   height: 0;
   width: 0;
+}
+
+
+@media (max-width: 460) {
+
+  /* Menú fijo a la izquierda (overlay) */
+  .sidebar {
+    grid-area: sidebar;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100dvh;
+    z-index: 3;
+
+  }
+
+  /* Header arriba */
+  .header {
+    grid-area: header;
+    z-index: 2;
+    justify-content: end;
+    /* border: 1px dashed lightgray; */
+    border-radius: var(--radius);
+    width: calc(100vw - 6rem);
+    margin: 0.0rem 0rem 1rem 0rem;
+    box-sizing: border-box;
+  }
+
+  /* Main */
+  .content {
+    width: calc(100vw - 6rem);
+    margin: 0rem 0rem 1rem 4rem;
+    height: calc(100vh - 9rem);
+    grid-area: content;
+    position: relative;
+    z-index: 1;
+    padding: 16px 24px;
+    /* border: 1px dashed lightgray; */
+    border-radius: var(--radius);
+
+    box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* hace más delgado el scrollbar */
+    scrollbar-color: #C1D7FB transparent;
+  }
+
+  .content::-webkit-scrollbar {
+    width: 8px;
+    /* Puedes ajustar el ancho */
+    background: transparent;
+    /* Quita el fondo */
+  }
+
+  .content::-webkit-scrollbar-thumb {
+    background: #ecebeb;
+    /* Cambia por el color que quieras */
+    border-radius: 4px;
+  }
+
+  .content::-webkit-inner-spin-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
 }

@@ -29,6 +29,7 @@
   overflow: visible;
   /* border-right: 1px solid rgba(0, 0, 0, .06); */
   box-shadow: 5px 0px 20px 1px rgba(0,0,0,0.1);
+  
 }
 
 .menu.expanded {
@@ -138,7 +139,7 @@
 /* Activo principal: fondo + borde izq para que no se pierda */
 .active {
   color: #0f172a !important;
-  background: rgba(134, 134, 134, 0.14) !important;
+  background: rgba(134, 134, 134, 0.14) ;
   /* box-shadow: inset .2rem 0 0 var(--accent); */
 }
 
@@ -210,4 +211,33 @@
 /* Colapsado: oculta textos, mantiene sólo iconos */
 .menu.collapsed .text {
   display: none;
+}
+
+@media (max-width: 460px) {
+  .menu {
+    transform: translate(-3rem);
+  }
+
+  .brand {
+    transform: translate(3rem);
+  }
+
+  .list {
+    margin-left: 3rem;
+    & > li > span {
+      background: transparent;
+    }
+  }
+  
+  .active {
+    background: transparent;
+    box-shadow: 3px 0px 0px rgba(0, 0, 0, .5) inset;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  .submenu {
+    transform: translateX(-4rem);
+  }
+  
 }

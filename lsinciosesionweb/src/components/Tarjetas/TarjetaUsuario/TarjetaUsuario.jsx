@@ -72,7 +72,7 @@ const TarjetaUsuario = () => {
       <p className={styles.hola}>Hola, Usuario1</p>
       <div className={styles.datosUsuario}>
         <div className={styles.idPerfil}>
-          <img src={noti} alt="noticia" />
+          <img className={styles.noti} src={noti} alt="noticia" />
           <span className={styles.nombreUsuario}>{nombre}</span>
         </div>
 

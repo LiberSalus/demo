@@ -1,7 +1,7 @@
 .cntTarjetaSalud {
   margin: 1rem auto;
   padding: 1rem;
-  
+
   min-width: 29rem;
   width: 29.93rem;
   box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
@@ -21,11 +21,12 @@
   display: flex;
   align-items: center;
   justify-content: end;
-  
-  & > :nth-child(1) {
+
+  &> :nth-child(1) {
     margin-right: auto;
   }
-  & > :nth-child(3) {
+
+  &> :nth-child(3) {
     transform: translate(1.5rem, -1.5rem);
   }
 }
@@ -36,7 +37,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  
+
 }
 
 .contenedor {
@@ -50,16 +51,17 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  & > :nth-child(2) {
+
+  &> :nth-child(2) {
     font-size: 0.75rem;
     color: #334155;
   }
-  
+
 }
 
 
 .frase {
-  
+
   text-align: center;
 }
 
@@ -69,7 +71,10 @@
 .modalFondo {
   background: rgba(255, 243, 243, 0.1);
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +92,8 @@
   overflow-y: scroll;
   text-align: center;
   box-shadow: 0 14px 16px rgba(0, 0, 0, 0.1);
-  & > :nth-child(5) {
+
+  &> :nth-child(5) {
     margin-bottom: 1rem;
   }
 }
@@ -132,8 +138,10 @@
   accent-color: #ffffff;
   border-radius: 0.5rem;
 }
+
 .rango::-webkit-slider-thumb {
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3); /* sombra suave */
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  /* sombra suave */
   border-radius: 50%;
   background-color: #4caf50;
   width: 20px;
@@ -172,13 +180,13 @@
 
 .itemSeleccionado button {
   position: absolute;
-  top:   -7px;
+  top: -7px;
   right: -7px;
   /* background: white; */
   color: white;
   border: none;
   border-radius: 50%;
-  width:  20px;
+  width: 20px;
   height: 20px;
   cursor: pointer;
   display: flex;
@@ -203,15 +211,76 @@
   border: none;
   border-radius: 3rem;
   background-color: #4b7083;
-  color:white;
-  
+  color: white;
+
 }
 
 .botonTarjeta {
   background-color: transparent;
-  
+
 }
 
 .botonTarjeta:focus {
   outline: none;
+}
+
+@media (max-width: 460px) {
+
+  .cntTarjetaSalud {
+    width: fit-content;
+    box-shadow: none;
+  }
+
+  .encabezado {
+    margin: 0 auto;
+    width: 90vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+
+    &> :nth-child(1) {
+      margin-right: 0;
+    }
+
+    &> :nth-child(3) {
+      position: absolute;
+      top: 2.5rem;
+      left: 50%;
+    }
+  }
+
+  .cntWds {}
+
+  .cntTarjetas {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    /* border: 2px dashed red; */
+  }
+
+  .botonTarjeta {
+    background-color: transparent;
+    padding: 0;
+    margin: 0.25rem;
+
+  }
+
+  .rango {
+    appearance: none;
+    background: linear-gradient(90deg, #FD8D8D, #F6E68B, #98DBD3);
+    width: 50%;
+    height: 0.5rem;
+    margin: 0.5rem 0 1rem;
+    accent-color: #ffffff;
+    border-radius: 0.5rem;
+  }
+
+  .frase {
+    width: 50vw;
+  }
+
 }

@@ -48,3 +48,26 @@
 .botonTarjeta:focus {
   outline: none;
 }
+
+@media (max-width: 460px) {
+  .TarjetaMedicion  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 8.5rem;
+    height: auto;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    
+
+    & > img {
+      margin-left: 0;
+    }
+
+    & > .data {
+
+    }
+  }
+
+}

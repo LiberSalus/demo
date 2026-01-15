@@ -103,7 +103,7 @@ export default function Inicio() {
           </div>
 
           <div className={styles.cntCora}>
-            <ProgCora porcentaje="65" />
+            <ProgCora porcentaje="50" />
             <div className={styles.mensaje}>
               Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
             </div>
