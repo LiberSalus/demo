@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./inicio.module.css";
 import TarjetaAlertas from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
@@ -32,7 +32,17 @@ import TarjetasCitas from "./TarjetasCitas/TarjetasCitas";
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
-  
+
+  useEffect(() => {
+  if (typeof esMujer !== "boolean") return;
+
+  window.dispatchEvent(
+    new CustomEvent("perfil_min_updated", {
+      detail: { esMujer },
+    })
+  );
+}, [esMujer]);
+
 
   useEffect(() => {
     const elements = document.querySelectorAll(".scroll-container");
@@ -77,6 +87,7 @@ export default function Inicio() {
 
           setEsMujer(mujer);
         }
+        window.dispatchEvent(new Event("perfil_min_updated"));
       }
     } catch {
       null;

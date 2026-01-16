@@ -145,14 +145,14 @@ const GraficaGlucosa = ({
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="label"
-              tick={{ fontSize: 7, fill: "#94a3b8" }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
               axisLine={true}
               tickLine={false}
               className={styles.font}
             />
             <YAxis
               domain={domainY}
-              tick={{ fontSize: 7, fill: "#94a3b8" }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
               axisLine={false}
               tickLine={false}
               className={styles.font}

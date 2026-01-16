@@ -230,7 +230,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    margin: 1rem auto;
+    margin: 0rem auto;
     gap: 1rem;
   }
 }
@@ -243,7 +243,7 @@
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    gap: 1rem;
+    gap: 0rem;
   }
 
 
@@ -298,7 +298,7 @@
 
   .cntLogros {
     /* border: 2px dashed red; */
-    width: 90vw;
+    width: fit-content;
     transform: scale(0.7);
   }
 
