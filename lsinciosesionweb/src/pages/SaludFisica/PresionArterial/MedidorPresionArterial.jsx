@@ -85,6 +85,7 @@ const MedidorPresionArterial = ({
           pathLength="240"
           transform="rotate(180) translate(-440 -310)"
           transformOrigin="50%"
+          className={styles.gradCorta}
         />
 
         {/* graduación larga */}
@@ -99,6 +100,7 @@ const MedidorPresionArterial = ({
           pathLength="240"
           transform="rotate(180) translate(-440 -310)"
           transformOrigin="50%"
+          className={styles.gradLarga}
         />
 
         {/* cubre */}
@@ -107,7 +109,7 @@ const MedidorPresionArterial = ({
           cy="200"
           r="130"
           fill="none"
-          stroke="rgb(228,233,253)"
+          stroke="rgb(252,226,252)"
           strokeWidth="1.1rem"
           strokeDasharray="119 122"
           pathLength="240"

@@ -7,7 +7,7 @@ import styles from "./FrecuenciaCardiaca.module.css";
 
 import RangoFrecuencias from "./RangoFrecuencias/RangoFrecuencias";
 import GraficaFrecuenciaCardiaca from "./GraficaFrecuenciaCardiaca/GraficaFrecuenciaCardiaca";
-import FrecuenciaDiaria from "./RangoFrecuencias/FrecuenicaDiaria";
+import FrecuenciaDiaria from "./RangoFrecuencias/MedidorFrecuencia";
 import RegistroAlertas from "./RangoFrecuencias/RegistroAlertas";
 import ComparacionSemanal from "./RangoFrecuencias/ComparacionSemanal";
 import Alertas from "./RangoFrecuencias/Alertas";

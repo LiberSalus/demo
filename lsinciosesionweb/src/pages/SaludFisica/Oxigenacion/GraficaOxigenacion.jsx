@@ -1,13 +1,14 @@
 // src/pages/SaludFisica/Oxigenacion/GraficaOxigenacion.jsx
-// src/components/Oxigenacion/GraficaOxigenacion.jsx
+// (o src/components/Oxigenacion/GraficaOxigenacion.jsx)
 import React, { useState, useMemo } from "react";
 import styles from "./GraficaOxigenacion.module.css";
-import ModalDescargaOxigenacion from "./ModalDescargaOxigenacion"; // ✅ ruta a pages
+import ModalDescargaOxigenacion from "./ModalDescargaOxigenacion";
 
 import {
   ResponsiveContainer,
-  ScatterChart,
+  ComposedChart,
   Scatter,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -15,7 +16,7 @@ import {
   ReferenceLine,
 } from "recharts";
 
-const dataDia = [
+const MOCK_DIA = [
   { x: 1, spo2: 91 },
   { x: 3, spo2: 93 },
   { x: 4, spo2: 95 },
@@ -27,7 +28,7 @@ const dataDia = [
   { x: 20, spo2: 92 },
 ];
 
-const dataSemana = [
+const MOCK_SEMANA = [
   { x: 1, spo2: 94 },
   { x: 2, spo2: 95 },
   { x: 3, spo2: 93 },
@@ -37,7 +38,7 @@ const dataSemana = [
   { x: 7, spo2: 95 },
 ];
 
-const dataMes = [
+const MOCK_MES = [
   { x: 1, spo2: 93 },
   { x: 5, spo2: 94 },
   { x: 9, spo2: 92 },
@@ -47,7 +48,7 @@ const dataMes = [
   { x: 28, spo2: 93 },
 ];
 
-const dataAnio = [
+const MOCK_ANIO = [
   { x: 1, spo2: 94 },
   { x: 2, spo2: 93 },
   { x: 3, spo2: 95 },
@@ -57,10 +58,14 @@ const dataAnio = [
   { x: 12, spo2: 95 },
 ];
 
-const GraficaOxigenacion = () => {
+const GraficaOxigenacion = ({
+  dataDia = MOCK_DIA,
+  dataSemana = MOCK_SEMANA,
+  dataMes = MOCK_MES,
+  dataAnio = MOCK_ANIO,
+}) => {
+  const [modalAbierto, setModalAbierto] = useState(false);
   const [vista, setVista] = useState("dia");
-  const [fechaSeleccionada, setFechaSeleccionada] = useState("2025-10-21");
-  const [modalAbierto, setModalAbierto] = useState(false); // ✅
 
   const { data, xDomain, xTicks, xLabelFormatter } = useMemo(() => {
     switch (vista) {
@@ -70,7 +75,7 @@ const GraficaOxigenacion = () => {
           xDomain: [1, 7],
           xTicks: [1, 2, 3, 4, 5, 6, 7],
           xLabelFormatter: (v) => {
-            const dias = ["L", "M", "X", "J", "V", "S", "D"];
+            const dias = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
             return dias[v - 1] || v;
           },
         };
@@ -97,19 +102,16 @@ const GraficaOxigenacion = () => {
           data: dataDia,
           xDomain: [0, 24],
           xTicks: [0, 6, 12, 18, 24],
-          xLabelFormatter: (v) => v,
+          xLabelFormatter: (v) => `${String(v).padStart(2, "0")}:00`,
         };
     }
-  }, [vista]);
+  }, [vista, dataDia, dataSemana, dataMes, dataAnio]);
 
-  const opcionesFecha = [
-    { value: "2025-10-21", label: "Mar 21, Oct 2025" },
-    { value: "2025-10-20", label: "Lun 20, Oct 2025" },
-    { value: "2025-10-19", label: "Dom 19, Oct 2025" },
-  ];
+  const domainY = [70, 100];
 
   return (
-    <div className={styles.card}>
+    <div className={styles.GraficaOxigenacion}>
+      {/* Tabs */}
       <div className={styles.tabs}>
         <button
           type="button"
@@ -141,64 +143,97 @@ const GraficaOxigenacion = () => {
         </button>
       </div>
 
-      <div className={styles.chartArea}>
-        <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              type="number"
-              dataKey="x"
-              domain={xDomain}
-              ticks={xTicks}
-              tickFormatter={xLabelFormatter}
-              tick={{ fontSize: "0.85rem", fill: "#333" }}
-            />
-            <YAxis
-              type="number"
-              dataKey="spo2"
-              domain={[70, 100]}
-              ticks={[70, 75, 80, 85, 90, 92, 94, 96, 98, 100]}
-              tickFormatter={(v) => `${v}%`}
-              tick={{ fontSize: "0.85rem", fill: "#333" }}
-            />
+      {/* Chart */}
+      <div className={styles.chartWrapper}>
+        <ResponsiveContainer width="100%" height={180}>
+  <ComposedChart
+    data={data}
+    margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
+  >
+    <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-            <ReferenceLine y={92} stroke="#16a34a" strokeWidth={2} strokeDasharray="3 0" />
-            <ReferenceLine y={85} stroke="#fbbf24" strokeWidth={2} strokeDasharray="4 4" />
-            <ReferenceLine y={75} stroke="#f97373" strokeWidth={2} strokeDasharray="3 0" />
+    <XAxis
+      type="number"
+      dataKey="x"
+      domain={xDomain}
+      ticks={xTicks}
+      tickFormatter={xLabelFormatter}
+      tick={{ fontSize: 10, fill: "#94a3b8" }}
+      axisLine={true}
+      tickLine={false}
+      className={styles.font}
+    />
 
-            <Tooltip formatter={(value) => `${value}%`} labelFormatter={(v) => `Punto: ${v}`} />
+    <YAxis
+      type="number"
+      domain={domainY}
+      tickFormatter={(v) => `${v}%`}
+      tick={{ fontSize: 10, fill: "#94a3b8" }}
+      axisLine={false}
+      tickLine={false}
+      className={styles.font}
+    />
 
-            <Scatter data={data} fill="#0284c7" stroke="#0284c7" strokeWidth={1.4} />
-          </ScatterChart>
-        </ResponsiveContainer>
+    <ReferenceLine y={92} stroke="#16a34a" strokeWidth={2} strokeDasharray="3 0" />
+    <ReferenceLine y={85} stroke="#fbbf24" strokeWidth={2} strokeDasharray="4 4" />
+    <ReferenceLine y={75} stroke="#f97373" strokeWidth={2} strokeDasharray="3 0" />
+
+    <Tooltip
+      formatter={(value) => [`${value}%`, "SpO₂"]}
+      labelFormatter={(v) =>
+        vista === "dia" ? `Hora: ${xLabelFormatter(v)}` : `Punto: ${v}`
+      }
+      labelStyle={{ fontSize: "0.75rem" }}
+      contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
+    />
+
+    {/* ✅ Línea de unión */}
+    <Line
+      type="monotone"
+      dataKey="spo2"
+      stroke="#fd908d"
+      strokeWidth={2}
+      dot={false}
+      activeDot={{ r: 5 }}
+    />
+
+    {/* ✅ Puntos pequeños */}
+    <Scatter
+      dataKey="spo2"
+      fill="#fd908d"
+      stroke="#fd908d"
+      strokeWidth={1}
+      shape={({ cx, cy }) => {
+        if (cx == null || cy == null) return null;
+        return (
+          <g>
+            <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
+            <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
+          </g>
+        );
+      }}
+    />
+  </ComposedChart>
+</ResponsiveContainer>
+
       </div>
 
-      <div className={styles.bottomBar}>
-        <div className={styles.fechaSelectWrapper}>
-          <select
-            className={styles.fechaSelect}
-            value={fechaSeleccionada}
-            onChange={(e) => setFechaSeleccionada(e.target.value)}
-          >
-            {opcionesFecha.map((op) => (
-              <option key={op.value} value={op.value}>
-                {op.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Footer (patrón Glucosa) */}
+      <div className={styles.footer}>
+        <button type="button" className={styles.btnFecha}>
+          Martes 21, Oct 2025
+          <span className={styles.chevron}>▾</span>
+        </button>
 
-        {/* ✅ aquí ya abre modal */}
         <button
           type="button"
-          className={styles.linkReg}
+          className={styles.btnRegistros}
           onClick={() => setModalAbierto(true)}
         >
           Ver registros
         </button>
       </div>
 
-      {/* ✅ aquí renderizamos el modal */}
       <ModalDescargaOxigenacion
         abierto={modalAbierto}
         onClose={() => setModalAbierto(false)}

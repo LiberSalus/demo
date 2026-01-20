@@ -1,4 +1,4 @@
-// src/pages/SaludFisica/FrecuenciaCardiaca/RangoFrecuencias/FrecuenciaDiaria.jsx
+// src/pages/SaludFisica/FrecuenciaCardiaca/RangoFrecuencias/MedidorFrecuencia.jsx
 
 import { useMemo, useState } from "react";
 import {
@@ -13,17 +13,20 @@ import {
   Line,
 } from "recharts";
 
-import styles from "./FrecuenciaDiaria.module.css";
+import styles from "./MedidorFrecuenica.module.css";
 import ModalFrecuenciaDiaria from "./ModalFrecuenciaDiaria";
 import { buildDailyMetrics, FREC_MIN } from "./FrecuenciaUtils";
 
-/**
- * Frecuencia cardiaca diaria
- * Props:
- *  - readings: [{ ts, bpm }]
- *  - date: Date (día que se muestra)
- *  - onAddReading: fn({ bpm, ts })
- */
+const CustomDot = ({ cx, cy }) => {
+  if (cx == null || cy == null) return null;
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
+      <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
+    </g>
+  );
+};
+
 const FrecuenciaDiaria = ({
   readings = [],
   onAddReading = () => {},
@@ -33,7 +36,6 @@ const FrecuenciaDiaria = ({
   const {
     dayReadings,
     mean,
-    ultimaHora,
     ultimoRegistro,
     ultimaLecturaOriginal,
   } = useMemo(() => buildDailyMetrics(readings, date), [readings, date]);
@@ -42,8 +44,7 @@ const FrecuenciaDiaria = ({
 
   const formatFecha = (ts) => {
     if (!ts) return "—";
-    const d = new Date(ts);
-    return d.toLocaleDateString("es-MX", {
+    return new Date(ts).toLocaleDateString("es-MX", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -59,56 +60,65 @@ const FrecuenciaDiaria = ({
   };
 
   return (
-    <div className={styles.card}>
+    <div className={styles.FrecuenciaDiaria}>
       {/* HEADER */}
       <div className={styles.header}>
-        <div className={styles.cntTxt}>
-          <h3>{title}</h3>
+        <p className={styles.titulo}>{title}</p>
 
-          <div className={styles.medi}>
-            <p>
-              <b>{ultimoRegistro ? `${ultimoRegistro.bpm} ppm` : "—"}</b>
-            </p>
+        <div className={styles.cntValor}>
+          <p className={styles.valor}>
+            {ultimoRegistro ? `${ultimoRegistro.bpm}` : "—"}
+            <span className={styles.simbolo}> ppm</span>
+          </p>
 
-            <p>Última lectura registrada:</p>
-
-            <p>
+          <p className={styles.sub}>
+            Última lectura registrada:
+            <br />
+            <span className={styles.tiempo}>
               {ultimaLecturaOriginal
                 ? `${formatFecha(ultimaLecturaOriginal.ts)} — ${formatHora(
                     ultimaLecturaOriginal.ts
                   )}`
                 : "—"}
-            </p>
-          </div>
+            </span>
+          </p>
         </div>
       </div>
 
-      {/* GRÁFICA */}
-      <div className={styles.chart}>
-        <ResponsiveContainer>
+      {/* CHART */}
+      <div className={styles.chartWrapper}>
+        <ResponsiveContainer width="100%" height={180}>
           <ComposedChart
             data={dayReadings}
-            margin={{ top: 10, right: 10, bottom: 8, left: 0 }}
+            margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+
             <XAxis
               type="number"
               dataKey="hora"
               domain={[0, 24]}
               ticks={[0, 6, 12, 18, 24]}
-              tick={{ fontSize: 11, fill: "#6B7280" }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
+              axisLine={true}
+              tickLine={false}
+              className={styles.font}
             />
+
             <YAxis
               domain={[40, 190]}
               allowDecimals={false}
-              tick={{ fontSize: 11, fill: "#6B7280" }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
+              axisLine={false}
+              tickLine={false}
+              className={styles.font}
               tickFormatter={(v) => `${v}`}
             />
 
-            {/* Línea de referencia mínima teórica */}
+            {/* Reference: mínimo teórico */}
             <ReferenceLine y={FREC_MIN} stroke="#ef4444" strokeWidth={1.5} />
 
-            {/* Línea del promedio del día */}
+            {/* Reference: promedio */}
             {mean > 0 && (
               <ReferenceLine
                 y={mean}
@@ -119,35 +129,44 @@ const FrecuenciaDiaria = ({
             )}
 
             <Tooltip
-              cursor={{ stroke: "rgba(0,0,0,0.2)", strokeDasharray: "3 3" }}
-              formatter={(val, name) =>
-                name === "bpm" ? [`${val} ppm`, "Lectura"] : [val, name]
-              }
+              formatter={(val) => [`${val} ppm`, "Lectura"]}
               labelFormatter={(v) => `Hora: ${v.toFixed(2)} h`}
+              labelStyle={{ fontSize: "0.75rem" }}
+              contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
             />
 
-            {/* Línea suave uniendo lecturas */}
+            {/* ✅ Línea patrón (rosa) */}
             <Line
               type="monotone"
               dataKey="bpm"
-              stroke="#93c5fd"
+              stroke="#fd908d"
               strokeWidth={2}
               dot={false}
               connectNulls
             />
 
-            {/* Puntos individuales */}
-            <Scatter dataKey="bpm" name="Lectura" fill="#007cba" />
+            {/* ✅ Puntos pequeños con borde blanco */}
+            <Scatter
+              dataKey="bpm"
+              name="Lectura"
+              fill="#fd908d"
+              stroke="#fd908d"
+              strokeWidth={1}
+              shape={({ cx, cy }) => <CustomDot cx={cx} cy={cy} />}
+            />
           </ComposedChart>
         </ResponsiveContainer>
+      </div>
 
-        {/* BOTÓN AÑADIR */}
-        <button className={styles.addBtn} onClick={() => setOpen(true)}>
-          <span className={styles.dot} /> Añadir
+      {/* FOOTER (botón pill, sin margin-left raro) */}
+      <div className={styles.footer}>
+        <button type="button" className={styles.btnAdd} onClick={() => setOpen(true)}>
+          <span className={styles.icoMas}>＋</span>
+          <span>Añadir</span>
         </button>
       </div>
 
-      {/* MODAL PARA NUEVA LECTURA */}
+      {/* MODAL */}
       {open && (
         <ModalFrecuenciaDiaria
           onClose={() => setOpen(false)}

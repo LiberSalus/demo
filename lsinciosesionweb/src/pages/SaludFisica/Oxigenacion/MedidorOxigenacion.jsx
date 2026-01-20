@@ -5,8 +5,9 @@ import styles from "./MedidorOxigenacion.module.css";
 import ActualizacionOxigenacion from "./ActualizacionOxigenacion";
 import {
   ResponsiveContainer,
-  ScatterChart,
+  ComposedChart,
   Scatter,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -84,7 +85,8 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
 
   return (
     <>
-      <div className={styles.card}>
+      <div className={styles.MedidorOxigenacion}>
+
         {/* Header */}
         <div className={styles.header}>
           <p className={styles.titulo}>Oxigenación diaria</p>
@@ -103,33 +105,75 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
         </div>
 
         {/* Chart */}
-        <div className={styles.chartArea}>
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis
-                type="number"
-                dataKey="hora"
-                domain={[0, 24]}
-                ticks={[0, 6, 12, 18, 24]}
-                tick={{ fontSize: "0.85rem", fill: "#333" }}
-              />
-              <YAxis
-                type="number"
-                dataKey="spo2"
-                domain={[90, 100]}
-                ticks={[90, 92, 94, 96, 98, 100]}
-                tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: "0.85rem", fill: "#333" }}
-              />
-              <Tooltip
-                formatter={(value) => `${value}%`}
-                labelFormatter={(hora) => `Hora: ${hora}:00`}
-              />
-              <Scatter data={mediciones} fill="#0284c7" />
-            </ScatterChart>
-          </ResponsiveContainer>
-        </div>
+        {/* Chart */}
+<div className={styles.chartWrapper}>
+  <ResponsiveContainer width="100%" height={180}>
+    <ComposedChart
+      data={mediciones}
+      margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+
+      <XAxis
+        type="number"
+        dataKey="hora"
+        domain={[0, 24]}
+        ticks={[0, 6, 12, 18, 24]}
+        tickFormatter={(v) => `${String(v).padStart(2, "0")}:00`}
+        tick={{ fontSize: 10, fill: "#94a3b8" }}
+        axisLine={true}
+        tickLine={false}
+        className={styles.font}
+      />
+
+      <YAxis
+        type="number"
+        domain={[90, 100]}
+        ticks={[90, 92, 94, 96, 98, 100]}
+        tickFormatter={(v) => `${v}%`}
+        tick={{ fontSize: 10, fill: "#94a3b8" }}
+        axisLine={false}
+        tickLine={false}
+        className={styles.font}
+      />
+
+      <Tooltip
+        formatter={(value) => [`${value}%`, "SpO₂"]}
+        labelFormatter={(hora) => `Hora: ${String(hora).padStart(2, "0")}:00`}
+        labelStyle={{ fontSize: "0.75rem" }}
+        contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
+      />
+
+      {/* ✅ Línea de unión (igual patrón) */}
+      <Line
+        type="monotone"
+        dataKey="spo2"
+        stroke="#fd908d"
+        strokeWidth={2}
+        dot={false}
+        activeDot={{ r: 5 }}
+      />
+
+      {/* ✅ Puntos pequeños con borde blanco */}
+      <Scatter
+        dataKey="spo2"
+        fill="#fd908d"
+        stroke="#fd908d"
+        strokeWidth={1}
+        shape={({ cx, cy }) => {
+          if (cx == null || cy == null) return null;
+          return (
+            <g>
+              <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
+              <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
+            </g>
+          );
+        }}
+      />
+    </ComposedChart>
+  </ResponsiveContainer>
+</div>
+
 
         {/* Footer botón */}
         <div className={styles.footer}>
