@@ -3,6 +3,8 @@
   & > h3 {font-size: 1rem; margin-bottom: 0.25rem;}
   & > p  {font-size: .75rem;}  
   flex-wrap: wrap;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .cntDin {
@@ -30,6 +32,15 @@
 @media (max-width: 864px) {
   .cntDin {
     flex-direction: column;
+    
+  }
+
+  .VistaFisica {
+    width: 100%;
+    & > h3, & > p {
+      text-align: center;
+    }
+    
   }
   
 }

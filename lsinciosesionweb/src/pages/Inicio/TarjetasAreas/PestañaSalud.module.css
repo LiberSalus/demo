@@ -5,6 +5,7 @@
   align-items: center;
 }
 .encabezado {
+  /* border: 2px dashed red; */
   
   display: flex;
   justify-content: space-around;
@@ -74,4 +75,12 @@
   border-color: #9c27b0;
   color: #9c27b0;
   background-color: rgba(156, 39, 176, 0.1);
+}
+
+@media (max-width: 600px) {
+  .encabezado {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
 }

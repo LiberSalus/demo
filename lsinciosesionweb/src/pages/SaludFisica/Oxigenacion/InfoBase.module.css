@@ -2,7 +2,7 @@
   margin: 1rem auto;
   width: 27.93rem;
   height: 10.81rem;
-  
+
   display: flex;
   align-items: center;
 }
@@ -16,12 +16,14 @@
   flex-direction: column;
   margin: 1rem;
   font-style: italic;
-  & > :nth-child(1) {
+
+  &> :nth-child(1) {
     padding-left: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
   }
-  & > :nth-child(2) {
+
+  &> :nth-child(2) {
     font-size: 0.85rem;
     margin-bottom: 0.5rem;
     color: #838282;
@@ -30,4 +32,26 @@
 }
 
 
+@media (max-width: 600px) {
+  .InfoBase {
+    margin: 1rem auto;
+    width: 90%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
+    &>.cntIco {
+      text-align: center;
+      width: 50%;
+    }
+
+    &>.cntInfo {
+      &> :nth-child(1) {
+        padding-left: 0;
+      }
+    }
+  }
+}

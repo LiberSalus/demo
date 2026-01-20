@@ -1,6 +1,7 @@
 .cntBotonesQs {
     margin: 0.5rem auto;
-    width: 22rem;
+    width: 100%;
+    max-width: 360px;
     /* border: 1px solid #dcdcdd; */
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;

@@ -1,6 +1,6 @@
 //mesat\src\components\RangoFrecuencias\ModalFrecuenciaDiaria.jsx
 import { useEffect, useMemo, useState } from "react";
-import styles from "./ModalFrecuenciaDiaria.module.css";
+import styles from "./MedidorFrecuenica.module.css";
 
 const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }) => {
   // fecha/hora autollenadas (no editables)

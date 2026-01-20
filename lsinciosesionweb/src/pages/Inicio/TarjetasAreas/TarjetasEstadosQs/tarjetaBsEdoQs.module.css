@@ -1,9 +1,9 @@
 .cntTarjetaBsEdoQs {
-    zoom: 0.85;
+    
     margin: 0rem auto;
     padding: 1rem;
-    width: 22rem;
-    max-width: 22rem;
+    width: 400px;
+    max-width: 350px;
     height: auto;
     border-radius: 1rem;
     /* border: 1px dashed lightpink; */
@@ -77,4 +77,12 @@
         background-color: var(--color-prn);
         font-size: 0.75rem;
     }
+}
+
+@media (max-width: 460px) {
+    .cntTarjetaBsEdoQs{
+        width: 100%;
+        max-width: 350px;
+    }
+    
 }

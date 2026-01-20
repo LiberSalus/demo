@@ -208,7 +208,7 @@
   flex-wrap: wrap;
   /* max-width: 90.1rem; */
   gap: 1rem;
-}
+  margin: 0;}
 
 .seccInfe {
   /* border: 2px dashed green; */
@@ -313,6 +313,15 @@
     gap: 1rem;
   }
 
-
+  .seccInfe {
+    /* border: 2px dashed green; */
+    margin: 0rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
 }

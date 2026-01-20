@@ -27,6 +27,16 @@
   margin-top: 0.5rem;
   gap: 1rem;
   padding: 1rem;
+
+  & > h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--color-prn);
+  }
+  & > p {
+    font-size: 0.875rem;
+    color: #575858;
+  }
 }
 
 @media (max-width: 768px) {
@@ -39,6 +49,14 @@
     height: 15rem;
     & > img {
       width: 200%;
+    }
+  }
+  .cntInfo {
+    & > h3 {
+      font-size: 1rem;
+    }
+    & > p {
+      font-size: 0.75rem;
     }
   }
 }

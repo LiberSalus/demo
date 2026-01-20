@@ -41,3 +41,14 @@
   font-size: 0.5rem;
   font-weight: 100;
 }
+
+@media (max-width: 600px) {
+  .RangoOxigenacion {
+    width: 90%;
+    height: auto;
+    margin: 1rem 0.5rem;
+    align-items: center;
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+}

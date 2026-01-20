@@ -63,9 +63,9 @@ const FrecuenciaDiaria = ({
     <div className={styles.FrecuenciaDiaria}>
       {/* HEADER */}
       <div className={styles.header}>
-        <p className={styles.titulo}>{title}</p>
+        <h3 className={styles.titulo}>{title}</h3>
 
-        <div className={styles.cntValor}>
+        <div className={styles.medi}>
           <p className={styles.valor}>
             {ultimoRegistro ? `${ultimoRegistro.bpm}` : "—"}
             <span className={styles.simbolo}> ppm</span>

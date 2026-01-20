@@ -39,3 +39,28 @@
 .valor {
   font-weight: bold;
 }
+
+@media (max-width: 600px) {
+  .ComparacionSemanalOxigeno {
+    & > :nth-child(1) {
+      font-size: 1rem;
+      text-align: center;
+    }
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    & > .info {
+      font-size: 1rem;
+      align-items: center;
+      flex-direction: column;
+      & > :nth-child(1),
+      & > :nth-child(2) {
+        text-align: center;
+      }
+    }
+  }
+}

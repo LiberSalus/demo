@@ -19,15 +19,22 @@
   margin-top: 0.25rem;
   width: 100%;
   height: auto;
-  padding: 0.5rem;
-  /* border: 1px dashed lightgreen; */
   border-radius: 1rem;
-
+  padding: 0.5rem;
+  
 }
 
 @media (max-width: 947px) {
   .cntTarjetaAreas {
-    width: 90%;
+    /* border: 1px dashed lightgreen; */
+    margin: 0 auto;
+    width: 100%;
     height: auto;
+    padding: 0.1rem;
+
+    &> h3, &> p {
+      text-align: center;
+    }
+    
   }
 }
