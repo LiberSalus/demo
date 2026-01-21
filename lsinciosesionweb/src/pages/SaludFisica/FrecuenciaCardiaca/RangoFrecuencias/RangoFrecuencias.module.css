@@ -17,3 +17,18 @@
     font-weight: bold;
   }
 }
+@media (max-width: 600px) {
+  .RangoFrecuencias {
+  margin: 1rem 0;
+  padding: 0;
+  width: calc(85vw - 3rem);
+  border: none;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column-reverse;
+  box-shadow:none;
+  /* background-color: white; */
+}
+}

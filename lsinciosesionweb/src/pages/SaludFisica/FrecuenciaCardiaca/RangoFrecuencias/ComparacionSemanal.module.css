@@ -15,7 +15,7 @@
 }
 
 /* Título */
-.ComparacionSemanal > :nth-child(1) {
+.ComparacionSemanal> :nth-child(1) {
   width: 80%;
   font-weight: 800;
   text-align: left;
@@ -33,14 +33,14 @@
 }
 
 /* Columna 1: PP media */
-.info > :nth-child(1) {
+.info> :nth-child(1) {
   font-size: 0.75rem;
   color: #6b7280;
 }
 
 /* Actual y semana anterior: centrado */
-.info > :nth-child(2),
-.info > :nth-child(3) {
+.info> :nth-child(2),
+.info> :nth-child(3) {
   text-align: center;
 }
 
@@ -101,4 +101,22 @@
   margin: 0.25rem 0 0;
   width: 90%;
   text-align: center;
+}
+
+
+@media (max-width: 600px) {
+  .ComparacionSemanal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin: 1rem 0;
+    width: calc(85vw - 3rem);
+    height: 9.5rem;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: none;
+    /* background-color: white; */
+  }
 }

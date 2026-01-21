@@ -30,7 +30,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #e5e7eb ;
+  border: 1px solid #e5e7eb;
   border-radius: 1rem;
   gap: 1rem;
   box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
@@ -54,10 +54,12 @@
   font-size: 0.85rem;
   text-align: end;
   line-height: 1.7;
+
   &>:nth-child(1),
   &>:nth-child(3) {
     color: red;
   }
+
   &>:nth-child(2) {
     color: #62D247;
   }
@@ -72,4 +74,23 @@
 .icos {
   display: flex;
   flex-direction: column;
+}
+
+
+@media (max-width: 600px) {
+  .RegistroAlertas {
+    margin: 1rem auto;
+    padding: 0;
+    width: calc(85vw - 3rem);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    gap: 1rem;
+    box-shadow: none;
+    /* background-color: white; */
+  }
 }

@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./MedidorFrecuenica.module.css";
 
+
 const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }) => {
   // fecha/hora autollenadas (no editables)
   const [ts, setTs] = useState(()=> {

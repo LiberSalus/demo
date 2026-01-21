@@ -80,5 +80,24 @@
 
 .valor {
   font-weight: bold;
-  color:#007cba ;
+  color: #007cba;
+}
+
+
+@media (max-width: 600px) {
+  .Alertas {
+    padding: 0;
+    box-shadow:none;
+    border: none;
+    width: calc(85vw - 3rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+  }
+
+
+
 }

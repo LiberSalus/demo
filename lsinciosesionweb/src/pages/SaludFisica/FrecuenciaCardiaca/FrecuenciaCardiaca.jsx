@@ -12,7 +12,7 @@ import RegistroAlertas from "./RangoFrecuencias/RegistroAlertas";
 import ComparacionSemanal from "./RangoFrecuencias/ComparacionSemanal";
 import Alertas from "./RangoFrecuencias/Alertas";
 
-import alver from "./icoAlver.svg";
+import adver from "./icoAdver.svg";
 
 const FrecuenciaCardiaca = () => {
   // Lecturas base (de momento mock para probar)
@@ -81,9 +81,9 @@ const FrecuenciaCardiaca = () => {
             maxDia={metrics.maxDia}
           />
 
-          <div className={styles.alver}>
+          <div className={styles.adver}>
             <div className={styles.sup}>
-              <img src={alver} alt="Información" />
+              <img src={adver} alt="Información" />
               <p>
                 Recuerda que tu frecuencia cardiaca puede cambiar según tu nivel
                 de actividad, el estrés, el sueño o incluso si tomas café o
