@@ -34,8 +34,9 @@
 
 @media (max-width: 600px) {
   .InfoBase {
-    margin: 1rem auto;
-    width: 90%;
+    margin: 1rem 0;
+    padding: 0;
+    width: calc(85vw - 3rem) ;
     height: auto;
     display: flex;
     flex-direction: column;

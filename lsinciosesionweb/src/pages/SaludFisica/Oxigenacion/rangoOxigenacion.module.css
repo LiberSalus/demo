@@ -50,5 +50,7 @@
     align-items: center;
     flex-direction: column-reverse;
     text-align: center;
+    box-shadow: none;
+    border: none;
   }
 }

@@ -210,3 +210,14 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+
+@media (max-width: 600px) {
+  .MedidorOxigenacion {
+    width: 90%;
+    margin: 0;
+    padding: 0rem;
+    box-shadow: 0 0px 0px rgba(15, 23, 42, 0.08);
+    border: none;
+  }
+}

@@ -58,6 +58,7 @@
 @media (max-width: 600px) {
   .PestañasFisica {
     min-width: auto;
+    box-shadow: none;
 
     & > :nth-child(1) {
       margin: 1rem auto;

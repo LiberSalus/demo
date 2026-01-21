@@ -28,11 +28,12 @@
   .Adver {
 
     
-    
-    padding: 0.5rem;
+    box-shadow: none;
+    border: none;
+    padding: 0;
     width: 90%;
     height: auto;
-    margin: 1rem auto;
+    margin: 1rem 0;
     position: relative;
     display: flex;
     flex-direction: column;
