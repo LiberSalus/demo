@@ -46,3 +46,9 @@
   background: #007cba;
   color: #fff;
 }
+
+@media (max-width: 400px) {
+  .ActualizacionOxigenacion {
+    width: 70%;
+  }
+}
