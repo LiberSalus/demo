@@ -1,6 +1,6 @@
 .TabMedicamento {
   width: 27.5rem;
-  
+
   margin: 1rem 0.5rem;
   position: relative;
   display: flex;
@@ -14,6 +14,7 @@
   width: 13.43rem;
   height: 8.875rem;
   font-size: 0.75rem;
+
   /* background-color: white; */
   &>:nth-child(1) {
     font-size: 1rem;
@@ -21,12 +22,14 @@
     padding: 0.5rem 1.5rem 0rem 1rem;
     color: var(--color-prn);
   }
-  &>:nth-child(2), 
-  &>:nth-child(4){
+
+  &>:nth-child(2),
+  &>:nth-child(4) {
     padding: 0.5rem 0.75rem 0.1rem;
   }
-  &>:nth-child(3), 
-  &>:nth-child(5){
+
+  &>:nth-child(3),
+  &>:nth-child(5) {
     padding: 0.25rem;
     /* border: 1px solid #ACCCEB; */
     border-radius: 0.35rem;
@@ -57,11 +60,13 @@
   margin-bottom: 1rem;
   /* background-color: white; */
   cursor: pointer;
-  & > img  {
+
+  &>img {
     width: 2rem;
     margin: 0 0rem 0 2rem;
   }
-  & > p {
+
+  &>p {
     font-size: 0.85rem;
     text-align: center;
   }
@@ -72,49 +77,89 @@
 }
 
 @keyframes agita {
-   0%,
+
+  0%,
   100% {
     -webkit-transform: translateX(0%);
-            transform: translateX(0%);
+    transform: translateX(0%);
     -webkit-transform-origin: 50% 50%;
-            transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
   }
+
   15% {
     -webkit-transform: translateX(-1rem) rotate(-6deg);
-            transform: translateX(-1rem) rotate(-6deg);
+    transform: translateX(-1rem) rotate(-6deg);
   }
+
   30% {
     -webkit-transform: translateX(0.5rem) rotate(6deg);
-            transform: translateX(0.5rem) rotate(6deg);
+    transform: translateX(0.5rem) rotate(6deg);
   }
+
   45% {
     -webkit-transform: translateX(-0.5rem) rotate(-3.6deg);
-            transform: translateX(-0.5rem) rotate(-3.6deg);
+    transform: translateX(-0.5rem) rotate(-3.6deg);
   }
+
   60% {
     -webkit-transform: translateX(0.25rem) rotate(2.4deg);
-            transform: translateX(0.25rem) rotate(2.4deg);
+    transform: translateX(0.25rem) rotate(2.4deg);
   }
+
   75% {
     -webkit-transform: translateX(-0.15rem) rotate(-1.2deg);
-            transform: translateX(-0.15rem) rotate(-1.2deg);
+    transform: translateX(-0.15rem) rotate(-1.2deg);
   }
 }
 
 .prox {
   width: 13rem;
-  &>:nth-child(1){
+
+  &>:nth-child(1) {
     text-align: center;
     font-size: 0.85rem;
   }
-  &>:nth-child(2){
+
+  &>:nth-child(2) {
     text-align: center;
     font-size: 1.25rem;
     font-weight: bold;
     color: var(--color-prn);
   }
-  &>:nth-child(3){
+
+  &>:nth-child(3) {
     text-align: center;
     font-size: 0.70rem;
   }
+}
+
+@media (max-width:600px) {
+  .TabMedicamento {
+    width: calc(90vw - 3rem);
+    margin: 1rem 0;
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .prox {
+    margin-top: 2rem;
+  }
+
+  .medicamento {
+    width: 90%;
+    height: auto;
+    box-shadow: none;
+    border: none;
+    text-align: center;
+
+    &>:nth-child(3),
+    &>:nth-child(5) {
+      text-align: center;
+    }
+  }
+
 }

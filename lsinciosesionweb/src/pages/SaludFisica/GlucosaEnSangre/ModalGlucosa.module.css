@@ -13,7 +13,7 @@
   border-radius: 18px;
   padding: 20px 24px 18px;
   width: 360px;
-  
+
   max-width: 90vw;
   position: relative;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
@@ -21,7 +21,7 @@
 
 .cerrar {
   position: absolute;
-  top:   1rem;
+  top: 1rem;
   right: 1rem;
   border: none;
   background: transparent;
@@ -51,7 +51,7 @@
   align-items: center;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-size: 0.85rem; 
+  font-size: 0.85rem;
 }
 
 
@@ -82,33 +82,35 @@
   /* border: 1px dashed red; */
   display: flex;
   padding-left: 2rem;
-  text-align: center;  
+  text-align: center;
   margin-bottom: 1rem;
   font-size: 0.85rem;
 }
 
 .check {
   margin-left: 1.75rem;
-  width:  1rem;
+  width: 1rem;
   height: 1rem;
-  
+
   border: 2px solid;
-  border-radius: 0.2rem ;
+  border-radius: 0.2rem;
   border-color: var(--color-prn);
-  outline-color:var(--color-prn) ;
+  outline-color: var(--color-prn);
 }
 
 .recomendaciones {
   margin: 1rem auto 2rem;
   font-size: 0.85rem;
   color: #A7A8A9;
-  & > :nth-child(2) {
+
+  &> :nth-child(2) {
     margin: 0.5rem 0;
   }
 
-  & > ol {
+  &>ol {
     padding-left: 1rem;
-    & > li  {
+
+    &>li {
       font-size: 0.75rem;
       margin-top: 0.5rem;
     }
@@ -129,7 +131,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  
+
 }
 
 .cntBoton {
@@ -146,4 +148,32 @@
   align-items: center;
   justify-content: center;
   z-index: 50;
+}
+
+
+@media (max-width: 600px) {
+  .modal {
+    width: calc(85vw - 3rem);
+    margin: 1rem 0;
+  }
+
+  .cerrar {
+    position: absolute;
+    top:   0.25rem;
+    right: 0.25rem;
+    border: none;
+    background: transparent;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  .input {
+    width: 80%;
+    margin-right: 1rem;
+  }
+
+  .unidad {
+    right: 2rem;
+  }
+
 }

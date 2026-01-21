@@ -1,5 +1,5 @@
 .RangosGlucosa {
-  margin: 1rem 00.5rem;
+  margin: 1rem 0.5rem;
   width: 27.5rem;
   height: 9rem;
   display: flex;
@@ -19,11 +19,12 @@
   align-items: center;
   line-height: 1.7;
 
-  & > :nth-child(1) {
+  &> :nth-child(1) {
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    & > span {
+
+    &>span {
       font-weight: normal;
       font-size: 0.65rem;
     }
@@ -39,7 +40,7 @@
 .bloque {
   display: flex;
   align-items: center;
-  
+
 }
 
 .color {
@@ -62,12 +63,15 @@
   color: #334155;
 }
 
-.ayunas, .comida {
+.ayunas,
+.comida {
   display: flex;
   justify-content: space-between;
+
   &>:nth-child(1) {
     padding-right: 3rem;
   }
+
   &>:nth-child(2) {
     font-weight: bold;
   }
@@ -75,12 +79,12 @@
 
 
 .cntIco {
-  
+
   display: flex;
   place-content: center;
   width: 3rem;
 
-  
+
 }
 
 .sinDatos {
@@ -109,4 +113,22 @@
 
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .RangosGlucosa {
+    margin: 1rem 0;
+    width: calc(85vw - 3rem);
+    height: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    /* background: #fff; */
+    box-shadow: none;
+    border: none;
+    border-radius: 1rem;
+    text-align: center;
+  }
 }

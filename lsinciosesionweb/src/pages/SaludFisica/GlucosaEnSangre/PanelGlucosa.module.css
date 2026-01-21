@@ -14,7 +14,7 @@
 .viewport {
   overflow: hidden;
   flex: 1;
-  
+
 }
 
 /* Pista que se mueve en X */
@@ -35,7 +35,7 @@
 .flecha {
   border: none;
   background: transparent;
-  width:  2rem;
+  width: 2rem;
   height: 2rem;
   border-radius: 999px;
   /* box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18); */
@@ -69,7 +69,30 @@
 
 /* Opcional: en pantallas chicas, que ocupe todo el ancho */
 @media (max-width: 640px) {
-  .viewport {
-    max-width: 100%;
+
+  .PanelGlucosa {
+    position: relative;
+    width: calc(90vw - 3rem);
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px dashed red; */
+    padding: 0;
   }
+
+  .izquierda {
+    position: absolute;
+    left: 0.1rem;
+    margin-right: 0.75rem;
+    z-index: 1;
+  }
+
+  .derecha {
+    position: absolute;
+    right: 0.1rem;
+    margin-left: 0.75rem;
+  }
+
+
 }

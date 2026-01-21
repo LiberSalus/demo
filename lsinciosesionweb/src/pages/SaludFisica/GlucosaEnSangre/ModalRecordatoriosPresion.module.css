@@ -321,3 +321,16 @@
   border-radius: 4px;
   background: #d1d5db;
 }
+
+
+@media (max-width: 480px) {
+  .modal {
+    width: calc(90vw - 3rem);
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  .btnPri {
+    padding: 0.5rem 1.5rem;
+  }
+}

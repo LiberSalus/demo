@@ -64,3 +64,9 @@ button:focus-visible {
     background-color: white;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
