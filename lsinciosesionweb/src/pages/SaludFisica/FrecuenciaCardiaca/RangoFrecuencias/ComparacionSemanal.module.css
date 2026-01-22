@@ -74,17 +74,17 @@
 
 /* Estados */
 .icono.ok {
-  background: #ecfdf3;
+  /* background: #ecfdf3; */
   color: #16a34a;
 }
 
 .icono.alta {
-  background: #fee2e2;
+  /* background: #fee2e2; */
   color: #b91c1c;
 }
 
 .icono.baja {
-  background: #e0f2fe;
+  /* background: #e0f2fe; */
   color: #0369a1;
 }
 

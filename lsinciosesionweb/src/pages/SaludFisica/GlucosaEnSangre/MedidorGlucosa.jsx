@@ -83,7 +83,7 @@ const MedidorGlucosa = ({
           className={styles.puntero}
           style={{
             transform: `rotate(${angulo}deg)`,
-            transformOrigin: "220px 130px",
+            transformOrigin: "220px 140px",
           }}
         >
           <circle

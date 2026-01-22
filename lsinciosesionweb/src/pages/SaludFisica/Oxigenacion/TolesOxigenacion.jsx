@@ -12,13 +12,13 @@ const tolerancias = [
     key: "moderada",
     color: "#FF9F1C",
     txt: "Hipoxemia moderada",
-    valor: "90% - 94%"
+    valor: "85% - 89%"
   },
   {
     key: "leve",
     color: "#FFD93D",
     txt: "Hipoxemia leve",
-    valor: "85% - 89%"
+    valor: "90% - 94%"
   },
   {
     key: "severa",

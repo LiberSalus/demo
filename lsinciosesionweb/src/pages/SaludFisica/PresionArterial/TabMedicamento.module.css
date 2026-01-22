@@ -1,3 +1,8 @@
+@import url(
+  '../GlucosaEnSangre/TabMedicamento.module.css'
+);
+
+
 .TabMedicamento {
   width: 27.5rem;
   
@@ -116,5 +121,18 @@
   &>:nth-child(3){
     text-align: center;
     font-size: 0.70rem;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .TabMedicamento {
+    margin-top: 2rem;
+    width: calc(85vw - 3rem);
+  }
+
+  .medicamento {
+    border: none;
+    box-shadow: none;
   }
 }

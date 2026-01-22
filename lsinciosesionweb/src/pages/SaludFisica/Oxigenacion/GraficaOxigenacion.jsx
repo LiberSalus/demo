@@ -14,6 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   ReferenceLine,
+  AreaChart, Area,
 } from "recharts";
 
 const MOCK_DIA = [
@@ -21,11 +22,12 @@ const MOCK_DIA = [
   { x: 3, spo2: 93 },
   { x: 4, spo2: 95 },
   { x: 6, spo2: 97 },
-  { x: 8, spo2: 92 },
+  { x: 8, spo2: 92 }, 
   { x: 10, spo2: 94 },
   { x: 12, spo2: 98 },
   { x: 16, spo2: 90 },
   { x: 20, spo2: 92 },
+  
 ];
 
 const MOCK_SEMANA = [
@@ -174,9 +176,10 @@ const GraficaOxigenacion = ({
       className={styles.font}
     />
 
-    <ReferenceLine y={92} stroke="#16a34a" strokeWidth={2} strokeDasharray="3 0" />
-    <ReferenceLine y={85} stroke="#fbbf24" strokeWidth={2} strokeDasharray="4 4" />
-    <ReferenceLine y={75} stroke="#f97373" strokeWidth={2} strokeDasharray="3 0" />
+    <ReferenceLine y={97} stroke="#16a34a" strokeWidth={0.4} strokeDasharray="3 0" />
+    <ReferenceLine y={92} stroke="#FFD93D" strokeWidth={0.4} strokeDasharray="3 0" />
+    <ReferenceLine y={87} stroke="#FF9F1C" strokeWidth={0.4} strokeDasharray="3 0" />
+    <ReferenceLine y={79} stroke="#f97373" strokeWidth={0.4} strokeDasharray="3 0" />
 
     <Tooltip
       formatter={(value) => [`${value}%`, "SpO₂"]}

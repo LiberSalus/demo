@@ -283,3 +283,10 @@ input[type=number]::-webkit-outer-spin-button {
 .dotBaja:hover {
   transform: scale(1.1);
 }
+
+
+@media (max-width: 600px) {
+  .modal {
+    width: calc(85vw - 3rem);
+  }
+}

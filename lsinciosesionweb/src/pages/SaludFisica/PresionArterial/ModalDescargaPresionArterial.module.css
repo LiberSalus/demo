@@ -268,3 +268,21 @@
     display: none !important;
   }
 }
+
+@media (max-width: 600px) {
+    .modal {
+    position: fixed;
+    left:50%;
+    top: 55%;
+    transform: translate(-50%, -70%);
+    width: calc(85vw - 3rem);
+    max-height: min(80vh, 740px);
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+}

@@ -1,6 +1,6 @@
 // mesat/src/components/PresionArterial/UltimosRegistros.jsx
 import React from "react";
-import styles from "./UltimosRegistro.module.css";
+import styles from "./UltimosRegistros.module.css";
 
 import bien from "./icoVer.svg";
 import alert from "./icoAma.svg";

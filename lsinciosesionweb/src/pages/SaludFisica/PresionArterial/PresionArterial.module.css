@@ -7,3 +7,15 @@
   border-radius: 1rem;
   flex-wrap: wrap;
 }
+
+@media (max-width: 900px) {
+  .PresionArterial {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .izq, .cen, .der {
+    width: calc(90vw - 3rem);
+    margin: 0.5rem 0;
+  }
+}

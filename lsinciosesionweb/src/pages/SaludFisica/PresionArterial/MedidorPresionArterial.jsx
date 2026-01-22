@@ -73,6 +73,31 @@ const MedidorPresionArterial = ({
         style={{ width: "100%", height: "100%" }}
         className={styles.progreso}
       >
+        <defs>
+          {/* IMPORTANTE: para que el rect use el mismo sistema del viewBox */}
+          <clipPath id="clipMedio" clipPathUnits="userSpaceOnUse">
+            {/* Corta “abajo” del medidor: ajusta el height */}
+            <rect x="0" y="0" width="440" height="215" />
+          </clipPath>
+        </defs>
+
+        {/* fondo azul base */}
+        <circle
+          cx="220"
+          cy="100"
+          r="150"
+          fill="none"
+          stroke="#007CBA"
+          strokeWidth="1.5rem"
+          strokeDasharray="50 50"
+          pathLength="100"
+          transform="rotate(180) translate(-440 -310)"
+          transformOrigin="50%"
+          strokeLinecap="round"
+        />
+
+        <g clipPath="url(#clipMedio)">
+
         {/* graduación corta */}
         <circle
           cx="220"
@@ -102,35 +127,7 @@ const MedidorPresionArterial = ({
           transformOrigin="50%"
           className={styles.gradLarga}
         />
-
-        {/* cubre */}
-        <circle
-          cx="220"
-          cy="200"
-          r="130"
-          fill="none"
-          stroke="rgb(252,226,252)"
-          strokeWidth="1.1rem"
-          strokeDasharray="119 122"
-          pathLength="240"
-          transform="rotate(1)translate(3 7)"
-          transformOrigin="50%"
-        />
-
-        {/* fondo azul base */}
-        <circle
-          cx="220"
-          cy="100"
-          r="150"
-          fill="none"
-          stroke="#007CBA"
-          strokeWidth="1.5rem"
-          strokeDasharray="50 50"
-          pathLength="100"
-          transform="rotate(180) translate(-440 -310)"
-          transformOrigin="50%"
-          strokeLinecap="round"
-        />
+        
 
         {/* arco dinámico de rango sistólica–diastólica */}
         <circle
@@ -176,6 +173,11 @@ const MedidorPresionArterial = ({
             />
           </g>
         )}
+        </g>
+
+        
+
+
 
         {/* valores graduación */}
         <g>
@@ -183,12 +185,7 @@ const MedidorPresionArterial = ({
             0
           </text>
 
-          <text
-            className={styles.txtGrd}
-            x="318"
-            y="153"
-            fontFamily="Arial"
-          >
+          <text className={styles.txtGrd} x="318" y="153" fontFamily="Arial">
             40
           </text>
 
@@ -265,6 +262,9 @@ const MedidorPresionArterial = ({
 
       {/* <div className={styles.indAlta}></div> */}
       {/* <div className={styles.indBaja}></div> */}
+      
+
+    
 
       <p className={styles.valorP}>
         {sistolica} - {diastolica} mmHg
@@ -284,6 +284,7 @@ const MedidorPresionArterial = ({
         <img className={styles.mas} src={mas} alt="Agregar" />
         Añadir
       </button>
+
     </div>
   );
 };
