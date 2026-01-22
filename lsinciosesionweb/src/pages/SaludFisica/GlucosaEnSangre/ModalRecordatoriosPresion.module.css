@@ -214,6 +214,8 @@
 .diasRow {
   display: flex;
   gap: 0.4rem;
+  flex-wrap: wrap;
+  
 }
 
 .diaBtn {
