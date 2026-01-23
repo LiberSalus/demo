@@ -33,6 +33,10 @@
   }
 }
 
+.arco {
+  transform: rotate(180deg) translate(-440px, -310px);
+}
+
 .medicion {
   /* border: 1px dashed red; */
   & > :nth-child(1) {

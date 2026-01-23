@@ -66,10 +66,11 @@ const MedidorGlucosa = ({
           stroke="url(#grad)"
           strokeWidth="28"
           strokeDasharray="50 50"
-          transform="rotate(180) translate(-440 -310)"
+          /* transform="rotate(180) translate(-440 -310)" */
           pathLength="100"
           transformOrigin="220 150"
           strokeLinecap="round"
+          className={styles.arco}
         />
 
         {/* <polyline 

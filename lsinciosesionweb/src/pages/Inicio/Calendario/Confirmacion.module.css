@@ -1,0 +1,32 @@
+.cntConfirmacion {
+  margin: 1rem auto;
+  width: 25rem;
+  height: 12.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  background-color: var(--color-bco);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  &>:nth-child(2) {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}
+.ico {
+  margin: 0 auto;
+  width: 25%;
+}
+
+.boton {
+  margin: 0 auto;
+  width: 14.25rem;
+  appearance: none;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-prn);
+  border-radius: 3rem;
+  color: var(--color-bco);
+  cursor: pointer;
+}
