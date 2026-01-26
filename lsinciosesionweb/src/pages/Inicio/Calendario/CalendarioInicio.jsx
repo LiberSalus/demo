@@ -29,8 +29,6 @@ const CITAS_INICIALES = {
   ],
 };
 
-
-
 /**
  * Día custom:
  * - Puntito si hay citas
@@ -84,12 +82,12 @@ function CustomDay(props) {
   const contenidoTooltip = (
     <Box sx={{ p: 0.5 }}>
       <Typography sx={{ fontWeight: 600, fontSize: "0.8rem", mb: 0.5 }}>
-        {citas.length} cita{citas.length > 1 ? "s" : ""} | {day.format("D MMM")} 
+        {citas.length} cita{citas.length > 1 ? "s" : ""} | {day.format("D MMM")}
       </Typography>
 
       {citas.slice(0, 2).map((c) => (
         <Typography key={c.id} sx={{ fontSize: "0.75rem", lineHeight: 1.2 }}>
-          • {c.medico} {c.horario} 
+          • {c.medico} {c.horario}
         </Typography>
       ))}
 
@@ -100,8 +98,6 @@ function CustomDay(props) {
       )}
     </Box>
   );
-
-  
 
   return (
     <Tooltip
@@ -130,17 +126,18 @@ function CustomDay(props) {
   );
 }
 
-const CalendarioInicio = ({ 
+const CalendarioInicio = ({
   compact = false,
-  citasPorFecha = CITAS_INICIALES, 
+  citasPorFecha = CITAS_INICIALES,
   setCitasPorFecha = () => {},
   externalSelectedDate,
   externalOpen,
   onExternalClose,
   onExternalDateChange,
 }) => {
-  
-  const [selectedDate, setSelectedDate] = useState(externalSelectedDate || dayjs());
+  const [selectedDate, setSelectedDate] = useState(
+    externalSelectedDate || dayjs(),
+  );
   const [openModal, setOpenModal] = useState(false);
 
   // sincroniza si viene desde afuera (tarjetas)
@@ -152,13 +149,12 @@ const CalendarioInicio = ({
     if (typeof externalOpen === "boolean") setOpenModal(externalOpen);
   }, [externalOpen]);
 
-
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const openForDay = (day) => {
     setSelectedDate(day);
     setOpenModal(true);
-    onExternalDateChange?.(day)
+    onExternalDateChange?.(day);
   };
 
   const CalendarOnly = (
@@ -216,6 +212,22 @@ const CalendarioInicio = ({
             padding: "4px",
             "&:hover": { backgroundColor: "transparent" },
             "& svg": { fontSize: "2rem" },
+          },
+
+          /* ✅ cuando está abierto el selector de AÑO */
+          "& .MuiYearCalendar-root": {
+            maxHeight: "12rem", // ajusta: 10–14rem recomendado
+            overflowY: "auto",
+            paddingInline: "0.25rem",
+          },
+
+          /* ✅ cada “botón” de año más compacto */
+          "& .MuiPickersYear-yearButton": {
+            height: "2rem",
+            width: "4.2rem", // opcional (compacta columnas)
+            margin: "0.2rem",
+            borderRadius: "999px",
+            fontSize: "0.8rem",
           },
         }}
       />

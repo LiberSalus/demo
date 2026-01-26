@@ -1,7 +1,7 @@
 .cntTarjetasCitas {
-  width: fit-content;
+  width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 0 0.5rem;
   gap: 1rem;
   
