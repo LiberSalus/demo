@@ -95,10 +95,26 @@ export default function Inicio() {
     }
   }, []);
 
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(dayjs());
+  const CITAS_INICIALES = {
+  "2025-11-19": [
+    {
+      id: 1,
+      medico: "Dra. Regina Bustos Díaz",
+      especialidad: "Cardiología",
+      horario: "10:30 am - 11:00 am",
+      tipo: "presencial",
+      lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
+      notas: "Llevar resultados de laboratorio.",
+    },
+  ],
+};
+  
+  const [citasPorFecha, setCitasPorFecha] = useState(CITAS_INICIALES);
 
   const avatarImg = esMujer ? mona : mono;
   const manchaImg = esMujer ? manchaR : manchaA;
+
+
 
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
@@ -136,7 +152,12 @@ export default function Inicio() {
 
         <div className={styles.cntAgenda}>
           <div className={styles.agenda}>
-            <CalendarioInicio compact />
+            <CalendarioInicio 
+              compact
+              citasPorFecha={citasPorFecha}
+              setCitasPorFecha={setCitasPorFecha}
+
+            />
           </div>
           <hr className={styles.hr} />
 
@@ -147,7 +168,7 @@ export default function Inicio() {
             </div>
             <p>Mis Citas</p>
             <div className={`${styles.cntCitas} scroll-container`}>
-              <TarjetasCitas />
+              <TarjetasCitas citasPorFecha={citasPorFecha}/>
             </div>
           </div>
         </div>

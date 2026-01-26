@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useMemo } from "react";
 import TarjetaCita from "./TarjetaCita";
-import { citas } from "./datosCita.js";
 import styles from "./TarjetasCitas.module.css";
+import { buildTarjetasCitas } from "../Calendario/citasUtils";
 
-const TarjetasCitas = () => {
+const TarjetasCitas = ({ citasPorFecha = {} }) => {
+
+  
+
+  const tarjetas = useMemo(
+    () => buildTarjetasCitas(citasPorFecha),
+    [citasPorFecha]
+  );
+
   return (
     <div className={styles.cntTarjetasCitas}>
-
-      
-      {citas.map((cita) => (
+      {tarjetas.map((cita) => (
         <TarjetaCita key={cita.id} {...cita} />
       ))}
     </div>

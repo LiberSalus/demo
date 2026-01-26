@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 import styles from "./FormularioCitaMedica.module.css";
 
+
 dayjs.locale("es-mx");
 
 // genera horarios en bloques de 30 min (ej. 10:00 am - 10:30 am)

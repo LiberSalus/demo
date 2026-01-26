@@ -39,11 +39,10 @@ const CITAS_INICIALES = {
   ],
 };
 
-const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate }) => {
+const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFecha, setCitasPorFecha,  focusSection = "citas" }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   const fecha = selectedDate || dayjs("2025-11-19");
 
-  const [citasPorFecha, setCitasPorFecha] = useState(CITAS_INICIALES);
 
   const keyFechaActual = fecha.format("YYYY-MM-DD");
   const citasDelDia = citasPorFecha[keyFechaActual] || [];
@@ -149,6 +148,7 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate }) => {
             flexDirection: isMobile ? "column" : "row",
             gap: isMobile ? 2 : 3,
             alignItems: "stretch",
+            pointerEvents: showConfirm ? "none" : "auto",
           }}
         >
           {/* ✅ Panel izquierdo compacto en móvil */}
@@ -166,6 +166,7 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate }) => {
               onChangeDate={handleChangeDate}
               citasPorFecha={citasPorFecha}
               isMobile={isMobile} // 👈 por si quieres compactarlo dentro
+              focusSection={focusSection}
             />
           </Box>
 
@@ -191,26 +192,29 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate }) => {
 
         {/* ✅ Overlay confirmación con safe area */}
         {showConfirm && (
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "rgba(15,23,42,0.35)",
-              zIndex: 10,
-              p: 2,
-              pt: isMobile ? "calc(env(safe-area-inset-top) + 16px)" : 2,
-              pb: isMobile ? "calc(env(safe-area-inset-bottom) + 16px)" : 2,
-            }}
-          >
-            <Confirmacion
-              tipo={tipoConfirm}
-              onClose={() => setShowConfirm(false)}
-            />
-          </Box>
-        )}
+  <Box
+    sx={{
+      position: "fixed",        // 👈 clave
+      inset: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(15,23,42,0.35)",
+      backdropFilter: "blur(4px)",
+      zIndex: 2000,             // arriba del dialog content
+      p: 2,
+      pt: "calc(env(safe-area-inset-top) + 16px)",
+      pb: "calc(env(safe-area-inset-bottom) + 16px)",
+      pointerEvents: "auto",
+    }}
+  >
+    <Confirmacion
+      tipo={tipoConfirm}
+      onClose={() => setShowConfirm(false)}
+    />
+  </Box>
+)}
+
       </DialogContent>
     </Dialog>
   );

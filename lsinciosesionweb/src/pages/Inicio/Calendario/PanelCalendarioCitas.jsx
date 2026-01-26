@@ -1,5 +1,5 @@
 //src\pages\Inicio\Calendario\PanelCalendarioCitas.jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   Box,
   Tabs,
@@ -26,14 +26,16 @@ dayjs.locale("es-mx");
 const PanelCalendarioCitas = ({
   selectedDate: selectedDateProp,
   onChangeDate,
-  citasPorFecha = {}, 
+  citasPorFecha = {},
   isMobile,
+  focusSection = "citas",
 }) => {
   const [tab, setTab] = useState("cita");
 
   const [internalDate, setInternalDate] = useState(dayjs("2025-11-19"));
   const selectedDate = selectedDateProp || internalDate;
-
+  
+  const citasHeaderRef = useRef(null);
   const handleDateChange = (newValue) => {
     if (onChangeDate) onChangeDate(newValue);
     else setInternalDate(newValue);
@@ -45,6 +47,23 @@ const PanelCalendarioCitas = ({
   );
 
   const citasDelDia = citasPorFecha[selectedKey] || [];
+
+
+  
+  useEffect(() => {
+  if (focusSection !== "citas") return;
+  if (tab !== "cita") return;
+
+  // espera un tick para que el DOM esté pintado (y el modal termine layout)
+  const t = setTimeout(() => {
+    citasHeaderRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 80);
+
+  return () => clearTimeout(t);
+}, [focusSection, tab, selectedKey]);
 
   const handleTabChange = (_e, value) => setTab(value);
 
@@ -219,8 +238,8 @@ const PanelCalendarioCitas = ({
                 color: "#007CBA",
                 fontSize: "0.75rem",
                 fontWeight: 700,
-                mt: -0.2, // Ajuste fino para acercar las líneas
-                letterSpacing: "0.1px", // Hace que se lea más nítido
+                mt: -0.2, 
+                letterSpacing: "0.1px", 
               }}
             >
               {selectedDate.format("D [de] MMMM [de] YYYY")}
