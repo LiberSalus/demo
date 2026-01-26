@@ -134,9 +134,23 @@ const CalendarioInicio = ({
   compact = false,
   citasPorFecha = CITAS_INICIALES, 
   setCitasPorFecha = () => {},
+  externalSelectedDate,
+  externalOpen,
+  onExternalClose,
+  onExternalDateChange,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+  
+  const [selectedDate, setSelectedDate] = useState(externalSelectedDate || dayjs());
   const [openModal, setOpenModal] = useState(false);
+
+  // sincroniza si viene desde afuera (tarjetas)
+  React.useEffect(() => {
+    if (externalSelectedDate) setSelectedDate(externalSelectedDate);
+  }, [externalSelectedDate]);
+
+  React.useEffect(() => {
+    if (typeof externalOpen === "boolean") setOpenModal(externalOpen);
+  }, [externalOpen]);
 
 
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -144,6 +158,7 @@ const CalendarioInicio = ({
   const openForDay = (day) => {
     setSelectedDate(day);
     setOpenModal(true);
+    onExternalDateChange?.(day)
   };
 
   const CalendarOnly = (
@@ -238,8 +253,11 @@ const CalendarioInicio = ({
 
       <ModalCitaMedica
         open={openModal}
-        onClose={() => setOpenModal(false)}
         selectedDate={selectedDate}
+        onClose={() => {
+          setOpenModal(false);
+          onExternalClose?.();
+        }}
         onChangeDate={setSelectedDate}
         citasPorFecha={citasPorFecha}
         setCitasPorFecha={setCitasPorFecha}

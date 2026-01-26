@@ -11,12 +11,19 @@ const colorEstado = {
   reprogramada: { bg: "#E4B365", texto: "Tu cita ha sido reprogramada" },
 };
 
-const TarjetaCita = ({ nombre, especialidad, fecha, hora, estado }) => {
+const TarjetaCita = ({ nombre, especialidad, fecha, hora, estado, onClick }) => {
   // Seleccionamos el color según el estado o el default
   const info = colorEstado[estado] || colorEstado.aiempo;
 
   return (
-    <div className={styles.TarjetaCita}>
+    <div 
+      className={styles.TarjetaCita}
+      onClick={onClick}
+      role='button'
+      tabIndex={0}
+      onKeyDown={(e) =>(e.key === "Enter" ? onclick?.() : null)}
+      style={{ cursor: onClick ? "pointer" : "default"}}
+    >
       <div className={styles.encabezado}>
         <p className={styles.nombre}>{nombre}</p>
         <p className={styles.especialidad}>{especialidad}</p>

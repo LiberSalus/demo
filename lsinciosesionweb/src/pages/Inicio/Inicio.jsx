@@ -96,25 +96,26 @@ export default function Inicio() {
   }, []);
 
   const CITAS_INICIALES = {
-  "2025-11-19": [
-    {
-      id: 1,
-      medico: "Dra. Regina Bustos Díaz",
-      especialidad: "Cardiología",
-      horario: "10:30 am - 11:00 am",
-      tipo: "presencial",
-      lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
-      notas: "Llevar resultados de laboratorio.",
-    },
-  ],
-};
-  
+    "2025-11-19": [
+      {
+        id: 1,
+        medico: "Dra. Regina Bustos Díaz",
+        especialidad: "Cardiología",
+        horario: "10:30 am - 11:00 am",
+        tipo: "presencial",
+        lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
+        notas: "Llevar resultados de laboratorio.",
+      },
+    ],
+  };
+
   const [citasPorFecha, setCitasPorFecha] = useState(CITAS_INICIALES);
 
   const avatarImg = esMujer ? mona : mono;
   const manchaImg = esMujer ? manchaR : manchaA;
 
-
+  const [openAgendaModal, setOpenAgendaModal] = useState(false);
+  const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
 
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
@@ -152,23 +153,32 @@ export default function Inicio() {
 
         <div className={styles.cntAgenda}>
           <div className={styles.agenda}>
-            <CalendarioInicio 
+            <CalendarioInicio
               compact
               citasPorFecha={citasPorFecha}
               setCitasPorFecha={setCitasPorFecha}
-
+              externalSelectedDate={selectedAgendaDay}
+              externalOpen={openAgendaModal}
+              onExternalClose={() => setOpenAgendaModal(false)}
+              onExternalDateChange={setSelectedAgendaDay}
             />
           </div>
           <hr className={styles.hr} />
 
           <div className={styles.cntTarjetasAlertas}>
-          <p>Mis Medicamentos</p>
+            <p>Mis Medicamentos</p>
             <div className={`${styles.cntAlertas} scroll-container`}>
               <TarjetasMedicamentosIco />
             </div>
             <p>Mis Citas</p>
             <div className={`${styles.cntCitas} scroll-container`}>
-              <TarjetasCitas citasPorFecha={citasPorFecha}/>
+              <TarjetasCitas 
+                citasPorFecha={citasPorFecha}
+                onOpenCita={(cita) => {
+                  setSelectedAgendaDay(dayjs(cita._ts));
+                  setOpenAgendaModal(true);
+                }}
+              />
             </div>
           </div>
         </div>
