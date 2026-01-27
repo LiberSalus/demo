@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+// src/pages/Inicio/TarjetaNoticias/TarjetaNoticias.jsx
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import styles from "./TarjetaNoticias.module.css";
 
 import {
@@ -12,164 +13,301 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { noticias as noticiasSeed } from "../TarjetaNoticia/noticiasData";
+import newsFallback from "@/assets/newsFallback.jpg";
+import { noticiasData } from "./noticiasData";
+import { useNewsCarousel } from "./useNewsCarousel";
 
-const TarjetaNoticias = ({ noticias = noticiasSeed }) => {
+// Ajustes autoplay
+const DURACION_MS = 4500;
+const TICK_MS = 80;
+
+function safeImg(url) {
+  return url || newsFallback;
+}
+
+function formatFecha(fechaStr) {
+  // deja tal cual o ponle tu formato (dayjs si quieres)
+  return fechaStr || "";
+}
+
+export default function TarjetaNoticias() {
+  const autoScrollingRef = useRef(false);
+
   const isMobile = useMediaQuery("(max-width:600px)");
+
+  const lista = useMemo(() => noticiasData ?? [], []);
+  const length = lista.length;
+
+  const {
+    index,
+    progress,
+    goTo,
+    pause,
+    resume,
+    pauseFor,
+    setIndex,
+    setProgress,
+  } = useNewsCarousel({ length: lista.length, durationMs: 4500, tickMs: 80 });
+
+  // modal
   const [open, setOpen] = useState(false);
-  const [nota, setNota] = useState(null);
+  const [selected, setSelected] = useState(null);
 
-  const lista = useMemo(() => noticias ?? [], [noticias]);
+  // carrusel ref
+  const carruselRef = useRef(null);
 
-  const abrir = (n) => {
-    setNota(n);
+  const openModal = (n) => {
+    setSelected(n);
     setOpen(true);
+    pause();
   };
 
-  const cerrar = () => {
+  const closeModal = () => {
     setOpen(false);
-    setNota(null);
+    setSelected(null);
+    resume();
   };
+
+  // ✅ SCROLL SOLO HORIZONTAL (evita que la página se brinque)
+  useEffect(() => {
+    const el = carruselRef.current;
+    if (!el) return;
+
+    const slide = el.querySelector(`[data-slide="${index}"]`);
+    if (!slide) return;
+
+    const paddingLeft = 8;
+    const targetLeft = Math.max(0, slide.offsetLeft - paddingLeft);
+
+    autoScrollingRef.current = true;
+    el.scrollTo({ left: targetLeft, behavior: "smooth" });
+
+    const t = setTimeout(() => {
+      autoScrollingRef.current = false;
+    }, 350);
+
+    return () => clearTimeout(t);
+  }, [index]);
+
+  // sincronizar index si usuario scrollea manual
+  const handleScroll = () => {
+    if (autoScrollingRef.current) return;
+
+    const el = carruselRef.current;
+    if (!el) return;
+
+    // throttle con RAF
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+    rafRef.current = requestAnimationFrame(() => {
+      const slides = Array.from(el.querySelectorAll("[data-slide]"));
+      if (!slides.length) return;
+
+      const left = el.scrollLeft;
+      let closest = 0;
+      let minDist = Infinity;
+
+      slides.forEach((s) => {
+        const dist = Math.abs(s.offsetLeft - left);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = Number(s.dataset.slide);
+        }
+      });
+
+      setIndex((prev) => (prev === closest ? prev : closest));
+      setProgress(0);
+
+      // ✅ el usuario interactuó: pausa y reanuda después
+      pauseFor(2200);
+    });
+  };
+
+  if (!length) {
+    return (
+      <div className={styles.TarjetaNoticias}>
+        <div className={styles.header}>
+          <h3 className={styles.titulo}>Noticias</h3>
+          <p className={styles.tip}>No hay noticias disponibles</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className={styles.TarjetaNoticias}>
-        {/* Header del widget */}
-        <div className={styles.header}>
-          <div className={styles.titulo}>Noticias</div>
-          <div className={styles.subtitulo}>Desliza para ver más</div>
-        </div>
+    <div className={styles.TarjetaNoticias}>
+      <div className={styles.header}>
+        <h3 className={styles.titulo}>Noticias</h3>
+        <p className={styles.tip}>Desliza o deja que avance</p>
+      </div>
 
-        {/* Carrusel */}
-        <div className={`${styles.carrusel} scroll-container`}>
-          {lista.map((n) => (
-            <div key={n.id} className={styles.slide}>
-              <div
-                className={styles.cardNoticia}
-                role="button"
-                tabIndex={0}
-                onClick={() => abrir(n)}
-                onKeyDown={(e) => (e.key === "Enter" ? abrir(n) : null)}
-              >
-                <div className={styles.cntImg}>
-                  <img src={n.imagen} alt={n.titulo} />
-                </div>
-
-                <div className={styles.cntInfo}>
-                  <div className={styles.meta}>
-                    <span className={styles.categoria}>{n.categoria}</span>
-                    <span className={styles.fecha}>{formatearFecha(n.fecha)}</span>
-                  </div>
-
-                  <h3>{n.titulo}</h3>
-                  <p>{n.resumenCorto}</p>
-
-                  <div className={styles.fuente}>{n.fuente}</div>
-                </div>
-              </div>
+      <div
+        ref={carruselRef}
+        className={styles.carrusel}
+        onScroll={handleScroll}
+        onMouseEnter={!isMobile ? pause : undefined}
+        onMouseLeave={!isMobile ? resume : undefined}
+        onTouchStart={isMobile ? () => pauseFor(2500) : undefined}
+        onTouchEnd={isMobile ? () => pauseFor(2500) : undefined}
+        onPointerDown={!isMobile ? () => pauseFor(2500) : undefined}
+        onPointerUp={!isMobile ? () => pauseFor(2500) : undefined}
+      >
+        {lista.map((n, i) => (
+          <button
+            key={n.id}
+            type="button"
+            className={styles.card}
+            data-slide={i}
+            onMouseDown={(e) => e.preventDefault()} // ✅ evita focus jump raro
+            onClick={() => openModal(n)}
+          >
+            <div className={styles.cntImg}>
+              <img
+                src={safeImg(n.imagen)}
+                alt={n.titulo}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = newsFallback;
+                }}
+              />
             </div>
-          ))}
-        </div>
+
+            <div className={styles.cntInfo}>
+              <div className={styles.metaRow}>
+                <span className={styles.chip}>{n.categoria || "Salud"}</span>
+                <span className={styles.fecha}>{formatFecha(n.fecha)}</span>
+              </div>
+
+              <h4 className={styles.titCard}>{n.titulo}</h4>
+              <p className={styles.resumen}>{n.resumenCorto}</p>
+
+              <p className={styles.fuente}>{n.fuente}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Barras */}
+      <div className={styles.barras}>
+        {lista.map((_, i) => {
+          const fill = i < index ? 1 : i > index ? 0 : progress;
+          return (
+            <button
+              key={i}
+              type="button"
+              className={styles.barraBtn}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => goTo(i)}
+              aria-label={`Ir a noticia ${i + 1}`}
+            >
+              <div className={styles.barraBase}>
+                <div
+                  className={styles.barraFill}
+                  style={{ width: `${Math.round(fill * 100)}%` }}
+                />
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {/* Modal */}
       <Dialog
         open={open}
-        onClose={cerrar}
+        onClose={closeModal}
         fullScreen={isMobile}
-        maxWidth="sm"
-        fullWidth={!isMobile}
+        maxWidth="md"
+        fullWidth
+        disableRestoreFocus // ✅ evita scroll/focus al cerrar
         PaperProps={{
-          sx: {
-            borderRadius: isMobile ? 0 : 3,
-            overflow: "hidden",
-            bgcolor: "#F8FAFC",
-          },
+          sx: { borderRadius: isMobile ? 0 : 3, overflow: "hidden" },
         }}
       >
         <DialogTitle
           sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 2,
-            bgcolor: "rgba(248,250,252,0.92)",
-            backdropFilter: "blur(10px)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            py: 1.5,
+            justifyContent: "space-between",
+            gap: 2,
           }}
         >
-          <Typography sx={{ fontWeight: 900 }}>Resumen</Typography>
-          <IconButton
-            onClick={cerrar}
-            sx={{ position: "absolute", right: 10, top: 10 }}
-          >
+          <Typography sx={{ fontWeight: 800 }}>
+            {selected?.titulo || "Noticia"}
+          </Typography>
+
+          <IconButton onClick={closeModal}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent sx={{ p: 2.25 }}>
-          {nota && (
-            <>
-              <Box
-                sx={{
-                  borderRadius: 2,
-                  overflow: "hidden",
-                  border: "1px solid rgba(15,23,42,0.10)",
-                  mb: 1.5,
+        <DialogContent dividers sx={{ p: 0 }}>
+          <Box
+            sx={{
+              height: isMobile ? 200 : 260,
+              backgroundImage: `url(${safeImg(selected?.imagen)})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundColor: "#E2E8F0",
+            }}
+          />
+
+          <Box sx={{ p: isMobile ? 2 : 3 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 1,
+                mb: 1,
+              }}
+            >
+              <Typography sx={{ fontWeight: 800, color: "#0EA5E9" }}>
+                {selected?.categoria || "Salud"}
+              </Typography>
+              <Typography sx={{ color: "#64748B" }}>
+                {formatFecha(selected?.fecha)}
+              </Typography>
+            </Box>
+
+            <Typography sx={{ color: "#334155", mb: 1 }}>
+              {selected?.resumenLargo || selected?.resumenCorto}
+            </Typography>
+
+            {!!selected?.fuente && (
+              <Typography sx={{ color: "#64748B", fontSize: "0.85rem" }}>
+                Fuente: {selected.fuente}
+              </Typography>
+            )}
+
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                gap: 1,
+                justifyContent: "flex-end",
+                flexWrap: "wrap",
+              }}
+            >
+              <Button onClick={closeModal} variant="outlined">
+                Cerrar
+              </Button>
+
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (selected?.url)
+                    window.open(selected.url, "_blank", "noopener,noreferrer");
                 }}
+                disabled={!selected?.url}
               >
-                <Box
-                  sx={{
-                    height: isMobile ? 180 : 220,
-                    backgroundImage: `url(${nota.imagen})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
-              </Box>
-
-              <Typography sx={{ fontWeight: 900, fontSize: "1.1rem", mb: 0.75 }}>
-                {nota.titulo}
-              </Typography>
-
-              <Typography sx={{ color: "#0f172a", lineHeight: 1.5 }}>
-                {nota.resumenLargo}
-              </Typography>
-
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                <Button
-                  variant="contained"
-                  endIcon={<OpenInNewIcon />}
-                  onClick={() => window.open(nota.url, "_blank", "noopener,noreferrer")}
-                  sx={{ borderRadius: 999, px: 4, textTransform: "none", fontWeight: 800 }}
-                >
-                  Ver noticia
-                </Button>
-              </Box>
-            </>
-          )}
+                Ver noticia
+              </Button>
+            </Box>
+          </Box>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
-};
-
-function formatearFecha(iso) {
-  if (!iso) return "";
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("es-MX", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return iso;
-  }
 }
-
-export default TarjetaNoticias;
