@@ -5,6 +5,7 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  ReferenceLine,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -142,6 +143,11 @@ const GraficaGlucosa = ({
             data={data}
             margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
           >
+            <ReferenceLine y={126} stroke="#fd8d8d" strokeWidth={1.9} strokeDasharray="10 10" />
+            <ReferenceLine y={110} stroke="#f6e68b" strokeWidth={1.9} strokeDasharray="10 10" />
+            <ReferenceLine y={70}  stroke="#98dbd3" strokeWidth={1.9} strokeDasharray="10 10" />
+            {/* <ReferenceLine y={60}  stroke="#3dcdf5" strokeWidth={1.9} strokeDasharray="10 10" /> */}
+
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="label"

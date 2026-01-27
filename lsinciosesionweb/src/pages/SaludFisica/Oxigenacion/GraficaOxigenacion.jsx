@@ -176,10 +176,10 @@ const GraficaOxigenacion = ({
       className={styles.font}
     />
 
-    <ReferenceLine y={97} stroke="#16a34a" strokeWidth={0.4} strokeDasharray="3 0" />
-    <ReferenceLine y={92} stroke="#FFD93D" strokeWidth={0.4} strokeDasharray="3 0" />
-    <ReferenceLine y={87} stroke="#FF9F1C" strokeWidth={0.4} strokeDasharray="3 0" />
-    <ReferenceLine y={79} stroke="#f97373" strokeWidth={0.4} strokeDasharray="3 0" />
+    <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
+    <ReferenceLine y={95}  stroke="#FFD93D" strokeWidth={1.9} strokeDasharray="10 10" />
+    <ReferenceLine y={90}  stroke="#FF9F1C" strokeWidth={1.9} strokeDasharray="10 10" />
+    <ReferenceLine y={85}  stroke="#f97373" strokeWidth={1.9} strokeDasharray="10 10" />
 
     <Tooltip
       formatter={(value) => [`${value}%`, "SpO₂"]}

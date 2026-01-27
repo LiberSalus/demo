@@ -11,6 +11,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  ReferenceLine,
 } from "recharts";
 
 // ✅ MOCKS (mismo patrón que Glucosa)
@@ -134,6 +135,8 @@ const GraficaFrecuenciaCardiaca = ({
         <ResponsiveContainer width="100%" height={180}>
           <LineChart data={data} margin={{ top: 10, right: 20, bottom: 0, left: -20 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
+            <ReferenceLine y={60}  stroke="#f97373" strokeWidth={1.9} strokeDasharray="10 10" />
             <XAxis
               dataKey="label"
               tick={{ fontSize: 10, fill: "#94a3b8" }}

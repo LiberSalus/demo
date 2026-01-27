@@ -116,7 +116,9 @@ const FrecuenciaDiaria = ({
             />
 
             {/* Reference: mínimo teórico */}
-            <ReferenceLine y={FREC_MIN} stroke="#ef4444" strokeWidth={1.5} />
+            {/* <ReferenceLine y={FREC_MIN} stroke="#ef4444" strokeWidth={1.5} /> */}
+            <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
+            <ReferenceLine y={60}  stroke="#f97373" strokeWidth={1.9} strokeDasharray="10 10" />
 
             {/* Reference: promedio */}
             {mean > 0 && (

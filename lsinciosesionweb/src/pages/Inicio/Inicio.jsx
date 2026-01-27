@@ -33,7 +33,7 @@ import CalendarioInicio from "./Calendario/CalendarioInicio";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
-  const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
+  const [esMujer, setEsMujer] = useState(false); // false = hombre por defecto
 
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;

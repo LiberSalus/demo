@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  ReferenceArea,
   Tooltip,
 } from "recharts";
 
@@ -136,7 +137,12 @@ const GraficaPresionArterial = ({
         <ResponsiveContainer width="100%" height={180}>
           <LineChart data={data} margin={{ top: 10, right: 20, bottom: 0, left: -20 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-
+            <ReferenceArea
+              y1={80} y2={120}
+              fill="#22c55e"
+              fillOpacity={0.1}
+              
+            />
             <XAxis
               dataKey="label"
               tick={{ fontSize: 10, fill: "#94a3b8" }}

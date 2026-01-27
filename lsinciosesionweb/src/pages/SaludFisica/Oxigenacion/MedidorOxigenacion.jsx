@@ -8,6 +8,7 @@ import {
   ComposedChart,
   Scatter,
   Line,
+  ReferenceLine,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -113,7 +114,12 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
       margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
     >
       <CartesianGrid strokeDasharray="3 3" vertical={false} />
-
+      <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
+      <ReferenceLine y={95} stroke="#ffd93d" strokeWidth={1.9} strokeDasharray="10 10" />
+      <ReferenceLine y={90} stroke="#ff9f1c" strokeWidth={1.9} strokeDasharray="10 10" />
+      <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
+      
+      
       <XAxis
         type="number"
         dataKey="hora"
@@ -153,7 +159,7 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
         dot={false}
         activeDot={{ r: 5 }}
       />
-
+    
       {/* ✅ Puntos pequeños con borde blanco */}
       <Scatter
         dataKey="spo2"
