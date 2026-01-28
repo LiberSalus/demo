@@ -44,8 +44,9 @@
 
   & .cntImgMono {
     /* border: 1px dashed darkgoldenrod; */
-    width: 35%;
-    margin: rem;
+    width: 20vw;
+    height: 100%;
+    
     z-index: 1;
     text-align: center;
 
@@ -266,8 +267,10 @@
     flex-direction: column;
     flex-wrap: wrap;
 
+
     &>.cntImgMono {
       width: 100%;
+      
 
       &>img {
         width: 12rem;

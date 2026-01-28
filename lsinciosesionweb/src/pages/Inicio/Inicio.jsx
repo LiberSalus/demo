@@ -31,9 +31,12 @@ import TarjetasCitas from "./TarjetasCitas/TarjetasCitas";
 
 import CalendarioInicio from "./Calendario/CalendarioInicio";
 
+import Mona3d from "./Monos3d/Mona3d";
+import Mono3d from "./Monos3d/Mono3d"
+
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
-  const [esMujer, setEsMujer] = useState(false); // false = hombre por defecto
+  const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
 
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;
@@ -121,10 +124,10 @@ export default function Inicio() {
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
-          <img className={styles.cuadro} src={cuadro} />
           <img className={styles.mancha} src={manchaImg} />
           <div className={styles.cntImgMono}>
-            <img className={styles.mono} src={avatarImg} />
+            {/* <img className={styles.mono} src={avatarImg} /> */}
+            <Mona3d/>
           </div>
 
           <div className={styles.cntPie}>

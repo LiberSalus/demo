@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/CalendarioInicio.jsx
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
 import ModalCitaMedica from "./ModalCitaMedica";
+import { isTakeDay } from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
 
@@ -31,8 +32,8 @@ const CITAS_INICIALES = {
 
 /**
  * Día custom:
- * - Puntito si hay citas
- * - Tooltip (hover) en desktop con lista: horario + médico
+ * - Puntito si hay citas o medicamentos
+ * - Tooltip (hover) en desktop con lista: horario + médico (solo citas por ahora)
  * - En móvil no hay hover => no tooltip
  */
 function CustomDay(props) {
@@ -40,14 +41,19 @@ function CustomDay(props) {
     day,
     outsideCurrentMonth,
     citasPorFecha,
+    medsTieneEnFecha, // fn(key) => boolean
     isMobile,
-    onOpenDay, // handler para abrir modal (tap o doble click)
+    onOpenDay,
     ...other
   } = props;
 
   const key = day.format("YYYY-MM-DD");
   const citas = citasPorFecha?.[key] || [];
   const hayCitas = citas.length > 0;
+
+  const hayMeds = medsTieneEnFecha ? medsTieneEnFecha(key) : false;
+
+  const hayAlgo = hayCitas || hayMeds;
 
   const dayNode = (
     <PickersDay
@@ -58,7 +64,7 @@ function CustomDay(props) {
       onDoubleClick={!isMobile ? () => onOpenDay?.(day) : undefined}
       sx={{
         ...(other.sx || {}),
-        ...(hayCitas && {
+        ...(hayAlgo && {
           position: "relative",
           "&::after": {
             content: '""',
@@ -77,6 +83,7 @@ function CustomDay(props) {
   );
 
   // Si no hay citas o es móvil -> regresamos normal (sin tooltip)
+  // (Tooltip por ahora solo para citas, como lo venías usando)
   if (!hayCitas || isMobile) return dayNode;
 
   const contenidoTooltip = (
@@ -120,7 +127,6 @@ function CustomDay(props) {
         arrow: { sx: { color: "white" } },
       }}
     >
-      {/* span para que Tooltip funcione bien con children */}
       <span>{dayNode}</span>
     </Tooltip>
   );
@@ -130,13 +136,17 @@ const CalendarioInicio = ({
   compact = false,
   citasPorFecha = CITAS_INICIALES,
   setCitasPorFecha = () => {},
+
+  // 👇 nuevo: reglas de medicamentos (si aún no las pasas, no rompe nada)
+  medicamentos = [],
+
   externalSelectedDate,
   externalOpen,
   onExternalClose,
   onExternalDateChange,
 }) => {
   const [selectedDate, setSelectedDate] = useState(
-    externalSelectedDate || dayjs(),
+    externalSelectedDate || dayjs()
   );
   const [openModal, setOpenModal] = useState(false);
 
@@ -157,32 +167,37 @@ const CalendarioInicio = ({
     onExternalDateChange?.(day);
   };
 
+  // ✅ función para saber si hay medicamento en una fecha (para el puntito)
+  const medsTieneEnFecha = useMemo(() => {
+    if (!Array.isArray(medicamentos) || medicamentos.length === 0) {
+      return () => false;
+    }
+    return (dateKey) => medicamentos.some((r) => isTakeDay(r, dateKey));
+  }, [medicamentos]);
+
   const CalendarOnly = (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es-mx">
       <DateCalendar
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate)}
-        // ✅ aquí metemos nuestro día custom
         slots={{ day: CustomDay }}
         slotProps={{
           day: (ownerState) => ({
             citasPorFecha,
+            medsTieneEnFecha,
             isMobile,
             onOpenDay: openForDay,
-            // 👇 MUI necesita day/outsideCurrentMonth en el slot day
             day: ownerState.day,
             outsideCurrentMonth: ownerState.outsideCurrentMonth,
           }),
         }}
         sx={{
           width: "85%",
-
           "& .MuiDayCalendar-weekContainer": {
             minHeight: "1.2rem",
             marginBottom: "0.1rem",
             width: "100%",
           },
-
           "& .MuiPickersDay-root": {
             height: "1.6rem",
             width: "1.6rem",
@@ -190,41 +205,33 @@ const CalendarioInicio = ({
             margin: "0px 12px",
             fontSize: "0.7rem",
           },
-
           "& .MuiTypography-root": {
             fontSize: "0.7rem",
             margin: "0px 7px",
           },
-
           "& .MuiPickersCalendarHeader-label": {
             fontSize: "0.95rem",
             fontWeight: "bold",
           },
-
           "& .MuiPickersArrowSwitcher-root": {
             justifyContent: "space-between",
             marginBottom: "0.5rem",
             transform: "translateY(0.5rem)",
           },
-
           "& .MuiPickersArrowSwitcher-button": {
             color: "#1976d2",
             padding: "4px",
             "&:hover": { backgroundColor: "transparent" },
             "& svg": { fontSize: "2rem" },
           },
-
-          /* ✅ cuando está abierto el selector de AÑO */
           "& .MuiYearCalendar-root": {
-            maxHeight: "12rem", // ajusta: 10–14rem recomendado
+            maxHeight: "12rem",
             overflowY: "auto",
             paddingInline: "0.25rem",
           },
-
-          /* ✅ cada “botón” de año más compacto */
           "& .MuiPickersYear-yearButton": {
             height: "2rem",
-            width: "4.2rem", // opcional (compacta columnas)
+            width: "4.2rem",
             margin: "0.2rem",
             borderRadius: "999px",
             fontSize: "0.8rem",
@@ -257,7 +264,7 @@ const CalendarioInicio = ({
 
           <Typography variant="body2" sx={{ mt: 1, color: "#64748B" }}>
             {isMobile
-              ? "Toca un día para crear o revisar una cita."
+              ? "Toca un día para crear o revisar una cita o medicamento."
               : "Pasa el mouse para ver citas. Doble clic para abrir."}
           </Typography>
         </Box>

@@ -1,13 +1,6 @@
-//src\pages\Inicio\Calendario\PanelCalendarioCitas.jsx
+// src/pages/Inicio/Calendario/PanelCalendarioCitas.jsx
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import {
-  Box,
-  Tabs,
-  Tab,
-  Card,
-  Typography,
-  Link as MuiLink,
-} from "@mui/material";
+import { Box, Tabs, Tab, Card, Typography, Link as MuiLink } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -19,7 +12,13 @@ import horario from "./icoHorario.svg";
 import lugar from "./icoLugar.svg";
 import profesion from "./icoProfesion.svg";
 import linea from "./icoEnlinea.svg";
-import notas from "./icoNotas.svg"
+import notasIco from "./icoNotas.svg";
+
+import {
+  buildCalendarPaint,
+  isTakeDay,
+  buildDailyTimes,
+} from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
 
@@ -28,14 +27,36 @@ const PanelCalendarioCitas = ({
   onChangeDate,
   citasPorFecha = {},
   isMobile,
+
+  // 👇 control del tab desde el Modal (si no vienen, funciona como antes)
+  tab: tabProp,
+  onTabChange,
+
+  // 👇 medicamentos (reglas / tratamientos)
+  medicamentos = [],
+
+  // 👇 medicamento seleccionado para pintar (si no vienen, lo maneja interno)
+  selectedMedId: selectedMedIdProp,
+  onSelectMedId,
+
   focusSection = "citas",
 }) => {
-  const [tab, setTab] = useState("cita");
+  const [internalTab, setInternalTab] = useState("cita");
+  const tab = tabProp ?? internalTab;
 
   const [internalDate, setInternalDate] = useState(dayjs("2025-11-19"));
   const selectedDate = selectedDateProp || internalDate;
-  
+
+  const [internalSelectedMedId, setInternalSelectedMedId] = useState(null);
+  const selectedMedId = selectedMedIdProp ?? internalSelectedMedId;
+
   const citasHeaderRef = useRef(null);
+
+  const handleTabChange = (_e, value) => {
+    if (onTabChange) onTabChange(value);
+    else setInternalTab(value);
+  };
+
   const handleDateChange = (newValue) => {
     if (onChangeDate) onChangeDate(newValue);
     else setInternalDate(newValue);
@@ -48,28 +69,75 @@ const PanelCalendarioCitas = ({
 
   const citasDelDia = citasPorFecha[selectedKey] || [];
 
-
-  
+  // scroll hacia lista (citas) cuando se abre en esa sección
   useEffect(() => {
-  if (focusSection !== "citas") return;
-  if (tab !== "cita") return;
+    if (focusSection !== "citas") return;
+    if (tab !== "cita") return;
 
-  // espera un tick para que el DOM esté pintado (y el modal termine layout)
-  const t = setTimeout(() => {
-    citasHeaderRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, 80);
+    const t = setTimeout(() => {
+      citasHeaderRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 80);
 
-  return () => clearTimeout(t);
-}, [focusSection, tab, selectedKey]);
+    return () => clearTimeout(t);
+  }, [focusSection, tab, selectedKey]);
 
-  const handleTabChange = (_e, value) => setTab(value);
+  // --- Medicamentos del día (tratamientos que tienen toma en selectedKey)
+  const medsDelDia = useMemo(() => {
+    return (medicamentos || []).filter((r) => isTakeDay(r, selectedKey));
+  }, [medicamentos, selectedKey]);
 
+  // Si no hay selección y hay meds del día, elegimos el primero para pintar
+  useEffect(() => {
+    if (tab !== "medicamento") return;
+    if (selectedMedId) return;
+    if (medsDelDia.length === 0) return;
+
+    const firstId = medsDelDia[0].id;
+    if (onSelectMedId) onSelectMedId(firstId);
+    else setInternalSelectedMedId(firstId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, medsDelDia.length]);
+
+  const selectedMedRule = useMemo(() => {
+    if (!selectedMedId) return null;
+    return (medicamentos || []).find((r) => r.id === selectedMedId) || null;
+  }, [medicamentos, selectedMedId]);
+
+  // --- Pintado del calendario del modal (solo en tab medicamento)
+  const monthStartKey = useMemo(
+    () => selectedDate.startOf("month").format("YYYY-MM-DD"),
+    [selectedDate]
+  );
+  const monthEndKey = useMemo(
+    () => selectedDate.endOf("month").format("YYYY-MM-DD"),
+    [selectedDate]
+  );
+
+  const paint = useMemo(() => {
+    if (tab !== "medicamento") return null;
+    if (!selectedMedRule) return null;
+    return buildCalendarPaint(selectedMedRule, monthStartKey, monthEndKey);
+  }, [tab, selectedMedRule, monthStartKey, monthEndKey]);
+
+  // Citas: puntito en el calendario del modal
   const tieneCitas = (day) => {
     const key = day.format("YYYY-MM-DD");
-    return !!citasPorFecha[key];
+    const arr = citasPorFecha[key] || [];
+    return arr.length > 0;
+  };
+
+  const handleSelectMed = (id) => {
+    if (onSelectMedId) onSelectMedId(id);
+    else setInternalSelectedMedId(id);
+  };
+
+  const renderHorasResumen = (rule) => {
+    const times = buildDailyTimes(rule.frecuenciaHoras, rule.horaInicio);
+    if (times.length <= 3) return times.join(", ");
+    return `${times.slice(0, 2).join(", ")} +${times.length - 2} más`;
   };
 
   return (
@@ -86,7 +154,6 @@ const PanelCalendarioCitas = ({
       }}
     >
       {/* Tabs tipo switch */}
-      {/* Tabs tipo switch */}
       <Box
         sx={{
           display: "inline-flex",
@@ -102,12 +169,10 @@ const PanelCalendarioCitas = ({
         <Tabs
           value={tab}
           onChange={handleTabChange}
-          TabIndicatorProps={{ style: { display: "none" } }} // sin línea inferior
+          TabIndicatorProps={{ style: { display: "none" } }}
           sx={{
             minHeight: 0,
-            "& .MuiTabs-flexContainer": {
-              gap: 0.5,
-            },
+            "& .MuiTabs-flexContainer": { gap: 0.5 },
             "& .MuiTab-root": {
               textTransform: "none",
               fontWeight: 500,
@@ -121,11 +186,11 @@ const PanelCalendarioCitas = ({
               justifyContent: "center",
             },
             "& .MuiTab-root.Mui-selected": {
-              backgroundColor: "#007CBA", // azul activo
+              backgroundColor: "#007CBA",
               color: "#FFFFFF",
             },
             "& .MuiTab-root:not(.Mui-selected)": {
-              backgroundColor: "#E5F0FB", // pastilla inactiva
+              backgroundColor: "#E5F0FB",
             },
           }}
         >
@@ -145,24 +210,15 @@ const PanelCalendarioCitas = ({
             ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
           }
           sx={{
-            "& .MuiDayCalendar-header": {
-              justifyContent: "space-between",
-              px: 1,
-            },
-            "& .MuiDayCalendar-weekContainer": {
-              justifyContent: "space-between",
-            },
+            "& .MuiDayCalendar-header": { justifyContent: "space-between", px: 1 },
+            "& .MuiDayCalendar-weekContainer": { justifyContent: "space-between" },
             "& .MuiPickersDay-root": {
               fontSize: "0.9rem",
               marginX: 0.1,
               position: "relative",
             },
-            "& .MuiPickersDay-dayOutsideMonth": {
-              opacity: 0.4,
-            },
-            "& .MuiPickersCalendarHeader-root": {
-              mb: 1,
-            },
+            "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.4 },
+            "& .MuiPickersCalendarHeader-root": { mb: 1 },
             "& .MuiPickersCalendarHeader-label": {
               fontWeight: 700,
               fontSize: "1rem",
@@ -173,14 +229,29 @@ const PanelCalendarioCitas = ({
               padding: "4px",
               marginInline: 0.25,
             },
-            zoom: 0.6
+            zoom: 0.6,
           }}
           slotProps={{
             day: (ownerState) => {
               const day = ownerState.day;
+              const key = day.format("YYYY-MM-DD");
+
+              // --- Citas (puntito)
               const hayCitas = tieneCitas(day);
-              return {
-                sx: hayCitas
+
+              // --- Medicamentos (sombreado + círculo según tratamiento seleccionado)
+              const inShade =
+                tab === "medicamento" &&
+                paint &&
+                key >= paint.shadeStart &&
+                key <= paint.shadeEnd;
+
+              const isCircle =
+                tab === "medicamento" && paint && paint.takeDays?.has(key);
+
+              // Estilos combinados
+              const sx = {
+                ...(hayCitas && tab === "cita"
                   ? {
                       "&::after": {
                         content: '""',
@@ -192,14 +263,31 @@ const PanelCalendarioCitas = ({
                         bottom: 4,
                       },
                     }
-                  : undefined,
+                  : null),
+
+                ...(tab === "medicamento" && inShade
+                  ? {
+                      backgroundColor: "rgba(14,165,233,0.12)",
+                      borderRadius: 2,
+                    }
+                  : null),
+
+                ...(tab === "medicamento" && isCircle
+                  ? {
+                      outline: "2px solid #0EA5E9",
+                      outlineOffset: "-2px",
+                      borderRadius: "999px",
+                    }
+                  : null),
               };
+
+              return { sx };
             },
           }}
         />
       </LocalizationProvider>
 
-      {/* Detalle + carrusel horizontal */}
+      {/* Detalle + carrusel horizontal (tarjetitas inferiores) */}
       <Card
         elevation={0}
         sx={{
@@ -218,6 +306,7 @@ const PanelCalendarioCitas = ({
         {tab === "cita" ? (
           <>
             <Typography
+              ref={citasHeaderRef}
               variant="subtitle2"
               sx={{
                 color: "#64748B",
@@ -238,8 +327,8 @@ const PanelCalendarioCitas = ({
                 color: "#007CBA",
                 fontSize: "0.75rem",
                 fontWeight: 700,
-                mt: -0.2, 
-                letterSpacing: "0.1px", 
+                mt: -0.2,
+                letterSpacing: "0.1px",
               }}
             >
               {selectedDate.format("D [de] MMMM [de] YYYY")}
@@ -292,7 +381,7 @@ const PanelCalendarioCitas = ({
                         }}
                       >
                         <img src={profesion} alt="" width={16} height={16} />
-                        <Typography variant="body2" sx={{  fontSize:"0.75rem" }}>
+                        <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
                           {cita.especialidad}
                         </Typography>
                       </Box>
@@ -307,11 +396,15 @@ const PanelCalendarioCitas = ({
                         }}
                       >
                         <img src={horario} alt="" width={16} height={16} />
-                        <Typography variant="body2" sx={{  fontSize:"0.75rem", color:"#007CBA" }}>{cita.horario}</Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: "0.75rem", color: "#007CBA" }}
+                        >
+                          {cita.horario}
+                        </Typography>
                       </Box>
 
-                      {/* notas de cita */}
-
+                      {/* notas */}
                       {cita.notas && (
                         <Box
                           sx={{
@@ -322,18 +415,15 @@ const PanelCalendarioCitas = ({
                           }}
                         >
                           <img
-                            src={notas}
-                            alt="Ubicación"
+                            src={notasIco}
+                            alt="Notas"
                             width={16}
                             height={16}
                             style={{ marginTop: 0 }}
                           />
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: "0.75rem" }}
-                        >
-                          {cita.notas}
-                        </Typography>
+                          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
+                            {cita.notas}
+                          </Typography>
                         </Box>
                       )}
 
@@ -350,11 +440,13 @@ const PanelCalendarioCitas = ({
                           <img
                             src={lugar}
                             alt="Ubicación"
-                            width= {16}
+                            width={16}
                             height={16}
                             style={{ marginTop: 0 }}
                           />
-                          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>{cita.lugar}</Typography>
+                          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
+                            {cita.lugar}
+                          </Typography>
                         </Box>
                       ) : (
                         <>
@@ -366,12 +458,7 @@ const PanelCalendarioCitas = ({
                               mb: 0.5,
                             }}
                           >
-                            <img
-                              src={linea}
-                              alt="En línea"
-                              width={16}
-                              height={16}
-                            />
+                            <img src={linea} alt="En línea" width={16} height={16} />
                             <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
                               Cita en línea
                             </Typography>
@@ -386,14 +473,13 @@ const PanelCalendarioCitas = ({
                               fontSize: "0.9rem",
                               ml: 4,
                               color: cita.enlace ? "#007CBA" : "#94A3B8",
-                              pointerEvents: cita.enlace ? "auto" : "none", // si no hay enlace, no es clickeable
+                              pointerEvents: cita.enlace ? "auto" : "none",
                             }}
                           >
                             Accede a tu consulta aquí
                           </MuiLink>
                         </>
                       )}
-                      
                     </Box>
                   </Card>
                 ))
@@ -415,13 +501,155 @@ const PanelCalendarioCitas = ({
           </>
         ) : (
           <>
-            <Typography variant="subtitle2" sx={{ color: "#64748B", mb: 0.5 }}>
-              Recordatorios de medicamento
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: "#64748B",
+                mb: 0.2,
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.2px",
+              }}
+            >
+              {medsDelDia.length
+                ? "Recordatorios de medicamento del día"
+                : "Sin recordatorios para este día"}
             </Typography>
-            <Typography variant="body2">
-              Aquí mostraremos los medicamentos y horarios asociados a la fecha
-              seleccionada.
+
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#007CBA",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                mt: -0.2,
+                letterSpacing: "0.1px",
+              }}
+            >
+              {selectedDate.format("D [de] MMMM [de] YYYY")}
             </Typography>
+
+            <Box
+              sx={{
+                mt: 1,
+                flex: 1,
+                display: "flex",
+                overflowX: "auto",
+                overflowY: "hidden",
+                gap: 1.5,
+                pb: 0.5,
+              }}
+            >
+              {medsDelDia.length > 0 ? (
+                medsDelDia.map((m) => {
+                  const selected = m.id === selectedMedId;
+                  const times = buildDailyTimes(m.frecuenciaHoras, m.horaInicio);
+
+                  return (
+                    <Card
+                      key={m.id}
+                      elevation={0}
+                      onClick={() => handleSelectMed(m.id)}
+                      sx={{
+                        cursor: "pointer",
+                        flex: "0 0 auto",
+                        minWidth: 360,
+                        maxWidth: 360,
+                        borderRadius: 2,
+                        border: selected
+                          ? "2px solid rgba(14,165,233,0.9)"
+                          : "1px solid #E5E7EB",
+                        p: 1.5,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        backgroundColor: selected
+                          ? "rgba(14,165,233,0.06)"
+                          : "white",
+                        transition: "transform 120ms ease",
+                        "&:active": { transform: "scale(0.99)" },
+                      }}
+                    >
+                      <Box>
+                        {/* Nombre medicamento */}
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontSize: "0.95rem", mb: 0.4 }}
+                        >
+                          {m.medicamento}
+                        </Typography>
+
+                        {/* Presentación + dosis/cantidad */}
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: "0.75rem", color: "#334155" }}
+                        >
+                          {m.presentacion}
+                          {m.dosis ? ` • ${m.dosis}` : ""}
+                          {m.cantidad ? ` • ${m.cantidad}` : ""}
+                        </Typography>
+
+                        {/* Horario (horas del día por frecuencia) */}
+                        <Box sx={{ mt: 0.8 }}>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontSize: "0.75rem", color: "#64748B" }}
+                          >
+                            Horario
+                          </Typography>
+
+                          <Typography
+                            variant="body2"
+                            sx={{ fontSize: "0.75rem", color: "#007CBA", fontWeight: 700 }}
+                          >
+                            {times.length} toma{times.length > 1 ? "s" : ""} •{" "}
+                            {renderHorasResumen(m)}
+                          </Typography>
+                        </Box>
+
+                        {/* Notas */}
+                        {m.notas && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 1,
+                              mt: 1,
+                            }}
+                          >
+                            <img src={notasIco} alt="Notas" width={16} height={16} />
+                            <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
+                              {m.notas}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Box>
+
+                      {/* micro hint */}
+                      <Typography
+                        variant="caption"
+                        sx={{ mt: 1, color: "#94A3B8" }}
+                      >
+                        {selected ? "Seleccionado para ver calendario" : "Toca para ver calendario"}
+                      </Typography>
+                    </Card>
+                  );
+                })
+              ) : (
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="body2" sx={{ color: "#94A3B8" }}>
+                    No hay medicamentos configurados para este día.
+                  </Typography>
+                </Box>
+              )}
+            </Box>
           </>
         )}
       </Card>

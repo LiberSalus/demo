@@ -1,5 +1,5 @@
-// src\pages\Inicio\Calendario\ModalCitaMedica.jsx
-import React, { useState } from "react";
+// src/pages/Inicio/Calendario/ModalCitaMedica.jsx
+import React, { useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -14,46 +14,49 @@ import dayjs from "dayjs";
 
 import PanelCalendarioCitas from "./PanelCalendarioCitas";
 import FormularioCitaMedica from "./FormularioCitaMedica";
+import FormularioMedicamento from "./FormularioMedicamento";
 import Confirmacion from "./Confirmacion";
 
-const CITAS_INICIALES = {
-  "2025-11-19": [
-    {
-      id: 1,
-      medico: "Dra. Regina Bustos Díaz",
-      especialidad: "Cardiología",
-      horario: "10:30 am - 11:00 am",
-      tipo: "presencial",
-      lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
-      notas: "Llevar resultados de laboratorio.",
-    },
-    {
-      id: 2,
-      medico: "Dra. Carolina Mora",
-      especialidad: "Neurología",
-      horario: "11:30 am - 12:00 pm",
-      tipo: "en_linea",
-      enlace: "https://liberzoom.libersalus.com/sala/neu-456",
-      notas: "",
-    },
-  ],
-};
+const ModalCitaMedica = ({
+  open,
+  onClose,
+  selectedDate,
+  onChangeDate,
 
-const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFecha, setCitasPorFecha,  focusSection = "citas" }) => {
+  // ✅ citas (igual que antes)
+  citasPorFecha,
+  setCitasPorFecha,
+
+  // si lo quieres abrir enfocando una sección
+  focusSection = "citas",
+}) => {
   const isMobile = useMediaQuery("(max-width:600px)");
-  const fecha = selectedDate || dayjs("2025-11-19");
-
+  const fecha = selectedDate || dayjs();
 
   const keyFechaActual = fecha.format("YYYY-MM-DD");
-  const citasDelDia = citasPorFecha[keyFechaActual] || [];
+  const citasDelDia = (citasPorFecha?.[keyFechaActual] || []);
 
+  // ✅ tab dual
+  const initialTab =
+    focusSection === "medicamento" || focusSection === "medicamentos"
+      ? "medicamento"
+      : "cita";
+  const [tab, setTab] = useState(initialTab);
+
+  // ✅ medicamentos (reglas/tratamientos) — por ahora local en el modal
+  const [medicamentos, setMedicamentos] = useState([]);
+
+  // ✅ para pintar calendario por medicamento seleccionado
+  const [selectedMedId, setSelectedMedId] = useState(null);
+
+  // ✅ confirmación
   const [showConfirm, setShowConfirm] = useState(false);
   const [tipoConfirm, setTipoConfirm] = useState("cita");
 
-  const manejarGuardar = (datosCita) => {
+  const manejarGuardarCita = (datosCita) => {
     const key = dayjs(datosCita.fecha).format("YYYY-MM-DD");
 
-    setCitasPorFecha((prev) => {
+    setCitasPorFecha?.((prev) => {
       const anteriores = prev[key] || [];
       return {
         ...prev,
@@ -65,9 +68,26 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
     setShowConfirm(true);
   };
 
-  const handleChangeDate = (newDate) => {
-    if (onChangeDate) onChangeDate(newDate);
+  const manejarGuardarMedicamento = (rule) => {
+    setMedicamentos((prev) => {
+      const next = [...prev, rule];
+      return next;
+    });
+
+    setSelectedMedId(rule.id);
+    setTipoConfirm("medicamento");
+    setShowConfirm(true);
   };
+
+  const handleChangeDate = (newDate) => {
+    onChangeDate?.(newDate);
+  };
+
+  // para que el panel muestre foco correcto si vienes externo
+  const computedFocusSection = useMemo(() => {
+    if (tab === "medicamento") return "medicamento";
+    return "citas";
+  }, [tab]);
 
   return (
     <Dialog
@@ -81,19 +101,16 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
           width: isMobile ? "100%" : "min(1100px, 96vw)",
           borderRadius: isMobile ? 0 : 3,
           overflow: "hidden",
-
-          // 👇 fondo más “app”
           bgcolor: "#F8FAFC",
         },
       }}
     >
-      {/* ✅ Header sticky */}
+      {/* Header sticky */}
       <DialogTitle
         sx={{
           position: "sticky",
           top: 0,
           zIndex: 2,
-
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -102,13 +119,11 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
           bgcolor: "rgba(248,250,252,0.9)",
           backdropFilter: "blur(10px)",
           borderBottom: "1px solid rgba(15,23,42,0.08)",
-
-          // ✅ safe area notch
           pt: isMobile ? "calc(env(safe-area-inset-top) + 12px)" : 1.5,
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: "1.15rem" }}>
-          Cita médica
+          {tab === "medicamento" ? "Recordatorio de medicamentos" : "Cita médica"}
         </Typography>
 
         <IconButton
@@ -128,17 +143,11 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
         dividers={false}
         sx={{
           position: "relative",
-
-          // ✅ padding más limpio en móvil
           p: isMobile ? 2 : 3,
-
-          // ✅ scroll seguro (teclado + viewport)
           overflowY: "auto",
           maxHeight: isMobile
             ? "calc(100dvh - (env(safe-area-inset-top) + 64px))"
             : "80dvh",
-
-          // ✅ espacio para home indicator
           pb: isMobile ? "calc(env(safe-area-inset-bottom) + 16px)" : 3,
         }}
       >
@@ -151,7 +160,7 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
             pointerEvents: showConfirm ? "none" : "auto",
           }}
         >
-          {/* ✅ Panel izquierdo compacto en móvil */}
+          {/* Panel izquierdo */}
           <Box
             sx={{
               flex: isMobile ? "0 0 auto" : "0 0 420px",
@@ -165,12 +174,17 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
               selectedDate={fecha}
               onChangeDate={handleChangeDate}
               citasPorFecha={citasPorFecha}
-              isMobile={isMobile} // 👈 por si quieres compactarlo dentro
-              focusSection={focusSection}
+              isMobile={isMobile}
+              tab={tab}
+              onTabChange={setTab}
+              focusSection={computedFocusSection}
+              medicamentos={medicamentos}
+              selectedMedId={selectedMedId}
+              onSelectMedId={setSelectedMedId}
             />
           </Box>
 
-          {/* ✅ Formulario con tarjeta */}
+          {/* Formulario derecho */}
           <Box
             sx={{
               flex: 1,
@@ -181,40 +195,47 @@ const ModalCitaMedica = ({ open, onClose, selectedDate, onChangeDate, citasPorFe
               p: isMobile ? 1.5 : 2,
             }}
           >
-            <FormularioCitaMedica
-              selectedDate={fecha}
-              onGuardar={manejarGuardar}
-              citasDelDia={citasDelDia}
-              isMobile={isMobile}
-            />
+            {tab === "medicamento" ? (
+              <FormularioMedicamento
+                selectedDate={fecha}
+                onGuardar={manejarGuardarMedicamento}
+                isMobile={isMobile}
+              />
+            ) : (
+              <FormularioCitaMedica
+                selectedDate={fecha}
+                onGuardar={manejarGuardarCita}
+                citasDelDia={citasDelDia}
+                isMobile={isMobile}
+              />
+            )}
           </Box>
         </Box>
 
-        {/* ✅ Overlay confirmación con safe area */}
+        {/* Overlay confirmación */}
         {showConfirm && (
-  <Box
-    sx={{
-      position: "fixed",        // 👈 clave
-      inset: 0,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "rgba(15,23,42,0.35)",
-      backdropFilter: "blur(4px)",
-      zIndex: 2000,             // arriba del dialog content
-      p: 2,
-      pt: "calc(env(safe-area-inset-top) + 16px)",
-      pb: "calc(env(safe-area-inset-bottom) + 16px)",
-      pointerEvents: "auto",
-    }}
-  >
-    <Confirmacion
-      tipo={tipoConfirm}
-      onClose={() => setShowConfirm(false)}
-    />
-  </Box>
-)}
-
+          <Box
+            sx={{
+              position: "fixed",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(15,23,42,0.35)",
+              backdropFilter: "blur(4px)",
+              zIndex: 2000,
+              p: 2,
+              pt: "calc(env(safe-area-inset-top) + 16px)",
+              pb: "calc(env(safe-area-inset-bottom) + 16px)",
+              pointerEvents: "auto",
+            }}
+          >
+            <Confirmacion
+              tipo={tipoConfirm}
+              onClose={() => setShowConfirm(false)}
+            />
+          </Box>
+        )}
       </DialogContent>
     </Dialog>
   );
