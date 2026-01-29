@@ -284,7 +284,7 @@ const FormularioMedicamento = ({
 
           <Grid item xs={12} sm={5}>
             <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
-              Dosis
+              Concentración
             </Typography>
             <TextField
               name="dosis"

@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/ModalCitaMedica.jsx
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -22,32 +22,37 @@ const ModalCitaMedica = ({
   onClose,
   selectedDate,
   onChangeDate,
-
-  // ✅ citas (igual que antes)
   citasPorFecha,
   setCitasPorFecha,
-
-  // si lo quieres abrir enfocando una sección
   focusSection = "citas",
+
+  medicamentos = [],
+  setMedicamentos,
+  selectedMedId,
+  onSelectMedId,
+
+  // con qué tab abrir el modal (desde tarjetas o desde calendar)
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   const fecha = selectedDate || dayjs();
 
   const keyFechaActual = fecha.format("YYYY-MM-DD");
-  const citasDelDia = (citasPorFecha?.[keyFechaActual] || []);
+  const citasDelDia = citasPorFecha?.[keyFechaActual] || [];
 
-  // ✅ tab dual
-  const initialTab =
+  // ✅ tab dual: se recalcula cada que abres el modal (muy importante)
+  const desiredTab =
     focusSection === "medicamento" || focusSection === "medicamentos"
       ? "medicamento"
       : "cita";
-  const [tab, setTab] = useState(initialTab);
 
-  // ✅ medicamentos (reglas/tratamientos) — por ahora local en el modal
-  const [medicamentos, setMedicamentos] = useState([]);
+  const [tab, setTab] = useState(desiredTab);
 
-  // ✅ para pintar calendario por medicamento seleccionado
-  const [selectedMedId, setSelectedMedId] = useState(null);
+  // si cambian focusSection/open, re-sincronizamos tab al abrir
+  useEffect(() => {
+    if (!open) return;
+    setTab(desiredTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, focusSection]);
 
   // ✅ confirmación
   const [showConfirm, setShowConfirm] = useState(false);
@@ -57,7 +62,7 @@ const ModalCitaMedica = ({
     const key = dayjs(datosCita.fecha).format("YYYY-MM-DD");
 
     setCitasPorFecha?.((prev) => {
-      const anteriores = prev[key] || [];
+      const anteriores = prev?.[key] || [];
       return {
         ...prev,
         [key]: [...anteriores, { ...datosCita, id: Date.now() }],
@@ -69,12 +74,10 @@ const ModalCitaMedica = ({
   };
 
   const manejarGuardarMedicamento = (rule) => {
-    setMedicamentos((prev) => {
-      const next = [...prev, rule];
-      return next;
-    });
+  setMedicamentos?.((prev) => [...prev, rule]);
+  onSelectMedId?.(rule.id);
 
-    setSelectedMedId(rule.id);
+
     setTipoConfirm("medicamento");
     setShowConfirm(true);
   };
@@ -83,7 +86,7 @@ const ModalCitaMedica = ({
     onChangeDate?.(newDate);
   };
 
-  // para que el panel muestre foco correcto si vienes externo
+  // Para que el panel sepa dónde enfocar scroll
   const computedFocusSection = useMemo(() => {
     if (tab === "medicamento") return "medicamento";
     return "citas";
@@ -92,7 +95,14 @@ const ModalCitaMedica = ({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        // si está confirmación abierta, primero ciérrala
+        if (showConfirm) {
+          setShowConfirm(false);
+          return;
+        }
+        onClose?.();
+      }}
       fullScreen={isMobile}
       maxWidth="lg"
       fullWidth={!isMobile}
@@ -123,11 +133,19 @@ const ModalCitaMedica = ({
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: "1.15rem" }}>
-          {tab === "medicamento" ? "Recordatorio de medicamentos" : "Cita médica"}
+          {tab === "medicamento"
+            ? "Recordatorio de medicamentos"
+            : "Cita médica"}
         </Typography>
 
         <IconButton
-          onClick={onClose}
+          onClick={() => {
+            if (showConfirm) {
+              setShowConfirm(false);
+              return;
+            }
+            onClose?.();
+          }}
           edge="end"
           sx={{
             position: "absolute",
@@ -180,7 +198,7 @@ const ModalCitaMedica = ({
               focusSection={computedFocusSection}
               medicamentos={medicamentos}
               selectedMedId={selectedMedId}
-              onSelectMedId={setSelectedMedId}
+              onSelectMedId={onSelectMedId}
             />
           </Box>
 

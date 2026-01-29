@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/CalendarioInicio.jsx
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -16,24 +16,10 @@ import { isTakeDay } from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
 
-const CITAS_INICIALES = {
-  "2025-11-19": [
-    {
-      id: 1,
-      medico: "Dra. Regina Bustos Díaz",
-      especialidad: "Cardiología",
-      horario: "10:30 am - 11:00 am",
-      tipo: "presencial",
-      lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
-      notas: "Llevar resultados de laboratorio.",
-    },
-  ],
-};
-
 /**
  * Día custom:
  * - Puntito si hay citas o medicamentos
- * - Tooltip (hover) en desktop con lista: horario + médico (solo citas por ahora)
+ * - Tooltip (hover) en desktop con lista: horario + médico (solo citas)
  * - En móvil no hay hover => no tooltip
  */
 function CustomDay(props) {
@@ -82,8 +68,7 @@ function CustomDay(props) {
     />
   );
 
-  // Si no hay citas o es móvil -> regresamos normal (sin tooltip)
-  // (Tooltip por ahora solo para citas, como lo venías usando)
+  // Tooltip solo para citas y solo en desktop
   if (!hayCitas || isMobile) return dayNode;
 
   const contenidoTooltip = (
@@ -134,16 +119,23 @@ function CustomDay(props) {
 
 const CalendarioInicio = ({
   compact = false,
-  citasPorFecha = CITAS_INICIALES,
+
+  // ✅ citas
+  citasPorFecha = {},
   setCitasPorFecha = () => {},
 
-  // 👇 nuevo: reglas de medicamentos (si aún no las pasas, no rompe nada)
+  // ✅ meds (desde Inicio)
   medicamentos = [],
+  setMedicamentos,
+  selectedMedId,
+  onSelectMedId,
 
+  // ✅ control externo (tarjetas)
   externalSelectedDate,
   externalOpen,
   onExternalClose,
   onExternalDateChange,
+
 }) => {
   const [selectedDate, setSelectedDate] = useState(
     externalSelectedDate || dayjs()
@@ -151,11 +143,11 @@ const CalendarioInicio = ({
   const [openModal, setOpenModal] = useState(false);
 
   // sincroniza si viene desde afuera (tarjetas)
-  React.useEffect(() => {
+  useEffect(() => {
     if (externalSelectedDate) setSelectedDate(externalSelectedDate);
   }, [externalSelectedDate]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof externalOpen === "boolean") setOpenModal(externalOpen);
   }, [externalOpen]);
 
@@ -269,7 +261,6 @@ const CalendarioInicio = ({
           </Typography>
         </Box>
       )}
-
       <ModalCitaMedica
         open={openModal}
         selectedDate={selectedDate}
@@ -281,6 +272,12 @@ const CalendarioInicio = ({
         citasPorFecha={citasPorFecha}
         setCitasPorFecha={setCitasPorFecha}
         focusSection="citas"
+        // ✅ ahora el modal ya recibe meds desde Inicio
+        medicamentos={medicamentos}
+        setMedicamentos={setMedicamentos}
+        selectedMedId={selectedMedId}
+        onSelectMedId={setSelectedMedId}
+        focusSection={focusSection}
       />
     </>
   );

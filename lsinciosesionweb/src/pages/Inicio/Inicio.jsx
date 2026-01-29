@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+//src\pages\Inicio\Inicio.jsx
+import React, { useEffect, useState } from "react";
 import styles from "./inicio.module.css";
 import TarjetaAlertas from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
@@ -17,10 +18,6 @@ import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
 dayjs.locale("es");
-import Box from "@mui/material/Box";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
@@ -32,11 +29,48 @@ import TarjetasCitas from "./TarjetasCitas/TarjetasCitas";
 import CalendarioInicio from "./Calendario/CalendarioInicio";
 
 import Mona3d from "./Monos3d/Mona3d";
-import Mono3d from "./Monos3d/Mono3d"
+import Mono3d from "./Monos3d/Mono3d";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
+
+  // ============================
+  // ✅ NUEVO: estado global (en Inicio) para medicamentos
+  // ============================
+  const [medicamentos, setMedicamentos] = useState(() => {
+    // Persistencia opcional (si no existe, arranca vacío)
+    try {
+      const raw = localStorage.getItem("ls_medicamentos_rules");
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [selectedMedId, setSelectedMedId] = useState(null);
+
+  // ✅ Persistencia opcional
+  useEffect(() => {
+    try {
+      localStorage.setItem("ls_medicamentos_rules", JSON.stringify(medicamentos));
+    } catch {
+      null;
+    }
+  }, [medicamentos]);
+
+  // ============================
+  // Calendario / Modal
+  // ============================
+  const [openAgendaModal, setOpenAgendaModal] = useState(false);
+  const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
+
+  const [medicamentos, setMedicamentos] = useState([]);
+  const [selectedMedId, setSelectedMedId] = useState(null);
+
+
+  // ✅ NUEVO: con qué “tab” abre el modal
+  const [agendaFocus, setAgendaFocus] = useState("citas"); // "citas" | "medicamento"
 
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;
@@ -44,7 +78,7 @@ export default function Inicio() {
     window.dispatchEvent(
       new CustomEvent("perfil_min_updated", {
         detail: { esMujer },
-      }),
+      })
     );
   }, [esMujer]);
 
@@ -82,15 +116,14 @@ export default function Inicio() {
         }
 
         // género / sexo (ajusta al nombre real que tengan en backend)
-        // ejemplos que cubrimos: "M", "F", "Hombre", "Mujer", etc.
         const sexo = p?.sexo || p?.genero || p?.gender;
         if (sexo) {
           const s = String(sexo).toLowerCase();
           const mujer =
             s === "f" || s === "mujer" || s === "femenino" || s === "female";
-
           setEsMujer(mujer);
         }
+
         window.dispatchEvent(new Event("perfil_min_updated"));
       }
     } catch {
@@ -117,17 +150,35 @@ export default function Inicio() {
   const avatarImg = esMujer ? mona : mono;
   const manchaImg = esMujer ? manchaR : manchaA;
 
-  const [openAgendaModal, setOpenAgendaModal] = useState(false);
-  const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
+  // ✅ Helpers para abrir modal desde tarjetas
+  const openModalCitas = (tsOrDayjs) => {
+    setAgendaFocus("citas");
+    if (tsOrDayjs?.$d) setSelectedAgendaDay(tsOrDayjs);
+    else if (typeof tsOrDayjs === "number") setSelectedAgendaDay(dayjs(tsOrDayjs));
+    setOpenAgendaModal(true);
+  };
+
+  const openModalMedicamentos = ({ day, medId } = {}) => {
+    setAgendaFocus("medicamento");
+
+    // si te pasan un día específico, lo usamos; si no, usamos el día actual seleccionado
+    if (day?.$d) setSelectedAgendaDay(day);
+    if (typeof day === "number") setSelectedAgendaDay(dayjs(day));
+
+    // si te pasan el medicamento, lo marcamos seleccionado (para pintar el calendario del modal)
+    if (medId != null) setSelectedMedId(medId);
+
+    setOpenAgendaModal(true);
+  };
 
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
-          <img className={styles.mancha} src={manchaImg} />
+          <img className={styles.mancha} src={manchaImg} alt="" />
           <div className={styles.cntImgMono}>
             {/* <img className={styles.mono} src={avatarImg} /> */}
-            <Mona3d/>
+            <Mona3d />
           </div>
 
           <div className={styles.cntPie}>
@@ -145,40 +196,47 @@ export default function Inicio() {
           </div>
         </div>
 
-        {/* <div className={styles.cntAccion}>
-          <hr className={styles.hr} />
-          <div className={styles.cntAccesos}>
-            <div className={styles.acceso}></div>
-            <div className={styles.acceso}></div>
-            <div className={styles.acceso}></div>
-          </div>
-        </div> */}
-
         <div className={styles.cntAgenda}>
           <div className={styles.agenda}>
             <CalendarioInicio
               compact
               citasPorFecha={citasPorFecha}
               setCitasPorFecha={setCitasPorFecha}
+              medicamentos={medicamentos}
               externalSelectedDate={selectedAgendaDay}
               externalOpen={openAgendaModal}
               onExternalClose={() => setOpenAgendaModal(false)}
               onExternalDateChange={setSelectedAgendaDay}
+              medicamentos={medicamentos}
+              setMedicamentos={setMedicamentos}
+              selectedMedId={selectedMedId}
+              setSelectedMedId={setSelectedMedId}
             />
           </div>
+
           <hr className={styles.hr} />
 
           <div className={styles.cntTarjetasAlertas}>
             <p>Mis Medicamentos</p>
             <div className={`${styles.cntAlertas} scroll-container`}>
-              <TarjetasMedicamentosIco />
+              {/* En la siguiente iteración conectamos esto para abrir modal en “medicamento”
+                 y seleccionar medId. Por ahora NO rompe nada. */}
+              <TarjetasMedicamentosIco
+                medicamentos={medicamentos}
+                onOpenMedicamento={(payload) => {
+                  // payload sugerido: { day: dayjs() | ts, medId }
+                  openModalMedicamentos(payload || {});
+                }}
+              />
             </div>
+
             <p>Mis Citas</p>
             <div className={`${styles.cntCitas} scroll-container`}>
-              <TarjetasCitas 
+              <TarjetasCitas
                 citasPorFecha={citasPorFecha}
                 onOpenCita={(cita) => {
                   setSelectedAgendaDay(dayjs(cita._ts));
+                  setAgendaFocus("citas");
                   setOpenAgendaModal(true);
                 }}
               />
@@ -195,7 +253,6 @@ export default function Inicio() {
 
       <div className={styles.seccInfe}>
         <TarjetaAreas />
-
         <TarjetaNoticias />
       </div>
 
