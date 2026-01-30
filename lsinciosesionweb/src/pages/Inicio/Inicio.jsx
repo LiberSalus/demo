@@ -33,13 +33,10 @@ import Mono3d from "./Monos3d/Mono3d";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
-  const [esMujer, setEsMujer] = useState(true); // false = hombre por defecto
+  const [esMujer, setEsMujer] = useState(false);
 
-  // ============================
-  // ✅ NUEVO: estado global (en Inicio) para medicamentos
-  // ============================
+  // ✅ estado central medicamentos (arriba de todo)
   const [medicamentos, setMedicamentos] = useState(() => {
-    // Persistencia opcional (si no existe, arranca vacío)
     try {
       const raw = localStorage.getItem("ls_medicamentos_rules");
       return raw ? JSON.parse(raw) : [];
@@ -47,30 +44,26 @@ export default function Inicio() {
       return [];
     }
   });
-
   const [selectedMedId, setSelectedMedId] = useState(null);
 
-  // ✅ Persistencia opcional
+  // ✅ con qué tab abre el modal
+  const [agendaFocus, setAgendaFocus] = useState("citas");
+
+  // ✅ modal agenda
+  const [openAgendaModal, setOpenAgendaModal] = useState(false);
+  const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
+
+  // ✅ Persistencia (ahora sí, ya existe medicamentos)
   useEffect(() => {
     try {
-      localStorage.setItem("ls_medicamentos_rules", JSON.stringify(medicamentos));
+      localStorage.setItem(
+        "ls_medicamentos_rules",
+        JSON.stringify(medicamentos),
+      );
     } catch {
       null;
     }
   }, [medicamentos]);
-
-  // ============================
-  // Calendario / Modal
-  // ============================
-  const [openAgendaModal, setOpenAgendaModal] = useState(false);
-  const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
-
-  const [medicamentos, setMedicamentos] = useState([]);
-  const [selectedMedId, setSelectedMedId] = useState(null);
-
-
-  // ✅ NUEVO: con qué “tab” abre el modal
-  const [agendaFocus, setAgendaFocus] = useState("citas"); // "citas" | "medicamento"
 
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;
@@ -78,7 +71,7 @@ export default function Inicio() {
     window.dispatchEvent(
       new CustomEvent("perfil_min_updated", {
         detail: { esMujer },
-      })
+      }),
     );
   }, [esMujer]);
 
@@ -154,7 +147,8 @@ export default function Inicio() {
   const openModalCitas = (tsOrDayjs) => {
     setAgendaFocus("citas");
     if (tsOrDayjs?.$d) setSelectedAgendaDay(tsOrDayjs);
-    else if (typeof tsOrDayjs === "number") setSelectedAgendaDay(dayjs(tsOrDayjs));
+    else if (typeof tsOrDayjs === "number")
+      setSelectedAgendaDay(dayjs(tsOrDayjs));
     setOpenAgendaModal(true);
   };
 
@@ -178,7 +172,7 @@ export default function Inicio() {
           <img className={styles.mancha} src={manchaImg} alt="" />
           <div className={styles.cntImgMono}>
             {/* <img className={styles.mono} src={avatarImg} /> */}
-            <Mona3d />
+            <Mono3d />
           </div>
 
           <div className={styles.cntPie}>
@@ -202,15 +196,16 @@ export default function Inicio() {
               compact
               citasPorFecha={citasPorFecha}
               setCitasPorFecha={setCitasPorFecha}
-              medicamentos={medicamentos}
               externalSelectedDate={selectedAgendaDay}
               externalOpen={openAgendaModal}
               onExternalClose={() => setOpenAgendaModal(false)}
               onExternalDateChange={setSelectedAgendaDay}
+              // ✅ nuevos
               medicamentos={medicamentos}
               setMedicamentos={setMedicamentos}
               selectedMedId={selectedMedId}
               setSelectedMedId={setSelectedMedId}
+              focusSection={agendaFocus}
             />
           </div>
 
@@ -223,10 +218,10 @@ export default function Inicio() {
                  y seleccionar medId. Por ahora NO rompe nada. */}
               <TarjetasMedicamentosIco
                 medicamentos={medicamentos}
-                onOpenMedicamento={(payload) => {
-                  // payload sugerido: { day: dayjs() | ts, medId }
-                  openModalMedicamentos(payload || {});
-                }}
+                day={selectedAgendaDay} // ✅ usa el día actual de agenda
+                onOpenMedicamento={(payload) =>
+                  openModalMedicamentos(payload || {})
+                }
               />
             </div>
 

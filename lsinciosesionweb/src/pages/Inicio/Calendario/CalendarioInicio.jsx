@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/CalendarioInicio.jsx
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -16,18 +16,12 @@ import { isTakeDay } from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
 
-/**
- * Día custom:
- * - Puntito si hay citas o medicamentos
- * - Tooltip (hover) en desktop con lista: horario + médico (solo citas)
- * - En móvil no hay hover => no tooltip
- */
 function CustomDay(props) {
   const {
     day,
     outsideCurrentMonth,
     citasPorFecha,
-    medsTieneEnFecha, // fn(key) => boolean
+    medsTieneEnFecha,
     isMobile,
     onOpenDay,
     ...other
@@ -38,7 +32,6 @@ function CustomDay(props) {
   const hayCitas = citas.length > 0;
 
   const hayMeds = medsTieneEnFecha ? medsTieneEnFecha(key) : false;
-
   const hayAlgo = hayCitas || hayMeds;
 
   const dayNode = (
@@ -68,7 +61,6 @@ function CustomDay(props) {
     />
   );
 
-  // Tooltip solo para citas y solo en desktop
   if (!hayCitas || isMobile) return dayNode;
 
   const contenidoTooltip = (
@@ -119,35 +111,33 @@ function CustomDay(props) {
 
 const CalendarioInicio = ({
   compact = false,
-
-  // ✅ citas
   citasPorFecha = {},
   setCitasPorFecha = () => {},
 
-  // ✅ meds (desde Inicio)
+  // ✅ medicamentos vienen de Inicio (estado central)
   medicamentos = [],
-  setMedicamentos,
-  selectedMedId,
-  onSelectMedId,
+  setMedicamentos = () => {},
 
-  // ✅ control externo (tarjetas)
+  // ✅ selección de tratamiento (estado central)
+  selectedMedId = null,
+  setSelectedMedId = () => {},
+
+  // ✅ para abrir el modal en el tab correcto
+  focusSection = "citas",
+
   externalSelectedDate,
   externalOpen,
   onExternalClose,
   onExternalDateChange,
-
 }) => {
-  const [selectedDate, setSelectedDate] = useState(
-    externalSelectedDate || dayjs()
-  );
+  const [selectedDate, setSelectedDate] = useState(externalSelectedDate || dayjs());
   const [openModal, setOpenModal] = useState(false);
 
-  // sincroniza si viene desde afuera (tarjetas)
-  useEffect(() => {
+  React.useEffect(() => {
     if (externalSelectedDate) setSelectedDate(externalSelectedDate);
   }, [externalSelectedDate]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof externalOpen === "boolean") setOpenModal(externalOpen);
   }, [externalOpen]);
 
@@ -159,11 +149,8 @@ const CalendarioInicio = ({
     onExternalDateChange?.(day);
   };
 
-  // ✅ función para saber si hay medicamento en una fecha (para el puntito)
   const medsTieneEnFecha = useMemo(() => {
-    if (!Array.isArray(medicamentos) || medicamentos.length === 0) {
-      return () => false;
-    }
+    if (!Array.isArray(medicamentos) || medicamentos.length === 0) return () => false;
     return (dateKey) => medicamentos.some((r) => isTakeDay(r, dateKey));
   }, [medicamentos]);
 
@@ -216,18 +203,6 @@ const CalendarioInicio = ({
             "&:hover": { backgroundColor: "transparent" },
             "& svg": { fontSize: "2rem" },
           },
-          "& .MuiYearCalendar-root": {
-            maxHeight: "12rem",
-            overflowY: "auto",
-            paddingInline: "0.25rem",
-          },
-          "& .MuiPickersYear-yearButton": {
-            height: "2rem",
-            width: "4.2rem",
-            margin: "0.2rem",
-            borderRadius: "999px",
-            fontSize: "0.8rem",
-          },
         }}
       />
     </LocalizationProvider>
@@ -261,6 +236,7 @@ const CalendarioInicio = ({
           </Typography>
         </Box>
       )}
+
       <ModalCitaMedica
         open={openModal}
         selectedDate={selectedDate}
@@ -271,13 +247,12 @@ const CalendarioInicio = ({
         onChangeDate={setSelectedDate}
         citasPorFecha={citasPorFecha}
         setCitasPorFecha={setCitasPorFecha}
-        focusSection="citas"
-        // ✅ ahora el modal ya recibe meds desde Inicio
+        focusSection={focusSection}
+        // ✅ nuevos: estado central (Inicio)
         medicamentos={medicamentos}
         setMedicamentos={setMedicamentos}
         selectedMedId={selectedMedId}
-        onSelectMedId={setSelectedMedId}
-        focusSection={focusSection}
+        setSelectedMedId={setSelectedMedId}
       />
     </>
   );

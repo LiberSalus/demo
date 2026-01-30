@@ -210,7 +210,7 @@ const FormularioMedicamento = ({
 
     // Armamos la regla completa (tratamiento)
     const rule = {
-      id: Date.now(),
+      id: (globalThis.crypto?.randomUUID?.() ?? String(Date.now())),
       medicamento: form.medicamento.trim(),
       dosis: form.dosis.trim(),
       presentacion: form.presentacion,

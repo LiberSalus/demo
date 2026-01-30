@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/ModalCitaMedica.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -22,16 +22,18 @@ const ModalCitaMedica = ({
   onClose,
   selectedDate,
   onChangeDate,
+
   citasPorFecha,
   setCitasPorFecha,
+
   focusSection = "citas",
 
+  // ✅ vienen desde Inicio (estado central)
   medicamentos = [],
-  setMedicamentos,
-  selectedMedId,
-  onSelectMedId,
+  setMedicamentos = () => {},
 
-  // con qué tab abrir el modal (desde tarjetas o desde calendar)
+  selectedMedId = null,
+  setSelectedMedId = () => {},
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   const fecha = selectedDate || dayjs();
@@ -39,22 +41,22 @@ const ModalCitaMedica = ({
   const keyFechaActual = fecha.format("YYYY-MM-DD");
   const citasDelDia = citasPorFecha?.[keyFechaActual] || [];
 
-  // ✅ tab dual: se recalcula cada que abres el modal (muy importante)
-  const desiredTab =
+  // ✅ tab dual: se inicializa desde focusSection
+  const initialTab =
     focusSection === "medicamento" || focusSection === "medicamentos"
       ? "medicamento"
       : "cita";
 
-  const [tab, setTab] = useState(desiredTab);
+  const [tab, setTab] = useState(initialTab);
 
-  // si cambian focusSection/open, re-sincronizamos tab al abrir
+  // ✅ si el modal se abre y viene focusSection distinto, ajustamos tab
   useEffect(() => {
     if (!open) return;
-    setTab(desiredTab);
+    setTab(initialTab);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, focusSection]);
 
-  // ✅ confirmación
+  // confirmación
   const [showConfirm, setShowConfirm] = useState(false);
   const [tipoConfirm, setTipoConfirm] = useState("cita");
 
@@ -62,7 +64,7 @@ const ModalCitaMedica = ({
     const key = dayjs(datosCita.fecha).format("YYYY-MM-DD");
 
     setCitasPorFecha?.((prev) => {
-      const anteriores = prev?.[key] || [];
+      const anteriores = prev[key] || [];
       return {
         ...prev,
         [key]: [...anteriores, { ...datosCita, id: Date.now() }],
@@ -74,19 +76,13 @@ const ModalCitaMedica = ({
   };
 
   const manejarGuardarMedicamento = (rule) => {
-  setMedicamentos?.((prev) => [...prev, rule]);
-  onSelectMedId?.(rule.id);
+    setMedicamentos((prev) => [...prev, rule]);
 
-
+    setSelectedMedId(rule.id);
     setTipoConfirm("medicamento");
     setShowConfirm(true);
   };
 
-  const handleChangeDate = (newDate) => {
-    onChangeDate?.(newDate);
-  };
-
-  // Para que el panel sepa dónde enfocar scroll
   const computedFocusSection = useMemo(() => {
     if (tab === "medicamento") return "medicamento";
     return "citas";
@@ -95,14 +91,7 @@ const ModalCitaMedica = ({
   return (
     <Dialog
       open={open}
-      onClose={() => {
-        // si está confirmación abierta, primero ciérrala
-        if (showConfirm) {
-          setShowConfirm(false);
-          return;
-        }
-        onClose?.();
-      }}
+      onClose={onClose}
       fullScreen={isMobile}
       maxWidth="lg"
       fullWidth={!isMobile}
@@ -115,7 +104,6 @@ const ModalCitaMedica = ({
         },
       }}
     >
-      {/* Header sticky */}
       <DialogTitle
         sx={{
           position: "sticky",
@@ -133,19 +121,11 @@ const ModalCitaMedica = ({
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: "1.15rem" }}>
-          {tab === "medicamento"
-            ? "Recordatorio de medicamentos"
-            : "Cita médica"}
+          {tab === "medicamento" ? "Medicamentos" : "Cita médica"}
         </Typography>
 
         <IconButton
-          onClick={() => {
-            if (showConfirm) {
-              setShowConfirm(false);
-              return;
-            }
-            onClose?.();
-          }}
+          onClick={onClose}
           edge="end"
           sx={{
             position: "absolute",
@@ -178,7 +158,6 @@ const ModalCitaMedica = ({
             pointerEvents: showConfirm ? "none" : "auto",
           }}
         >
-          {/* Panel izquierdo */}
           <Box
             sx={{
               flex: isMobile ? "0 0 auto" : "0 0 420px",
@@ -190,7 +169,7 @@ const ModalCitaMedica = ({
           >
             <PanelCalendarioCitas
               selectedDate={fecha}
-              onChangeDate={handleChangeDate}
+              onChangeDate={onChangeDate}
               citasPorFecha={citasPorFecha}
               isMobile={isMobile}
               tab={tab}
@@ -198,11 +177,10 @@ const ModalCitaMedica = ({
               focusSection={computedFocusSection}
               medicamentos={medicamentos}
               selectedMedId={selectedMedId}
-              onSelectMedId={onSelectMedId}
+              onSelectMedId={setSelectedMedId}
             />
           </Box>
 
-          {/* Formulario derecho */}
           <Box
             sx={{
               flex: 1,
@@ -230,7 +208,6 @@ const ModalCitaMedica = ({
           </Box>
         </Box>
 
-        {/* Overlay confirmación */}
         {showConfirm && (
           <Box
             sx={{
