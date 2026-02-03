@@ -40,7 +40,7 @@
 .header {
   /* border: 2px dashed red; */
   grid-area: header;
-  z-index: 2;
+  z-index: 3;
   justify-content: end;
   /* border: 1px dashed lightgray; */
   border-radius: var(--radius);

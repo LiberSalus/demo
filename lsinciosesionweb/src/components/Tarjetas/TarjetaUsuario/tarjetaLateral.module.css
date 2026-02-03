@@ -199,7 +199,7 @@ hr {
   --ls-panel-w-max: 92vw;
   --ls-overlay: rgba(0,0,0,.45);
   --ls-z-overlay: 1050;
-  --ls-z-panel: 1051;
+  --ls-z-panel: 10051;
 }
 
 /* Capa oscura detrás del panel */
@@ -259,4 +259,5 @@ hr {
   background-color: transparent;
   outline: none;
   border: none;
+  font-weight: 800;
 }

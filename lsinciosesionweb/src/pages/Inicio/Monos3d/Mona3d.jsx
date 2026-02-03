@@ -24,6 +24,7 @@ export default function App() {
         height: "100%",
         width:  "100%",
         /* border: "2px dashed red" */
+        
       }}
       camera={{
         position: [-2, 0, 5],

@@ -306,6 +306,19 @@
 
 @media (max-width: 460px) {
 
+  .cntMono {
+    width: 100vw;
+    
+    
+  }
+
+  .cntImgMono {
+    /* border: 2px dashed red; */
+    
+  }
+
+
+
   .mensaje {
     width: 70vw;
     font-size: 0.85rem;

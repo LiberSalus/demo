@@ -14,6 +14,8 @@ import "dayjs/locale/es-mx";
 import ModalCitaMedica from "./ModalCitaMedica";
 import { isTakeDay } from "./MedicamentoUtils";
 
+import styles from "./DataCalendar.module.css"
+
 dayjs.locale("es-mx");
 
 function CustomDay(props) {
@@ -47,7 +49,7 @@ function CustomDay(props) {
           position: "relative",
           "&::after": {
             content: '""',
-            width: 6,
+            width:  6,
             height: 6,
             borderRadius: "50%",
             bgcolor: "#0EA5E9",
@@ -157,6 +159,7 @@ const CalendarioInicio = ({
   const CalendarOnly = (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es-mx">
       <DateCalendar
+        className={styles.DataCalendar}
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate)}
         slots={{ day: CustomDay }}
@@ -178,8 +181,8 @@ const CalendarioInicio = ({
             width: "100%",
           },
           "& .MuiPickersDay-root": {
-            height: "1.6rem",
-            width: "1.6rem",
+            height: "1.7rem",
+            width:  "1.7rem",
             padding: 0,
             margin: "0px 12px",
             fontSize: "0.7rem",
@@ -195,7 +198,7 @@ const CalendarioInicio = ({
           "& .MuiPickersArrowSwitcher-root": {
             justifyContent: "space-between",
             marginBottom: "0.5rem",
-            transform: "translateY(0.5rem)",
+            transform: "translateY(0.25rem)",
           },
           "& .MuiPickersArrowSwitcher-button": {
             color: "#1976d2",

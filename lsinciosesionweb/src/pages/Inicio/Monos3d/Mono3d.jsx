@@ -55,8 +55,11 @@ export default function App() {
         {/* OrbitControls: orbitar alrededor del objeto */}
       <OrbitControls
         target={[0,0,0]}
+        /* rota mono */
         enableRotate={true}
+        /* mueve mono  */
         enablePan={true}
+        /* acerca mono */
         enableZoom={true}
         minDistance={2}
         maxDistance={3}

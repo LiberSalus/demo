@@ -1,0 +1,9 @@
+.DataCalendar { width: 100%;}
+
+@media (min-width: 461px) and (max-width:1460px ) {
+    .DataCalendar { min-width: 99%;}
+}
+
+@media (max-width: 460px) {
+    .DataCalendar { width: 80%;}
+}
