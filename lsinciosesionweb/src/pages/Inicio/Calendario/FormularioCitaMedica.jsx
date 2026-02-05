@@ -107,8 +107,9 @@ const FormularioCitaMedica = ({
       component="form"
       onSubmit={handleSubmit}
       sx={{
+        
         width: "100%",
-        maxWidth: 420,
+        maxWidth: "content",
         display: "flex",
         flexDirection: "column",
         gap: 2,

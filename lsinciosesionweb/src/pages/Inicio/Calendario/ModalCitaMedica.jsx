@@ -1,5 +1,5 @@
 // ModalCitaMedica.jsx
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -25,15 +25,17 @@ const ModalCitaMedica = ({
   citasPorFecha,
   setCitasPorFecha,
   focusSection = "citas",
-}) => {
-  // ✅ 1) Fullscreen real
-  const isMobile = useMediaQuery("(max-width:600px)");
 
-  // ✅ 2) Rango “problemático” (601–900): apilamos en columna
+  // ✅ NUEVO: estado CENTRAL (viene de Inicio)
+  medicamentos = [],
+  setMedicamentos = () => {},
+  selectedMedId = null,
+  setSelectedMedId = () => {},
+}) => {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const isStacked = useMediaQuery("(max-width:900px)");
 
   const fecha = selectedDate || dayjs();
-
   const keyFechaActual = fecha.format("YYYY-MM-DD");
   const citasDelDia = citasPorFecha?.[keyFechaActual] || [];
 
@@ -41,10 +43,17 @@ const ModalCitaMedica = ({
     focusSection === "medicamento" || focusSection === "medicamentos"
       ? "medicamento"
       : "cita";
+
   const [tab, setTab] = useState(initialTab);
 
-  const [medicamentos, setMedicamentos] = useState([]);
-  const [selectedMedId, setSelectedMedId] = useState(null);
+  // ✅ importante: si abres desde tarjeta (focusSection cambia), sincroniza tab
+  useEffect(() => {
+    setTab(
+      focusSection === "medicamento" || focusSection === "medicamentos"
+        ? "medicamento"
+        : "cita"
+    );
+  }, [focusSection, open]);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [tipoConfirm, setTipoConfirm] = useState("cita");
@@ -65,8 +74,10 @@ const ModalCitaMedica = ({
   };
 
   const manejarGuardarMedicamento = (rule) => {
-    setMedicamentos((prev) => [...prev, rule]);
-    setSelectedMedId(rule.id);
+    // ✅ ahora sí se guarda en el estado central (Inicio)
+    setMedicamentos?.((prev) => [...(prev || []), rule]);
+    setSelectedMedId?.(rule.id);
+
     setTipoConfirm("medicamento");
     setShowConfirm(true);
   };
@@ -78,7 +89,6 @@ const ModalCitaMedica = ({
     return "citas";
   }, [tab]);
 
-  // ✅ ancho del modal según estado
   const paperWidth = isMobile
     ? "100%"
     : isStacked
@@ -90,12 +100,11 @@ const ModalCitaMedica = ({
       open={open}
       onClose={onClose}
       fullScreen={isMobile}
-      maxWidth={false}          // ✅ evita que MUI meta restricciones raras
+      maxWidth={false}
       sx={{
-  minWidth: 0,
-  "& .MuiTextField-root, & .MuiFormControl-root": { minWidth: 0 },
-}}
-
+        minWidth: 0,
+        "& .MuiTextField-root, & .MuiFormControl-root": { minWidth: 0 },
+      }}
       fullWidth
       PaperProps={{
         sx: {
@@ -123,13 +132,14 @@ const ModalCitaMedica = ({
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: "1.15rem" }}>
-          {tab === "medicamento" ? "Recordatorio de medicamentos" : "Cita médica"}
+          {tab === "medicamento" ? "Medicamentos" : "Cita médica"}
         </Typography>
 
         <IconButton
           onClick={onClose}
           edge="end"
           sx={{
+            transform: "translate(-5px, -5px)",
             position: "absolute",
             right: 12,
             top: isMobile ? "calc(env(safe-area-inset-top) + 8px)" : 12,
@@ -154,7 +164,7 @@ const ModalCitaMedica = ({
         <Box
           sx={{
             display: "flex",
-            flexDirection: isStacked ? "column" : "row",  // ✅ AQUÍ está la magia
+            flexDirection: isStacked ? "column" : "row",
             gap: isMobile ? 2 : 3,
             alignItems: "stretch",
             pointerEvents: showConfirm ? "none" : "auto",
@@ -180,6 +190,7 @@ const ModalCitaMedica = ({
               tab={tab}
               onTabChange={setTab}
               focusSection={computedFocusSection}
+              // ✅ ahora viene de Inicio
               medicamentos={medicamentos}
               selectedMedId={selectedMedId}
               onSelectMedId={setSelectedMedId}
@@ -234,7 +245,10 @@ const ModalCitaMedica = ({
               pointerEvents: "auto",
             }}
           >
-            <Confirmacion tipo={tipoConfirm} onClose={() => setShowConfirm(false)} />
+            <Confirmacion
+              tipo={tipoConfirm}
+              onClose={() => setShowConfirm(false)}
+            />
           </Box>
         )}
       </DialogContent>

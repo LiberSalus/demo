@@ -251,7 +251,7 @@ const FormularioMedicamento = ({
         onSubmit={handleSubmit}
         sx={{
           width: "100%",
-          maxWidth: 520,
+          maxWidth: "content",
           display: "flex",
           flexDirection: "column",
           gap: 2,
@@ -278,7 +278,7 @@ const FormularioMedicamento = ({
               fullWidth
               size="small"
               variant="outlined"
-              InputProps={{ sx: pillInputSx }}
+              InputProps={{ sx: pillInputSx, }}
             />
           </Grid>
 
@@ -385,6 +385,49 @@ const FormularioMedicamento = ({
             </Typography>
           )}
         </Box>
+        
+        {/* Fechas inicio/fin */}
+        <Grid container columnSpacing={2} rowSpacing={1.5}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+              Fecha de inicio
+            </Typography>
+
+            <DatePicker
+              value={startDayjs}
+              onChange={(d) => setDateField("startDate", d)}
+              disabled={form.patron === "daily_perm"} // permanente jala del calendario ✅
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  size: "small",
+                  placeholder: "Selecciona una fecha",
+                  InputProps: { sx: pillInputSx },
+                },
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+              Fecha de fin
+            </Typography>
+
+            <DatePicker
+              value={endDayjs}
+              onChange={(d) => setDateField("endDate", d)}
+              minDate={startDayjs}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  size: "small",
+                  placeholder: "Selecciona una fecha",
+                  InputProps: { sx: pillInputSx },
+                },
+              }}
+            />
+          </Grid>
+        </Grid>
 
         {/* Duración + Frecuencia */}
         <Grid container columnSpacing={2} rowSpacing={1.5}>
@@ -449,6 +492,7 @@ const FormularioMedicamento = ({
           </Box>
         )}
 
+        
         {form.patron === "with_pauses" && (
           <Grid container columnSpacing={2} rowSpacing={1.5}>
             <Grid item xs={12} sm={6}>
@@ -522,48 +566,7 @@ const FormularioMedicamento = ({
           </Typography>
         </Box>
 
-        {/* Fechas inicio/fin */}
-        <Grid container columnSpacing={2} rowSpacing={1.5}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
-              Fecha de inicio
-            </Typography>
-
-            <DatePicker
-              value={startDayjs}
-              onChange={(d) => setDateField("startDate", d)}
-              disabled={form.patron === "daily_perm"} // permanente jala del calendario ✅
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  size: "small",
-                  placeholder: "Selecciona una fecha",
-                  InputProps: { sx: pillInputSx },
-                },
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
-              Fecha de fin
-            </Typography>
-
-            <DatePicker
-              value={endDayjs}
-              onChange={(d) => setDateField("endDate", d)}
-              minDate={startDayjs}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  size: "small",
-                  placeholder: "Selecciona una fecha",
-                  InputProps: { sx: pillInputSx },
-                },
-              }}
-            />
-          </Grid>
-        </Grid>
+        
 
         {/* Notas */}
         <Box>
