@@ -3,7 +3,7 @@
   padding: 0.8vw;
   width: 6.25rem;
   height: 30rem;
-  /* border: 1px solid #ACCCEB; */
+  border: 1px solid #ACCCEB;
   border-radius: 0.8vw;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   backdrop-filter: blur(6px);
   overflow: hidden;
   color: var(--brand);
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
 }
 
 .datos {
