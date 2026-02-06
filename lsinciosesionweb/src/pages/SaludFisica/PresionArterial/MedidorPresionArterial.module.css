@@ -161,9 +161,7 @@
 }
 
 .corazon {
-  transform-box: fill-box;
-  /* transform-origin: center center; */
-
+  transform-origin: center;
 }
 
 /* se activa solo cuando hay nueva lectura */
@@ -174,27 +172,27 @@
 
 @keyframes latido {
   0% {
-    transform: scale(1) translate(12.2rem, 6.875rem);
+    transform: scale(1);
   }
 
   20% {
-    transform: scale(1.12) translate(12.2rem, 6.875rem);
+    transform: scale(1.12);
   }
 
   40% {
-    transform: scale(0.95) translate(12.2rem, 6.875rem);
+    transform: scale(0.95);
   }
 
   60% {
-    transform: scale(1.08) translate(12.2rem, 6.875rem);
+    transform: scale(1.08);
   }
 
   80% {
-    transform: scale(0.98) translate(12.2rem, 6.875rem);
+    transform: scale(0.98);
   }
 
   100% {
-    transform: scale(1) translate(12.2rem, 6.875rem);
+    transform: scale(1);
   }
 }
 
