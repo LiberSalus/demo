@@ -2,7 +2,7 @@
   margin: 0.5rem auto;
   background: white;
   /* border: 1.5px solid white; */
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   width: 11rem;
   min-height: 10rem;
   display: flex;
@@ -14,17 +14,18 @@
 
 .encabezado {
   background-color: #5CB1DC;
-  color: white;
   text-align: center;
 }
 
 .medicamento {
+  color: white;
   padding-top: 0.25rem;
   font-weight: 600;
   font-size: 0.75rem;
 }
 
 .dosis {
+  color: white;
   font-size: 0.75rem;
   padding-bottom: 0.5rem;
 }

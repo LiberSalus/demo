@@ -69,11 +69,11 @@ const TarjetaUsuario = () => {
 
   return (
     <div className={styles.cntTarjetaUsuario}>
-      <p className={styles.hola}>Hola, Usuario1</p>
+      <p className={styles.hola}>Hola, Alex</p>
       <div className={styles.datosUsuario}>
         <div className={styles.idPerfil}>
           <img className={styles.noti} src={noti} alt="noticia" />
-          <span className={styles.nombreUsuario}>{nombre}</span>
+          
         </div>
 
         {/* FOTO → abre panel lateral */}
@@ -95,6 +95,7 @@ const TarjetaUsuario = () => {
           style={{ display: 'none' }}
           onChange={onSelectFile}
         />
+        <span className={styles.nombreUsuario}>{nombre}</span>
       </div>
 
       {/* PANEL LATERAL + OVERLAY */}

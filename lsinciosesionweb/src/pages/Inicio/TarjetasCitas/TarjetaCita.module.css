@@ -20,12 +20,14 @@
 }
 
 .nombre {
+  color: white;
   font-weight: bold;
   font-size: 0.75rem;
   padding: 0.25rem 0;
 }
 
 .especialidad {
+  color: white;
   background-color: #007cba;
   font-size: 0.75rem;
   opacity: 0.9;
@@ -68,7 +70,11 @@
   align-items: center;
   text-align: center;
   height: 2.75rem;
-  color: white;
   font-size: .75rem;
   font-weight: 400;
+}
+
+.estadoTxt {
+  color: white;
+  
 }

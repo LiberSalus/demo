@@ -39,7 +39,7 @@ const retos = [
     txt: "Llevas el 65% de tu meta semanal. ¡Estas haciendo un gran trabajo!",
     pasos: 65000,
     icon: IcoCuarto,
-    bg: "linear-gradient(90deg, #ffffff 0%, #a1b39d 100%)",
+    bg: "linear-gradient(90deg, #ffffff 0%, #A1B39D 100%)",
   },
 ];
 

@@ -3,14 +3,23 @@ import styles from "./backgroundPanel.module.css";
 import lineas from "./line.svg";
 
 const BackgroundPanel = ({ esMujer = true }) => {
+  //const vars = esMujer
+  //  ? {
+  //      "--bgTop": "rgba(239, 241, 243, 0.5)",
+  //      "--bgBottom": "rgba(255, 177, 251, 0.5)",
+  //    }
+  //  : {
+  //      "--bgTop": "rgba(239, 241, 243, 0.5)",
+  //      "--bgBottom": "rgba(177, 191, 255, 0.5)", // tu azul hombre
+  //    };
   const vars = esMujer
     ? {
-        "--bgTop": "rgba(239, 241, 243, 0.5)",
-        "--bgBottom": "rgba(255, 177, 251, 0.5)",
+        "--bgTop": "#7ED4FF",
+        "--bgBottom": "#B1E5FF",
       }
     : {
-        "--bgTop": "rgba(239, 241, 243, 0.5)",
-        "--bgBottom": "rgba(177, 191, 255, 0.5)", // tu azul hombre
+        "--bgTop": "#7ED4FF",
+        "--bgBottom": "#B1E5FF", // tu azul hombre
       };
 
   return (

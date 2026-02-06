@@ -169,10 +169,11 @@ export default function Inicio() {
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
+          <img className={styles.cuadro} src={cuadro}></img>
           <img className={styles.mancha} src={manchaImg} alt="" />
           <div className={styles.cntImgMono}>
-            {/* <img className={styles.mono} src={avatarImg} /> */}
-            <Mono3d />
+            <img className={styles.mono} src={avatarImg} />
+            {/* <Mono3d /> */}
           </div>
 
           <div className={styles.cntPie}>
@@ -229,6 +230,7 @@ export default function Inicio() {
             <div className={`${styles.cntCitas} scroll-container`}>
               <TarjetasCitas
                 citasPorFecha={citasPorFecha}
+                day={selectedAgendaDay}
                 onOpenCita={(cita) => {
                   setSelectedAgendaDay(dayjs(cita._ts));
                   setAgendaFocus("citas");

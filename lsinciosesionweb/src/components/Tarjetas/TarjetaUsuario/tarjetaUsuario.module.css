@@ -50,6 +50,10 @@
 
 }
 
+.nombreUsuario {
+  font-weight: bold;
+}
+
 @media (max-width: 460px) {
   .cntTarjetaUsuario {
     display: flex;

@@ -21,7 +21,7 @@ const TarjetaCita = ({ nombre, especialidad, fecha, hora, estado, onClick }) => 
       onClick={onClick}
       role='button'
       tabIndex={0}
-      onKeyDown={(e) =>(e.key === "Enter" ? onclick?.() : null)}
+      onKeyDown={(e) => (e.key === "Enter" ? onClick?.() : null)}
       style={{ cursor: onClick ? "pointer" : "default"}}
     >
       <div className={styles.encabezado}>
@@ -36,9 +36,9 @@ const TarjetaCita = ({ nombre, especialidad, fecha, hora, estado, onClick }) => 
 
       <div
         className={styles.estado}
-        style={{ backgroundColor: info.bg }}
+        style={{ backgroundColor: info.bg, color:"white" }}
       >
-        <p>{info.texto}</p>
+        <p className={styles.estadoTxt}>{info.texto}</p>
       </div>
     </div>
   );

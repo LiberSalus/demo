@@ -1,14 +1,15 @@
 /* src/pages/Inicio/TarjetaNoticias/TarjetaNoticias.module.css */
 
 .TarjetaNoticias {
-  margin: 2rem auto;
+  margin: 0rem auto;
   width: 36.5rem;
   height: 28.625rem;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, 0.06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, 0.06); */
   backdrop-filter: blur(4px);
-  background: rgba(255,255,255,0.18);
+  /* background: rgba(255,255,255,0.18); */
+  background: white;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -54,7 +55,8 @@
   width: 18.75rem;
   height: 22.2rem;
   border: none;
-  background: rgba(255,255,255,0.72);
+  /* background: rgba(255,255,255,0.72); */
+  background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);

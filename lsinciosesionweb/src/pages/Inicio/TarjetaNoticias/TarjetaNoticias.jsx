@@ -139,7 +139,7 @@ export default function TarjetaNoticias() {
     <div className={styles.TarjetaNoticias}>
       <div className={styles.header}>
         <h3 className={styles.titulo}>Noticias</h3>
-        <p className={styles.tip}>Desliza o deja que avance</p>
+        <p className={styles.tip}>Manten el mouse en noticia para pausar</p>
       </div>
 
       <div

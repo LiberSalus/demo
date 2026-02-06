@@ -2,7 +2,7 @@
   margin: 0rem auto;
   background: white;
   /* border: 1.5px solid white; */
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   width: 12rem;
   min-height: 19rem;
   display: flex;
@@ -13,12 +13,12 @@
 
 .encabezado {
   background-color: #5CB1DC;
-  color: white;
   padding: 1rem 0 0 0 ;
   text-align: center;
 }
 
 .medicamento {
+  color: white;
   font-weight: 600;
 }
 

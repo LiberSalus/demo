@@ -8,8 +8,11 @@
 }
 
 .lineas {
+    z-index: 1;
+    width: 110%;
     position: absolute;
-    top: 55%;
+    top: 17.5%;
+    left: 0;
     transform: rotate(-10deg);
 }
 

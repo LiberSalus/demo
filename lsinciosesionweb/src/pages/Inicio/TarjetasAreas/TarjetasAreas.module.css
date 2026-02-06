@@ -6,7 +6,7 @@
   /* border: 1px solid lightgray; */
   border-radius: 1rem;
   padding: 1rem;
-  /* background-color: white; */
+  background-color: white;
   & > h3 { margin: 0.5rem; }
   & > p  { 
     font-size: 0.75rem; 
