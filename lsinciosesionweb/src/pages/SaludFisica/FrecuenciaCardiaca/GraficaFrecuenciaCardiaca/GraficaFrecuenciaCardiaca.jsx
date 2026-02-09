@@ -16,7 +16,7 @@ import {
 
 // ✅ MOCKS (mismo patrón que Glucosa)
 const MOCK_DIA = [
-  { label: "0:00", valor: 61 },
+  { label: "00:00", valor: 61 },
   { label: "01:00", valor: 95 },
   { label: "02:00", valor: 85 },
   { label: "03:00", valor: 77 },
@@ -227,7 +227,7 @@ const GraficaFrecuenciaCardiaca = ({
               className={styles.font}
             />
             <Tooltip
-              formatter={(value) => [`${value} bpm`, "Frecuencia"]}
+              formatter={(value) => [`${value} ppm`, "Frecuencia"]}
               labelStyle={{ fontSize: "0.75rem" }}
               contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
             />
