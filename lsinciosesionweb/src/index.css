@@ -51,7 +51,8 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 2px auto -webkit-focus-ring-color;
+  outline: 2px auto #007CBA;
+  color: #007CBA;
 }
 
 @media (prefers-color-scheme: light) {

@@ -1,13 +1,13 @@
 .TarjetaMedicion {
   margin: 0rem auto;
   width: 9.5rem;
-  /* border: 1px solid lightblue; */
+  border: 1px solid lightblue;
   border-radius: 0.75rem;
   height: 3.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
   /* background-color: red; */
   transition: box-shadow 0.4s ease;
   & > img {
@@ -32,7 +32,7 @@
 
   &:hover {
     
-    box-shadow: 0 8px 20px rgba(31, 41, 55, .2);
+    /* box-shadow: 0 8px 20px rgba(31, 41, 55, .2); */
   }
 }
 

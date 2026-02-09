@@ -99,7 +99,7 @@ const BotonesQs = ({edoQs, av, activo, onClick}) => {
       case "edo1": return "rgba(98, 210, 71, 0.2)";
       case "edo2": return "rgba(0, 124, 186, 0.2)";
       case "edo3": return "rgba(255, 255, 255, 0.35)"
-      case "edo4": return "rgba(255, 255, 255, 0.35)";
+      case "edo4": return "rgba(0, 0, 0, 0.1)";
       default: "transparent";
         return null;
     }

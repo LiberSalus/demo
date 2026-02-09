@@ -2,12 +2,12 @@
     margin: 0.5rem auto;
     width: 100%;
     max-width: 360px;
-    /* border: 1px solid #dcdcdd; */
+    border: 1px solid #dcdcdd;
     border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem .35rem;
     display: flex;
     align-items: center;
-    box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+    /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
 }
 
 .info {
@@ -15,8 +15,8 @@
     border-left: 3.5px solid ;
     padding-left: 1rem;
     & :nth-child(2) {
-        font-size: 0.85rem;
-        color: #575858;
+        font-size: 0.7rem;
+        color: #b6b8b8;
 
     }
 }

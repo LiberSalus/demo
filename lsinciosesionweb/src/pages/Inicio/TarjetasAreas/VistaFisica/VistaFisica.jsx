@@ -101,20 +101,22 @@ const VistaFisica = () => {
             onClick={() => setTarjetaActiva(tarjetas.edo1)}
           />
           <BotonesQs
-            edoQs="edo2"
-            activo={tarjetaActiva?.edoQs === "edo2"}
-            onClick={() => setTarjetaActiva(tarjetas.edo2)}
-          />
-          <BotonesQs
-            edoQs="edo3"
-            activo={tarjetaActiva?.edoQs === "edo3"}
-            onClick={() => setTarjetaActiva(tarjetas.edo3)}
-          />
-          <BotonesQs
             edoQs="edo4"
             activo={tarjetaActiva?.edoQs === "edo4"}
             onClick={() => setTarjetaActiva(tarjetas.edo4)}
           />
+            <BotonesQs
+              edoQs="edo3"
+              activo={tarjetaActiva?.edoQs === "edo3"}
+              onClick={() => setTarjetaActiva(tarjetas.edo3)}
+            />
+            <BotonesQs
+              edoQs="edo3"
+              activo={tarjetaActiva?.edoQs === "edo3"}
+              onClick={() => setTarjetaActiva(tarjetas.edo3)}
+            />
+            
+          
         </div>
         <div className={styles.cntStd}>
           {tarjetaActiva && <TarjetaBsEdoQs {...tarjetaActiva} />}

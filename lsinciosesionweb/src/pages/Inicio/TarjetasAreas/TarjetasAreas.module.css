@@ -1,7 +1,7 @@
 .cntTarjetaAreas {
   margin: 0 auto;
   width: 52.5rem;
-  
+  max-height: 31.3125rem;
   
   /* border: 1px solid lightgray; */
   border-radius: 1rem;

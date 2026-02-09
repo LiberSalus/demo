@@ -2,49 +2,48 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
 }
 .encabezado {
-  /* border: 2px dashed red; */
-  
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin: 0 auto 0.5rem;
   border: 1px solid #ACCCEB;
-  padding: 0.5rem;
+  padding: 0.35rem;
   border-radius: 1rem;
   flex-wrap: wrap;
-  gap: 0.25rem;
+  
 }
 
 .boton {
   margin: 0;
   appearance: none;
   outline: none;
-  /* border: 1px solid lightskyblue; */
+  border: 1px solid lightskyblue;
   background: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem !important;
   cursor: pointer;
   text-wrap: nowrap;
   width: 11rem;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
   transition: box-shadow 0.4s ease;
 
   &:hover{
-  box-shadow: 0 8px 20px rgba(31, 41, 55, .22);
+  /* box-shadow: 0 8px 20px rgba(31, 41, 55, .22); */
   }
 
 }
 
 .activa {
-  outline: 2px solid var(--color-prn);
+  outline: 2px solid #2196f3;
   font-weight: bold;
-  color: var(--color-prn);
+  color: #2196f3;
 }
 
 .boton {
-  border: 2px solid transparent;
+  border: 1px solid #ACCCEB;
   background-color: transparent;
   padding: 0.5rem 1rem;
   cursor: pointer;
