@@ -27,24 +27,28 @@ const PestañasSalud = ({ tabs, tituloSeccion }) => {
     <div className={styles.PestañasFisica}>
       {tituloSeccion && <h3>{tituloSeccion}</h3>}
 
-      <div className={styles.cntBotones}>
-        {tabs.map(({ medidor }) => (
-          <button
-            key={medidor}
-            type="button"
-            className={`${styles.tabBtn} ${
-              medidor === activa ? styles.tabBtnActiva : ""
-            }`}
-            onClick={() => setActiva(medidor)}
-          >
-            {medidor}
-          </button>
-        ))}
+      <div className={styles.cntBalnco}>
+
+
+        <div className={styles.cntBotones}>
+          {tabs.map(({ medidor }) => (
+            <button
+              key={medidor}
+              type="button"
+              className={`${styles.tabBtn} ${medidor === activa ? styles.tabBtnActiva : ""
+                }`}
+              onClick={() => setActiva(medidor)}
+            >
+              {medidor}
+            </button>
+          ))}
+        </div>
+
+        <div>
+          <ComponenteActivo />
+        </div>
       </div>
 
-      <div>
-        <ComponenteActivo />
-      </div>
     </div>
   );
 };

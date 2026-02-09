@@ -10,14 +10,14 @@ const RangoFrecuencias = ({ minDia, maxDia }) => {
     if (typeof minDia !== "number" || typeof maxDia !== "number") {
       return "-- -- bpm";
     }
-    return `${minDia} - ${maxDia} bpm`;
+    return `${minDia} - ${maxDia}`;
   };
 
   return (
     <div className={styles.RangoFrecuencias}>
       <div className={styles.txt}>
         <p>Rango de frecuencia cardiaca</p>
-        <p>{formatRango()}</p>
+        <p>{formatRango()} <spam className={styles.ppm}>ppm</spam></p>
       </div>
 
       <div className={styles.icon}>
