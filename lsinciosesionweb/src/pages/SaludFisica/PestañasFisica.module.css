@@ -7,7 +7,7 @@
   min-width: 30.75rem;
   height: auto;
   /* background-color: white; */
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
 
   &>h3 {
     margin: 3rem;
@@ -15,8 +15,8 @@
   }
 }
 
-.cntBalnco {
-  padding: 1rem;
+.cntBlanco {
+  padding: 2rem;
   background-color: white;
   width: 90%;
   margin: 0 auto;

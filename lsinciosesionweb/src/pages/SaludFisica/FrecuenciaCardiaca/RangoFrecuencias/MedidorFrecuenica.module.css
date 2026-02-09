@@ -1,10 +1,10 @@
 .FrecuenciaDiaria {
   /* background: #fff; */
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ACCCEB;
   border-radius: 14px;
   padding: 12px;
   padding-bottom: 3.5rem;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
 }
 
 .header {

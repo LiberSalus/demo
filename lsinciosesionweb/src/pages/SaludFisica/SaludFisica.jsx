@@ -66,29 +66,34 @@ import Oxigenacion from "./Oxigenacion/Oxigenacion";
 import ActividadFisica from "./ActividadFisica/ActividadFisica";
 import CicloMenstrual from "./CicloMenstrual/CicloMenstrual";
 
+
+const ordenMetricas = [
+  "Frecuencia cardiaca",
+  "Presión arterial",
+  "SpO2",
+  "Glucosa en sangre",
+  "Pasos",
+  "Ciclo menstrual",
+];
+
 const mapComponentByMetric = {
-  "Glucosa en sangre": Glucosa,
-  "Presión arterial": PresionArterial,
-  "Ciclo menstrual": CicloMenstrual,
-  "SpO2": Oxigenacion,
-  "Pasos": ActividadFisica,
   "Frecuencia cardiaca": FrecuenciaCardiaca,
+  "Presión arterial": PresionArterial,
+  "SpO2": Oxigenacion,
+  "Glucosa en sangre": Glucosa,
+  "Pasos": ActividadFisica,
+  "Ciclo menstrual": CicloMenstrual,
 };
 
 const SaludFisica = () => {
-  const metricas = METRICAS_SALUD["Salud Física"] || [];
+  const metricasConfig = METRICAS_SALUD["Salud Física"] || [];
 
-  const tabs = metricas.map((nombre) => ({
-    medidor: nombre,
-    Component:
-      mapComponentByMetric[nombre] ||
-      (() => (
-        <div>
-          <h4>{nombre}</h4>
-          <p>Contenido pendiente para esta métrica.</p>
-        </div>
-      )),
-  }));
+  const tabs = ordenMetricas
+    .filter((nombre) => metricasConfig.includes(nombre))
+    .map((nombre) => ({
+      medidor: nombre,
+      Component: mapComponentByMetric[nombre] || (() => <div>Pendiente</div>),
+    }));
 
   return (
     <div className={styles.SaludFisica}>

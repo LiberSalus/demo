@@ -29,8 +29,8 @@
   padding: 1.2rem 1rem 1.4rem;
   border-radius: 1.25rem;
   /* background: #ffffff; */
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
-  border: 1px solid #e5e7eb;
+  /* box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); */
+  border: 1px solid #ACCCEB;
   width: 22.5rem;
   display: flex;
   flex-direction: column;

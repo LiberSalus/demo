@@ -1,7 +1,7 @@
 // src/pages/SaludCompartida/PestañasSalud.jsx
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-// Reutilizamos los estilos de PestañasFisica
+
 import styles from "../SaludFisica/PestañasFisica.module.css";
 
 const PestañasSalud = ({ tabs, tituloSeccion }) => {
@@ -27,7 +27,7 @@ const PestañasSalud = ({ tabs, tituloSeccion }) => {
     <div className={styles.PestañasFisica}>
       {tituloSeccion && <h3>{tituloSeccion}</h3>}
 
-      <div className={styles.cntBalnco}>
+      <div className={styles.cntBlanco}>
 
 
         <div className={styles.cntBotones}>

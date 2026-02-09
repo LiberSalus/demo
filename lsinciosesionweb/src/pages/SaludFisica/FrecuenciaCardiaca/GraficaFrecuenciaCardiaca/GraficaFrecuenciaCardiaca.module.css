@@ -4,8 +4,8 @@
   width: 27.5rem;
   padding: 0.9rem;
   border-radius: 1rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border: 1px solid #ACCCEB;
+  /* box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); */
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -14,14 +14,15 @@
 /* Tabs */
 .tabs {
   display: flex;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 1.75rem;
 }
 
 .tab {
-  flex: 1;
-  padding: 0.5rem 0.5rem;
+  width: 4.25rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1px solid #bcbfc4;
   background: transparent;
   font-size: 0.75rem;
   cursor: pointer;
@@ -29,7 +30,8 @@
 }
 
 .tabActiva {
-  background: #e0f2fe;
+  background: none;
+  border-width: 2px;
   border-color: #007cba;
   color: #007cba;
 }
@@ -53,13 +55,14 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
+  outline: 1px solid #ACCCEB;
   border-radius: 999px;
   border: none;
   background: transparent;
   font-size: 0.7rem;
   cursor: pointer;
   color: #475569;
-  box-shadow: 0 6px 16px rgba(31, 41, 55, .06);
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
 }
 
 .chevron {

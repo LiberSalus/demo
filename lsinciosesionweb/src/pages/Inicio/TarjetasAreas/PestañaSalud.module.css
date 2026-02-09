@@ -4,6 +4,7 @@
   flex-direction: column;
   align-items: start;
 }
+
 .encabezado {
   width: 100%;
   display: flex;
@@ -13,7 +14,7 @@
   padding: 0.35rem;
   border-radius: 1rem;
   flex-wrap: wrap;
-  
+
 }
 
 .boton {
@@ -30,11 +31,13 @@
   /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
   transition: box-shadow 0.4s ease;
 
-  &:hover{
-  /* box-shadow: 0 8px 20px rgba(31, 41, 55, .22); */
+  &:hover {
+    /* box-shadow: 0 8px 20px rgba(31, 41, 55, .22); */
   }
 
 }
+
+
 
 .activa {
   outline: 2px solid #2196f3;
