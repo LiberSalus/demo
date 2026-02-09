@@ -1,0 +1,15 @@
+.Noticia {
+    margin: 0rem auto;
+    width: 38.43rem;
+    
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: white;
+}
+
+.info {
+    margin: .5rem 1rem;
+    & > h3 {
+        margin-bottom: 1rem;
+    }
+}
