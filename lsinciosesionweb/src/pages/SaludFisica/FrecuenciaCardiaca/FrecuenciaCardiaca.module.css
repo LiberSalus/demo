@@ -8,7 +8,7 @@
 }
 
 .tit {
-  margin: 3rem 0 1rem 3rem;
+  margin: 2rem 0 2rem 3rem;
   padding-left: 2rem;
   font-size: 1.5rem;
 }
@@ -16,7 +16,7 @@
 .col {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 .adver {

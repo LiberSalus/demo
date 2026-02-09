@@ -13,9 +13,19 @@ const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }
   const [bpm, setBpm] = useState("");
 
   // label legible
-  const fechaTxt = useMemo(()=> new Intl.DateTimeFormat("es-MX", {
-    weekday:"long", day:"2-digit", month:"short", year:"numeric"
-  }).format(ts), [ts]);
+  const fechaTxt = useMemo(() => {
+  const partes = new Intl.DateTimeFormat("es-MX", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).formatToParts(ts);
+
+  const dia = partes.find(p => p.type === "day").value;
+  const mes = partes.find(p => p.type === "month").value;
+  const año = partes.find(p => p.type === "year").value;
+
+  return `${dia} / ${mes} / ${año}`;
+}, [ts])
 
   const horaTxt = useMemo(()=> new Intl.DateTimeFormat("es-MX", {
     hour:"2-digit", minute:"2-digit"
@@ -35,12 +45,8 @@ const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }
         </div>
 
         <div className={styles.formRow}>
-          <label>Fecha:</label>
-          <input value={fechaTxt} readOnly className={styles.readonly}/>
-        </div>
-        <div className={styles.formRow}>
-          <label>Hora:</label>
-          <input value={horaTxt} readOnly className={styles.readonly}/>
+          <label>Fecha y hora:</label>
+          <input value={`${fechaTxt} - ${horaTxt}`} readOnly className={styles.readonly}/>
         </div>
         <div className={styles.formRow}>
           <label>Pulsaciones por minuto:</label>
@@ -57,10 +63,11 @@ const  ModalFrecuenciaDiaria = ({ onClose, onConfirm, defaultDate = new Date() }
             <span className={styles.suffix}>ppm</span>
           </div>
         </div>
-          <small className={styles.help}>Rango válido: 30–220 ppm</small>
+          {/* <small className={styles.help}>Rango válido: 30–220 ppm</small> */}
 
         <div className={styles.recos}>
-          <b>Recomendaciones:</b>
+          <b>Recomendaciones:</b><br/>
+          <b>Mide tu frecuencia cardiaca manualmente</b>
           <ol>
             <li>Coloca dos dedos (índice y medio) sobre tu muñeca o cuello.</li>
             <li>Cuenta los latidos durante 15 segundos.</li>

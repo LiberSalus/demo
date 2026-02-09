@@ -198,7 +198,7 @@ const GraficaFrecuenciaCardiaca = ({
 
       {/* Gráfica */}
       <div className={styles.chartWrapper}>
-        <ResponsiveContainer width="100%" height={180}> { }
+        <ResponsiveContainer width="100%" height={200}> { }
           <LineChart data={data} margin={{ top: 10, right: 20, bottom: 0, left: -20 }}>
             <defs>
 

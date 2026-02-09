@@ -88,7 +88,7 @@ const ComparacionSemanal = ({ readings = [], today = new Date() }) => {
 
       <div className={styles.info}>
         {/* Col 1: etiqueta */}
-        <p>PP media</p>
+        <p>PPM media</p>
 
         {/* Col 2: semana actual */}
         <div>
@@ -97,8 +97,8 @@ const ComparacionSemanal = ({ readings = [], today = new Date() }) => {
         </div>
 
         {/* Col 3: semana anterior */}
-        <div>
-          <p>Semana anterior</p>
+        <div className={styles.semana}>
+          <p>Semana <br/> anterior</p>
           <p className={styles.valor}>{formatPPM(promAnterior)}</p>
         </div>
 
@@ -119,12 +119,12 @@ const ComparacionSemanal = ({ readings = [], today = new Date() }) => {
               }`}
             />
           )}
-          <p className={styles.delta}>{formatDelta(delta)}</p>
+          {<p className={styles.delta}>{formatDelta(delta)}</p>}
         </div>
       </div>
 
       {/* Mensaje debajo (opcional, ya tienes clase .mensaje en CSS) */}
-      <p className={styles.mensaje}>{mensajeEstado}</p>
+      {/* <p className={styles.mensaje}>{mensajeEstado}</p> */}
     </div>
   );
 };

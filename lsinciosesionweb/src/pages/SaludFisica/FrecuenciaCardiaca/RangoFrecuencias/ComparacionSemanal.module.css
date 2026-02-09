@@ -5,8 +5,8 @@
   justify-content: space-evenly;
 
   margin: 0rem auto 1rem auto;
-  width: 23rem;
-  height: 9.5rem;
+  width: 22.81rem;
+  height: 6.43rem;
 
   border: 1px solid #ACCCEB;
   border-radius: 1rem;
@@ -16,8 +16,9 @@
 
 /* Título */
 .ComparacionSemanal> :nth-child(1) {
-  width: 80%;
-  font-weight: 800;
+  width: 100%;
+  font-weight: bold;
+  padding: 0.25rem 1rem 0;
   text-align: left;
   font-size: 0.85rem;
   color: #111827;
@@ -26,7 +27,7 @@
 /* Contenedor principal */
 .info {
   display: flex;
-  gap: 1.5rem;
+  gap: 2.5rem;
   align-items: end;
   font-size: 0.75rem;
   line-height: 1.8;
@@ -44,6 +45,9 @@
   text-align: center;
 }
 
+.semana {
+  line-height: 1.3;
+}
 .valor {
   font-weight: bold;
   font-size: 0.9rem;
@@ -53,7 +57,7 @@
 /* Columna del icono / estado */
 .estado {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.15rem;
 }

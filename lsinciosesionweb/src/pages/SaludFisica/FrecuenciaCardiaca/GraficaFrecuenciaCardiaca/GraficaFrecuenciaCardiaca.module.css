@@ -2,6 +2,7 @@
   margin: 1rem auto;
   padding: 1rem;
   width: 27.5rem;
+  height: 20.875rem;
   padding: 0.9rem;
   border-radius: 1rem;
   border: 1px solid #ACCCEB;
@@ -47,7 +48,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.25rem;
+  margin-top: 1.5rem;
+  /* border: 2px dashed red; */
 }
 
 .btnFecha {

@@ -6,7 +6,8 @@ import ProgresoTU from './ProgresoTU';
 import ProgresoCuestionario from './ProgresoCuestionario';
 
 import lapiz from './icoLapiz.svg';
-import perfil from './perfil.png';
+//import perfil from './perfil.png';
+import user from './UserMan.png'
 import any from './any.svg';
 
 const TarjetaLateral = ({
@@ -80,7 +81,7 @@ const TarjetaLateral = ({
         <div className={styles.cntFoto}>
           <ProgresoTU porcentaje={40} />
           <div className={styles.foto}>
-            <img src={perfil} alt="foto de perfil de usuario" />
+            <img src={user} alt="foto de perfil de usuario" />
             <button
               type="button"
               className={styles.lapizBtn}

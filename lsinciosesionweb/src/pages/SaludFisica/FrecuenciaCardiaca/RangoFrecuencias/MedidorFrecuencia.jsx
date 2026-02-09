@@ -16,13 +16,14 @@ import {
 import styles from "./MedidorFrecuenica.module.css";
 import ModalFrecuenciaDiaria from "./ModalFrecuenciaDiaria";
 import { buildDailyMetrics, FREC_MIN } from "./FrecuenciaUtils";
+import mas from "./mas.svg"
 
 const CustomDot = ({ cx, cy }) => {
   if (cx == null || cy == null) return null;
   return (
     <g>
       <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
-      <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
+      <circle cx={cx} cy={cy} r={2.6} fill="#007cba" />
     </g>
   );
 };
@@ -72,11 +73,11 @@ const FrecuenciaDiaria = ({
           </p>
 
           <p className={styles.sub}>
-            Última lectura registrada:
+            Última actualización:
             <br />
             <span className={styles.tiempo}>
               {ultimaLecturaOriginal
-                ? `${formatFecha(ultimaLecturaOriginal.ts)} — ${formatHora(
+              ? `${formatFecha(ultimaLecturaOriginal.ts)} — ${formatHora(
                     ultimaLecturaOriginal.ts
                   )}`
                 : "—"}
@@ -92,7 +93,7 @@ const FrecuenciaDiaria = ({
             data={dayReadings}
             margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={true} />
 
             <XAxis
               type="number"
@@ -100,13 +101,14 @@ const FrecuenciaDiaria = ({
               domain={[0, 24]}
               ticks={[0, 6, 12, 18, 24]}
               tick={{ fontSize: 10, fill: "#94a3b8" }}
+              interval={1}
               axisLine={true}
               tickLine={false}
               className={styles.font}
             />
 
             <YAxis
-              domain={[40, 190]}
+              domain={[30, 150]}
               allowDecimals={false}
               tick={{ fontSize: 10, fill: "#94a3b8" }}
               axisLine={false}
@@ -117,18 +119,20 @@ const FrecuenciaDiaria = ({
 
             {/* Reference: mínimo teórico */}
             {/* <ReferenceLine y={FREC_MIN} stroke="#ef4444" strokeWidth={1.5} /> */}
-            <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
-            <ReferenceLine y={60}  stroke="#f97373" strokeWidth={1.9} strokeDasharray="10 10" />
+            {/* <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" /> */}
+            <ReferenceLine y={60}  stroke="#f97373" strokeWidth={.9} strokeDasharray="" />
 
             {/* Reference: promedio */}
             {mean > 0 && (
               <ReferenceLine
                 y={mean}
-                stroke="#007cba"
+                stroke="transparent"
                 strokeDasharray="4 4"
                 ifOverflow="extendDomain"
               />
             )}
+
+            
 
             <Tooltip
               formatter={(val) => [`${val} ppm`, "Lectura"]}
@@ -141,7 +145,7 @@ const FrecuenciaDiaria = ({
             <Line
               type="monotone"
               dataKey="bpm"
-              stroke="#fd908d"
+              stroke="transparent"
               strokeWidth={2}
               dot={false}
               connectNulls
@@ -163,7 +167,7 @@ const FrecuenciaDiaria = ({
       {/* FOOTER (botón pill, sin margin-left raro) */}
       <div className={styles.footer}>
         <button type="button" className={styles.btnAdd} onClick={() => setOpen(true)}>
-          <span className={styles.icoMas}>＋</span>
+          <img src={mas} className={styles.icoMas}></img>
           <span>Añadir</span>
         </button>
       </div>

@@ -37,19 +37,21 @@
   /* background-color: white; */
 }
 
-.container {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
 
 .tit {
-  width: 80%;
-  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.25rem 1rem 0;
   font-weight: bold;
   text-align: left;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  gap: 0.5rem;
+  
+}
 .cntValores {
   font-size: 0.85rem;
   text-align: end;
