@@ -1,11 +1,13 @@
 # Reporte de Cambios - Enero 2026
 
 ## Periodo analizado
+
 - Desde: 2026-01-01
 - Hasta: 2026-01-31
 - Fuente: historial de git del repositorio `lsinciosesionweb`
 
 ## Resumen
+
 - Commits registrados: 25
 - Archivos impactados (acumulado): 283
 - Inserciones: 10,484
@@ -14,6 +16,7 @@
 Durante enero se concentraron mejoras en tres frentes: diseño responsivo de vistas clave, evolución del módulo de citas/calendario y fortalecimiento de módulos de métricas/medicamentos/noticias.
 
 ## Lista de actividades realizadas
+
 1. Implementación y ajuste de modales en varias vistas.
    Se estandarizó la apertura/cierre y el contenido de ventanas modales para formularios y flujos informativos, mejorando consistencia visual y de interacción.
    ![alt text](image.png)
@@ -66,6 +69,7 @@ Durante enero se concentraron mejoras en tres frentes: diseño responsivo de vis
     Se implementó persistencia de tratamientos por fecha, permitiendo registrar y visualizar medicamentos conforme a la configuración definida.
 
 ## Trazabilidad de commits (enero 2026)
+
 - 2026-01-30 - `bbdfd8d` - add// medicamentos. guarda en calendario tratamientos por fecha según configuración
 - 2026-01-29 - `a3d5ae9` - valor D modalCitaMedica
 - 2026-01-28 - `c0f0e48` - add// ajuste package, monos3d, formulario medicamento..
@@ -93,6 +97,7 @@ Durante enero se concentraron mejoras en tres frentes: diseño responsivo de vis
 - 2026-01-12 - `a8215bd` - modales
 
 ## Notas
+
 - Las graficas se mantienen en construcción para ajustarlas a las necesidades propuestas por el área de investigación
 - Las vistas responsivas se mantienen en construcción para ajustarlas a diseño propuesto.
-- El reporte describe cambios técnicos integrados al repositorio durante enero 2026. 
+- El reporte describe cambios técnicos integrados al repositorio durante enero 2026.
