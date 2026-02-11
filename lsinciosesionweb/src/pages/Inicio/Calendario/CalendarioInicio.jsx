@@ -170,9 +170,13 @@ const CalendarioInicio = ({
             isMobile,
             onOpenDay: openForDay,
             day: ownerState.day,
+            showDaysOutsideCurrentMonth: true,
             outsideCurrentMonth: ownerState.outsideCurrentMonth,
           }),
         }}
+        dayOfWeekFormatter={(day) =>
+            ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
+          }
         sx={{
           width: "85%",
           "& .MuiDayCalendar-weekContainer": {
