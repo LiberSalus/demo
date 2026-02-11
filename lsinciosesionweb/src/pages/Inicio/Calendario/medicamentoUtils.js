@@ -75,7 +75,6 @@ export function isTakeDay(rule, dayKey) {
     const take = Math.max(Number(rule.takeDays || 1), 1);
     const rest = Math.max(Number(rule.restDays || 0), 0);
     const cycle = take + rest;
-
     const diff = day.diff(start, "day");
     const pos = diff % Math.max(cycle, 1);
     return pos < take;

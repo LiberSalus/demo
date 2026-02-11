@@ -32,6 +32,12 @@ import CalendarioInicio from "./Calendario/CalendarioInicio";
 import Mona3d from "./Monos3d/Mona3d";
 import Mono3d from "./Monos3d/Mono3d";
 
+// ✅ NUEVO: storage de citas (localStorage)
+import {
+  loadCitasPorFecha,
+  saveCitasPorFecha,
+} from "./Calendario/storageCitas";
+
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(false);
@@ -54,13 +60,10 @@ export default function Inicio() {
   const [openAgendaModal, setOpenAgendaModal] = useState(false);
   const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
 
-  // ✅ Persistencia (ahora sí, ya existe medicamentos)
+  // ✅ Persistencia medicamentos
   useEffect(() => {
     try {
-      localStorage.setItem(
-        "ls_medicamentos_rules",
-        JSON.stringify(medicamentos),
-      );
+      localStorage.setItem("ls_medicamentos_rules", JSON.stringify(medicamentos));
     } catch {
       null;
     }
@@ -72,7 +75,7 @@ export default function Inicio() {
     window.dispatchEvent(
       new CustomEvent("perfil_min_updated", {
         detail: { esMujer },
-      }),
+      })
     );
   }, [esMujer]);
 
@@ -139,7 +142,15 @@ export default function Inicio() {
     ],
   };
 
-  const [citasPorFecha, setCitasPorFecha] = useState(CITAS_INICIALES);
+  // ✅ NUEVO: citas desde localStorage (si no hay, usa CITAS_INICIALES)
+  const [citasPorFecha, setCitasPorFecha] = useState(() =>
+    loadCitasPorFecha(CITAS_INICIALES)
+  );
+
+  // ✅ NUEVO: Persistencia citas
+  useEffect(() => {
+    saveCitasPorFecha(citasPorFecha);
+  }, [citasPorFecha]);
 
   const avatarImg = esMujer ? mona : mono;
   const manchaImg = esMujer ? manchaR : manchaA;
@@ -148,8 +159,7 @@ export default function Inicio() {
   const openModalCitas = (tsOrDayjs) => {
     setAgendaFocus("citas");
     if (tsOrDayjs?.$d) setSelectedAgendaDay(tsOrDayjs);
-    else if (typeof tsOrDayjs === "number")
-      setSelectedAgendaDay(dayjs(tsOrDayjs));
+    else if (typeof tsOrDayjs === "number") setSelectedAgendaDay(dayjs(tsOrDayjs));
     setOpenAgendaModal(true);
   };
 
@@ -216,14 +226,10 @@ export default function Inicio() {
           <div className={styles.cntTarjetasAlertas}>
             <p>Mis Medicamentos</p>
             <div className={`${styles.cntAlertas} scroll-container`}>
-              {/* En la siguiente iteración conectamos esto para abrir modal en “medicamento”
-                 y seleccionar medId. Por ahora NO rompe nada. */}
               <TarjetasMedicamentosIco
                 medicamentos={medicamentos}
-                day={selectedAgendaDay} // ✅ usa el día actual de agenda
-                onOpenMedicamento={(payload) =>
-                  openModalMedicamentos(payload || {})
-                }
+                day={selectedAgendaDay}
+                onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
               />
             </div>
 

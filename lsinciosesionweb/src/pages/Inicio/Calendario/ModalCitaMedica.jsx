@@ -17,6 +17,9 @@ import FormularioCitaMedica from "./FormularioCitaMedica";
 import FormularioMedicamento from "./FormularioMedicamento";
 import Confirmacion from "./Confirmacion";
 
+// ✅ NUEVO: asegurar ids únicos con UUID
+import { ensureId } from "@/utils/ensureId";
+
 const ModalCitaMedica = ({
   open,
   onClose,
@@ -26,7 +29,7 @@ const ModalCitaMedica = ({
   setCitasPorFecha,
   focusSection = "citas",
 
-  // ✅ NUEVO: estado CENTRAL (viene de Inicio)
+  // ✅ estado CENTRAL (viene de Inicio)
   medicamentos = [],
   setMedicamentos = () => {},
   selectedMedId = null,
@@ -46,7 +49,7 @@ const ModalCitaMedica = ({
 
   const [tab, setTab] = useState(initialTab);
 
-  // ✅ importante: si abres desde tarjeta (focusSection cambia), sincroniza tab
+  // ✅ si abres desde tarjeta (focusSection cambia), sincroniza tab
   useEffect(() => {
     setTab(
       focusSection === "medicamento" || focusSection === "medicamentos"
@@ -61,11 +64,24 @@ const ModalCitaMedica = ({
   const manejarGuardarCita = (datosCita) => {
     const key = dayjs(datosCita.fecha).format("YYYY-MM-DD");
 
+    // ✅ compat + ts + UUID
+    const citaToSave = ensureId({
+      ...datosCita,
+      tipo: datosCita.tipo ?? datosCita.tipoCita,
+      lugar: datosCita.lugar ?? datosCita.ubicacion,
+      _ts: datosCita?._ts ?? Date.now(),
+    });
+
     setCitasPorFecha?.((prev) => {
-      const anteriores = prev[key] || [];
+      const anteriores = prev?.[key] || [];
+      const next = [...anteriores, citaToSave];
+
+      // ✅ evitar duplicados por id
+      const unique = Array.from(new Map(next.map((c) => [c.id, c])).values());
+
       return {
         ...prev,
-        [key]: [...anteriores, { ...datosCita, id: Date.now() }],
+        [key]: unique,
       };
     });
 
@@ -74,9 +90,11 @@ const ModalCitaMedica = ({
   };
 
   const manejarGuardarMedicamento = (rule) => {
-    // ✅ ahora sí se guarda en el estado central (Inicio)
-    setMedicamentos?.((prev) => [...(prev || []), rule]);
-    setSelectedMedId?.(rule.id);
+    // ✅ asegura UUID (por si el form no lo trae)
+    const ruleToSave = ensureId(rule);
+
+    setMedicamentos?.((prev) => [...(prev || []), ruleToSave]);
+    setSelectedMedId?.(ruleToSave.id);
 
     setTipoConfirm("medicamento");
     setShowConfirm(true);
@@ -190,7 +208,7 @@ const ModalCitaMedica = ({
               tab={tab}
               onTabChange={setTab}
               focusSection={computedFocusSection}
-              // ✅ ahora viene de Inicio
+              // ✅ viene de Inicio
               medicamentos={medicamentos}
               selectedMedId={selectedMedId}
               onSelectMedId={setSelectedMedId}
