@@ -15,6 +15,7 @@ import cuadro from "./cuadro.svg";
 import ProgCora from "@/components/ProgresoCorazon/ProgCora";
 import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
 import Noticia from "./TarjetaNoticia/Noticia";
+import Derechos from "@/components/Derechos/Derechos"
 
 import dayjs from "dayjs";
 import "dayjs/locale/es";
@@ -262,6 +263,9 @@ export default function Inicio() {
       </div>
 
       <div className={styles}></div>
+      <div className={styles.footer}>
+        <Derechos />
+      </div>
     </div>
   );
 }
