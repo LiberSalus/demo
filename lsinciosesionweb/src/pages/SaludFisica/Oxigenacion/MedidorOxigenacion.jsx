@@ -75,7 +75,6 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
     setShowConfirm(true);
   };
 
-
   const fechaMostrar = new Date().toLocaleString("es-MX", {
     day: "2-digit",
     month: "short",
@@ -87,7 +86,6 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
   return (
     <>
       <div className={styles.MedidorOxigenacion}>
-
         {/* Header */}
         <div className={styles.header}>
           <p className={styles.titulo}>Oxigenación diaria</p>
@@ -107,79 +105,99 @@ const MedidorOxigenacion = ({ onUpdateOxi }) => {
 
         {/* Chart */}
         {/* Chart */}
-<div className={styles.chartWrapper}>
-  <ResponsiveContainer width="100%" height={180}>
-    <ComposedChart
-      data={mediciones}
-      margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-      <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
-      <ReferenceLine y={95} stroke="#ffd93d" strokeWidth={1.9} strokeDasharray="10 10" />
-      <ReferenceLine y={90} stroke="#ff9f1c" strokeWidth={1.9} strokeDasharray="10 10" />
-      <ReferenceLine y={100} stroke="#16a34a" strokeWidth={1.9} strokeDasharray="10 10" />
-      
-      
-      <XAxis
-        type="number"
-        dataKey="hora"
-        domain={[0, 24]}
-        ticks={[0, 6, 12, 18, 24]}
-        tickFormatter={(v) => `${String(v).padStart(2, "0")}:00`}
-        tick={{ fontSize: 10, fill: "#94a3b8" }}
-        axisLine={true}
-        tickLine={false}
-        className={styles.font}
-      />
+        <div className={styles.chartWrapper}>
+          <ResponsiveContainer width="100%" height={180}>
+            <ComposedChart
+              data={mediciones}
+              margin={{ top: 10, right: 20, bottom: 0, left: -20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <ReferenceLine
+                y={100}
+                stroke="#16a34a"
+                strokeWidth={1.9}
+                strokeDasharray="10 10"
+              />
+              <ReferenceLine
+                y={95}
+                stroke="#ffd93d"
+                strokeWidth={1.9}
+                strokeDasharray="10 10"
+              />
+              <ReferenceLine
+                y={90}
+                stroke="#ff9f1c"
+                strokeWidth={1.9}
+                strokeDasharray="10 10"
+              />
+              <ReferenceLine
+                y={100}
+                stroke="#16a34a"
+                strokeWidth={1.9}
+                strokeDasharray="10 10"
+              />
 
-      <YAxis
-        type="number"
-        domain={[90, 100]}
-        ticks={[90, 92, 94, 96, 98, 100]}
-        tickFormatter={(v) => `${v}%`}
-        tick={{ fontSize: 10, fill: "#94a3b8" }}
-        axisLine={false}
-        tickLine={false}
-        className={styles.font}
-      />
+              <XAxis
+                type="number"
+                dataKey="hora"
+                domain={[0, 24]}
+                ticks={[0, 6, 12, 18, 24]}
+                tickFormatter={(v) => `${String(v).padStart(2, "0")}:00`}
+                tick={{ fontSize: 10, fill: "#94a3b8" }}
+                axisLine={true}
+                tickLine={false}
+                className={styles.font}
+              />
 
-      <Tooltip
-        formatter={(value) => [`${value}%`, "SpO₂"]}
-        labelFormatter={(hora) => `Hora: ${String(hora).padStart(2, "0")}:00`}
-        labelStyle={{ fontSize: "0.75rem" }}
-        contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
-      />
+              <YAxis
+                type="number"
+                domain={[90, 100]}
+                ticks={[90, 92, 94, 96, 98, 100]}
+                tickFormatter={(v) => `${v}%`}
+                tick={{ fontSize: 10, fill: "#94a3b8" }}
+                axisLine={false}
+                tickLine={false}
+                className={styles.font}
+              />
 
-      {/* ✅ Línea de unión (igual patrón) */}
-      <Line
-        type="monotone"
-        dataKey="spo2"
-        stroke="#fd908d"
-        strokeWidth={2}
-        dot={false}
-        activeDot={{ r: 5 }}
-      />
-    
-      {/* ✅ Puntos pequeños con borde blanco */}
-      <Scatter
-        dataKey="spo2"
-        fill="#fd908d"
-        stroke="#fd908d"
-        strokeWidth={1}
-        shape={({ cx, cy }) => {
-          if (cx == null || cy == null) return null;
-          return (
-            <g>
-              <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
-              <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
-            </g>
-          );
-        }}
-      />
-    </ComposedChart>
-  </ResponsiveContainer>
-</div>
+              <Tooltip
+                formatter={(value) => [`${value}%`, "SpO₂"]}
+                labelFormatter={(hora) =>
+                  `Hora: ${String(hora).padStart(2, "0")}:00`
+                }
+                labelStyle={{ fontSize: "0.75rem" }}
+                contentStyle={{ fontSize: "0.75rem", borderRadius: "0.5rem" }}
+              />
 
+              {/* ✅ Línea de unión (igual patrón) */}
+              <Line
+                type="monotone"
+                dataKey="spo2"
+                stroke="#fd908d"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 5 }}
+              />
+
+              {/* ✅ Puntos pequeños con borde blanco */}
+              <Scatter
+                dataKey="spo2"
+                fill="#fd908d"
+                stroke="#fd908d"
+                strokeWidth={1}
+                shape={({ cx, cy }) => {
+                  if (cx == null || cy == null) return null;
+                  return (
+                    <g>
+                      <circle cx={cx} cy={cy} r={3.5} fill="#ffffff" />
+                      <circle cx={cx} cy={cy} r={2.6} fill="#fd908d" />
+                    </g>
+                  );
+                }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
 
         {/* Footer botón */}
         <div className={styles.footer}>

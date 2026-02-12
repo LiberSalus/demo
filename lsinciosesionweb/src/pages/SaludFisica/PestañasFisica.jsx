@@ -1,5 +1,5 @@
 // src/pages/SaludFisica/PestañasFisica.jsx
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import styles from "./PestañasFisica.module.css";
 
@@ -11,87 +11,100 @@ import styles from "./PestañasFisica.module.css";
 const aliasMetricToInterna = {
   SpO2: "Oxigenación",
   Pasos: "Actividad física",
-  // si mañana cambian nombres externos, los agregas aquí:
   // "Ritmo cardiaco": "Frecuencia cardiaca",
 };
 
-/**
- * Dado un medidor interno ("Oxigenación", "Actividad física"),
- * obtenemos la etiqueta que queremos mostrar en el botón.
- * Por defecto, usamos el mismo texto si no hay alias inverso.
- */
-function labelParaMedidorInterno(medidorInterno) {
-  // buscar si este medidor interno tiene un alias externo
-  const entrada = Object.entries(aliasMetricToInterna).find(
-    ([externo, interno]) => interno === medidorInterno
-  );
-  return entrada ? entrada[0] : medidorInterno;
-}
-
-/**
- * Normaliza lo que viene del query param ?metric=
- * a un nombre interno de medidor.
- */
+/** Normaliza lo que viene del query param o tabs a nombre interno */
 function normalizarMetric(metric) {
   if (!metric) return metric;
   return aliasMetricToInterna[metric] || metric;
 }
 
-const PestañasFisica = ({ tabs }) => {
-  const [searchParams] = useSearchParams();
+/** Convierte interno → externo (solo si existe alias), útil para URL */
+function externaParaInterna(medidorInterno) {
+  const entrada = Object.entries(aliasMetricToInterna).find(
+    ([, interno]) => interno === medidorInterno
+  );
+  return entrada ? entrada[0] : medidorInterno;
+}
+
+const PestañasFisica = ({ tabs = [] }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ✅ 1) Normalizamos los tabs para que la UI use SIEMPRE nombres internos “bonitos”
+  const tabsNorm = useMemo(() => {
+    return (tabs || []).map((t) => {
+      const medidorInterno = normalizarMetric(t.medidor);
+      return {
+        ...t,
+        medidorInterno,
+      };
+    });
+  }, [tabs]);
 
   // lo que viene en la URL, ej: "SpO2", "Pasos", "Frecuencia cardiaca"
   const metricSelected = searchParams.get("metric");
+  const metricSelectedInterna = useMemo(
+    () => normalizarMetric(metricSelected),
+    [metricSelected]
+  );
 
-  // lo convertimos a nuestro nombre interno
-  const metricSelectedInterna = normalizarMetric(metricSelected);
+  // ✅ 2) Estado activo SIEMPRE en interno
+  const initialActiva = useMemo(() => {
+    if (!tabsNorm.length) return "";
+    const candidata = metricSelectedInterna || tabsNorm[0].medidorInterno;
+    const existe = tabsNorm.some((t) => t.medidorInterno === candidata);
+    return existe ? candidata : tabsNorm[0].medidorInterno;
+  }, [tabsNorm, metricSelectedInterna]);
 
-  const [activa, setActiva] = useState(() => {
-    if (!tabs || tabs.length === 0) return "";
+  const [activa, setActiva] = useState(initialActiva);
 
-    // normalizamos la métrica seleccionada
-    const candidata = metricSelectedInterna || tabs[0].medidor;
-
-    const existe = tabs.some((t) => t.medidor === candidata);
-    return existe ? candidata : tabs[0].medidor;
-  });
-
-  // si cambia la URL (?metric=...), actualizamos pestaña activa
   useEffect(() => {
-    if (!metricSelectedInterna) return;
-    const existe = tabs.some((t) => t.medidor === metricSelectedInterna);
-    if (existe) setActiva(metricSelectedInterna);
-  }, [metricSelectedInterna, tabs]);
+    if (!tabsNorm.length) return;
+    setActiva(initialActiva);
+  }, [tabsNorm, initialActiva]);
 
-  const pestañaActiva = tabs.find((t) => t.medidor === activa) || tabs[0] || {};
-  const ComponenteActivo = pestañaActiva.Component;
+  // ✅ 3) Click: activa interno + actualiza URL (opcionalmente con alias externo)
+  const onSelectTab = useCallback(
+    (medidorInterno) => {
+      setActiva(medidorInterno);
+
+      // Para URL: si tiene alias externo, lo usamos; si no, dejamos el interno
+      const metricForUrl = externaParaInterna(medidorInterno);
+
+      const next = new URLSearchParams(searchParams);
+      next.set("metric", metricForUrl);
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams]
+  );
+
+  const pestañaActiva =
+    tabsNorm.find((t) => t.medidorInterno === activa) || tabsNorm[0];
+
+  const ComponenteActivo = pestañaActiva?.Component;
 
   return (
     <div className={styles.PestañasFisica}>
       {/* 🔹 Botones de pestañas */}
       <div className={styles.cntBotones}>
-        {tabs.map(({ medidor }) => {
-          const etiquetaBtn = labelParaMedidorInterno(medidor);
-
-          return (
-            <button
-              key={medidor}
-              type="button"
-              className={`${styles.tabBtn} ${
-                medidor === activa ? styles.tabBtnActiva : ""
-              }`}
-              onClick={() => setActiva(medidor)}
-            >
-              {labelParaMedidorInterno(medidor)}
-            </button>
-          );
-        })}
+        {tabsNorm.map((t) => (
+          <button
+            key={t.medidorInterno}
+            type="button"
+            className={`${styles.tabBtn} ${
+              t.medidorInterno === activa ? styles.tabBtnActiva : ""
+            }`}
+            onClick={() => onSelectTab(t.medidorInterno)}
+          >
+            {/* ✅ Aquí SIEMPRE se verá “Oxigenación” y “Actividad física” */}
+            {t.medidorInterno}
+          </button>
+        ))}
       </div>
 
       {/* 🔹 Contenido de la pestaña activa */}
-      <div>
-        {ComponenteActivo ? <ComponenteActivo /> : <p>Sin componente</p>}
-      </div>
+      <div>{ComponenteActivo ? <ComponenteActivo /> : <p>Sin componente</p>}</div>
     </div>
   );
 };

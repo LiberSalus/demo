@@ -54,28 +54,29 @@
   font-size: 0.85rem;
 }
 
-
 .inputGrupo {
+  margin-right: 1rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
   position: relative;
-  transform: translateX(2rem);
 }
 
 .input {
-  width: 70%;
+  width: 100%;
   padding: 0.5rem 1rem;
   appearance: none;
   border: 1px solid #a2b8ec;
   outline: none;
   border-radius: 3rem;
+  
 }
 
 .unidad {
   position: absolute;
-  right: 2.5rem;
-  color: var(--color-lbs);
+  right: 1.5rem;
+  color: darkgray;
+  transform: translateY(-1px);
 }
 
 .campoCheck {
