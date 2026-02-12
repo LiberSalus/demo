@@ -4,6 +4,11 @@ import { useSearchParams } from "react-router-dom";
 
 import styles from "../SaludFisica/PestañasFisica.module.css";
 
+const aliasMetricas = {
+  SpO2: "Oxigenación",
+  Pasos: "Actividad física",
+};
+
 const PestañasSalud = ({ tabs, tituloSeccion }) => {
   const [searchParams] = useSearchParams();
   const metricSelected = searchParams.get("metric");
@@ -39,7 +44,7 @@ const PestañasSalud = ({ tabs, tituloSeccion }) => {
                 }`}
               onClick={() => setActiva(medidor)}
             >
-              {medidor}
+              {aliasMetricas[medidor] || medidor}
             </button>
           ))}
         </div>
