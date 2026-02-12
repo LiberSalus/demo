@@ -17,7 +17,7 @@ const RangoFrecuencias = ({ minDia, maxDia }) => {
     <div className={styles.RangoFrecuencias}>
       <div className={styles.txt}>
         <p>Rango de frecuencia cardiaca</p>
-        <p>{formatRango()} <spam className={styles.ppm}>ppm</spam></p>
+        <p>{formatRango()} <span className={styles.ppm}>ppm</span></p>
       </div>
 
       <div className={styles.icon}>

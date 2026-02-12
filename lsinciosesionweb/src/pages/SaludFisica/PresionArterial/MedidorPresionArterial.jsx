@@ -92,7 +92,8 @@ const MedidorPresionArterial = ({
           strokeDasharray="50 50"
           pathLength="100"
           transform="rotate(180) translate(-440 -310)"
-          transformOrigin="50%"
+          styles={{transformOrigin:""}}
+          
           strokeLinecap="round"
         />
 
@@ -109,7 +110,7 @@ const MedidorPresionArterial = ({
           strokeDasharray="0.5 0.5"
           pathLength="240"
           transform="rotate(180) translate(-440 -310)"
-          transformOrigin="50%"
+          styles={{transformOrigin:"50%"}}
           className={styles.gradCorta}
         />
 
@@ -124,7 +125,7 @@ const MedidorPresionArterial = ({
           strokeDasharray="0.5 9.5"
           pathLength="240"
           transform="rotate(180) translate(-440 -310)"
-          transformOrigin="50%"
+          styles={{transformOrigin:"50%"}}
           className={styles.gradLarga}
         />
         
@@ -140,12 +141,12 @@ const MedidorPresionArterial = ({
           strokeDasharray={`${visible} ${PATH_TOTAL - visible}`}
           strokeDashoffset={offset}
           pathLength={PATH_TOTAL}
-          transform="rotate(180) translate(-440 -360)"
-          transformOrigin="220 150"
+          transform="rotate(180) translate(0 -60)"
           strokeLinecap="round"
           style={{
             transition:
               "stroke-dasharray 1.5s ease-out, stroke-dashoffset 1.5s ease-out",
+              transformOrigin: "220px 150px",
           }}
         />
 

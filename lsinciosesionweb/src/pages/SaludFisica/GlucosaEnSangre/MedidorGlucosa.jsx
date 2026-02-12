@@ -68,7 +68,7 @@ const MedidorGlucosa = ({
           strokeDasharray="50 50"
           /* transform="rotate(180) translate(-440 -310)" */
           pathLength="100"
-          transformOrigin="220 150"
+          styles={{transformOrigin:"220px 150px"}}
           strokeLinecap="round"
           className={styles.arco}
         />

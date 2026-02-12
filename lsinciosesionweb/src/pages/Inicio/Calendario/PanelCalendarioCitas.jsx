@@ -678,7 +678,7 @@ const PanelCalendarioCitas = ({
                     justifyContent: "center",
                   }}
                 >
-                  <Typography variant="body2" sx={{ color: "#94A3B8" }}>
+                  <Typography variant="body2" sx={{ color: "#94A3B8"}}>
                     No hay medicamentos configurados para este día.
                   </Typography>
                 </Box>
