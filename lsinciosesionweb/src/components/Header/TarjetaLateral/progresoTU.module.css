@@ -1,0 +1,40 @@
+.cntProgreso {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.progreso {
+ /*  position: absolute; */
+  transform: rotate(126deg);
+  
+}
+
+/* .progresoLinea{
+  
+} */
+
+
+
+
+.bola {
+  position: absolute;
+  /* border-right: 2px dashed red; */
+  width:  200px;
+  height: 200px;
+  transition: transform 2.95s ease;
+  transform: rotate(var(--grados));
+}
+.bola::before {
+  position: absolute;
+  content: '';
+  width:  0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color:#007CBA;
+  top:  50%;
+  left: 12%;
+  transform: translate(-50%, -50%);
+}

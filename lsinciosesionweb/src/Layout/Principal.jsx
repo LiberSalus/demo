@@ -1,13 +1,14 @@
 // src/Layout/Principal.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import { Outlet } from "react-router-dom";
-import Menu from "@/components/menu/Menu";
+import Header from "@/components/Header/Header";
+import MainMenu from "@/components/Header/menu/Menu";
+import Footer from "@/components/Footer/Footer";
 import styles from "./principal.module.css";
-import TarjetaUsuario from "@/components/Tarjetas/TarjetaUsuario/TarjetaUsuario";
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
 
 
-export default function Principal() {
+export default function Principal({ children }) {
 
   const [esMujer, setEsMujer] = useState(true);
 
@@ -47,26 +48,30 @@ export default function Principal() {
 
   return () => window.removeEventListener("perfil_min_updated", handler);
 }, [leerPerfil]);
+
+  const content = children ?? <Outlet />;
+
   return (
     <div className={styles.shell}>
-      
       <div className={styles.bg}>
         <BackgroundPanel esMujer={esMujer} />
       </div>
 
-      {/* Sidebar (fijo a la izquierda) */}
       <aside className={styles.sidebar}>
-        <Menu />
+        <MainMenu />
       </aside>
 
-      {/* Header (tarjeta usuario) */}
       <header className={styles.header}>
-        <TarjetaUsuario />
+        <Header />
       </header>
 
-      {/* Contenido principal */}
       <main className={styles.content}>
-        <Outlet />
+        <div className={styles.contentInner}>
+          {content}
+        </div>
+        <div className={styles.footer}>
+          <Footer />
+        </div>
       </main>
     </div>
   );

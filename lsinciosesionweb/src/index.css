@@ -71,3 +71,32 @@ button:focus-visible {
         scroll-behavior: smooth;
     }
 }
+
+:root {
+
+  /* Colores */
+  --prnci: #007CBA;
+  --bkgnd: #F7F7FF;
+  --menul: #F2F2F6;
+  --tipog: #334155;
+  --place: #B5B5B5;
+  --borde: #ACCCEB;
+  --blnco: #FFFFFF;
+  --barra: #EBEBEB;
+  --alert: #F8A737;
+
+  /* fuentes 10 12 14 16 24 32*/
+  --font10: 0.625rem;
+  --font12: 0.75rem;
+  --font14: 0.875rem;
+  --font16: 1rem;
+  --font18: 1.125rem;
+  --font24: 1.5rem;
+  --font32: 2rem;
+
+  /* pesos en fuentes */
+  --peso700:700;
+  --peso400:400;
+  --peso300:300;
+
+}

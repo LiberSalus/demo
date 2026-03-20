@@ -24,7 +24,7 @@ const BackgroundPanel = ({ esMujer = true }) => {
 
   return (
     <div className={styles.backgroundPanel}>
-      <img src={lineas} className={styles.lineas} alt="Background Lines" />
+      {/* <img src={lineas} className={styles.lineas} alt="Background Lines" /> */}
       <div className={styles.capa} style={vars} />
     </div>
   );

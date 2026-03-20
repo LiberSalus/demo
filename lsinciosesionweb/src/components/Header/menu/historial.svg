@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <g stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Carpeta -->
+    <path d="M10 20h16l4 4h24a2 2 0 0 1 2 2v24a2 2 0 0 1 -2 2h-44a2 2 0 0 1 -2 -2v-28a2 2 0 0 1 2 -2z" fill="transparent"/>
+    
+    <!-- Reloj sobre carpeta -->
+    <circle cx="45" cy="34" r="6"/>
+    <line x1="45" y1="34" x2="48" y2="34"/>
+    <line x1="45" y1="34" x2="45" y2="30.25"/>
+  </g>
+</svg>

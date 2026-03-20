@@ -1,0 +1,20 @@
+<svg width="200" height="200" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#ffffff" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Cabina -->
+    <rect x="14" y="18" width="36" height="40" rx="2" />
+    <!-- <rect x="20" y="24" width="24" height="34" /> -->
+    <rect x="24" y="32" width="16" height="26" />
+    <!-- <circle cx="32" cy="42" r="1" /> -->
+    
+    <!-- Parte superior con cruz -->
+    <path d="M16 18 h32 v-7a5 5 0 0 0 -5 -5h-22a5 5 0 0 0 -5 5z" />
+    <path transform="scale(0.7) translate(14,4)" d="M30 8v3h-3v4h3v3h4v-3h3v-4h-3v-3z" />
+    
+    <rect x="37" y="38" width="1" height="3" />
+    
+    <!-- Estetoscopio -->
+    <!-- <path transform="translate(3, 2)" d="M48 30a6 6 0 1 0 12 0v-6a6 6 0 1 0 -12 0z" /> -->
+    <!-- <path d="M54 36v4a6 6 0 0 1 -12 0v-2" /> -->
+    <!-- <circle cx="42" cy="38" r="4" /> -->
+  </g>
+</svg>
