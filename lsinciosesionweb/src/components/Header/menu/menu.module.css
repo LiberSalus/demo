@@ -17,7 +17,8 @@
   left: 0;
   top: 110px;
   height: calc(100dvh - 110px);
-  width: var(--menu-w);
+  /* width: var(--menu-w); */
+  width: 4rem;
   background: var(--menu-bg);
   box-shadow: 6px 0 18px rgba(13, 27, 44, 0.08);
   overflow: hidden;
@@ -33,6 +34,7 @@
   width: var(--menu-w-open);
   padding-left: 1.35rem;
   padding-right: 1.35rem;
+  
 }
 
 .list {
@@ -41,13 +43,16 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: end;
-  
+  justify-content: center;
+  width: 100%;
   gap: 0.3rem;
+  /* border: 1px dashed red; */
+
 }
 
 .item {
   padding: 0;
+  
 }
 
 .link {
@@ -81,9 +86,10 @@
   /* border: 1px dashed red; */
   width:  2rem;
   height: 2rem;
-  flex: 0 0 2rem;
+  flex: 0 0 0rem;
   display: inline-grid;
   place-items: center;
+  /* padding-left: 1rem; */
 }
 
 .imgIco {
@@ -107,6 +113,7 @@
 .menuDesktop:focus-within .link {
   justify-content: flex-start;
   gap: 1.05rem;
+  
 }
 
 .menuDesktop:hover .text,
