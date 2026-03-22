@@ -74,6 +74,11 @@ button:focus-visible {
 
 :root {
 
+  /* Fuentes */
+
+  --font-roboto:"Roboto", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
   /* Colores */
   --prnci: #007CBA;
   --bkgnd: #F7F7FF;
@@ -84,18 +89,23 @@ button:focus-visible {
   --blnco: #FFFFFF;
   --barra: #EBEBEB;
   --alert: #F8A737;
-
+  --stat1: #C72611;
+  --stat2: #3FAD58;
+ 
   /* fuentes 10 12 14 16 24 32*/
   --font10: 0.625rem;
   --font12: 0.75rem;
   --font14: 0.875rem;
   --font16: 1rem;
   --font18: 1.125rem;
+  --font20: 1.25rem;
   --font24: 1.5rem;
   --font32: 2rem;
 
   /* pesos en fuentes */
+  --peso600:600;
   --peso700:700;
+  --peso500:500;
   --peso400:400;
   --peso300:300;
 

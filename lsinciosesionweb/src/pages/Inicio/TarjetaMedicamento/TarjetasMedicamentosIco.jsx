@@ -108,7 +108,7 @@ const TarjetasMedicamentosIco = ({
       })}
 
       {medsDelDia.length === 0 && (
-        <div style={{ padding: ".5rem 0.75rem", color: "#94A3B8", fontSize: 13 }}>
+        <div style={{ padding: "4.5rem", color: "#94A3B8", fontSize: 13, textAlign: "center" }}>
           No hay medicamentos para este día.
         </div>
       )}

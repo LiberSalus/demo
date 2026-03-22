@@ -1,5 +1,5 @@
 //src\pages\Inicio\Inicio.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./inicio.module.css";
 import TarjetaAlertas from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
@@ -42,6 +42,12 @@ import {
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(false);
+  const medsScrollRef = useRef(null);
+  const citasScrollRef = useRef(null);
+  const [scrollState, setScrollState] = useState({
+    medicamentos: { canLeft: false, canRight: false },
+    citas: { canLeft: false, canRight: false },
+  });
 
   // ✅ estado central medicamentos (arriba de todo)
   const [medicamentos, setMedicamentos] = useState(() => {
@@ -60,6 +66,25 @@ export default function Inicio() {
   // ✅ modal agenda
   const [openAgendaModal, setOpenAgendaModal] = useState(false);
   const [selectedAgendaDay, setSelectedAgendaDay] = useState(dayjs());
+
+  const CITAS_INICIALES = {
+    "2025-11-19": [
+      {
+        id: 1,
+        medico: "Dra. Regina Bustos Díaz",
+        especialidad: "Cardiología",
+        horario: "10:30 am - 11:00 am",
+        tipo: "presencial",
+        lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
+        notas: "Llevar resultados de laboratorio.",
+      },
+    ],
+  };
+
+  // ✅ NUEVO: citas desde localStorage (si no hay, usa CITAS_INICIALES)
+  const [citasPorFecha, setCitasPorFecha] = useState(() =>
+    loadCitasPorFecha(CITAS_INICIALES)
+  );
 
   // ✅ Persistencia medicamentos
   useEffect(() => {
@@ -101,6 +126,59 @@ export default function Inicio() {
     };
   }, []);
 
+  const updateScrollButtons = (key, element) => {
+    if (!element) return;
+
+    const maxScrollLeft = element.scrollWidth - element.clientWidth;
+    setScrollState((prev) => ({
+      ...prev,
+      [key]: {
+        canLeft: element.scrollLeft > 8,
+        canRight: maxScrollLeft - element.scrollLeft > 8,
+      },
+    }));
+  };
+
+  useEffect(() => {
+    const configs = [
+      { key: "medicamentos", ref: medsScrollRef },
+      { key: "citas", ref: citasScrollRef },
+    ];
+
+    const cleanups = configs
+      .map(({ key, ref }) => {
+        const element = ref.current;
+        if (!element) return null;
+
+        const handleUpdate = () => updateScrollButtons(key, element);
+
+        handleUpdate();
+        element.addEventListener("scroll", handleUpdate, { passive: true });
+        window.addEventListener("resize", handleUpdate);
+
+        return () => {
+          element.removeEventListener("scroll", handleUpdate);
+          window.removeEventListener("resize", handleUpdate);
+        };
+      })
+      .filter(Boolean);
+
+    return () => cleanups.forEach((cleanup) => cleanup());
+  }, [medicamentos, citasPorFecha, selectedAgendaDay]);
+
+  const scrollCards = (ref, direction, key) => {
+    const element = ref.current;
+    if (!element) return;
+
+    const amount = Math.max(element.clientWidth * 0.72, 180);
+    element.scrollBy({
+      left: direction * amount,
+      behavior: "smooth",
+    });
+
+    window.setTimeout(() => updateScrollButtons(key, element), 260);
+  };
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem("perfil_min");
@@ -128,25 +206,6 @@ export default function Inicio() {
       null;
     }
   }, []);
-
-  const CITAS_INICIALES = {
-    "2025-11-19": [
-      {
-        id: 1,
-        medico: "Dra. Regina Bustos Díaz",
-        especialidad: "Cardiología",
-        horario: "10:30 am - 11:00 am",
-        tipo: "presencial",
-        lugar: "Hospital San Ángel Inn, Torre Mitikah piso 17",
-        notas: "Llevar resultados de laboratorio.",
-      },
-    ],
-  };
-
-  // ✅ NUEVO: citas desde localStorage (si no hay, usa CITAS_INICIALES)
-  const [citasPorFecha, setCitasPorFecha] = useState(() =>
-    loadCitasPorFecha(CITAS_INICIALES)
-  );
 
   // ✅ NUEVO: Persistencia citas
   useEffect(() => {
@@ -225,26 +284,84 @@ export default function Inicio() {
           <hr className={styles.hr} />
 
           <div className={styles.cntTarjetasAlertas}>
-            <p>Mis Medicamentos</p>
-            <div className={`${styles.cntAlertas} scroll-container`}>
-              <TarjetasMedicamentosIco
-                medicamentos={medicamentos}
-                day={selectedAgendaDay}
-                onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
-              />
+            <div className={styles.carruselBloque}>
+              <p className={styles.carruselTitulo}>Mis medicamentos</p>
+
+              <div
+                className={`${styles.carruselViewport} ${styles.viewportMedicamentos}`}
+              >
+                <button
+                  type="button"
+                  className={`${styles.btnCarrusel} ${styles.btnCarruselIzq}`}
+                  onClick={() => scrollCards(medsScrollRef, -1, "medicamentos")}
+                  disabled={!scrollState.medicamentos.canLeft}
+                  aria-label="Desplazar medicamentos a la izquierda"
+                >
+                  &#8249;
+                </button>
+
+                <div
+                  ref={medsScrollRef}
+                  className={`${styles.cntMedicamentos} scroll-container`}
+                >
+                  <TarjetasMedicamentosIco
+                    medicamentos={medicamentos}
+                    day={selectedAgendaDay}
+                    onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className={`${styles.btnCarrusel} ${styles.btnCarruselDer}`}
+                  onClick={() => scrollCards(medsScrollRef, 1, "medicamentos")}
+                  disabled={!scrollState.medicamentos.canRight}
+                  aria-label="Desplazar medicamentos a la derecha"
+                >
+                  &#8250;
+                </button>
+              </div>
             </div>
 
-            <p>Mis Citas</p>
-            <div className={`${styles.cntCitas} scroll-container`}>
-              <TarjetasCitas
-                citasPorFecha={citasPorFecha}
-                day={selectedAgendaDay}
-                onOpenCita={(cita) => {
-                  setSelectedAgendaDay(dayjs(cita._ts));
-                  setAgendaFocus("citas");
-                  setOpenAgendaModal(true);
-                }}
-              />
+            <div className={styles.carruselBloque}>
+              <p className={styles.carruselTitulo}>Mis citas</p>
+
+              <div className={`${styles.carruselViewport} ${styles.viewportCitas}`}>
+                <button
+                  type="button"
+                  className={`${styles.btnCarrusel} ${styles.btnCarruselIzq}`}
+                  onClick={() => scrollCards(citasScrollRef, -1, "citas")}
+                  disabled={!scrollState.citas.canLeft}
+                  aria-label="Desplazar citas a la izquierda"
+                >
+                  &#8249;
+                </button>
+
+                <div
+                  ref={citasScrollRef}
+                  className={`${styles.cntCitas} scroll-container`}
+                >
+                  <TarjetasCitas
+                    citasPorFecha={citasPorFecha}
+                    day={selectedAgendaDay}
+                    onOpenCita={(cita) => {
+                      setSelectedAgendaDay(dayjs(cita._ts));
+                      setAgendaFocus("citas");
+                      setOpenAgendaModal(true);
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className={`${styles.btnCarrusel} ${styles.btnCarruselDer}`}
+                  onClick={() => scrollCards(citasScrollRef, 1, "citas")}
+                  disabled={!scrollState.citas.canRight}
+                  aria-label="Desplazar citas a la derecha"
+                >
+                  &#8250;
+                </button>
+              </div>
             </div>
           </div>
         </div>

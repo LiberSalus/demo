@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import TarjetaCita from "./TarjetaCita";
 import styles from "./TarjetasCitas.module.css";
 import { buildTarjetasCitas } from "../Calendario/citasUtils";
+import { citas } from "./datosCita";
 
 const TarjetasCitas = ({ citasPorFecha = {}, day, onOpenCita }) => {
   const key = useMemo(
@@ -29,6 +30,12 @@ const TarjetasCitas = ({ citasPorFecha = {}, day, onOpenCita }) => {
           onClick={() => onOpenCita?.(cita)}
         />
       ))}
+
+      {citas.length === 0 && (
+        <div style={{ padding: "3.5rem 3rem", color: "#94A3B8", fontSize: 13, textAlign: "center" }}>
+          No hay medicamentos para este día.
+        </div>
+      )}
     </div>
   );
 };
