@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DudasFrecuentes = () => {
+const Tami = () => {
   return (
     <div style={
       { height:"70vh", 
@@ -13,9 +13,9 @@ const DudasFrecuentes = () => {
       }
       
       }>
-      DUDAS FRECUENTES
+      TAMI
     </div>
   )
 }
 
-export default DudasFrecuentes
+export default Tami

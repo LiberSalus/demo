@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FrankyTeAcompana = () => {
+const MonitorDeSalud = () => {
   return (
     <div style={
       { height:"70vh", 
@@ -13,9 +13,9 @@ const FrankyTeAcompana = () => {
       }
       
       }>
-      FRANKY TE ACOMPAÑA
+      MONITOR DE SALUD
     </div>
   )
 }
 
-export default FrankyTeAcompana
+export default MonitorDeSalud

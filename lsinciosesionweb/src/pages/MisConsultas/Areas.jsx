@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Areas = () => {
+const MiCuidadoDiario = () => {
   return (
     <div style={
       { height:"70vh", 
@@ -14,9 +14,9 @@ const Areas = () => {
       }
       
       }>
-      AREAS
+      MI CUIDADO DIARIO
     </div>
   )
 }
 
-export default Areas
+export default MiCuidadoDiario

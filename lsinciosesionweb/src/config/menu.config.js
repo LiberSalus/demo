@@ -28,7 +28,7 @@ export const MENU = [
   },
 
   // Secciones de ayuda/extra
-  { label: "Any",    to: ROUTES.ANY },
+  { label: "Monitor", to: ROUTES.MONITOR },
   { label: "Franky", to: ROUTES.FRANKY },
   { label: "Dudas frecuentes", to: ROUTES.DUDAS },
 ];

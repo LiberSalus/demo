@@ -31,6 +31,7 @@ export const ROUTES = {
 
   // Otros
   ANY: "/any",
+  MONITOR: "/monitor",
   PANEL: "/panelayout",
   DUDAS: "/ayuda/dudas-frecuentes",
   FRANKY: "/franky",

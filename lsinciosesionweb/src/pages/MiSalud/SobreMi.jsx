@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SobreMi = () => {
+const MiSaludATravesDelTiempo = () => {
   return (
     <div style={
       { height:"70vh", 
@@ -13,9 +13,9 @@ const SobreMi = () => {
       }
       
       }>
-      SOBRE MI
+      MI SALUD A TRAVÉS DEL TIEMPO
     </div>
   )
 }
 
-export default SobreMi
+export default MiSaludATravesDelTiempo

@@ -8,39 +8,64 @@ import LogoLSDes from "./LogoLSDescarga.svg";
 import cerrar from './icoCerrar.svg'
 
 import inicio from "./icoInicio.svg";
-import salud from "./icoSalud.svg";
-import consultas from "./icoConsultas.svg";
-import any from "./icoAny.svg";
+import miSalud from "./icoMiSalud.svg";
+import miCuidado from "./icoMiCuidado.svg";
+import monitor from "./icoMonitor.svg";
 import franky from "./icoFranky.svg";
+import any from "./icoAny.svg"
 import dudas from "./icoDudas.svg";
+import tami from "./icoTami.svg"
 
 import activeInicio from './icoActiveInicio.svg'
-import activeSalud from './icoActiveSalud.svg'
-import activeConsultas from './icoActiveConsulta.svg'
-import activeAny from './icoActiveAny.svg'
+import activeMiSalud from './icoActiveMiSalud.svg'
+import activeMiCuidado from './icoActiveMiCuidado.svg'
+import activeMonitor from './icoActiveMonitor.svg'
 import activeFranky from './icoActiveFranky.svg'
+import activeAny from './icoActiveAny.svg'
 import activeDudas from './icoActiveDudas.svg'
+import activeTami from './icoActiveTami.svg'
 
 const links = [
-  { id: "inicio", to: ROUTES.INICIO, label: "Inicio", icon: inicio, activeIcon: activeInicio },
+  { id: "INICIO", 
+    to: ROUTES.INICIO,
+    label: "Inicio", 
+    icon: inicio, 
+    activeIcon: activeInicio },
   {
-    id: "salud",
+    id: "SOBRE_MI",
     to: ROUTES.SOBRE_MI,
     label: "Mi salud a través del tiempo",
-    icon: salud,
-    activeIcon: activeSalud,
+    icon: miSalud,
+    activeIcon: activeMiSalud,
   },
   {
-    id: "consultas",
+    id: "AREAS",
     to: ROUTES.AREAS,
-    label: "Mis cuidado diario",
-    icon: consultas,
-    activeIcon: activeConsultas,
+    label: "Mi cuidado diario ",
+    icon: miCuidado,
+    activeIcon: activeMiCuidado,
   },
-  { id: "any", to: ROUTES.ANY, label: "Any", icon: any, activeIcon: activeAny },
-  { id: "any", to: ROUTES.ANY, label: "Any", icon: any, activeIcon: activeAny },
-  { id: "franky", to: ROUTES.FRANKY, label: "Franky", icon: franky, activeIcon: activeFranky },
-  { id: "dudas", to: ROUTES.DUDAS, label: "Dudas frecuentes", icon: dudas, activeIcon: activeDudas },
+  { id: "MONITOR", 
+    to: ROUTES.MONITOR, 
+    label: "Monitor de salud", 
+    icon: monitor, 
+    activeIcon: activeMonitor, 
+  },
+  { id: "FRANKY", 
+    to: ROUTES.FRANKY, 
+    label: 
+    "Franky te acompaña", 
+    icon: franky, 
+    activeIcon: activeFranky 
+  },
+  { id: "ANY", 
+    to: ROUTES.ANY, 
+    label: 
+    "Any", 
+    icon: any, 
+    activeIcon: activeAny 
+  },
+  { id: "DUDAS", to: ROUTES.DUDAS, label: "TAMI", icon: tami, activeIcon: activeTami },
 ];
 
 export default function Menu({ isOpen, onClose, breakpoint = 1028, mobileOnly = false }) {
