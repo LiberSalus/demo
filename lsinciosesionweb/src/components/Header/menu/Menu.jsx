@@ -26,17 +26,18 @@ const links = [
   {
     id: "salud",
     to: ROUTES.SOBRE_MI,
-    label: "Mi salud",
+    label: "Mi salud a través del tiempo",
     icon: salud,
     activeIcon: activeSalud,
   },
   {
     id: "consultas",
     to: ROUTES.AREAS,
-    label: "Mis consultas",
+    label: "Mis cuidado diario",
     icon: consultas,
     activeIcon: activeConsultas,
   },
+  { id: "any", to: ROUTES.ANY, label: "Any", icon: any, activeIcon: activeAny },
   { id: "any", to: ROUTES.ANY, label: "Any", icon: any, activeIcon: activeAny },
   { id: "franky", to: ROUTES.FRANKY, label: "Franky", icon: franky, activeIcon: activeFranky },
   { id: "dudas", to: ROUTES.DUDAS, label: "Dudas frecuentes", icon: dudas, activeIcon: activeDudas },
@@ -128,15 +129,15 @@ export default function Menu({ isOpen, onClose, breakpoint = 1028, mobileOnly = 
         </ul>
 
         <div className={styles.menuFoot}>
-          
-            <img src={LogoLSDes} alt="Liber Salus" />
-            <p>Descarga nuestra App</p>
-            <p>
-              Descarga nuestra app y consulta tu información de salud en
-              cualquier momento y desde cualquier lugar.
-            </p>
-            <button className={styles.footBtn}>Descarga App</button>
-          
+
+          <img src={LogoLSDes} alt="Liber Salus" />
+          <p>Descarga nuestra App</p>
+          <p>
+            Descarga nuestra app y consulta tu información de salud en
+            cualquier momento y desde cualquier lugar.
+          </p>
+          <button className={styles.footBtn}>Descarga App</button>
+
         </div>
       </nav>
     );
@@ -153,7 +154,7 @@ export default function Menu({ isOpen, onClose, breakpoint = 1028, mobileOnly = 
             onClick={onClose}
             aria-label="Cerrar menú"
           >
-            <img src={cerrar} alt="Cerrar Menu"/>
+            <img src={cerrar} alt="Cerrar Menu" />
           </button>
           <img src={logoLSMenuMob} className={styles.mobileLogo} alt="Liber Salus" />
         </div>
