@@ -274,7 +274,7 @@ const FormularioMedicamento = ({
         onSubmit={handleSubmit}
         sx={{
           width: "100%",
-          maxWidth: "content",
+          maxWidth: "27.31rem",
           display: "flex",
           flexDirection: "column",
           gap: 2,

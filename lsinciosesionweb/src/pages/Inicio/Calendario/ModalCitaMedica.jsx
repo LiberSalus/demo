@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
-
+import styles from './ModalCitaMedica.module.css'
 import PanelCalendarioCitas from "./PanelCalendarioCitas";
 import FormularioCitaMedica from "./FormularioCitaMedica";
 import FormularioMedicamento from "./FormularioMedicamento";
@@ -129,7 +129,8 @@ const ModalCitaMedica = ({
           width: paperWidth,
           borderRadius: isMobile ? 0 : 3,
           overflow: "hidden",
-          bgcolor: "#F8FAFC",
+          bgcolor: "#F7F7FF",
+          
         },
       }}
     >
@@ -143,13 +144,20 @@ const ModalCitaMedica = ({
           justifyContent: "center",
           px: 2,
           py: 1.5,
-          bgcolor: "rgba(248,250,252,0.9)",
+          /* bgcolor: "#F7F7FF", */
           backdropFilter: "blur(10px)",
-          borderBottom: "1px solid rgba(15,23,42,0.08)",
+
           pt: isMobile ? "calc(env(safe-area-inset-top) + 12px)" : 1.5,
         }}
       >
-        <Typography sx={{ fontWeight: 800, fontSize: "1.15rem" }}>
+        <Typography
+          className={styles.tit}
+          sx={{
+            fontFamily: "var(--font-inter)",
+            fontWeight: "var(--peso700)",
+            fontSize: "1.5rem",
+          }}
+        >
           {tab === "medicamento" ? "Medicamentos" : "Cita médica"}
         </Typography>
 
@@ -177,6 +185,7 @@ const ModalCitaMedica = ({
             ? "calc(100dvh - (env(safe-area-inset-top) + 64px))"
             : "80dvh",
           pb: isMobile ? "calc(env(safe-area-inset-bottom) + 16px)" : 3,
+          background: "#F7F7FF"
         }}
       >
         <Box
@@ -191,13 +200,13 @@ const ModalCitaMedica = ({
           {/* Panel */}
           <Box
             sx={{
-              flex: isStacked ? "0 0 auto" : "0 0 420px",
+              flex: isStacked ? "0 0 auto" : "0 0 37.18rem",
               width: "100%",
-              maxWidth: "100%",
-              borderRadius: 3,
+              maxWidth: "37.18rem",
+              borderRadius: 4,
               bgcolor: "white",
-              boxShadow: "0 8px 30px rgba(15,23,42,0.08)",
               p: isMobile ? 1.5 : 2,
+              border: "1px solid #ACCCEB"
             }}
           >
             <PanelCalendarioCitas
@@ -220,12 +229,13 @@ const ModalCitaMedica = ({
             sx={{
               flex: 1,
               minWidth: 0,
-              width: "100%",
-              maxWidth: "100%",
+              width: "27.31rem",
+              maxWidth: "27.31rem",
               borderRadius: 3,
               bgcolor: "white",
-              boxShadow: "0 8px 30px rgba(15,23,42,0.08)",
+              /* boxShadow: "0 8px 30px rgba(15,23,42,0.08)", */
               p: isMobile ? 1.5 : 2,
+              background: "transparent"
             }}
           >
             {tab === "medicamento" ? (

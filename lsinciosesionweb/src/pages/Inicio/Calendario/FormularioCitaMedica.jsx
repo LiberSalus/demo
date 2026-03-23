@@ -49,6 +49,24 @@ const TIPOS_CITA = [
   { value: "en_linea", label: "En línea" },
 ];
 
+const outlinedFieldSx = {
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+  "& .MuiOutlinedInput-input": {
+    fontSize: "13px",
+  },
+  "& .MuiSelect-select": {
+    fontSize: "13px",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+};
+
 const FormularioCitaMedica = ({
   selectedDate = dayjs(), // dayjs
   onGuardar, // función que recibe los datos del formulario
@@ -107,41 +125,43 @@ const FormularioCitaMedica = ({
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        
         width: "100%",
-        maxWidth: "content",
+        maxWidth: "27.31rem",
+        height: "fit-content",
         display: "flex",
         flexDirection: "column",
-        gap: 2,
+        gap: 1.35,
       }}
     >
       {/* Fecha arriba a la derecha */}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Typography variant="body2" sx={{ color: "#64748B" }}>
+        <Typography variant="body2" sx={{ color: "#64748B", mb: 0.15 }}>
           {fechaTexto}
         </Typography>
       </Box>
 
       {/* Nombre del médico */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
           Nombre del médico
         </Typography>
         <TextField
           name="medico"
-          placeholder="Escribe el nombre del médico"
+          placeholder="Ingresa nombre del médico"
           value={form.medico}
           onChange={handleChange}
           fullWidth
           size="small"
           variant="outlined"
-          InputProps={{ sx: { borderRadius: 999 } }}
+          className={styles.inputs}
+          sx={outlinedFieldSx}
+          InputProps={{ sx: { borderRadius: 999, p: 0, height: 1, m:0} }}
         />
       </Box>
 
       {/* Especialidad */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
           Especialidad
         </Typography>
         <FormControl fullWidth size="small">
@@ -150,21 +170,26 @@ const FormularioCitaMedica = ({
             value={form.especialidad}
             onChange={handleChange}
             displayEmpty
-            sx={{ borderRadius: 999 }}
+            sx={{
+              borderRadius: 999,
+              background: "white",
+              ...outlinedFieldSx,
+            }}
             MenuProps={{
               PaperProps: {
                 sx: {
                   borderRadius: "0 0 1rem 1rem", // 👈 parte importante
                   boxShadow: "0px 4px 20px rgba(0,0,0,0.08)",
+                  
                 },
               },
             }}
           >
-            <MenuItem value="">
+            <MenuItem value="" sx={{}}>
               <p className={styles.uno}>Selecciona una especialidad</p>
             </MenuItem>
             {ESPECIALIDADES.map((esp) => (
-              <MenuItem key={esp} value={esp}>
+              <MenuItem key={esp} value={esp} sx={{ background: "white",}}> 
                 {esp}
               </MenuItem>
             ))}
@@ -173,16 +198,15 @@ const FormularioCitaMedica = ({
       </Box>
 
       {/* Horario + Tipo de cita */}
-      <Grid container columnSpacing={0}>
+      
         {/* Horario */}
-        <Grid item xs={12} sm={6} sx={{ pr: { sm: 1 } }}>
+        <Box className={styles.horarioCita}>  
           <Box className={styles.horario}>
-            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+            <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
               Horario
             </Typography>
             {/* Horario */}
             <FormControl
-              fullWidth
               size="small"
               sx={{ mr: 1 }}
               className={styles.horario}
@@ -192,7 +216,11 @@ const FormularioCitaMedica = ({
                 value={form.horario}
                 onChange={handleChange}
                 displayEmpty
-                sx={{ borderRadius: 999 }}
+                sx={{
+                  borderRadius: 999,
+                  background: "white",
+                  ...outlinedFieldSx,
+                }}
               >
                 <MenuItem value="">
                   <p className={styles.uno}>Selecciona un horario</p>
@@ -208,12 +236,12 @@ const FormularioCitaMedica = ({
               </Select>
             </FormControl>
           </Box>
-        </Grid>
+        
 
         {/* Tipo de cita */}
-        <Grid item xs={12} sm={6}>
+      
           <Box className={styles.cita}>
-            <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+            <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
               Tipo de cita
             </Typography>
             <FormControl fullWidth size="small">
@@ -221,20 +249,23 @@ const FormularioCitaMedica = ({
                 name="tipoCita"
                 value={form.tipoCita}
                 onChange={handleChange}
-                sx={{ borderRadius: 999 }}
+                sx={{
+                  borderRadius: 999,
+                  background: "white",
+                  ...outlinedFieldSx,
+                }}
               >
                 <MenuItem value="presencial">Presencial</MenuItem>
                 <MenuItem value="en_linea">En línea</MenuItem>
               </Select>
             </FormControl>
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
 
       {/* Ubicación o leyenda según tipo de cita */}
       {esPresencial ? (
         <Box>
-          <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+          <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
             Ubicación
           </Typography>
           <TextField
@@ -245,6 +276,7 @@ const FormularioCitaMedica = ({
             fullWidth
             size="small"
             variant="outlined"
+            sx={outlinedFieldSx}
             InputProps={{ sx: { borderRadius: 999 } }}
           />
         </Box>
@@ -259,7 +291,7 @@ const FormularioCitaMedica = ({
 
       {/* Motivo de consulta */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.5, ml: 2.5 }}>
+        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
           Motivo de consulta
         </Typography>
         <TextField
@@ -270,6 +302,7 @@ const FormularioCitaMedica = ({
           fullWidth
           size="small"
           variant="outlined"
+          sx={outlinedFieldSx}
           InputProps={{ sx: { borderRadius: 999 } }}
         />
       </Box>
@@ -289,7 +322,7 @@ const FormularioCitaMedica = ({
 
       {/* Notas */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.5 }}>
+        <Typography variant="body2" sx={{ mb: 0.35 }}>
           Notas
         </Typography>
         <TextField
@@ -299,14 +332,15 @@ const FormularioCitaMedica = ({
           onChange={handleChange}
           fullWidth
           multiline
-          minRows={3}
+          minRows={2.6}
           variant="outlined"
+          sx={outlinedFieldSx}
           InputProps={{ sx: { borderRadius: 3 } }}
         />
       </Box>
 
       {/* Botón Guardar */}
-      <Box sx={{ mt: 1, display: "flex", justifyContent: "center", flexDirection:"column", alignItems:"center" }}>
+      <Box sx={{ mt: 0.35, display: "flex", justifyContent: "center", flexDirection:"column", alignItems:"center" }}>
         {errorMsg && (
           <Typography variant="caption" sx={{ color: "#DC2626", mt: 0, textAlign:"center"}}>
             {errorMsg}

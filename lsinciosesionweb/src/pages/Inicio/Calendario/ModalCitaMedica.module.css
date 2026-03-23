@@ -1,4 +1,7 @@
 .tit {
-  font-weight: 800;
+  font-weight: var(--peso700);
+  font-family: var(--font-inter);
 }
-
+.calendario {
+  border: 1px dashed red;
+}

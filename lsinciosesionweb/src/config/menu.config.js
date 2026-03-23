@@ -1,34 +1,13 @@
 import { ROUTES } from "./routes";
 
+// Configuracion base del menu principal visible en la app.
+// Cada item mantiene el mismo id conceptual que ROUTES y el path real en `to`.
 export const MENU = [
-  { label: "Inicio", to: ROUTES.INICIO },
-
-  {
-    label: "Mi Salud",
-    children: [
-      { label: "Sobre mí",              to: ROUTES.SOBRE_MI },
-      { label: "Mi historia con la salud", to: ROUTES.HISTORIA_SALUD },
-      { label: "Mi familia y herencia", to: ROUTES.FAMILIA_HERENCIA },
-      { label: "Mi cuerpo y su historia", to: ROUTES.CUERPO_HISTORIA },
-      { label: "Responde y cuídate",    to: ROUTES.RESPONDE_CUIDATE },
-    ],
-  },
-
-  {
-    label: "Mis Consultas",
-    children: [
-      { label: "Susurros Salud",           to: ROUTES.SUSURROS },
-      { label: "Comprensión de mi situación", to: ROUTES.COMPRENSION },
-      { label: "Mi plan de cuidado",       to: ROUTES.PLAN_CUIDADO },
-      { label: "Cómo voy avanzando",       to: ROUTES.AVANCE },
-      { label: "Próximos pasos",           to: ROUTES.PROXIMOS_PASOS },
-      { label: "Lo que dice tu salud",     to: ROUTES.LO_QUE_DICE },
-      { label: "Áreas",                    to: ROUTES.AREAS },
-    ],
-  },
-
-  // Secciones de ayuda/extra
-  { label: "Monitor", to: ROUTES.MONITOR },
-  { label: "Franky", to: ROUTES.FRANKY },
-  { label: "Dudas frecuentes", to: ROUTES.DUDAS },
+  { id: "INICIO", label: "Inicio", to: ROUTES.INICIO },
+  { id: "SOBRE_MI", label: "Mi salud a través del tiempo", to: ROUTES.SOBRE_MI },
+  { id: "AREAS", label: "Mi cuidado diario", to: ROUTES.AREAS },
+  { id: "MONITOR", label: "Monitor de salud", to: ROUTES.MONITOR },
+  { id: "FRANKY", label: "Franky te acompaña", to: ROUTES.FRANKY },
+  { id: "ANY", label: "Any", to: ROUTES.ANY },
+  { id: "DUDAS", label: "TAMI", to: ROUTES.DUDAS },
 ];

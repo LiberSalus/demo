@@ -15,11 +15,16 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 import styles from "./PanelCalendarioCitas.module.css";
 
+import medico from "./icoMedico.svg";
+import especialidad from "./icoEspecialidad.svg";
 import horario from "./icoHorario.svg";
-import lugar from "./icoLugar.svg";
-import profesion from "./icoProfesion.svg";
+import ubicacion from "./icoUbicacion.svg";
 import linea from "./icoEnlinea.svg";
-import notasIco from "./icoNotas.svg";
+import notas from "./icoNotas.svg";
+import agenda from "./icoAgenda.svg";
+import medicamento from "./icoMedicamento.svg";
+import dosis from "./icoDosis.svg";
+import nada from "./icoNada.svg";
 
 import {
   buildCalendarPaint,
@@ -135,11 +140,17 @@ const PanelCalendarioCitas = ({
     return `${times.slice(0, 2).join(", ")} +${times.length - 2} más`;
   };
 
+
+  const agendaDay = selectedDate.format("D");
+  const agendaMonth = selectedDate.format("MMMM");
+  const agendaMonthLabel =
+    agendaMonth.charAt(0).toUpperCase() + agendaMonth.slice(1);
+
   return (
     <Box
       sx={{
         width: "100%",
-        maxWidth: isMobile ? "100%" : 580,
+        maxWidth: isMobile ? "100%" : "100%",
         borderRadius: 7,
         bgcolor: "#FFF",
         p: 2.5,
@@ -157,7 +168,7 @@ const PanelCalendarioCitas = ({
           border: "1px solid #BFDBFE",
           backgroundColor: "#fff",
           width: "fit-content",
-          minWidth: 287,
+          minWidth: 286.75,
           margin: "0 auto",
         }}
       >
@@ -174,7 +185,7 @@ const PanelCalendarioCitas = ({
               minHeight: 32,
               minWidth: 0,
               padding: "0.25rem 1.5rem",
-              borderRadius: 999,
+              borderRadius: 50,
               fontSize: "0.9rem",
               color: "#9CA3AF",
               display: "flex",
@@ -211,17 +222,18 @@ const PanelCalendarioCitas = ({
             },
             "& .MuiDayCalendar-weekContainer": {
               justifyContent: "space-between",
+              marginBottom: "0rem",
             },
             "& .MuiPickersDay-root": {
-              fontSize: "0.9rem",
-              marginX: 0.1,
+              fontSize: "1rem",
+              marginX: 1,
               position: "relative",
             },
             "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.4 },
             "& .MuiPickersCalendarHeader-root": { mb: 1 },
             "& .MuiPickersCalendarHeader-label": {
               fontWeight: 700,
-              fontSize: "1rem",
+              fontSize: "1.5rem",
               textTransform: "capitalize",
             },
             "& .MuiPickersArrowSwitcher-button": {
@@ -229,7 +241,6 @@ const PanelCalendarioCitas = ({
               padding: "4px",
               marginInline: 0.25,
             },
-            zoom: 0.6,
           }}
           slotProps={{
             day: (ownerState) => {
@@ -291,11 +302,11 @@ const PanelCalendarioCitas = ({
       <Card
         elevation={0}
         sx={{
-          borderRadius: 3,
-          border: "1px solid #E2E8F0",
-          p: 2,
+          borderRadius: 4,
+          border: "1px solid #ACCCEB",
+          /* p: 2, */
           mt: 1,
-          height: 260,
+          height: 240,
           display: "flex",
           flexDirection: "column",
           width: "100%",
@@ -305,383 +316,249 @@ const PanelCalendarioCitas = ({
       >
         {tab === "cita" ? (
           <>
-            <Typography
-              ref={citasHeaderRef}
-              variant="subtitle2"
-              sx={{
-                color: "#64748B",
-                mb: 0.2,
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                letterSpacing: "0.2px",
-              }}
-            >
-              {citasDelDia.length
-                ? "Citas médicas del día"
-                : "Sin citas médicas para este día"}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: "#007CBA",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                mt: -0.2,
-                letterSpacing: "0.1px",
-              }}
-            >
-              {selectedDate.format("D [de] MMMM [de] YYYY")}
-            </Typography>
-
             <Box
+              ref={citasHeaderRef}
               sx={{
-                mt: 1,
                 flex: 1,
                 display: "flex",
-                overflowX: "auto",
-                overflowY: "hidden",
-                gap: 1.5,
-                pb: 0.5,
+                alignItems: "stretch",
               }}
             >
               {citasDelDia.length > 0 ? (
-                citasDelDia.map((cita) => (
-                  <Card
-                    key={cita.id}
-                    elevation={0}
-                    sx={{
-                      flex: "0 0 auto",
-                      minWidth: 360,
-                      maxWidth: 360,
-                      borderRadius: 2,
-                      border: "1px solid #E5E7EB",
-                      p: 1.5,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Box>
-                      {/* Nombre del médico */}
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: "0.95rem", mb: 0.5 }}
-                      >
-                        {cita.medico}
-                      </Typography>
+                <Card elevation={0} className={styles.agendaCard}>
+                  <Box className={styles.agendaHeader}>
+                    <span className={styles.agendaDay}>{agendaDay}</span>
+                    <span className={styles.agendaMonth}>
+                      {agendaMonthLabel}
+                    </span>
+                  </Box>
 
-                      {/* Especialidad */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          mb: 0.5,
-                        }}
-                      >
-                        <img src={profesion} alt="" width={16} height={16} />
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: "0.75rem" }}
-                        >
-                          {cita.especialidad}
-                        </Typography>
-                      </Box>
-
-                      {/* Horario */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          mb: 0.5,
-                        }}
-                      >
-                        <img src={horario} alt="" width={16} height={16} />
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: "0.75rem", color: "#007CBA" }}
-                        >
-                          {cita.horario}
-                        </Typography>
-                      </Box>
-
-                      {/* notas */}
-                      {cita.notas && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: 1,
-                            mb: 0.5,
-                          }}
-                        >
-                          <img
-                            src={notasIco}
-                            alt="Notas"
-                            width={16}
-                            height={16}
-                            style={{ marginTop: 0 }}
-                          />
+                  <Box className={styles.agendaScroll}>
+                    {citasDelDia.map((cita) => (
+                      <Box key={cita.id} className={styles.agendaEntry}>
+                        <Box className={styles.agendaLine}>
+                          <img src={medico} alt="Médico" />
                           <Typography
                             variant="body2"
-                            sx={{ fontSize: "0.75rem" }}
+                            sx={{ fontSize: "inherit" }}
+                            className={styles.agendaDoctor}
                           >
-                            {cita.notas}
+                            Nombre del medico: {cita.medico}
                           </Typography>
                         </Box>
-                      )}
 
-                      {/* Lugar / En línea */}
-                      {cita.tipo === "presencial" ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: 1,
-                            mb: 0.5,
-                          }}
-                        >
-                          <img
-                            src={lugar}
-                            alt="Ubicación"
-                            width={16}
-                            height={16}
-                            style={{ marginTop: 0 }}
-                          />
+                        <Box className={styles.agendaLine}>
+                          <img src={especialidad} alt="Especialidad" />
                           <Typography
                             variant="body2"
-                            sx={{ fontSize: "0.75rem" }}
+                            sx={{ fontSize: "inherit" }}
                           >
-                            {cita.lugar}
+                            Especialidad: {cita.especialidad}
                           </Typography>
                         </Box>
-                      ) : (
-                        <>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                              mb: 0.5,
-                            }}
+
+                        <Box className={styles.agendaLine}>
+                          <img src={horario} alt="Horario" />
+                          <Typography
+                            variant="body2"
+                            className={styles.agendaLineAccent}
+                            sx={{ fontSize: "inherit" }}
                           >
-                            <img
-                              src={linea}
-                              alt="En línea"
-                              width={16}
-                              height={16}
-                            />
+                            Horario: {cita.horario}
+                          </Typography>
+                        </Box>
+
+                        {cita.notas && (
+                          <Box className={styles.agendaLine}>
+                            <img src={notas} alt="Notas" />
                             <Typography
                               variant="body2"
-                              sx={{ fontSize: "0.75rem" }}
+                              sx={{ fontSize: "inherit" }}
                             >
-                              Cita en línea
+                              {cita.notas}
                             </Typography>
                           </Box>
+                        )}
 
-                          <MuiLink
-                            href={cita.enlace || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            underline={cita.enlace ? "hover" : "none"}
-                            sx={{
-                              fontSize: "0.9rem",
-                              ml: 4,
-                              color: cita.enlace ? "#007CBA" : "#94A3B8",
-                              pointerEvents: cita.enlace ? "auto" : "none",
-                            }}
-                          >
-                            Accede a tu consulta aquí
-                          </MuiLink>
-                        </>
-                      )}
-                    </Box>
-                  </Card>
-                ))
+                        {cita.tipo === "presencial" ? (
+                          <Box className={styles.agendaLine}>
+                            <img src={ubicacion} alt="Ubicación" />
+                            <Typography
+                              variant="body2"
+                              sx={{ fontSize: "inherit" }}
+                            >
+                              {cita.lugar}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <>
+                            <Box className={styles.agendaLine}>
+                              <img src={linea} alt="En línea" />
+                              <Typography
+                                variant="body2"
+                                sx={{ fontSize: "inherit" }}
+                              >
+                                Cita en línea
+                              </Typography>
+                            </Box>
+
+                            <MuiLink
+                              href={cita.enlace || "#"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              underline="none"
+                              className={styles.agendaLink}
+                              sx={{
+                                pointerEvents: cita.enlace ? "auto" : "none",
+                                opacity: cita.enlace ? 1 : 0.55,
+                              }}
+                            >
+                              Accede a tu consulta aquí
+                            </MuiLink>
+                          </>
+                        )}
+                      </Box>
+                    ))}
+                  </Box>
+                </Card>
               ) : (
-                <Box
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography variant="body2" sx={{ color: "#94A3B8" }}>
-                    No hay citas registradas para este día.
-                  </Typography>
-                </Box>
+                <Card sx={{
+                  width: "100%",
+                  position: "relative"
+                  }}>
+                  <Box
+                    className={styles.agendaHeader}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap:"2rem"
+                    }}
+                  >
+                    <img src={agenda} alt="Sin agendar" />
+                    <span className={styles.agendaSin}>
+                      {/* {sinAgregar.cita} */} Aún no agregas una cita
+                    </span>
+                  </Box>
+                  <img className={styles.nada} src={nada} alt="Sin Agendar" />
+                </Card>
               )}
             </Box>
           </>
         ) : (
           <>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                color: "#64748B",
-                mb: 0.2,
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                letterSpacing: "0.2px",
-              }}
-            >
-              {medsDelDia.length
-                ? "Recordatorios de medicamento del día"
-                : "Sin recordatorios para este día"}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: "#007CBA",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                mt: -0.2,
-                letterSpacing: "0.1px",
-              }}
-            >
-              {selectedDate.format("D [de] MMMM [de] YYYY")}
-            </Typography>
-
             <Box
               sx={{
-                mt: 1,
                 flex: 1,
                 display: "flex",
-                overflowX: "auto",
-                overflowY: "hidden",
-                gap: 1.5,
-                pb: 0.5,
+                alignItems: "stretch",
               }}
             >
               {medsDelDia.length > 0 ? (
-                medsDelDia.map((m) => {
-                  const selected = normId(m.id) === normId(selectedMedId);
-                  const times = buildDailyTimes(
-                    m.frecuenciaHoras,
-                    m.horaInicio,
-                  );
+                <Card elevation={0} className={styles.agendaCard}>
+                  <Box className={styles.agendaHeader}>
+                    <span className={styles.agendaDay}>{agendaDay}</span>
+                    <span className={styles.agendaMonth}>
+                      {agendaMonthLabel}
+                    </span>
+                  </Box>
 
-                  return (
-                    <Card
-                      key={m.id}
-                      elevation={0}
-                      onClick={() => handleSelectMed(m.id)}
-                      sx={{
-                        cursor: "pointer",
-                        flex: "0 0 auto",
-                        minWidth: 360,
-                        maxWidth: 360,
-                        borderRadius: 2,
-                        border: selected
-                          ? "2px solid rgba(14,165,233,0.9)"
-                          : "1px solid #E5E7EB",
-                        p: 1.5,
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        backgroundColor: selected
-                          ? "rgba(14,165,233,0.06)"
-                          : "white",
-                        transition: "transform 120ms ease",
-                        "&:active": { transform: "scale(0.99)" },
-                      }}
-                    >
-                      <Box>
-                        {/* Nombre medicamento */}
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ fontSize: "0.95rem", mb: 0.4 }}
+                  <Box className={styles.agendaScroll}>
+                    {medsDelDia.map((m) => {
+                      const selected = normId(m.id) === normId(selectedMedId);
+                      const times = buildDailyTimes(
+                        m.frecuenciaHoras,
+                        m.horaInicio,
+                      );
+
+                      return (
+                        <Box
+                          key={m.id}
+                          className={styles.agendaEntry}
+                          onClick={() => handleSelectMed(m.id)}
+                          sx={{
+                            cursor: "pointer",
+
+                            transition: "transform 120ms ease",
+                            "&:active": { transform: "scale(0.99)" },
+                          }}
                         >
-                          {m.medicamento}
-                        </Typography>
-
-                        {/* Presentación + dosis/cantidad */}
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: "0.75rem", color: "#334155" }}
-                        >
-                          {m.presentacion}
-                          {m.dosis ? ` • ${m.dosis}` : ""}
-                          {m.cantidad ? ` • ${m.cantidad}` : ""}
-                        </Typography>
-
-                        {/* Horario (horas del día por frecuencia) */}
-                        <Box sx={{ mt: 0.8 }}>
-                          <Typography
-                            variant="body2"
-                            sx={{ fontSize: "0.75rem", color: "#64748B" }}
-                          >
-                            Horario
-                          </Typography>
-
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              fontSize: "0.75rem",
-                              color: "#007CBA",
-                              fontWeight: 700,
-                            }}
-                          >
-                            {times.length} toma{times.length > 1 ? "s" : ""} •{" "}
-                            {renderHorasResumen(m)}
-                          </Typography>
-                        </Box>
-
-                        {/* Notas */}
-                        {m.notas && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "flex-start",
-                              gap: 1,
-                              mt: 1,
-                            }}
-                          >
-                            <img
-                              src={notasIco}
-                              alt="Notas"
-                              width={16}
-                              height={16}
-                            />
+                          <Box className={styles.agendaLine}>
+                            <img src={medicamento} alt="Ubicación" />
                             <Typography
                               variant="body2"
-                              sx={{ fontSize: "0.75rem" }}
+                              sx={{ fontSize: "inherit" }}
                             >
-                              {m.notas}
+                              Medicamento: {m.medicamento}
                             </Typography>
                           </Box>
-                        )}
-                      </Box>
 
-                      {/* micro hint */}
-                      <Typography
-                        variant="caption"
-                        sx={{ mt: 1, color: "#94A3B8" }}
-                      >
-                        {selected
-                          ? "Seleccionado para ver calendario"
-                          : "Toca para ver calendario"}
-                      </Typography>
-                    </Card>
-                  );
-                })
+                          <Box className={styles.agendaLine}>
+                            <img src={dosis} alt="" />
+                            <Typography
+                              variant="body2"
+                              sx={{ fontSize: "inherit" }}
+                            >
+                              {m.presentacion}
+                              {m.dosis ? `: ${m.dosis}` : ""}
+                              {m.cantidad ? ` • ${m.cantidad}` : ""}
+                            </Typography>
+                          </Box>
+
+                          <Box className={styles.agendaLine}>
+                            <img src={horario} alt="" />
+                            <Typography
+                              variant="body2"
+                              className={styles.agendaLineAccent}
+                              sx={{ fontSize: "inherit" }}
+                            >
+                              {renderHorasResumen(m)}
+                            </Typography>
+                          </Box>
+
+                          {m.notas && (
+                            <Box className={styles.agendaLine}>
+                              <img src={notas} alt="Notas" />
+                              <Typography
+                                variant="body2"
+                                sx={{ fontSize: "inherit" }}
+                              >
+                                {m.notas}
+                              </Typography>
+                            </Box>
+                          )}
+
+                          <Typography className={styles.agendaHint}>
+                            {selected
+                              ? "Seleccionado para ver calendario"
+                              : "Toca para ver calendario"}
+                          </Typography>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Card>
               ) : (
-                <Box
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography variant="body2" sx={{ color: "#94A3B8"}}>
-                    No hay medicamentos configurados para este día.
-                  </Typography>
-                </Box>
+                <Card sx={{
+                  width: "100%",
+                  position: "relative"
+                  }}>
+                  <Box
+                    className={styles.agendaHeader}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap:"2rem"
+                    }}
+                  >
+                    <img src={agenda} alt="Sin agendar" />
+                    <span className={styles.agendaSin}>
+                      Aún no agregas un tratamiento
+                    </span>
+                  </Box>
+                  <img className={styles.nada} src={nada} alt="Sin Agendar" />
+                </Card>
               )}
             </Box>
           </>

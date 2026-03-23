@@ -1,6 +1,14 @@
+.horarioCita {
+  width: 100%;
+  display: flex;
+  /* border: 1px dashed red; */
+  align-items: flex-end;
+}
+
 .horario {
   width: 12rem;
   margin-right: 1.5rem;
+  
 }
 .cita {
   width: 12rem;
@@ -9,4 +17,25 @@
 .uno {
   color: #b0afaf;
 }
+
+.inputs {
+  margin: 0;
+  padding: 0;
+}
+
+.recordarme {
+  width: 100%;
+  margin: -0.15rem 0 0 auto !important;
+  justify-content: flex-end;
+}
+
+.recordarme :global(.MuiFormControlLabel-label) {
+  font-size: 0.95rem;
+  color: #42526b;
+}
+
+.recordarme :global(.MuiCheckbox-root) {
+  padding: 0.25rem 0.45rem 0.25rem 0.25rem;
+}
+
 
