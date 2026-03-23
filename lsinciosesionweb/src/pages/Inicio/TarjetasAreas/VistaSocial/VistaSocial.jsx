@@ -83,7 +83,7 @@ const tarjetas = {
 };
 
 const VistaSocial = () => {
-const [tarjetaActiva, setTarjetaActiva] = useState(null);
+const [tarjetaActiva, setTarjetaActiva] = useState(tarjetas.edo1);
 
   return (
     <div className={styles.VistaSocial}>

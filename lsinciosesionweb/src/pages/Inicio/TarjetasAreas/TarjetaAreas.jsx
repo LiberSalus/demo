@@ -13,7 +13,7 @@ const TarjetaAreas = () => {
   return (
     <div className={styles.cntTarjetaAreas}>
       <h3>Áreas de la salud</h3>
-      <p> Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu donec tortor non fermentum. Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu. Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu donec tortor non fermentum. Lorem ipsum dolor sit amet </p>
+      {/* <p> Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu donec tortor non fermentum. Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu. Lorem ipsum dolor sit amet consectetur. Dictumst nibh quisque eu donec tortor non fermentum. Lorem ipsum dolor sit amet </p> */}
 
       <div className={styles.cntPestañas}>
 

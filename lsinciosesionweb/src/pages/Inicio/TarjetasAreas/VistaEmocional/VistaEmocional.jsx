@@ -83,7 +83,7 @@ const tarjetas = {
 };
 
 const VistaEmocional = () => {
-  const [tarjetaActiva, setTarjetaActiva] = useState(null);
+  const [tarjetaActiva, setTarjetaActiva] = useState(tarjetas.edo2);
 
   return (
     <div className={styles.VistaEmocional}>

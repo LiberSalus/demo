@@ -82,7 +82,7 @@ const tarjetas = {
   },
 };
 const VistaNutricional = () => {
-  const [tarjetaActiva, setTarjetaActiva] = useState(null);
+  const [tarjetaActiva, setTarjetaActiva] = useState(tarjetas.edo4);
   return (
     <div className={styles.VistaNutricional}>
       <h3>Mis Cuestionarios</h3>

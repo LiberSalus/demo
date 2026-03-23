@@ -83,7 +83,7 @@ const tarjetas = {
 };
 
 const VistaFisica = () => {
-  const [tarjetaActiva, setTarjetaActiva] = useState(null);
+  const [tarjetaActiva, setTarjetaActiva] = useState(tarjetas.edo3);
 
   return (
     <div className={styles.VistaFisica}>
