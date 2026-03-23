@@ -49,6 +49,7 @@ var fakeDB = [
 
 const tarjetas = {
   edo1: {
+    id: "social-edo1",
     titQs: "Evaluación de conocimientos en primeros auxilios",
     desQs:
       "Cuestionario para medir tu capacidad de respuesta ante emergencias médicas básicas.",
@@ -57,6 +58,7 @@ const tarjetas = {
     n_responses: 25,
   },
   edo2: {
+    id: "social-edo2",
     titQs: "Diagnóstico sobre higiene hospitalaria",
     desQs:
       "Explora tus conocimientos sobre protocolos de limpieza y prevención de infecciones en entornos clínicos.",
@@ -65,6 +67,7 @@ const tarjetas = {
     n_responses: 30,
   },
   edo3: {
+    id: "social-edo3",
     titQs: "Autoevaluación en farmacología básica",
     desQs:
       "Identifica tu nivel de comprensión sobre medicamentos, dosis y efectos secundarios comunes.",
@@ -73,6 +76,7 @@ const tarjetas = {
     n_responses: 0,
   },
   edo4: {
+    id: "social-edo4",
     titQs: "Cuestionario de bioética médica",
     desQs:
       "Analiza tus criterios éticos frente a dilemas clínicos y decisiones sensibles en el cuidado de pacientes.",
@@ -97,22 +101,22 @@ const [tarjetaActiva, setTarjetaActiva] = useState(tarjetas.edo1);
         <div className={styles.cntCmp}>
           <BotonesQs
             edoQs="edo1"
-            activo={tarjetaActiva?.edoQs === "edo1"}
+            activo={tarjetaActiva?.id === tarjetas.edo1.id}
             onClick={() => setTarjetaActiva(tarjetas.edo1)}
           />
           <BotonesQs
             edoQs="edo2"
-            activo={tarjetaActiva?.edoQs === "edo2"}
+            activo={tarjetaActiva?.id === tarjetas.edo2.id}
             onClick={() => setTarjetaActiva(tarjetas.edo2)}
           />
           <BotonesQs
             edoQs="edo3"
-            activo={tarjetaActiva?.edoQs === "edo3"}
+            activo={tarjetaActiva?.id === tarjetas.edo3.id}
             onClick={() => setTarjetaActiva(tarjetas.edo3)}
           />
           <BotonesQs
             edoQs="edo4"
-            activo={tarjetaActiva?.edoQs === "edo4"}
+            activo={tarjetaActiva?.id === tarjetas.edo4.id}
             onClick={() => setTarjetaActiva(tarjetas.edo4)}
           />
         </div>

@@ -38,8 +38,9 @@
   width: 20%;
 }
 
-.activa {
-  box-shadow: 0 0 0 3px #007CBA33;
-  transform: scale(1.02);
+.activo {
+  box-shadow: 0 0 0 2px #007cba;
+  transform: scale(1);
   transition: all 0.2s ease;
+  
 }
