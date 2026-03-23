@@ -380,9 +380,7 @@ export default function Inicio() {
       </div>
 
       <div className={styles}></div>
-      <div className={styles.footer}>
-        <Derechos />
-      </div>
+      
     </div>
   );
 }

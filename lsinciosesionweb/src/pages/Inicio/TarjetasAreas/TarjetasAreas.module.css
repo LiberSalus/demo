@@ -3,7 +3,7 @@
   width: 52.5rem;
   max-height: 31.3125rem;
   
-  /* border: 1px solid lightgray; */
+  border: 1px solid var(--borde);
   border-radius: 1rem;
   padding: 1rem;
   background-color: white;

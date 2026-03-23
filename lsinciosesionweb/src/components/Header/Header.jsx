@@ -8,7 +8,7 @@ import usuario from './Usuario.png'
 import TarjetaLataral from './TarjetaLateral/TarjetaLateral'
 import Menu from './menu/Menu'
 
-const Header = ({ estados = ["e1"] }) => {
+const Header = ({ estados = ["e2"] }) => {
   const TRANSITION_MS = 280
   const [isOpen, setIsOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)

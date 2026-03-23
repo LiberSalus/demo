@@ -15,7 +15,7 @@
 
 .cntMono {
   border: 1px solid #ACCCEB;
-  width: 58.25rem;
+  width: 61rem;
   min-width: 54rem;
   height: 36.875rem;
   background-color: white;
@@ -142,7 +142,7 @@
   
   top: 0;
   left: 50%;
-
+  
 
 }
 
@@ -241,10 +241,12 @@
 
 .btnCarruselIzq {
   left: -2.3rem;
+  top: 35%;
 }
 
 .btnCarruselDer {
   right: -2.3rem;
+  top: 35%;
 }
 
 .cntCitas::-webkit-scrollbar {

@@ -15,7 +15,7 @@ import cerrar from './icoCerrar.svg'
 import resta from './icoZoomResta.svg'
 import suma  from './icoZoomSuma.svg'
 
-const TarjetaLateral = ({ estados = ['e2'], onClose, fotoPerfil = perfil, onGuardarFoto }) => {
+const TarjetaLateral = ({ estados , onClose, fotoPerfil = perfil, onGuardarFoto }) => {
   const MIN_ZOOM = 0.5
   const BASE_ZOOM = 1
   const MAX_ZOOM = 2
@@ -155,10 +155,13 @@ const TarjetaLateral = ({ estados = ['e2'], onClose, fotoPerfil = perfil, onGuar
         </button>
         {conexion.map((code) => {
           const cfg = ESTADOS[code]
-          const colorClass = styles[cfg.color] || styles.porDefecto
 
           return (
-            <div key={cfg.id} className={`${styles.pill} ${colorClass}`}>
+            <div
+              key={cfg.id}
+              className={`${styles.pill} ${styles.porDefecto}`}
+              style={cfg.color ? { color: cfg.color } : undefined}
+            >
               <p className={styles.txto}>
                 {cfg.txt} <span className={styles.bola}>•</span>
               </p>

@@ -1,7 +1,7 @@
 .Noticia {
     margin: 0rem auto;
     width: 38.43rem;
-    
+    border: 1px solid var(--borde);
     border-radius: 1rem;
     overflow: hidden;
     background-color: white;

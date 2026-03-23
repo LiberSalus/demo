@@ -69,10 +69,10 @@ export default function Principal({ children }) {
         <div className={styles.contentInner}>
           {content}
         </div>
+      </main>
         <div className={styles.footer}>
           <Footer />
         </div>
-      </main>
     </div>
   );
 }

@@ -14,9 +14,31 @@ import "dayjs/locale/es-mx";
 import ModalCitaMedica from "./ModalCitaMedica";
 import { isTakeDay } from "./MedicamentoUtils";
 
-import styles from "./DataCalendar.module.css"
-
 dayjs.locale("es-mx");
+
+function ChevronIcon({ direction = "left" }) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d={
+          direction === "left"
+            ? "M14.5 6.5L9 12l5.5 5.5"
+            : "M9.5 6.5L15 12l-5.5 5.5"
+        }
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 function CustomDay(props) {
   const {
@@ -49,8 +71,8 @@ function CustomDay(props) {
           position: "relative",
           "&::after": {
             content: '""',
-            width:  6,
-            height: 6,
+            width:  5,
+            height: 5,
             borderRadius: "50%",
             bgcolor: "#0EA5E9",
             position: "absolute",
@@ -159,10 +181,13 @@ const CalendarioInicio = ({
   const CalendarOnly = (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es-mx">
       <DateCalendar
-        className={styles.DataCalendar}
         value={selectedDate}
         onChange={(newDate) => setSelectedDate(newDate)}
-        slots={{ day: CustomDay }}
+        slots={{
+          day: CustomDay,
+          leftArrowIcon: () => <ChevronIcon direction="left" />,
+          rightArrowIcon: () => <ChevronIcon direction="right" />,
+        }}
         slotProps={{
           day: (ownerState) => ({
             citasPorFecha,
@@ -178,37 +203,155 @@ const CalendarioInicio = ({
             ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
           }
         sx={{
-          width: "85%",
+          width: "90%",
+          "& .MuiDateCalendar-root": {
+            width: "100%",
+            maxHeight: "16.5rem",
+            overflow: "hidden",
+          },
+          "& .MuiDateCalendar-viewTransitionContainer": {
+            minHeight: "13.75rem",
+            maxHeight: "13.75rem",
+            overflow: "hidden",
+          },
           "& .MuiDayCalendar-weekContainer": {
             minHeight: "1.2rem",
-            marginBottom: "0.1rem",
             width: "100%",
+            
           },
           "& .MuiPickersDay-root": {
             height: "1.7rem",
             width:  "1.7rem",
             padding: 0,
-            margin: "0px 12px",
-            fontSize: "0.7rem",
+            margin: "0px 13px",
+            fontSize: "0.8rem",
           },
           "& .MuiTypography-root": {
-            fontSize: "0.7rem",
-            margin: "0px 7px",
+            fontSize: "0.9rem",
+            margin: "0px 8px",
+            textTransform:"capitalize"
           },
           "& .MuiPickersCalendarHeader-label": {
-            fontSize: "0.95rem",
+            fontSize: "1.1rem",
             fontWeight: "bold",
+            textDecoration: "capitalize"
           },
           "& .MuiPickersArrowSwitcher-root": {
             justifyContent: "space-between",
             marginBottom: "0.5rem",
             transform: "translateY(0.25rem)",
+            "& button": {
+              color: "#1976d2",
+            },
           },
           "& .MuiPickersArrowSwitcher-button": {
             color: "#1976d2",
-            padding: "4px",
+            width: "1.5rem",
+            height: "1.5rem",
+            minWidth: " 1.5rem",
+            minHeight: "1.5rem",
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "transparent",
+            border: "none",
+            borderRadius: 0,
+            transition: "none",
+            animation: "none",
             "&:hover": { backgroundColor: "transparent" },
-            "& svg": { fontSize: "2rem" },
+            "&:focus": { backgroundColor: "transparent" },
+            "&:focus-visible": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+            "&.Mui-disabled": {
+              backgroundColor: "transparent",
+            },
+            "&.Mui-focusVisible": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+            "& .MuiTouchRipple-root": {
+              display: "none",
+            },
+            "& svg": {
+              width:  "2rem",
+              height: "2rem",
+              stroke: "#1976d2",
+              margin: 0,
+            },
+          },
+          "& .MuiPickersCalendarHeader-switchViewButton": {
+            backgroundColor: "transparent",
+            transition: "none",
+            animation: "none",
+            boxShadow: "none",
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+            "&:focus": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+            "&:focus-visible": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+            "&.Mui-focusVisible": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+            "& .MuiTouchRipple-root": {
+              display: "none",
+            },
+          },
+          "& .MuiPickersCalendarHeader-switchViewIcon": {
+            transition: "none",
+            animation: "none",
+          },
+          "& .MuiPickersYear-yearButton": {
+            minHeight: "2.25rem",
+            height: "2.25rem",
+            padding: 0,
+            lineHeight: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "none",
+            animation: "none",
+            boxShadow: "none",
+            "&:hover": {
+              backgroundColor: "rgba(25, 118, 210, 0.08)",
+            },
+            "&:focus": {
+              boxShadow: "none",
+            },
+            "&:focus-visible": {
+              boxShadow: "none",
+            },
+            "&.Mui-selected": {
+              transition: "none",
+              animation: "none",
+              boxShadow: "none",
+            },
+            "&.Mui-selected:hover": {
+              boxShadow: "none",
+            },
+            "&.Mui-focusVisible": {
+              boxShadow: "none",
+            },
+            "& .MuiTouchRipple-root": {
+              display: "none",
+            },
+          },
+          "& .MuiYearCalendar-root": {
+            width: "100%",
+            maxHeight: "13.75rem",
+            overflowY: "auto",
+            overflowX: "hidden",
+            alignContent: "start",
+            paddingBottom: 0,
           },
         }}
       />
