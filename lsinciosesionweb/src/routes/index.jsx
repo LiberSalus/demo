@@ -31,59 +31,82 @@ import MonitorDeSalud from "@/pages/Monitor/Monitor";
 import Tami from "@/pages/Ayuda/DudasFrecuentes";
 
 import SaludFisica from "@/pages/SaludFisica/SaludFisica";
-import SaludMental from "@/pages/SaludMental/SaludMental"
-import SaludNutricional from "@/pages/SaludNutricional/SaludNutricional"
+import SaludMental from "@/pages/SaludMental/SaludMental";
+import SaludNutricional from "@/pages/SaludNutricional/SaludNutricional";
 
+const miSaludRoutes = [
+  { path: ROUTES.SOBRE_MI, element: <MiSaludATravesDelTiempo /> },
+  { path: ROUTES.HISTORIA_SALUD, element: <HistoriaSalud /> },
+  { path: ROUTES.CUERPO_HISTORIA, element: <CuerpoHistoria /> },
+  { path: ROUTES.FAMILIA_HERENCIA, element: <FamiliaHerencia /> },
+  { path: ROUTES.RESPONDE_CUIDATE, element: <RespondeCuidate /> },
+];
 
-// (Opcional) re-export para compatibilidad vieja
+const saludDetalleRoutes = [
+  { path: ROUTES.SALUD_FISICA, element: <SaludFisica /> },
+  { path: ROUTES.SALUD_MENTAL, element: <SaludMental /> },
+  { path: ROUTES.SALUD_NUTRICIONAL, element: <SaludNutricional /> },
+];
+
+const misConsultasRoutes = [
+  { path: ROUTES.AREAS, element: <MiCuidadoDiario /> },
+  { path: ROUTES.AVANCE, element: <Avance /> },
+  { path: ROUTES.SUSURROS, element: <Susurros /> },
+  { path: ROUTES.LO_QUE_DICE, element: <LoQueDice /> },
+  { path: ROUTES.COMPRENSION, element: <Comprension /> },
+  { path: ROUTES.PLAN_CUIDADO, element: <PlanCuidado /> },
+  { path: ROUTES.PROXIMOS_PASOS, element: <ProximosPasos /> },
+];
+
+const extrasRoutes = [
+  { path: ROUTES.ANY, element: <Any /> },
+  { path: ROUTES.MONITOR, element: <MonitorDeSalud /> },
+  { path: ROUTES.FRANKY, element: <FrankyTeAcompana /> },
+  { path: ROUTES.DUDAS, element: <Tami /> },
+];
+
+// Re-export para mantener un unico punto de acceso a ROUTES.
 export { ROUTES } from "@/config/routes";
+
+/*
+  Flujo general del router:
+  1. `LOGIN` es la unica ruta publica.
+  2. El resto pasa por `ProtectedRoute`, que valida `auth_ready` en localStorage.
+  3. Si el acceso es valido, `Principal` monta el layout comun de la app.
+  4. Dentro de ese layout se renderiza la pagina correspondiente con nested routes.
+  5. La ruta index protegida redirige a `INICIO`.
+  6. Cualquier URL desconocida redirige a `LOGIN`.
+*/
 
 export const AppRouter = () => (
   <BrowserRouter basename="/panel">
     <Routes>
-      {/* Pública */}
       <Route path={ROUTES.LOGIN} element={<Login />} />
 
-      {/* Protegidas */}
       <Route element={<ProtectedRoute />}>
-        {/* Layout */}
         <Route element={<Principal />}>
-          {/* Inicio */}
           <Route path={ROUTES.INICIO} element={<Inicio />} />
 
-          {/* Mi Salud */}
-          <Route path={ROUTES.SOBRE_MI} element={<MiSaludATravesDelTiempo />} />
-          <Route path={ROUTES.HISTORIA_SALUD} element={<HistoriaSalud />} />
-          <Route path={ROUTES.CUERPO_HISTORIA} element={<CuerpoHistoria />} />
-          <Route path={ROUTES.FAMILIA_HERENCIA} element={<FamiliaHerencia />} />
-          <Route path={ROUTES.RESPONDE_CUIDATE} element={<RespondeCuidate />} />
+          {miSaludRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
 
-          {/* 🆕 Salud Física */}
-          <Route path={ROUTES.SALUD_FISICA} element={<SaludFisica />} />
-          <Route path={ROUTES.SALUD_MENTAL} element={<SaludMental />} />
-          <Route path={ROUTES.SALUD_NUTRICIONAL} element={<SaludNutricional />} />
+          {saludDetalleRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
 
-          {/* Mis Consultas */}
-          <Route path={ROUTES.AREAS} element={<MiCuidadoDiario />} />
-          <Route path={ROUTES.AVANCE} element={<Avance />} />
-          <Route path={ROUTES.SUSURROS} element={<Susurros />} />
-          <Route path={ROUTES.LO_QUE_DICE} element={<LoQueDice />} />
-          <Route path={ROUTES.COMPRENSION} element={<Comprension />} />
-          <Route path={ROUTES.PLAN_CUIDADO} element={<PlanCuidado />} />
-          <Route path={ROUTES.PROXIMOS_PASOS} element={<ProximosPasos />} />
+          {misConsultasRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
 
-          {/* Extras */}
-          <Route path={ROUTES.ANY} element={<Any />} />
-          <Route path={ROUTES.MONITOR} element={<MonitorDeSalud />} />
-          <Route path={ROUTES.FRANKY} element={<FrankyTeAcompana />} />
-          <Route path={ROUTES.DUDAS} element={<Tami />} />
+          {extrasRoutes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
 
-          {/* Index protegido: si caen en /panel/ directamente */}
           <Route index element={<Navigate to={ROUTES.INICIO} replace />} />
         </Route>
       </Route>
 
-      {/* Catch-all */}
       <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
     </Routes>
   </BrowserRouter>

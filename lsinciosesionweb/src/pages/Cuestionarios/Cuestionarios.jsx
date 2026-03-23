@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import styles from "./cuestionarios.module.css";
-import { ROUTES } from "@/routes";
 import { Link } from "react-router-dom";
-import Menu from "@/components/menu/Menu";
-import Principal from "@/Layout/Principal";
 import TarjetaListadoAvance from "./TarjetaListadoAvance/TarjetaListadoAvance";
 import fisico from "./fisico.png";
 import mental from "./mental.png";

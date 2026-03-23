@@ -1,4 +1,6 @@
-// src/config/routes.js
+// src/config/routes.jsx
+// Rutas activas del router principal.
+// Se conservan solo paths que hoy participan en la navegacion vigente.
 export const ROUTES = {
   LOGIN: "/login",
   INICIO: "/inicio",
@@ -24,15 +26,9 @@ export const ROUTES = {
   PLAN_CUIDADO: "/mis-consultas/plan-cuidado",
   PROXIMOS_PASOS: "/mis-consultas/proximos-pasos",
 
-  // Cuestionarios (vista general + drilldown)
-  CUESTIONARIOS: "/cuestionarios",
-  CUESTIONARIOS_RUN: "/cuestionarios/:area/:key",
-  CUESTIONARIOS_AREA: "/cuestionarios/:area",
-
   // Otros
   ANY: "/any",
   MONITOR: "/monitor",
-  PANEL: "/panelayout",
   DUDAS: "/ayuda/dudas-frecuentes",
   FRANKY: "/franky",
 };
