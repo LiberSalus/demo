@@ -236,6 +236,14 @@ export default function Inicio() {
     setOpenAgendaModal(true);
   };
 
+  const handleMedicamentoColorChange = ({ medId, color }) => {
+    setMedicamentos((prev) =>
+      (prev || []).map((med) =>
+        String(med?.id) === String(medId) ? { ...med, colorBarra: color } : med
+      )
+    );
+  };
+
   return (
     <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
       <div className={styles.seccSuperior}>
@@ -304,12 +312,13 @@ export default function Inicio() {
                   ref={medsScrollRef}
                   className={`${styles.cntMedicamentos} scroll-container`}
                 >
-                  <TarjetasMedicamentosIco
-                    medicamentos={medicamentos}
-                    day={selectedAgendaDay}
-                    onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
-                  />
-                </div>
+              <TarjetasMedicamentosIco
+                medicamentos={medicamentos}
+                day={selectedAgendaDay}
+                onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
+                onChangeMedicamentoColor={handleMedicamentoColorChange}
+              />
+            </div>
 
                 <button
                   type="button"

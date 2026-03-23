@@ -97,12 +97,15 @@
 
 .pie {
     font-size: 10px;
+    text-align: center;
     & > p{
         filter: opacity(0.75);
     }
     & > p > a {
         transition: filter 0.3s ease;
         cursor: pointer;
+        font-weight: bold;
+        text-decoration: underline;
         &:hover {
             filter: opacity(1);
         }

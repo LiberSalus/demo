@@ -47,7 +47,7 @@ const Footer = () => {
         <p>Todos los derechos reservados.</p>
         <p>
           Consulta las <a>Políticas de Privacidad</a> y{" "}
-          <a>Condiciones de Uso</a>.
+          <a>Condiciones de uso</a>.
         </p>
       </div>
     </div>

@@ -3,6 +3,8 @@ import React from "react";
 import styles from "./TarjetaMedicamentoIco.module.css";
 import "./animaIcoMedicamentos.css";
 
+const coloresBarra = ["#59EDFE", "#21D127", "#FF8904", "#C11007", "#A855F7"];
+
 const colorAlerta = {
   ahora: {
     bg: "#F7D66F",
@@ -35,6 +37,8 @@ const TarjetaMedicamentoIco = ({
   estado,
   icono,
   tipoIcono,
+  colorBarra = "#59EDFE",
+  onChangeColor,
 
   // ✅ NUEVO
   onOpen,
@@ -61,7 +65,26 @@ const TarjetaMedicamentoIco = ({
       <div className={styles.encabezado}>
         <p className={styles.medicamento}>{medicamento}</p>
         <p className={styles.dosis}>{dosis}</p>
-        <div className={styles.barraColor} style={{ backgroundColor: "#59edfe" }} />
+        <div className={styles.colorPicker}>
+          <div className={styles.selectorColores}>
+            {coloresBarra.map((color) => (
+              <button
+                key={color}
+                type="button"
+                className={`${styles.colorOption} ${
+                  colorBarra === color ? styles.colorOptionActiva : ""
+                }`}
+                style={{ backgroundColor: color }}
+                aria-label={`Seleccionar color ${color}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChangeColor?.(color);
+                }}
+              />
+            ))}
+          </div>
+          <div className={styles.barraColor} style={{ backgroundColor: colorBarra }} />
+        </div>
       </div>
 
       <div className={styles.cuerpo}>

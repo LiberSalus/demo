@@ -10,12 +10,14 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   zoom: 0.8;
+  position: relative;
 }
 
 .encabezado {
   background-color: #5CB1DC;
   text-align: center;
   max-height: 2.5rem;
+  position: relative;
 }
 
 .medicamento {
@@ -25,14 +27,52 @@
   font-size: 1rem;
   padding-bottom: 0.35rem;
 }
-.barraColor {
-  transform: translateY(-0.35rem);
-}
-
 .dosis {
   color: white;
   font-size: 0.75rem;
   padding-bottom: 0.5rem;
+}
+
+.selectorColores {
+  position: absolute;
+  top: -0.1rem;
+  right: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  padding: 0.28rem 0.25rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.92);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.2rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.colorPicker {
+  position: relative;
+}
+
+.colorPicker:hover .selectorColores,
+.colorPicker:focus-within .selectorColores {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.colorOption {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(51, 65, 85, 0.14);
+}
+
+.colorOptionActiva {
+  box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.35);
 }
 
 .cuerpo {
@@ -98,5 +138,6 @@
 .barraColor {
   width: 100%;
   height: 0.5rem;
-  
+  transform: translateY(-0.35rem);
+  cursor: pointer;
 }

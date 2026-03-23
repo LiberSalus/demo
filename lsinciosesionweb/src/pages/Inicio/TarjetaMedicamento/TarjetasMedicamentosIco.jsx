@@ -76,6 +76,7 @@ const TarjetasMedicamentosIco = ({
   medicamentos = [],
   day, // dayjs seleccionado en agenda
   onOpenMedicamento, // fn({ day, medId })
+  onChangeMedicamentoColor,
 }) => {
   const dayObj = useMemo(() => (day?.$d ? day : dayjs()), [day]);
   const dayKey = useMemo(() => dayObj.format("YYYY-MM-DD"), [dayObj]);
@@ -100,9 +101,13 @@ const TarjetasMedicamentosIco = ({
             hora={hora}
             timer={""} // por ahora no
             estado={estado}
+            colorBarra={rule.colorBarra || "#59EDFE"}
             icono={<IconComp />}
             tipoIcono={tipoIcono}
-            onClick={() => onOpenMedicamento?.({ day: dayObj, medId: rule.id })}
+            onChangeColor={(color) =>
+              onChangeMedicamentoColor?.({ medId: rule.id, color })
+            }
+            onOpen={() => onOpenMedicamento?.({ day: dayObj, medId: rule.id })}
           />
         );
       })}
