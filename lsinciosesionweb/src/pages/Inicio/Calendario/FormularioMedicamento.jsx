@@ -1,5 +1,5 @@
 // src/pages/Inicio/Calendario/FormularioMedicamento.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Box,
   TextField,
@@ -172,13 +172,84 @@ const calendarFieldSx = {
     fontSize:"0.5rem",
   },
 };
+const accordionMenuProps = {
+  anchorOrigin: { vertical: "bottom", horizontal: "left" },
+  transformOrigin: { vertical: "top", horizontal: "left" },
+  transitionDuration: 180,
+  PaperProps: {
+    elevation: 0,
+    sx: {
+      mt: 0.15,
+      border: "1px solid #ACCCEB",
+      borderRadius: "0 0 1.5rem 1.5rem",
+      boxShadow: "0px 10px 26px rgba(15, 23, 42, 0.08)",
+      overflow: "hidden",
+      backgroundColor: "#fff",
+    },
+  },
+  MenuListProps: {
+    sx: {
+      py: 0.25,
+      "& .MuiMenuItem-root": {
+        minHeight: "unset",
+        alignItems: "flex-start",
+        padding: "0.65rem 1rem",
+      },
+    },
+  },
+};
+const presentationMenuProps = {
+  ...accordionMenuProps,
+  disablePortal: true,
+  sx: {
+    zIndex: 0,
+  },
+  PaperProps: {
+    ...accordionMenuProps.PaperProps,
+    sx: {
+      ...accordionMenuProps.PaperProps.sx,
+      mt: "-1.5rem",
+      pt: "1.8rem",
+      maxHeight: "16.5rem",
+      overflow: "hidden",
+      zIndex: -1,
+      borderTop: "none",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+    },
+  },
+  MenuListProps: {
+    sx: {
+      py: 0.25,
+      maxHeight: "calc(16.5rem - 1.8rem)",
+      overflowY: "auto",
+      overflowX: "hidden",
+      "& .MuiMenuItem-root": {
+        minHeight: "unset",
+        alignItems: "flex-start",
+        padding: "0.65rem 1rem",
+      },
+    },
+  },
+};
+const accordionSelectSx = {
+  "& .MuiSelect-icon": {
+    fill: "#505151",
+    fontSize: "2rem",
+    right: 10,
+    transition: "transform 180ms ease, color 180ms ease",
+    transformOrigin: "center",
+  },
+  "& .MuiSelect-iconOpen": {
+    transform: "rotate(180deg)",
+  },
+};
 const checkboxLabelSx = {
   mt: 0.1,
   alignSelf: "flex-end",
-  mr: 0,
-  pr: 0,
+  m: 0,
   "& .MuiFormControlLabel-label": {
-    fontSize: "0.95rem",
+    fontSize: "0.85rem",
     color: "#334155",
   },
 };
@@ -188,6 +259,8 @@ const FormularioMedicamento = ({
   onGuardar,
   isMobile,
 }) => {
+  const presentationFieldRef = useRef(null);
+  const [presentationMenuWidth, setPresentationMenuWidth] = useState(null);
   const [form, setForm] = useState({
     medicamento: "",
     dosis: "",
@@ -241,6 +314,24 @@ const FormularioMedicamento = ({
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.patron]);
+
+  useEffect(() => {
+    const node = presentationFieldRef.current;
+    if (!node) return;
+
+    const syncWidth = () => {
+      setPresentationMenuWidth(node.getBoundingClientRect().width);
+    };
+
+    syncWidth();
+
+    if (typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(syncWidth);
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
 
   const horarios = useMemo(() => generarHorarios(0, 24), []);
 
@@ -376,7 +467,7 @@ const FormularioMedicamento = ({
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "15rem 8rem",
+            gridTemplateColumns: isMobile ? "1fr" : "15rem 9rem",
             columnGap: isMobile ? 0 : "1rem",
             rowGap: 1.5,
             alignItems: "start",
@@ -406,7 +497,7 @@ const FormularioMedicamento = ({
               }}
             />
           </Box>
-          <Box sx={{ width: isMobile ? "100%" : "8rem" }}>
+          <Box sx={{ width: isMobile ? "100%" : "9rem" }}>
 
             <Typography variant="body2" sx={fieldLabelSx}>
               Dosis
@@ -438,7 +529,12 @@ const FormularioMedicamento = ({
             <Typography variant="body2" sx={fieldLabelSx}>
               Presentación
             </Typography>
-            <FormControl fullWidth size="small">
+            <FormControl
+              fullWidth
+              size="small"
+              ref={presentationFieldRef}
+              sx={{ position: "relative", zIndex: 3 }}
+            >
               <Select
                 name="presentacion"
                 value={form.presentacion}
@@ -449,10 +545,20 @@ const FormularioMedicamento = ({
                   ...pillInputSx,
                   ...compactFieldSx,
                   fontSize:"0.9rem",
-                  "& .MuiSelect-icon": {
-                    fill: "#505151",
-                    fontSize: "2rem",
-                    right: 10,
+                  position: "relative",
+                  zIndex: 4,
+                  backgroundColor: "#fff",
+                  ...accordionSelectSx,
+                }}
+                MenuProps={{
+                  ...presentationMenuProps,
+                  PaperProps: {
+                    ...presentationMenuProps.PaperProps,
+                    sx: {
+                      ...presentationMenuProps.PaperProps.sx,
+                      width: presentationMenuWidth ?? undefined,
+                      minWidth: presentationMenuWidth ?? undefined,
+                    },
                   },
                 }}
               >
@@ -511,20 +617,9 @@ const FormularioMedicamento = ({
                   fontSize: "13.5px",
                   paddingLeft: "1rem",
                 },
-                "& .MuiSelect-icon": {
-                  fill: "#505151",
-                  fontSize: "2rem",
-                  right: 10,
-                },
+                ...accordionSelectSx,
               }}
-              MenuProps={{
-                PaperProps: {
-                  sx: {
-                    borderRadius: "0 0 1rem 1rem",
-                    boxShadow: "0px 4px 20px rgba(0,0,0,0.08)",
-                  },
-                },
-              }}
+              MenuProps={accordionMenuProps}
             >
               {PATRONES.map((p) => (
                 <MenuItem key={p.value} value={p.value}>
@@ -666,12 +761,9 @@ const FormularioMedicamento = ({
                   ...compactFieldSx,
                   color:"#A7A8A9",
                   fontSize:"0.85rem",
-                  "& .MuiSelect-icon": {
-                    fill: "#505151",
-                    fontSize: "2rem",
-                    right: 10,
-                  },
+                  ...accordionSelectSx,
                 }}
+                MenuProps={accordionMenuProps}
               >
                 {horarios.map((h) => (
                   <MenuItem key={h} value={h}>
@@ -792,7 +884,15 @@ const FormularioMedicamento = ({
         </Box>
 
         {/* Checkbox recordatorio (fijo 10 min antes) */}
-        <FormControlLabel
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+
+        <FormControlLabel 
           control={
             <Checkbox
               name="recordar"
@@ -830,8 +930,9 @@ const FormularioMedicamento = ({
             />
           }
           label="Recordarme 10 min antes"
-          sx={checkboxLabelSx}
+          sx={checkboxLabelSx, {justifyContent:"end", }}
         />
+        </Box>
 
         {/* Errores + Guardar */}
         <Box

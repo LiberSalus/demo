@@ -113,7 +113,7 @@ const compactFieldSx = {
 const checkboxLabelSx = {
   mt: 0.1,
   alignSelf: "flex-end",
-  mr: 0,
+  m: 0,
   "& .MuiFormControlLabel-label": {
     fontSize: "0.9rem",
     color: "#334155",
@@ -389,6 +389,7 @@ const FormularioCitaMedica = ({
       </Box>
 
       {/* Recordatorio */}
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
       <FormControlLabel
         className={styles.recordarme}
         control={
@@ -430,6 +431,7 @@ const FormularioCitaMedica = ({
         label="Recordarme 1 día antes"
         sx={checkboxLabelSx}
       />
+      </Box>
 
       {/* Notas */}
       <Box>
