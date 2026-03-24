@@ -6,7 +6,7 @@
 .calendario {
   width: 95%;
   min-width: 27rem;
-  
+  zoom: 0.85;
 }
 
 .agendaCard {
@@ -22,7 +22,7 @@
 
 .agendaHeader {
   background-color: #007cba;
-  border-top: 3px solid #007cba;
+  
   color: white;
   text-align: center;
   padding: 0.75rem 1rem 0.5rem;
@@ -32,7 +32,7 @@
 .agendaDay {
   display: block;
   font-family: var(--font-inter);
-  font-size: 2.1rem;
+  font-size: 1.5rem;
   font-weight: var(--peso700);
   line-height: 1;
   color: var(--blnco);

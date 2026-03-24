@@ -52,16 +52,37 @@ const TIPOS_CITA = [
 ];
 
 const outlinedFieldSx = {
+  backgroundColor: "#fff",
+  borderRadius:"3rem",
+  fontSize: "13.5px",
   "& .MuiOutlinedInput-notchedOutline": {
     borderColor: "#ACCCEB",
+  },
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: "#fff",
   },
   "& .MuiOutlinedInput-input": {
     fontSize: "13.5px",
     paddingLeft: "1rem",
   },
   "& .MuiSelect-select": {
-    fontSize: "13.5px",
+    fontSize: "10.5px",
     paddingLeft: "1rem",
+  },
+  "& .MuiSelect-root": {
+    backgroundColor: "#fff",
+  },
+  "& input:-webkit-autofill": {
+    WebkitBoxShadow: "0 0 0 100px #fff inset",
+    WebkitTextFillColor: "#0f172a",
+    caretColor: "#0f172a",
+    borderRadius: "inherit",
+  },
+  "& textarea:-webkit-autofill": {
+    WebkitBoxShadow: "0 0 0 100px #fff inset",
+    WebkitTextFillColor: "#0f172a",
+    caretColor: "#0f172a",
+    borderRadius: "inherit",
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
     borderColor: "#ACCCEB",
@@ -71,7 +92,40 @@ const outlinedFieldSx = {
   },
 };
 
-const fieldLabelSx = { mb: 0.35, ml: 2.5 };
+const fieldLabelSx = { mb: 0.3, ml: 2.5 };
+const compactFieldSx = {
+  "& .MuiOutlinedInput-root": {
+    height: "2.35rem",
+  },
+  "& .MuiOutlinedInput-input": {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  "& .MuiSelect-select": {
+    minHeight: "2.35rem !important",
+    display: "flex",
+    alignItems: "center",
+    paddingTop: 0,
+    paddingBottom: 0,
+    boxSizing: "border-box",
+  },
+};
+const checkboxLabelSx = {
+  mt: 0.1,
+  alignSelf: "flex-end",
+  mr: 0,
+  "& .MuiFormControlLabel-label": {
+    fontSize: "0.9rem",
+    color: "#334155",
+  },
+};
+const submitButtonSx = {
+  borderRadius: 999,
+  px: 6,
+  minWidth: "10rem",
+  textTransform: "none",
+  mt: 1,
+};
 
 const FormularioCitaMedica = ({
   selectedDate = dayjs(), // dayjs
@@ -136,7 +190,7 @@ const FormularioCitaMedica = ({
         height: "fit-content",
         display: "flex",
         flexDirection: "column",
-        gap: 1.35,
+        gap: 1.1,
       }}
     >
       {/* Fecha arriba a la derecha */}
@@ -160,8 +214,8 @@ const FormularioCitaMedica = ({
           size="small"
           variant="outlined"
           className={styles.inputs}
-          sx={outlinedFieldSx}
-          InputProps={{ sx: { borderRadius: 999, p: 0, height: 1, m:0} }}
+          sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+          InputProps={{ sx: {fontSize: "13.5px", borderRadius: 999, p: 0, height: 1, m:0} }}
         />
       </Box>
 
@@ -181,6 +235,7 @@ const FormularioCitaMedica = ({
               borderRadius: 999,
               background: "white",
               ...outlinedFieldSx,
+              ...compactFieldSx,
               "& .MuiSelect-icon": {
                 fill: "#505151",
                 fontSize: "2rem",
@@ -233,6 +288,7 @@ const FormularioCitaMedica = ({
                   borderRadius: 999,
                   background: "white",
                   ...outlinedFieldSx,
+                  ...compactFieldSx,
                   "& .MuiSelect-icon": {
                     fill: "#505151",
                     fontSize: "2rem",
@@ -272,6 +328,7 @@ const FormularioCitaMedica = ({
                   borderRadius: 999,
                   background: "white",
                   ...outlinedFieldSx,
+                  ...compactFieldSx,
                   "& .MuiSelect-icon": {
                     fill: "#505151",
                     fontSize: "2rem",
@@ -300,8 +357,8 @@ const FormularioCitaMedica = ({
             fullWidth
             size="small"
             variant="outlined"
-            sx={outlinedFieldSx}
-            InputProps={{ sx: { borderRadius: 999 } }}
+            sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+            InputProps={{ sx: {fontSize: "13.5px", borderRadius: 999 } }}
           />
         </Box>
       ) : (
@@ -326,8 +383,8 @@ const FormularioCitaMedica = ({
           fullWidth
           size="small"
           variant="outlined"
-          sx={outlinedFieldSx}
-          InputProps={{ sx: { borderRadius: 999 } }}
+          sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+          InputProps={{ sx: {fontSize: "13.5px", borderRadius: 999 } }}
         />
       </Box>
 
@@ -371,6 +428,7 @@ const FormularioCitaMedica = ({
           />
         }
         label="Recordarme 1 día antes"
+        sx={checkboxLabelSx}
       />
 
       {/* Notas */}
@@ -404,13 +462,7 @@ const FormularioCitaMedica = ({
           type="submit"
           variant="contained"
           disabled={!form.medico || !form.horario}
-          sx={{
-            mt:"8rem",
-            borderRadius: 999,
-            px: 6,
-            textTransform: "none",
-            
-          }}
+          sx={submitButtonSx}
         >
           Guardar
         </Button>

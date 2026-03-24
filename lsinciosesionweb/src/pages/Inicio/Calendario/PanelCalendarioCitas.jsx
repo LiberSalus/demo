@@ -36,6 +36,7 @@ dayjs.locale("es-mx");
 
 const normId = (v) => (v == null ? "" : String(v));
 const BRAND_BLUE = "#007CBA";
+const RANGE_EDGE_BLUE = "#1976d2";
 const RANGE_FILL = "rgba(14,165,233,0.18)";
 const RANGE_FILL_SOFT = "rgba(14,165,233,0.12)";
 const RANGE_DAY_SOFT = "#D8EEF8";
@@ -158,10 +159,10 @@ const PanelCalendarioCitas = ({
         maxWidth: isMobile ? "100%" : "100%",
         borderRadius: 7,
         bgcolor: "#FFF",
-        p: 2.5,
+        p: 2,
         display: "flex",
         flexDirection: "column",
-        gap: 2,
+        gap: 1.25,
       }}
     >
       {/* Tabs tipo switch */}
@@ -281,26 +282,29 @@ const PanelCalendarioCitas = ({
 
               const isCircle =
                 tab === "medicamento" && paint && paint.takeDays?.has(key);
-              const isPausePattern =
-                tab === "medicamento" && selectedMedRule?.patron === "with_pauses";
+              const usesRangeTrackPattern =
+                tab === "medicamento" &&
+                ["with_pauses", "every_n_days"].includes(selectedMedRule?.patron);
               const hasPrevInPeriod =
-                isPausePattern &&
+                usesRangeTrackPattern &&
                 paint &&
                 prevKey >= paint.shadeStart &&
                 prevKey <= paint.shadeEnd;
               const hasNextInPeriod =
-                isPausePattern &&
+                usesRangeTrackPattern &&
                 paint &&
                 nextKey >= paint.shadeStart &&
                 nextKey <= paint.shadeEnd;
               const hasPrevTake =
-                isPausePattern && paint && paint.takeDays?.has(prevKey);
+                usesRangeTrackPattern && paint && paint.takeDays?.has(prevKey);
               const hasNextTake =
-                isPausePattern && paint && paint.takeDays?.has(nextKey);
-              const isPeriodStart = isPausePattern && paint && key === paint.shadeStart;
-              const isPeriodEnd = isPausePattern && paint && key === paint.shadeEnd;
+                usesRangeTrackPattern && paint && paint.takeDays?.has(nextKey);
+              const isPeriodStart =
+                usesRangeTrackPattern && paint && key === paint.shadeStart;
+              const isPeriodEnd =
+                usesRangeTrackPattern && paint && key === paint.shadeEnd;
               const isInnerTakeDay =
-                isPausePattern && isCircle && !isPeriodStart && !isPeriodEnd;
+                usesRangeTrackPattern && isCircle && !isPeriodStart && !isPeriodEnd;
               const rangeFillLeft =
                 hasPrevInPeriod ? -13.5 : "49%";
               const rangeFillRight =
@@ -322,14 +326,14 @@ const PanelCalendarioCitas = ({
                     }
                   : null),
 
-                ...(tab === "medicamento" && inShade && !isPausePattern
+                ...(tab === "medicamento" && inShade && !usesRangeTrackPattern
                   ? {
                       backgroundColor: RANGE_FILL_SOFT,
                       borderRadius: 2,
                     }
                   : null),
 
-                ...(isPausePattern && inShade
+                ...(usesRangeTrackPattern && inShade
                   ? {
                       marginX: 0,
                       overflow: "visible",
@@ -367,7 +371,7 @@ const PanelCalendarioCitas = ({
                               width:  36,
                               height: 36,
                               borderRadius: "50%",
-                              backgroundColor: BRAND_BLUE,
+                              backgroundColor: RANGE_EDGE_BLUE,
                               zIndex: -1,
                               top:  "-1%",
                               left: "-1%",
@@ -401,7 +405,7 @@ const PanelCalendarioCitas = ({
                     }
                   : null),
 
-                ...(tab === "medicamento" && isCircle && !isPausePattern
+                ...(tab === "medicamento" && isCircle && !usesRangeTrackPattern
                   ? {
                       outline: `2px solid ${BRAND_BLUE}`,
                       outlineOffset: "-2px",
@@ -423,8 +427,8 @@ const PanelCalendarioCitas = ({
           borderRadius: 4,
           border: "1px solid #ACCCEB",
           /* p: 2, */
-          mt: 1,
-          height: 240,
+          mt: 0.5,
+          height: 212,
           display: "flex",
           flexDirection: "column",
           width: "100%",
@@ -646,11 +650,11 @@ const PanelCalendarioCitas = ({
                             </Box>
                           )}
 
-                          <Typography className={styles.agendaHint}>
+                          {/* <Typography className={styles.agendaHint}>
                             {selected
                               ? "Seleccionado para ver calendario"
                               : "Toca para ver calendario"}
-                          </Typography>
+                          </Typography> */}
                         </Box>
                       );
                     })}

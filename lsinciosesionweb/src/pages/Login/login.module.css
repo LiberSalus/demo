@@ -138,7 +138,7 @@
   visibility: hidden;
 }
 
-input[type="checkbox" i] {
+.cntInput input[type="checkbox" i] {
   display: none;
 }
 
@@ -151,7 +151,9 @@ input[type="checkbox" i] {
   justify-content: center;
 }
 
-input[type="email"], input[type="password"],input[type="text"] {
+.cntInput input[type="email"],
+.cntInput input[type="password"],
+.cntInput input[type="text"] {
   width: 100%;
   min-width: 18rem;
   padding: 0.5rem;

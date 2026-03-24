@@ -179,11 +179,11 @@ const ModalCitaMedica = ({
         dividers={false}
         sx={{
           position: "relative",
-          p: isMobile ? 2 : 3,
+          p: isMobile ? 2 : 2.25,
           overflowY: "auto",
           maxHeight: isMobile
             ? "calc(100dvh - (env(safe-area-inset-top) + 64px))"
-            : "80dvh",
+            : "90dvh",
           pb: isMobile ? "calc(env(safe-area-inset-bottom) + 16px)" : 3,
           background: "#F7F7FF"
         }}
@@ -201,7 +201,7 @@ const ModalCitaMedica = ({
           <Box
             sx={{
               flex: isStacked ? "0 0 auto" : "0 0 35.18rem",
-              margin: "1rem 0 auto 2rem",
+              margin: isStacked ? "0" : "0.5rem 0 auto 1rem",
               width: "100%",
               maxWidth: "37.18rem",
               borderRadius: 4,
