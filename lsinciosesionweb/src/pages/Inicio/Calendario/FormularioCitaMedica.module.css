@@ -27,6 +27,7 @@
   width: 100%;
   margin: -0.15rem 0 0 auto !important;
   justify-content: flex-end;
+  
 }
 
 .recordarme :global(.MuiFormControlLabel-label) {
@@ -37,5 +38,4 @@
 .recordarme :global(.MuiCheckbox-root) {
   padding: 0.25rem 0.45rem 0.25rem 0.25rem;
 }
-
 

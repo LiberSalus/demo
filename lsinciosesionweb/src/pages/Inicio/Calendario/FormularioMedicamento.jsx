@@ -13,6 +13,8 @@ import {
   Button,
   InputAdornment,
 } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
@@ -95,7 +97,30 @@ const FRECUENCIAS = [
   { value: 6, label: "Cada 6 horas (4 veces al día)" },
 ];
 
-const pillInputSx = { borderRadius: 999 };
+const outlinedFieldSx = {
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+  "& .MuiOutlinedInput-input": {
+    fontSize: "13.5px",
+    paddingLeft: "1rem",
+  },
+  "& .MuiSelect-select": {
+    fontSize: "13.5px",
+    paddingLeft: "1rem",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#ACCCEB",
+  },
+};
+
+const pillInputSx = {
+  borderRadius: 999,
+  ...outlinedFieldSx,
+};
 
 const FormularioMedicamento = ({
   selectedDate = dayjs(), // día seleccionado en calendario del modal
@@ -301,7 +326,8 @@ const FormularioMedicamento = ({
               fullWidth
               size="small"
               variant="outlined"
-              InputProps={{ sx: pillInputSx, }}
+              InputProps={{ sx: pillInputSx }}
+              sx={outlinedFieldSx}
             />
           </Grid>
 
@@ -318,6 +344,7 @@ const FormularioMedicamento = ({
               size="small"
               variant="outlined"
               InputProps={{ sx: pillInputSx }}
+              sx={outlinedFieldSx}
             />
           </Grid>
 
@@ -332,7 +359,15 @@ const FormularioMedicamento = ({
                 value={form.presentacion}
                 onChange={handleChange}
                 displayEmpty
-                sx={pillInputSx}
+                IconComponent={KeyboardArrowDownRoundedIcon}
+                sx={{
+                  ...pillInputSx,
+                  "& .MuiSelect-icon": {
+                    fill: "#505151",
+                    fontSize: "2rem",
+                    right: 10,
+                  },
+                }}
               >
                 <MenuItem value="">
                   <Typography sx={{ color: "#94A3B8" }}>
@@ -361,6 +396,7 @@ const FormularioMedicamento = ({
               size="small"
               variant="outlined"
               InputProps={{ sx: pillInputSx }}
+              sx={outlinedFieldSx}
             />
           </Grid>
         </Grid>
@@ -375,7 +411,20 @@ const FormularioMedicamento = ({
               name="patron"
               value={form.patron}
               onChange={handleChange}
-              sx={{ borderRadius: 3 }}
+              IconComponent={KeyboardArrowDownRoundedIcon}
+              sx={{
+                borderRadius: 3,
+                ...outlinedFieldSx,
+                "& .MuiSelect-select": {
+                  fontSize: "13.5px",
+                  paddingLeft: "1rem",
+                },
+                "& .MuiSelect-icon": {
+                  fill: "#505151",
+                  fontSize: "2rem",
+                  right: 10,
+                },
+              }}
               MenuProps={{
                 PaperProps: {
                   sx: {
@@ -426,6 +475,7 @@ const FormularioMedicamento = ({
                   size: "small",
                   placeholder: "Selecciona una fecha",
                   InputProps: { sx: pillInputSx },
+                  sx: outlinedFieldSx,
                 },
               }}
             />
@@ -446,6 +496,7 @@ const FormularioMedicamento = ({
                   size: "small",
                   placeholder: "Selecciona una fecha",
                   InputProps: { sx: pillInputSx },
+                  sx: outlinedFieldSx,
                 },
               }}
             />
@@ -467,6 +518,7 @@ const FormularioMedicamento = ({
               size="small"
               variant="outlined"
               InputProps={{ sx: pillInputSx, readOnly: true }}
+              sx={outlinedFieldSx}
               helperText="Se calcula con fecha inicio/fin."
             />
           </Grid>
@@ -480,7 +532,15 @@ const FormularioMedicamento = ({
                 name="frecuenciaHoras"
                 value={form.frecuenciaHoras}
                 onChange={handleChange}
-                sx={pillInputSx}
+                IconComponent={KeyboardArrowDownRoundedIcon}
+                sx={{
+                  ...pillInputSx,
+                  "& .MuiSelect-icon": {
+                    fill: "#505151",
+                    fontSize: "2rem",
+                    right: 10,
+                  },
+                }}
               >
                 {FRECUENCIAS.map((f) => (
                   <MenuItem key={f.value} value={f.value}>
@@ -511,6 +571,7 @@ const FormularioMedicamento = ({
                 ),
                 inputMode: "numeric",
               }}
+              sx={outlinedFieldSx}
             />
           </Box>
         )}
@@ -535,6 +596,7 @@ const FormularioMedicamento = ({
                   ),
                   inputMode: "numeric",
                 }}
+                sx={outlinedFieldSx}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -554,6 +616,7 @@ const FormularioMedicamento = ({
                   ),
                   inputMode: "numeric",
                 }}
+                sx={outlinedFieldSx}
               />
             </Grid>
           </Grid>
@@ -569,7 +632,15 @@ const FormularioMedicamento = ({
               name="horaInicio"
               value={form.horaInicio}
               onChange={handleChange}
-              sx={pillInputSx}
+              IconComponent={KeyboardArrowDownRoundedIcon}
+              sx={{
+                ...pillInputSx,
+                "& .MuiSelect-icon": {
+                  fill: "#505151",
+                  fontSize: "2rem",
+                  right: 10,
+                },
+              }}
             >
               {horarios.map((h) => (
                 <MenuItem key={h} value={h}>
@@ -606,6 +677,7 @@ const FormularioMedicamento = ({
             minRows={3}
             variant="outlined"
             InputProps={{ sx: { borderRadius: 3 } }}
+            sx={outlinedFieldSx}
           />
         </Box>
 
@@ -616,6 +688,35 @@ const FormularioMedicamento = ({
               name="recordar"
               checked={form.recordar}
               onChange={handleChange}
+              icon={
+                <Box
+                  sx={{
+                    width: 18,
+                    height: 18,
+                    border: "2px solid #007CBA",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "4px",
+                    boxSizing: "border-box",
+                  }}
+                />
+              }
+              checkedIcon={
+                <Box
+                  sx={{
+                    width: 18,
+                    height: 18,
+                    border: "2px solid #007CBA",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <CheckIcon sx={{ color: "#007CBA", fontSize: "16px" }} />
+                </Box>
+              }
             />
           }
           label="Recordarme 10 min antes"

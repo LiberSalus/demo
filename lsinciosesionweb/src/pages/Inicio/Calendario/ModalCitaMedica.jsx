@@ -200,7 +200,8 @@ const ModalCitaMedica = ({
           {/* Panel */}
           <Box
             sx={{
-              flex: isStacked ? "0 0 auto" : "0 0 37.18rem",
+              flex: isStacked ? "0 0 auto" : "0 0 35.18rem",
+              margin: "1rem 0 auto 2rem",
               width: "100%",
               maxWidth: "37.18rem",
               borderRadius: 4,

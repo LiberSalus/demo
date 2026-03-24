@@ -12,6 +12,8 @@ import {
   FormControlLabel,
   Button,
 } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 import styles from "./FormularioCitaMedica.module.css";
@@ -54,10 +56,12 @@ const outlinedFieldSx = {
     borderColor: "#ACCCEB",
   },
   "& .MuiOutlinedInput-input": {
-    fontSize: "13px",
+    fontSize: "13.5px",
+    paddingLeft: "1rem",
   },
   "& .MuiSelect-select": {
-    fontSize: "13px",
+    fontSize: "13.5px",
+    paddingLeft: "1rem",
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
     borderColor: "#ACCCEB",
@@ -66,6 +70,8 @@ const outlinedFieldSx = {
     borderColor: "#ACCCEB",
   },
 };
+
+const fieldLabelSx = { mb: 0.35, ml: 2.5 };
 
 const FormularioCitaMedica = ({
   selectedDate = dayjs(), // dayjs
@@ -135,14 +141,14 @@ const FormularioCitaMedica = ({
     >
       {/* Fecha arriba a la derecha */}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Typography variant="body2" sx={{ color: "#64748B", mb: 0.15 }}>
+        <Typography variant="body2" sx={{ color: "#64748B", mb: 0.15, fontSize:"1rem" }}>
           {fechaTexto}
         </Typography>
       </Box>
 
       {/* Nombre del médico */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+        <Typography variant="body2" sx={fieldLabelSx}>
           Nombre del médico
         </Typography>
         <TextField
@@ -161,7 +167,7 @@ const FormularioCitaMedica = ({
 
       {/* Especialidad */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+        <Typography variant="body2" sx={fieldLabelSx}>
           Especialidad
         </Typography>
         <FormControl fullWidth size="small">
@@ -170,10 +176,16 @@ const FormularioCitaMedica = ({
             value={form.especialidad}
             onChange={handleChange}
             displayEmpty
+            IconComponent={KeyboardArrowDownRoundedIcon}
             sx={{
               borderRadius: 999,
               background: "white",
               ...outlinedFieldSx,
+              "& .MuiSelect-icon": {
+                fill: "#505151",
+                fontSize: "2rem",
+                right: 10,
+              },
             }}
             MenuProps={{
               PaperProps: {
@@ -202,7 +214,7 @@ const FormularioCitaMedica = ({
         {/* Horario */}
         <Box className={styles.horarioCita}>  
           <Box className={styles.horario}>
-            <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+            <Typography variant="body2" sx={fieldLabelSx}>
               Horario
             </Typography>
             {/* Horario */}
@@ -216,10 +228,16 @@ const FormularioCitaMedica = ({
                 value={form.horario}
                 onChange={handleChange}
                 displayEmpty
+                IconComponent={KeyboardArrowDownRoundedIcon}
                 sx={{
                   borderRadius: 999,
                   background: "white",
                   ...outlinedFieldSx,
+                  "& .MuiSelect-icon": {
+                    fill: "#505151",
+                    fontSize: "2rem",
+                    right: 10,
+                  },
                 }}
               >
                 <MenuItem value="">
@@ -241,7 +259,7 @@ const FormularioCitaMedica = ({
         {/* Tipo de cita */}
       
           <Box className={styles.cita}>
-            <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+            <Typography variant="body2" sx={fieldLabelSx}>
               Tipo de cita
             </Typography>
             <FormControl fullWidth size="small">
@@ -249,10 +267,16 @@ const FormularioCitaMedica = ({
                 name="tipoCita"
                 value={form.tipoCita}
                 onChange={handleChange}
+                IconComponent={KeyboardArrowDownRoundedIcon}
                 sx={{
                   borderRadius: 999,
                   background: "white",
                   ...outlinedFieldSx,
+                  "& .MuiSelect-icon": {
+                    fill: "#505151",
+                    fontSize: "2rem",
+                    right: 10,
+                  },
                 }}
               >
                 <MenuItem value="presencial">Presencial</MenuItem>
@@ -265,7 +289,7 @@ const FormularioCitaMedica = ({
       {/* Ubicación o leyenda según tipo de cita */}
       {esPresencial ? (
         <Box>
-          <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+          <Typography variant="body2" sx={fieldLabelSx}>
             Ubicación
           </Typography>
           <TextField
@@ -291,7 +315,7 @@ const FormularioCitaMedica = ({
 
       {/* Motivo de consulta */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.35, ml: 2.5 }}>
+        <Typography variant="body2" sx={fieldLabelSx}>
           Motivo de consulta
         </Typography>
         <TextField
@@ -315,6 +339,35 @@ const FormularioCitaMedica = ({
             name="recordar"
             checked={form.recordar}
             onChange={handleChange}
+            icon={
+              <Box
+                sx={{
+                  width:  18,
+                  height: 18,
+                  border: "2px solid #007CBA",
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                  boxSizing: "border-box",
+                }}
+              />
+            }
+            checkedIcon={
+              <Box
+                sx={{ 
+                  width:  18,
+                  height: 18,
+                  border: "2px solid #007CBA",
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxSizing: "border-box",
+                }}
+              >
+                <CheckIcon sx={{ color: "#007CBA", fontSize: "16px" }} />
+              </Box>
+            }
           />
         }
         label="Recordarme 1 día antes"
@@ -322,7 +375,7 @@ const FormularioCitaMedica = ({
 
       {/* Notas */}
       <Box>
-        <Typography variant="body2" sx={{ mb: 0.35 }}>
+        <Typography variant="body2" sx={fieldLabelSx}>
           Notas
         </Typography>
         <TextField
@@ -335,7 +388,7 @@ const FormularioCitaMedica = ({
           minRows={2.6}
           variant="outlined"
           sx={outlinedFieldSx}
-          InputProps={{ sx: { borderRadius: 3 } }}
+          InputProps={{ sx: { borderRadius: 3, backgroundColor:"#fff" } }}
         />
       </Box>
 
@@ -352,6 +405,7 @@ const FormularioCitaMedica = ({
           variant="contained"
           disabled={!form.medico || !form.horario}
           sx={{
+            mt:"8rem",
             borderRadius: 999,
             px: 6,
             textTransform: "none",

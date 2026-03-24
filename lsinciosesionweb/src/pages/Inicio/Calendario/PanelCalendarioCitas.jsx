@@ -35,6 +35,11 @@ import {
 dayjs.locale("es-mx");
 
 const normId = (v) => (v == null ? "" : String(v));
+const BRAND_BLUE = "#007CBA";
+const RANGE_FILL = "rgba(14,165,233,0.18)";
+const RANGE_FILL_SOFT = "rgba(14,165,233,0.12)";
+const RANGE_DAY_SOFT = "#D8EEF8";
+const WEEKDAY_MUTED = "#A7A8A9";
 
 const PanelCalendarioCitas = ({
   selectedDate: selectedDateProp,
@@ -216,36 +221,53 @@ const PanelCalendarioCitas = ({
             ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
           }
           sx={{
+
+            "& .MuiDayCalendar-weekDayLabel": {
+              fontSize: "1rem",
+              color: WEEKDAY_MUTED,
+            },
+
             "& .MuiDayCalendar-header": {
               justifyContent: "space-between",
               px: 1,
+              
             },
             "& .MuiDayCalendar-weekContainer": {
               justifyContent: "space-between",
               marginBottom: "0rem",
+              
             },
             "& .MuiPickersDay-root": {
               fontSize: "1rem",
               marginX: 1,
               position: "relative",
+              
             },
-            "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.4 },
-            "& .MuiPickersCalendarHeader-root": { mb: 1 },
+            "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.4,  },
+            "& .MuiPickersCalendarHeader-root": { mb: 1, },
             "& .MuiPickersCalendarHeader-label": {
               fontWeight: 700,
               fontSize: "1.5rem",
               textTransform: "capitalize",
             },
             "& .MuiPickersArrowSwitcher-button": {
-              color: "#007CBA",
+              color: BRAND_BLUE,
               padding: "4px",
-              marginInline: 0.25,
+              marginInline: 0,
+              fontSize:"2rem",
+            },
+            "& .MuiPickersArrowSwitcher-button svg": {
+              color: BRAND_BLUE,
+              fill: BRAND_BLUE,
+              
             },
           }}
           slotProps={{
             day: (ownerState) => {
               const day = ownerState.day;
               const key = day.format("YYYY-MM-DD");
+              const prevKey = day.subtract(1, "day").format("YYYY-MM-DD");
+              const nextKey = day.add(1, "day").format("YYYY-MM-DD");
 
               // --- Citas (puntito)
               const hayCitas = tieneCitas(day);
@@ -259,6 +281,30 @@ const PanelCalendarioCitas = ({
 
               const isCircle =
                 tab === "medicamento" && paint && paint.takeDays?.has(key);
+              const isPausePattern =
+                tab === "medicamento" && selectedMedRule?.patron === "with_pauses";
+              const hasPrevInPeriod =
+                isPausePattern &&
+                paint &&
+                prevKey >= paint.shadeStart &&
+                prevKey <= paint.shadeEnd;
+              const hasNextInPeriod =
+                isPausePattern &&
+                paint &&
+                nextKey >= paint.shadeStart &&
+                nextKey <= paint.shadeEnd;
+              const hasPrevTake =
+                isPausePattern && paint && paint.takeDays?.has(prevKey);
+              const hasNextTake =
+                isPausePattern && paint && paint.takeDays?.has(nextKey);
+              const isPeriodStart = isPausePattern && paint && key === paint.shadeStart;
+              const isPeriodEnd = isPausePattern && paint && key === paint.shadeEnd;
+              const isInnerTakeDay =
+                isPausePattern && isCircle && !isPeriodStart && !isPeriodEnd;
+              const rangeFillLeft =
+                hasPrevInPeriod ? -13.5 : "49%";
+              const rangeFillRight =
+                hasNextInPeriod ? -14 : "49%";
 
               // Estilos combinados
               const sx = {
@@ -269,23 +315,95 @@ const PanelCalendarioCitas = ({
                         width: 6,
                         height: 6,
                         borderRadius: "50%",
-                        bgcolor: "#0EA5E9",
+                        bgcolor: BRAND_BLUE,
                         position: "absolute",
                         bottom: 4,
                       },
                     }
                   : null),
 
-                ...(tab === "medicamento" && inShade
+                ...(tab === "medicamento" && inShade && !isPausePattern
                   ? {
-                      backgroundColor: "rgba(14,165,233,0.12)",
+                      backgroundColor: RANGE_FILL_SOFT,
                       borderRadius: 2,
                     }
                   : null),
 
-                ...(tab === "medicamento" && isCircle
+                ...(isPausePattern && inShade
                   ? {
-                      outline: "2px solid #0EA5E9",
+                      marginX: 0,
+                      overflow: "visible",
+                      color: isPeriodStart || isPeriodEnd ? "#FFFFFF" : "#0F172A",
+                      fontWeight: isCircle ? 500 : 400,
+                      backgroundColor: "transparent",
+                      borderRadius: "999px",
+                      zIndex: 1,
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: "50%",
+                        transform: "translateY(-59%)",
+                        height: 18,
+                        left:  rangeFillLeft,
+                        right: rangeFillRight,
+                        backgroundColor: RANGE_FILL,
+                        borderRadius:
+                          !hasPrevInPeriod && !hasNextInPeriod
+                            ? "999px"
+                            : !hasPrevInPeriod
+                              ? "999px 0 0 999px"
+                              : !hasNextInPeriod
+                                ? "0 999px 999px 0"
+                                : 0,
+                        zIndex: -1,
+                      },
+                      ...((isPeriodStart || isPeriodEnd)
+                        ? {
+                            "&::after": {
+                              content: '""',
+                              position: "absolute",
+                              inset: 0,
+                              margin: "auto",
+                              width:  36,
+                              height: 36,
+                              borderRadius: "50%",
+                              backgroundColor: BRAND_BLUE,
+                              zIndex: -1,
+                              top:  "-1%",
+                              left: "-1%",
+                              transform: "translate(0%, 0%)",
+                            },
+                          }
+                        : null),
+                      ...(isInnerTakeDay
+                        ? {
+                            "&::after": {
+                              content: '""',
+                              position: "absolute",
+                              inset: 0,
+                              margin: "auto",
+                              width:  32,
+                              height: 32,
+                              borderRadius: "50%",
+                              backgroundColor: RANGE_DAY_SOFT,
+                              border: `1.5px solid ${BRAND_BLUE}`,
+                              zIndex: -1,
+                              top: "-1%",
+                              left: "-1%",
+                              transform: "translate(0%, 2%)",
+                            },
+                          }
+                        : null),
+                      "&:hover, &:focus": {
+                        backgroundColor: "transparent",
+                        
+                      },
+                    }
+                  : null),
+
+                ...(tab === "medicamento" && isCircle && !isPausePattern
+                  ? {
+                      outline: `2px solid ${BRAND_BLUE}`,
                       outlineOffset: "-2px",
                       borderRadius: "999px",
                     }

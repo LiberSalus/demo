@@ -15,6 +15,7 @@ import ModalCitaMedica from "./ModalCitaMedica";
 import { isTakeDay } from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
+const BRAND_BLUE = "#007CBA";
 
 function ChevronIcon({ direction = "left" }) {
   return (
@@ -69,15 +70,15 @@ function CustomDay(props) {
         ...(other.sx || {}),
         ...(hayAlgo && {
           position: "relative",
-          "&::after": {
-            content: '""',
-            width:  5,
-            height: 5,
-            borderRadius: "50%",
-            bgcolor: "#0EA5E9",
-            position: "absolute",
-            bottom: 2,
-            left: "50%",
+            "&::after": {
+              content: '""',
+              width:  5,
+              height: 5,
+              borderRadius: "50%",
+              bgcolor: BRAND_BLUE,
+              position: "absolute",
+              bottom: 2,
+              left: "50%",
             transform: "translateX(-50%)",
           },
         }),
@@ -241,11 +242,11 @@ const CalendarioInicio = ({
             marginBottom: "0.5rem",
             transform: "translateY(0.25rem)",
             "& button": {
-              color: "#1976d2",
+              color: BRAND_BLUE,
             },
           },
           "& .MuiPickersArrowSwitcher-button": {
-            color: "#1976d2",
+            color: BRAND_BLUE,
             width: "1.5rem",
             height: "1.5rem",
             minWidth: " 1.5rem",
