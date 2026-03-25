@@ -155,7 +155,7 @@ const ModalCitaMedica = ({
           sx={{
             fontFamily: "var(--font-inter)",
             fontWeight: "var(--peso700)",
-            fontSize: "1.5rem",
+            fontSize: isMobile ? "1.15rem" : "1.5rem",
           }}
         >
           {tab === "medicamento" ? "Medicamentos" : "Cita médica"}
@@ -179,7 +179,7 @@ const ModalCitaMedica = ({
         dividers={false}
         sx={{
           position: "relative",
-          p: isMobile ? 2 : 2.25,
+          p: isMobile ? 1 : 2.25,
           overflowY: "auto",
           maxHeight: isMobile
             ? "calc(100dvh - (env(safe-area-inset-top) + 64px))"
@@ -206,7 +206,7 @@ const ModalCitaMedica = ({
               maxWidth: "37.18rem",
               borderRadius: 4,
               bgcolor: "white",
-              p: isMobile ? 1.5 : 2,
+              p: isMobile ? 0.9 : 2,
               border: "1px solid #ACCCEB"
             }}
           >
@@ -230,13 +230,14 @@ const ModalCitaMedica = ({
             sx={{
               flex: 1,
               minWidth: 0,
-              width: "27.31rem",
-              maxWidth: "27.31rem",
+              width: isMobile ? "100%" : "27.31rem",
+              maxWidth: isMobile ? "100%" : "27.31rem",
+              minHeight: isMobile ? "auto" : "42.375rem",
               borderRadius: 3,
               bgcolor: "white",
               /* boxShadow: "0 8px 30px rgba(15,23,42,0.08)", */
-              p: isMobile ? 1.5 : 2,
-              background: "transparent"
+              p: isMobile ? 0.9 : 2,
+              background: "transparent",
             }}
           >
             {tab === "medicamento" ? (

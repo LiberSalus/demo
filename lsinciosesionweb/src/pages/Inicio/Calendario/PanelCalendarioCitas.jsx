@@ -157,25 +157,26 @@ const PanelCalendarioCitas = ({
       sx={{
         width: "100%",
         maxWidth: isMobile ? "100%" : "100%",
-        borderRadius: 7,
+        borderRadius: isMobile ? 4 : 7,
         bgcolor: "#FFF",
-        p: 2,
+        p: isMobile ? 1 : 2,
         display: "flex",
         flexDirection: "column",
-        gap: 1.25,
+        gap: isMobile ? 0.9 : 1.25,
       }}
     >
       {/* Tabs tipo switch */}
       <Box
         sx={{
           display: "inline-flex",
-          padding: "0.3rem",
+          padding: isMobile ? "0.2rem" : "0.3rem",
           borderRadius: 999,
           border: "1px solid #BFDBFE",
           backgroundColor: "#fff",
-          width: "fit-content",
-          minWidth: 286.75,
+          width: isMobile ? "min(100%, 17rem)" : "fit-content",
+          minWidth: isMobile ? 0 : 286.75,
           margin: "0 auto",
+          alignSelf: "center",
         }}
       >
         <Tabs
@@ -184,15 +185,17 @@ const PanelCalendarioCitas = ({
           TabIndicatorProps={{ style: { display: "none" } }}
           sx={{
             minHeight: 0,
+            width: isMobile ? "100%" : "auto",
             "& .MuiTabs-flexContainer": { gap: 0.5 },
             "& .MuiTab-root": {
               textTransform: "none",
               fontWeight: 500,
-              minHeight: 32,
+              minHeight: isMobile ? 30 : 32,
               minWidth: 0,
-              padding: "0.25rem 1.5rem",
+              flex: isMobile ? 1 : "initial",
+              padding: isMobile ? "0.2rem 0.9rem" : "0.25rem 1.5rem",
               borderRadius: 50,
-              fontSize: "0.9rem",
+              fontSize: isMobile ? "0.82rem" : "0.9rem",
               color: "#9CA3AF",
               display: "flex",
               justifyContent: "center",
@@ -223,10 +226,10 @@ const PanelCalendarioCitas = ({
           }
           sx={{
 
-            "& .MuiDayCalendar-weekDayLabel": {
-              fontSize: "1rem",
-              color: WEEKDAY_MUTED,
-            },
+              "& .MuiDayCalendar-weekDayLabel": {
+              fontSize: isMobile ? "0.76rem" : "1rem",
+                color: WEEKDAY_MUTED,
+              },
 
             "& .MuiDayCalendar-header": {
               justifyContent: "space-between",
@@ -238,25 +241,25 @@ const PanelCalendarioCitas = ({
               marginBottom: "0rem",
               
             },
-            "& .MuiPickersDay-root": {
-              fontSize: "1rem",
-              marginX: 1,
-              position: "relative",
+              "& .MuiPickersDay-root": {
+               fontSize: isMobile ? "0.88rem" : "1rem",
+                marginX: isMobile ? 0.35 : 1,
+                position: "relative",
               
             },
             "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.4,  },
             "& .MuiPickersCalendarHeader-root": { mb: 1, },
-            "& .MuiPickersCalendarHeader-label": {
-              fontWeight: 700,
-              fontSize: "1.5rem",
-              textTransform: "capitalize",
-            },
+              "& .MuiPickersCalendarHeader-label": {
+                fontWeight: 700,
+               fontSize: isMobile ? "1.18rem" : "1.5rem",
+                textTransform: "capitalize",
+              },
             "& .MuiPickersArrowSwitcher-button": {
               color: BRAND_BLUE,
-              padding: "4px",
+              padding: isMobile ? "2px" : "4px",
               marginInline: 0,
-              fontSize:"2rem",
-            },
+                fontSize: isMobile ? "1.5rem" : "2rem",
+              },
             "& .MuiPickersArrowSwitcher-button svg": {
               color: BRAND_BLUE,
               fill: BRAND_BLUE,
@@ -428,7 +431,7 @@ const PanelCalendarioCitas = ({
           border: "1px solid #ACCCEB",
           /* p: 2, */
           mt: 0.5,
-          height: 212,
+          height: isMobile ? 160 : 212,
           display: "flex",
           flexDirection: "column",
           width: "100%",

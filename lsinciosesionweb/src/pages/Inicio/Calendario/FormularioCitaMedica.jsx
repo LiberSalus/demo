@@ -66,7 +66,7 @@ const outlinedFieldSx = {
     paddingLeft: "1rem",
   },
   "& .MuiSelect-select": {
-    fontSize: "10.5px",
+    fontSize: "13.5px",
     paddingLeft: "1rem",
   },
   "& .MuiSelect-root": {
@@ -92,7 +92,7 @@ const outlinedFieldSx = {
   },
 };
 
-const fieldLabelSx = { mb: 0.3, ml: 2.5 };
+const fieldLabelSx = { mb: 0.3, ml: 2.5, fontSize: "0.9rem", color: "#334155" };
 const compactFieldSx = {
   "& .MuiOutlinedInput-root": {
     height: "2.35rem",
@@ -110,6 +110,79 @@ const compactFieldSx = {
     boxSizing: "border-box",
   },
 };
+const accordionMenuProps = {
+  anchorOrigin: { vertical: "bottom", horizontal: "left" },
+  transformOrigin: { vertical: "top", horizontal: "left" },
+  transitionDuration: 180,
+  PaperProps: {
+    elevation: 0,
+    className: styles.menuDesplegable,
+    sx: {
+      mt: "-0.3rem",
+      border: "2px solid #ACCCEB",
+      borderTop: "none",
+      borderRadius: "0 0 1.5rem 1.5rem",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      boxShadow: "0px 10px 26px rgba(15, 23, 42, 0.08)",
+      overflow: "hidden",
+      backgroundColor: "#fff",
+      zIndex: -1,
+      pb: "1rem",
+      maxHeight: "16.5rem",
+    },
+  },
+  MenuListProps: {
+    sx: {
+      zIndex: -1,
+      py: 0.25,
+      overflowY: "auto",
+      overflowX: "hidden",
+      "& .MuiMenuItem-root": {
+        minHeight: "unset",
+        alignItems: "flex-start",
+        padding: "0.65rem 1rem",
+      },
+    },
+  },
+};
+const createOverlayMenuProps = (topPadding) => ({
+  ...accordionMenuProps,
+  disablePortal: true,
+  sx: {
+    zIndex: -1,
+    transform: "translateY(-1rem)",
+  },
+  PaperProps: {
+    ...accordionMenuProps.PaperProps,
+    sx: {
+      ...accordionMenuProps.PaperProps.sx,
+      pt: topPadding,
+    },
+  },
+  MenuListProps: {
+    ...accordionMenuProps.MenuListProps,
+    sx: {
+      ...accordionMenuProps.MenuListProps.sx,
+      maxHeight: `calc(16.5rem - ${topPadding})`,
+    },
+  },
+});
+const specialtyMenuProps = createOverlayMenuProps("1.2rem");
+const scheduleMenuProps = createOverlayMenuProps("1.8rem");
+const appointmentTypeMenuProps = createOverlayMenuProps("1.2rem");
+const accordionSelectSx = {
+  "& .MuiSelect-icon": {
+    fill: "#505151",
+    fontSize: "2rem",
+    right: 10,
+    transition: "transform 180ms ease, color 180ms ease",
+    transformOrigin: "center",
+  },
+  "& .MuiSelect-iconOpen": {
+    transform: "rotate(180deg)",
+  },
+};
 const checkboxLabelSx = {
   mt: 0.1,
   alignSelf: "flex-end",
@@ -125,13 +198,16 @@ const submitButtonSx = {
   minWidth: "10rem",
   textTransform: "none",
   mt: 1,
+  fontSize: "0.95rem",
 };
 
 const FormularioCitaMedica = ({
   selectedDate = dayjs(), // dayjs
   onGuardar, // función que recibe los datos del formulario
   citasDelDia = [],
+  isMobile = false,
 }) => {
+  const [openSelect, setOpenSelect] = useState(null);
   const [form, setForm] = useState({
     medico: "",
     especialidad: "",
@@ -186,19 +262,22 @@ const FormularioCitaMedica = ({
       onSubmit={handleSubmit}
       sx={{
         width: "100%",
-        maxWidth: "27.31rem",
+        maxWidth: isMobile ? "100%" : "27.31rem",
         height: "fit-content",
         display: "flex",
         flexDirection: "column",
-        gap: 1.1,
+        gap: isMobile ? 0.8 : 1.1,
       }}
     >
       {/* Fecha arriba a la derecha */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Typography variant="body2" sx={{ color: "#64748B", mb: 0.15, fontSize:"1rem" }}>
-          {fechaTexto}
-        </Typography>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "#64748B", mb: 0.15, fontSize: isMobile ? "0.95rem" : "1rem" }}
+          >
+            {fechaTexto}
+          </Typography>
+        </Box>
 
       {/* Nombre del médico */}
       <Box>
@@ -224,11 +303,18 @@ const FormularioCitaMedica = ({
         <Typography variant="body2" sx={fieldLabelSx}>
           Especialidad
         </Typography>
-        <FormControl fullWidth size="small">
+        <FormControl
+          fullWidth
+          size="small"
+          sx={{ position: "relative", zIndex: openSelect === "especialidad" ? 20 : 3 }}
+        >
           <Select
+            className={styles.menuSelect}
             name="especialidad"
             value={form.especialidad}
             onChange={handleChange}
+            onOpen={() => setOpenSelect("especialidad")}
+            onClose={() => setOpenSelect(null)}
             displayEmpty
             IconComponent={KeyboardArrowDownRoundedIcon}
             sx={{
@@ -236,21 +322,12 @@ const FormularioCitaMedica = ({
               background: "white",
               ...outlinedFieldSx,
               ...compactFieldSx,
-              "& .MuiSelect-icon": {
-                fill: "#505151",
-                fontSize: "2rem",
-                right: 10,
-              },
+              position: "relative",
+              zIndex: 4,
+              backgroundColor: "#fff",
+              ...accordionSelectSx,
             }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  borderRadius: "0 0 1rem 1rem", // 👈 parte importante
-                  boxShadow: "0px 4px 20px rgba(0,0,0,0.08)",
-                  
-                },
-              },
-            }}
+            MenuProps={specialtyMenuProps}
           >
             <MenuItem value="" sx={{}}>
               <p className={styles.uno}>Selecciona una especialidad</p>
@@ -275,13 +352,20 @@ const FormularioCitaMedica = ({
             {/* Horario */}
             <FormControl
               size="small"
-              sx={{ mr: 1 }}
+              sx={{
+                mr: 1,
+                position: "relative",
+                zIndex: openSelect === "horario" ? 20 : 3,
+              }}
               className={styles.horario}
             >
               <Select
+                className={styles.menuSelect}
                 name="horario"
                 value={form.horario}
                 onChange={handleChange}
+                onOpen={() => setOpenSelect("horario")}
+                onClose={() => setOpenSelect(null)}
                 displayEmpty
                 IconComponent={KeyboardArrowDownRoundedIcon}
                 sx={{
@@ -289,12 +373,12 @@ const FormularioCitaMedica = ({
                   background: "white",
                   ...outlinedFieldSx,
                   ...compactFieldSx,
-                  "& .MuiSelect-icon": {
-                    fill: "#505151",
-                    fontSize: "2rem",
-                    right: 10,
-                  },
+                  position: "relative",
+                  zIndex: 4,
+                  backgroundColor: "#fff",
+                  ...accordionSelectSx,
                 }}
+                MenuProps={scheduleMenuProps}
               >
                 <MenuItem value="">
                   <p className={styles.uno}>Selecciona un horario</p>
@@ -303,7 +387,18 @@ const FormularioCitaMedica = ({
                   const ocupado = horariosOcupados.has(h);
                   return (
                     <MenuItem key={h} value={h} disabled={ocupado}>
-                      {h} {ocupado ? " (Ocupado)" : ""}
+                      {ocupado ? (
+                        <Box sx={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+                          <Typography sx={{ fontSize: "inherit", color: "#9CA3AF" }}>
+                            {h}
+                          </Typography>
+                          <Typography sx={{ fontSize: "0.82rem", color: "#9CA3AF" }}>
+                            Ocupado
+                          </Typography>
+                        </Box>
+                      ) : (
+                        h
+                      )}
                     </MenuItem>
                   );
                 })}
@@ -318,23 +413,30 @@ const FormularioCitaMedica = ({
             <Typography variant="body2" sx={fieldLabelSx}>
               Tipo de cita
             </Typography>
-            <FormControl fullWidth size="small">
+            <FormControl
+              fullWidth
+              size="small"
+              sx={{ position: "relative", zIndex: openSelect === "tipoCita" ? 20 : 3 }}
+            >
               <Select
+                className={styles.menuSelect}
                 name="tipoCita"
                 value={form.tipoCita}
                 onChange={handleChange}
+                onOpen={() => setOpenSelect("tipoCita")}
+                onClose={() => setOpenSelect(null)}
                 IconComponent={KeyboardArrowDownRoundedIcon}
                 sx={{
                   borderRadius: 999,
                   background: "white",
                   ...outlinedFieldSx,
                   ...compactFieldSx,
-                  "& .MuiSelect-icon": {
-                    fill: "#505151",
-                    fontSize: "2rem",
-                    right: 10,
-                  },
+                  position: "relative",
+                  zIndex: 4,
+                  backgroundColor: "#fff",
+                  ...accordionSelectSx,
                 }}
+                MenuProps={appointmentTypeMenuProps}
               >
                 <MenuItem value="presencial">Presencial</MenuItem>
                 <MenuItem value="en_linea">En línea</MenuItem>

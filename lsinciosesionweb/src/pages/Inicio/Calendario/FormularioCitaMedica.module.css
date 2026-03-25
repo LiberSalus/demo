@@ -3,19 +3,22 @@
   display: flex;
   /* border: 1px dashed red; */
   align-items: flex-end;
+  gap: 0.75rem;
 }
 
 .horario {
-  width: 12rem;
-  margin-right: 1.5rem;
+  width: 13.25rem;
+  margin-right: 0;
   
 }
 .cita {
-  width: 12rem;
+  flex: 1;
 }
 
 .uno {
   color: #b0afaf;
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 .inputs {
@@ -39,3 +42,33 @@
   padding: 0.25rem 0.45rem 0.25rem 0.25rem;
 }
 
+.menuSelect {
+}
+
+.menuDesplegable {
+}
+
+@media (max-width: 600px) {
+  .horarioCita {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .horario {
+    width: 100%;
+  }
+
+  .cita {
+    width: 100%;
+    flex: initial;
+  }
+
+  .recordarme {
+    margin-top: 0 !important;
+  }
+
+  .recordarme :global(.MuiFormControlLabel-label) {
+    font-size: 0.85rem;
+  }
+}

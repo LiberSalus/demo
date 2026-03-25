@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-
+import styles from './FormularioCitaMedica.module.css'
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
@@ -32,7 +32,7 @@ dayjs.locale("es-mx");
 
 // Opciones (puedes ajustar a gusto)
 const PRESENTACIONES = [
-  "Tableta","Jarabe",
+  "Tableta", "Jarabe",
   "Aerosol",
   "Cápsula",
   "Comprimido",
@@ -89,11 +89,14 @@ const PATRONES = [
   },
 ];
 
+const FRECUENCIA_HORAS_OPTIONS = [24, 12, 8, 6, 4];
+
 const outlinedFieldSx = {
   backgroundColor: "#fff",
-  borderRadius:"3rem",
+  borderRadius: "3rem",
   "& .MuiOutlinedInput-notchedOutline": {
     borderColor: "#ACCCEB",
+    
   },
   "& .MuiOutlinedInput-root": {
     backgroundColor: "#fff",
@@ -131,10 +134,10 @@ const outlinedFieldSx = {
 
 const pillInputSx = {
   borderRadius: 999,
-  backgroundColor:"#fff",
+  backgroundColor: "#fff",
   ...outlinedFieldSx,
 };
-const fieldLabelSx = { mb: 0.3, ml: 0.5, fontSize: "0.9rem", color: "#334155" };
+const fieldLabelSx = { mb: 0.3, pl: "1rem", fontSize: "0.9rem", color: "#334155" };
 const pairRowSx = {
   display: "grid",
   gridTemplateColumns: "1fr 1fr",
@@ -168,8 +171,8 @@ const compactFieldSx = {
 const calendarFieldSx = {
   "& .MuiInputBase-root": {
     borderRadius: 999,
-    borderColor:"#accceb",
-    fontSize:"0.5rem",
+    borderColor: "#accceb",
+    fontSize: "0.5rem",
   },
 };
 const accordionMenuProps = {
@@ -180,7 +183,8 @@ const accordionMenuProps = {
     elevation: 0,
     sx: {
       mt: 0.15,
-      border: "1px solid #ACCCEB",
+      border: "2px solid #ACCCEB",
+      
       borderRadius: "0 0 1.5rem 1.5rem",
       boxShadow: "0px 10px 26px rgba(15, 23, 42, 0.08)",
       overflow: "hidden",
@@ -198,18 +202,21 @@ const accordionMenuProps = {
     },
   },
 };
-const presentationMenuProps = {
+const createOverlayMenuProps = (topPadding) => ({
   ...accordionMenuProps,
   disablePortal: true,
   sx: {
-    zIndex: 0,
+    zIndex: -1,
+    transform: "translateY(-1rem)",
   },
   PaperProps: {
     ...accordionMenuProps.PaperProps,
+    className: styles.menuDesplegable,
     sx: {
       ...accordionMenuProps.PaperProps.sx,
-      mt: "-1.5rem",
-      pt: "1.8rem",
+      mt: "-0.3rem",
+      pt: topPadding,
+      pb: "1rem",
       maxHeight: "16.5rem",
       overflow: "hidden",
       zIndex: -1,
@@ -219,19 +226,19 @@ const presentationMenuProps = {
     },
   },
   MenuListProps: {
+    ...accordionMenuProps.MenuListProps,
     sx: {
-      py: 0.25,
-      maxHeight: "calc(16.5rem - 1.8rem)",
+      ...accordionMenuProps.MenuListProps.sx,
+      zIndex: -1,
+      maxHeight: `calc(16.5rem - ${topPadding})`,
       overflowY: "auto",
       overflowX: "hidden",
-      "& .MuiMenuItem-root": {
-        minHeight: "unset",
-        alignItems: "flex-start",
-        padding: "0.65rem 1rem",
-      },
     },
   },
-};
+});
+const presentationMenuProps = createOverlayMenuProps("1.2rem");
+const timeMenuProps = createOverlayMenuProps("1.8rem");
+const patternMenuProps = createOverlayMenuProps("2.4rem");
 const accordionSelectSx = {
   "& .MuiSelect-icon": {
     fill: "#505151",
@@ -261,6 +268,7 @@ const FormularioMedicamento = ({
 }) => {
   const presentationFieldRef = useRef(null);
   const [presentationMenuWidth, setPresentationMenuWidth] = useState(null);
+  const [presentationOpen, setPresentationOpen] = useState(false);
   const [form, setForm] = useState({
     medicamento: "",
     dosis: "",
@@ -280,6 +288,7 @@ const FormularioMedicamento = ({
 
     // patrón: cada N días
     everyNDays: 2,
+    duracionDias: 8,
 
     // patrón: con pausas
     takeDays: 3,
@@ -316,6 +325,18 @@ const FormularioMedicamento = ({
   }, [form.patron]);
 
   useEffect(() => {
+    if (form.patron !== "every_n_days") return;
+    const key = selectedDate.format("YYYY-MM-DD");
+    setForm((f) => ({
+      ...f,
+      startDate: key,
+      endDate: dayjs(key)
+        .add(Math.max(Number(f.duracionDias || 1) - 1, 0), "day")
+        .format("YYYY-MM-DD"),
+    }));
+  }, [form.patron, form.duracionDias, selectedDate]);
+
+  useEffect(() => {
     const node = presentationFieldRef.current;
     if (!node) return;
 
@@ -335,13 +356,32 @@ const FormularioMedicamento = ({
 
   const horarios = useMemo(() => generarHorarios(0, 24), []);
 
-  const startDayjs = useMemo(() => dayjs(form.startDate), [form.startDate]);
-  const endDayjs = useMemo(() => dayjs(form.endDate), [form.endDate]);
+  const effectiveStartDate = useMemo(() => {
+    if (form.patron === "every_n_days") {
+      return selectedDate.format("YYYY-MM-DD");
+    }
+    return form.startDate;
+  }, [form.patron, form.startDate, selectedDate]);
+
+  const effectiveEndDate = useMemo(() => {
+    if (form.patron === "every_n_days") {
+      const duration = Number(form.duracionDias || 0);
+      if (!duration || duration < 1) return "";
+      return dayjs(effectiveStartDate)
+        .add(duration - 1, "day")
+        .format("YYYY-MM-DD");
+    }
+    return form.endDate;
+  }, [form.patron, form.duracionDias, effectiveStartDate, form.endDate]);
+
+  const startDayjs = useMemo(() => dayjs(effectiveStartDate), [effectiveStartDate]);
+  const endDayjs = useMemo(() => dayjs(effectiveEndDate), [effectiveEndDate]);
 
   const duracion = useMemo(() => {
-    if (!form.startDate || !form.endDate) return 0;
-    return durationDays(form.startDate, form.endDate);
-  }, [form.startDate, form.endDate]);
+    if (form.patron === "every_n_days") return Number(form.duracionDias || 0);
+    if (!effectiveStartDate || !effectiveEndDate) return 0;
+    return durationDays(effectiveStartDate, effectiveEndDate);
+  }, [form.patron, form.duracionDias, effectiveStartDate, effectiveEndDate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -363,17 +403,19 @@ const FormularioMedicamento = ({
     if (!form.presentacion) return "Selecciona la presentación.";
     if (!form.cantidad.trim()) return "Escribe la cantidad.";
     if (!form.horaInicio) return "Selecciona la hora de inicio.";
-    if (!form.startDate) return "Selecciona la fecha de inicio.";
-    if (!form.endDate) return "Selecciona la fecha de fin.";
+    if (!effectiveStartDate) return "Selecciona la fecha de inicio.";
+    if (!effectiveEndDate) return "Selecciona la fecha de fin.";
 
-    const s = dayjs(form.startDate);
-    const e = dayjs(form.endDate);
+    const s = dayjs(effectiveStartDate);
+    const e = dayjs(effectiveEndDate);
     if (e.isBefore(s, "day"))
       return "La fecha de fin no puede ser antes del inicio.";
 
     if (form.patron === "every_n_days") {
       const n = Number(form.everyNDays);
       if (!n || n < 1) return "El campo 'Cada' debe ser mínimo 1 día.";
+      const d = Number(form.duracionDias);
+      if (!d || d < 1) return "El campo 'Duración' debe ser mínimo 1 día.";
     }
 
     if (form.patron === "with_pauses") {
@@ -410,12 +452,16 @@ const FormularioMedicamento = ({
       frecuenciaHoras: Number(form.frecuenciaHoras || 24),
       horaInicio: form.horaInicio, // "11:30 am" compatible ✅
 
-      startDate: form.startDate,
-      endDate: form.endDate, // siempre hay endDate ✅
+      startDate: effectiveStartDate,
+      endDate: effectiveEndDate, // siempre hay endDate ✅
 
       everyNDays:
         form.patron === "every_n_days"
           ? Number(form.everyNDays || 1)
+          : undefined,
+      duracionDias:
+        form.patron === "every_n_days"
+          ? Number(form.duracionDias || 1)
           : undefined,
       takeDays:
         form.patron === "with_pauses" ? Number(form.takeDays || 1) : undefined,
@@ -432,6 +478,14 @@ const FormularioMedicamento = ({
   const patronMeta = useMemo(() => {
     return PATRONES.find((p) => p.value === form.patron);
   }, [form.patron]);
+  const responsivePairRowSx = useMemo(
+    () => ({
+      ...pairRowSx,
+      gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+      rowGap: isMobile ? "0.75rem" : pairRowSx.rowGap,
+    }),
+    [isMobile],
+  );
   const submitButtonSx = {
     borderRadius: 999,
     px: 6,
@@ -449,10 +503,10 @@ const FormularioMedicamento = ({
         onSubmit={handleSubmit}
         sx={{
           width: "100%",
-          maxWidth: "27.31rem",
+          maxWidth: isMobile ? "100%" : "27.31rem",
           display: "flex",
           flexDirection: "column",
-          gap: 0.8,
+          gap: isMobile ? 0.7 : 0.8,
         }}
       >
         {/* Fecha arriba a la derecha (solo referencia visual) */}
@@ -524,7 +578,7 @@ const FormularioMedicamento = ({
         </Box>
 
         {/* Presentación + Cantidad */}
-        <Box sx={pairRowSx}>
+        <Box sx={responsivePairRowSx}>
           <Box>
             <Typography variant="body2" sx={fieldLabelSx}>
               Presentación
@@ -533,18 +587,20 @@ const FormularioMedicamento = ({
               fullWidth
               size="small"
               ref={presentationFieldRef}
-              sx={{ position: "relative", zIndex: 3 }}
+              sx={{ position: "relative", zIndex: presentationOpen ? 20 : 3 }}
             >
               <Select
                 name="presentacion"
                 value={form.presentacion}
                 onChange={handleChange}
+                onOpen={() => setPresentationOpen(true)}
+                onClose={() => setPresentationOpen(false)}
                 displayEmpty
                 IconComponent={KeyboardArrowDownRoundedIcon}
                 sx={{
                   ...pillInputSx,
                   ...compactFieldSx,
-                  fontSize:"0.9rem",
+                  fontSize: "0.9rem",
                   position: "relative",
                   zIndex: 4,
                   backgroundColor: "#fff",
@@ -598,33 +654,43 @@ const FormularioMedicamento = ({
         </Box>
 
         {/* Patrón del tratamiento */}
-        <Box>
+        <Box sx={{ position: "relative" }}>
           <Typography variant="body2" sx={fieldLabelSx}>
             Patrón del tratamiento
           </Typography>
-          <FormControl fullWidth size="small">
+          <FormControl
+            fullWidth
+            size="small"
+            sx={{ position: "relative", zIndex: 3 }}
+          >
             <Select
+              className={styles.menuSelect}
               name="patron"
               value={form.patron}
               onChange={handleChange}
               IconComponent={KeyboardArrowDownRoundedIcon}
               sx={{
                 borderRadius: 3,
-                padding:"0.15rem 0",
+                padding: "0.15rem 0",
                 ...outlinedFieldSx,
                 ...compactFieldSx,
+                position: "relative",
+                zIndex: 4,
+                backgroundColor: "#fff",
                 "& .MuiSelect-select": {
                   fontSize: "13.5px",
                   paddingLeft: "1rem",
                 },
                 ...accordionSelectSx,
               }}
-              MenuProps={accordionMenuProps}
+              MenuProps={patternMenuProps}
+
+
             >
               {PATRONES.map((p) => (
-                <MenuItem key={p.value} value={p.value}>
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography sx={{ fontWeight: 600, fontSize: "0.92rem" }}>
+                <MenuItem key={p.value} value={p.value} >
+                    <Box sx={{ display: "flex", flexDirection: "column", }} >
+                    <Typography sx={{ fontWeight: 600, fontSize: "0.92rem", color: "#334155" }}>
                       {p.label}
                     </Typography>
                     <Typography sx={{ fontSize: "0.78rem", color: "#64748B" }}>
@@ -638,35 +704,8 @@ const FormularioMedicamento = ({
 
         </Box>
 
-        {/* Campos extra según patrón */}
-        {form.patron === "every_n_days" && (
-          <Box>
-            <Typography variant="body2" sx={fieldLabelSx}>
-              Cada:
-            </Typography>
-            <TextField
-              name="everyNDays"
-              value={form.everyNDays}
-              onChange={handleChange}
-              fullWidth
-              size="small"
-              InputProps={{
-                sx: pillInputSx,
-                endAdornment: (
-                  <InputAdornment position="end">días</InputAdornment>
-                ),
-                inputMode: "numeric",
-              }}
-              sx={{ ...outlinedFieldSx, ...compactFieldSx,  "& .MuiOutlinedInput-input": {
-                  fontSize: "1rem", paddingLeft:"45%", fontWeight:"bold"
-                }, }}
-            />
-          </Box>
-        )}
-
-        
         {form.patron === "with_pauses" && (
-          <Box sx={pairRowSx}>
+          <Box sx={responsivePairRowSx}>
             <Box>
               <Typography variant="body2" sx={fieldLabelSx}>
                 Tomar por:
@@ -689,8 +728,8 @@ const FormularioMedicamento = ({
                   ...compactFieldSx,
                   "& .MuiOutlinedInput-input": {
                     paddingLeft: "5rem",
-                    fontWeight:"bold",
-                    fontSize:"1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
                   },
                 }}
               />
@@ -715,11 +754,11 @@ const FormularioMedicamento = ({
                 sx={{
                   ...outlinedFieldSx,
                   ...compactFieldSx,
-                  
+
                   "& .MuiOutlinedInput-input": {
                     paddingLeft: "5rem",
-                    fontWeight:"bold",
-                    fontSize:"1.2rem",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
                   },
                 }}
               />
@@ -727,56 +766,284 @@ const FormularioMedicamento = ({
           </Box>
         )}
 
-        {/* Duración + Hora de inicio */}
-        <Box sx={pairRowSx}>
-          <Box>
-            <Typography variant="body2" sx={fieldLabelSx}>
-              Duración
-            </Typography>
-            <TextField
-              value={
-                duracion ? `${duracion} día${duracion > 1 ? "s" : ""}` : ""
-              }
-              placeholder="Días de duración"
-              fullWidth
-              size="small"
-              variant="outlined"
-              InputProps={{ sx: pillInputSx, readOnly: true }}
-              sx={{ ...outlinedFieldSx, ...compactFieldSx }}
-            />
-          </Box>
+        {form.patron === "every_n_days" ? (
+          <>
+            <Box sx={responsivePairRowSx}>
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Duración
+                </Typography>
+                <TextField
+                  name="duracionDias"
+                  value={form.duracionDias}
+                  onChange={handleChange}
+                  placeholder="Días de duración"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    sx: pillInputSx,
+                    inputMode: "numeric",
+                  }}
+                  sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+                />
+              </Box>
 
-          <Box>
-            <Typography variant="body2" sx={fieldLabelSx}>
-              Hora de inicio
-            </Typography>
-            <FormControl fullWidth size="small">
-              <Select
-                name="horaInicio"
-                value={form.horaInicio}
-                onChange={handleChange}
-                IconComponent={KeyboardArrowDownRoundedIcon}
-                sx={{
-                  ...pillInputSx,
-                  ...compactFieldSx,
-                  color:"#A7A8A9",
-                  fontSize:"0.85rem",
-                  ...accordionSelectSx,
-                }}
-                MenuProps={accordionMenuProps}
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Cada:
+                </Typography>
+                <TextField
+                  name="everyNDays"
+                  value={form.everyNDays}
+                  onChange={handleChange}
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    sx: pillInputSx,
+                    endAdornment: (
+                      <InputAdornment position="end">días</InputAdornment>
+                    ),
+                    inputMode: "numeric",
+                  }}
+                  sx={{
+                    ...outlinedFieldSx,
+                    ...compactFieldSx,
+                    "& .MuiOutlinedInput-input": {
+                      fontSize: "1rem",
+                      paddingLeft: "1rem",
+                      fontWeight: "bold",
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Box sx={{ width: isMobile ? "100%" : "50%" }}>
+              <Typography variant="body2" sx={fieldLabelSx}>
+                Hora de inicio
+              </Typography>
+              <FormControl
+                fullWidth
+                size="small"
+                sx={{ position: "relative", zIndex: 1 }}
               >
-                {horarios.map((h) => (
-                  <MenuItem key={h} value={h}>
-                    {h}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        </Box>
+                <Select
+                  className={styles.menuSelect}
+                  name="horaInicio"
+                  value={form.horaInicio}
+                  onChange={handleChange}
+                  IconComponent={KeyboardArrowDownRoundedIcon}
+                  sx={{
+                    ...pillInputSx,
+                    ...compactFieldSx,
+                    color: "#A7A8A9",
+                    fontSize: "0.85rem",
+                    position: "relative",
+                    zIndex: 4,
+                    backgroundColor: "#fff",
+                    ...accordionSelectSx,
+                  }}
+                  MenuProps={timeMenuProps}
+                >
+                  {horarios.map((h) => (
+                    <MenuItem key={h} value={h}>
+                      {h}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-        {/* Fechas inicio/fin */}
-        <Box sx={pairRowSx}>
+            {!isMobile && (
+              <Box
+                sx={{
+                  ...pairRowSx,
+                  visibility: "hidden",
+                  pointerEvents: "none",
+                }}
+              >
+                <Box>
+                  <Typography variant="body2" sx={fieldLabelSx}>
+                    Fecha de inicio
+                  </Typography>
+                  <Box
+                    sx={{
+                      height: "2.35rem",
+                      borderRadius: 999,
+                      backgroundColor: "#fff",
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="body2" sx={fieldLabelSx}>
+                    Fecha de fin
+                  </Typography>
+                  <Box
+                    sx={{
+                      height: "2.35rem",
+                      borderRadius: 999,
+                      backgroundColor: "#fff",
+                    }}
+                  />
+                </Box>
+              </Box>
+            )}
+          </>
+        ) : form.patron === "daily_perm" ? (
+          <>
+            <Box sx={responsivePairRowSx}>
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Duración
+                </Typography>
+                <TextField
+                  value="Diario"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{ sx: pillInputSx, readOnly: true }}
+                  sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Frecuencia
+                </Typography>
+                <FormControl
+                  fullWidth
+                  size="small"
+                  sx={{ position: "relative", zIndex: 1 }}
+                >
+                  <Select
+                    className={styles.menuSelect}
+                    name="frecuenciaHoras"
+                    value={form.frecuenciaHoras}
+                    onChange={handleChange}
+                    IconComponent={KeyboardArrowDownRoundedIcon}
+                    sx={{
+                      ...pillInputSx,
+                      ...compactFieldSx,
+                      color: "#334155",
+                      fontSize: "0.85rem",
+                      position: "relative",
+                      zIndex: 4,
+                      backgroundColor: "#fff",
+                      ...accordionSelectSx,
+                    }}
+                    MenuProps={timeMenuProps}
+                  >
+                    {FRECUENCIA_HORAS_OPTIONS.map((h) => (
+                      <MenuItem
+                        key={h}
+                        value={h}
+                        sx={{ justifyContent: "center", textAlign: "center" }}
+                      >
+                        {h} horas
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+
+            <Box sx={{ width: isMobile ? "100%" : "50%" }}>
+              <Typography variant="body2" sx={fieldLabelSx}>
+                Hora de inicio
+              </Typography>
+              <FormControl
+                fullWidth
+                size="small"
+                sx={{ position: "relative", zIndex: 1 }}
+              >
+                <Select
+                  className={styles.menuSelect}
+                  name="horaInicio"
+                  value={form.horaInicio}
+                  onChange={handleChange}
+                  IconComponent={KeyboardArrowDownRoundedIcon}
+                  sx={{
+                    ...pillInputSx,
+                    ...compactFieldSx,
+                    color: "#A7A8A9",
+                    fontSize: "0.85rem",
+                    position: "relative",
+                    zIndex: 4,
+                    backgroundColor: "#fff",
+                    ...accordionSelectSx,
+                  }}
+                  MenuProps={timeMenuProps}
+                >
+                  {horarios.map((h) => (
+                    <MenuItem key={h} value={h}>
+                      {h}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </>
+        ) : (
+          <>
+            {/* Duración + Hora de inicio */}
+            <Box sx={responsivePairRowSx}>
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Duración
+                </Typography>
+                <TextField
+                  value={
+                    duracion ? `${duracion} día${duracion > 1 ? "s" : ""}` : ""
+                  }
+                  placeholder="Días de duración"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{ sx: pillInputSx, readOnly: true }}
+                  sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Hora de inicio
+                </Typography>
+                <FormControl
+                  fullWidth
+                  size="small"
+                  sx={{ position: "relative", zIndex: 1 }}
+                >
+                  <Select
+                    className={styles.menuSelect}
+                    name="horaInicio"
+                    value={form.horaInicio}
+                    onChange={handleChange}
+                    IconComponent={KeyboardArrowDownRoundedIcon}
+                    sx={{
+                      ...pillInputSx,
+                      ...compactFieldSx,
+                      color: "#A7A8A9",
+                      fontSize: "0.85rem",
+                      position: "relative",
+                      zIndex: 4,
+                      backgroundColor: "#fff",
+                      ...accordionSelectSx,
+                    }}
+                    MenuProps={timeMenuProps}
+                  >
+                    {horarios.map((h) => (
+                      <MenuItem key={h} value={h}>
+                        {h}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+
+            {/* Fechas inicio/fin */}
+            <Box sx={responsivePairRowSx}>
           <Box sx={{ width: "100%", minWidth: 0 }}>
             <Typography variant="body2" sx={fieldLabelSx}>
               Fecha de inicio
@@ -842,7 +1109,7 @@ const FormularioMedicamento = ({
                       "& .MuiSvgIcon-root": {
                         fontSize: "1.2rem",
                       },
-                      
+
                     },
                   },
                   sx: {
@@ -855,14 +1122,16 @@ const FormularioMedicamento = ({
                     },
                     "& .MuiOutlinedInput-root": {
                       width: "100%",
-                      
+
                     },
                   },
                 },
               }}
             />
           </Box>
-        </Box>
+            </Box>
+          </>
+        )}
 
         {/* Notas */}
         <Box>
@@ -892,46 +1161,46 @@ const FormularioMedicamento = ({
           }}
         >
 
-        <FormControlLabel 
-          control={
-            <Checkbox
-              name="recordar"
-              checked={form.recordar}
-              onChange={handleChange}
-              icon={
-                <Box
-                  sx={{
-                    width: 18,
-                    height: 18,
-                    border: "2px solid #007CBA",
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: "4px",
-                    boxSizing: "border-box",
-                  }}
-                />
-              }
-              checkedIcon={
-                <Box
-                  sx={{
-                    width: 18,
-                    height: 18,
-                    border: "2px solid #007CBA",
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <CheckIcon sx={{ color: "#007CBA", fontSize: "16px" }} />
-                </Box>
-              }
-            />
-          }
-          label="Recordarme 10 min antes"
-          sx={checkboxLabelSx, {justifyContent:"end", }}
-        />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="recordar"
+                checked={form.recordar}
+                onChange={handleChange}
+                icon={
+                  <Box
+                    sx={{
+                      width: 18,
+                      height: 18,
+                      border: "2px solid #007CBA",
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: "4px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                }
+                checkedIcon={
+                  <Box
+                    sx={{
+                      width: 18,
+                      height: 18,
+                      border: "2px solid #007CBA",
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <CheckIcon sx={{ color: "#007CBA", fontSize: "16px" }} />
+                  </Box>
+                }
+              />
+            }
+            label="Recordarme 10 min antes"
+            sx={checkboxLabelSx, { justifyContent: "end", }}
+          />
         </Box>
 
         {/* Errores + Guardar */}
@@ -958,12 +1227,12 @@ const FormularioMedicamento = ({
             variant="contained"
             disabled={
               !form.medicamento ||
-              !form.presentacion ||
-              !form.cantidad ||
-              !form.horaInicio ||
-              !form.startDate ||
-              !form.endDate
-            }
+                !form.presentacion ||
+                !form.cantidad ||
+                !form.horaInicio ||
+                !effectiveStartDate ||
+                !effectiveEndDate
+              }
             sx={submitButtonSx}
           >
             Guardar
