@@ -207,7 +207,7 @@ const ModalCitaMedica = ({
               borderRadius: 4,
               bgcolor: "white",
               p: isMobile ? 0.9 : 2,
-              border: "1px solid #ACCCEB"
+              border: "1px solid #ACCCEB",
             }}
           >
             <PanelCalendarioCitas
@@ -227,6 +227,7 @@ const ModalCitaMedica = ({
 
           {/* Formulario */}
           <Box
+            className={styles.cntFormulario}
             sx={{
               flex: 1,
               minWidth: 0,
@@ -238,16 +239,20 @@ const ModalCitaMedica = ({
               /* boxShadow: "0 8px 30px rgba(15,23,42,0.08)", */
               p: isMobile ? 0.9 : 2,
               background: "transparent",
+              margin: "0 auto"
+              
             }}
           >
             {tab === "medicamento" ? (
               <FormularioMedicamento
-                selectedDate={fecha}
-                onGuardar={manejarGuardarMedicamento}
-                isMobile={isMobile}
+              className={styles.cntFormulario}
+              selectedDate={fecha}
+              onGuardar={manejarGuardarMedicamento}
+              isMobile={isMobile}
               />
             ) : (
               <FormularioCitaMedica
+                className={styles.cntFormulario}
                 selectedDate={fecha}
                 onGuardar={manejarGuardarCita}
                 citasDelDia={citasDelDia}

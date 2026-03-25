@@ -3,5 +3,14 @@
   font-family: var(--font-inter);
 }
 .calendario {
-  border: 1px dashed red;
+}
+
+
+@media (max-width: 600px) {
+  
+  .cntFormulario {
+    justify-content: center;
+    /* border: 1px dashed red; */
+    margin: 0 auto;
+  }
 }

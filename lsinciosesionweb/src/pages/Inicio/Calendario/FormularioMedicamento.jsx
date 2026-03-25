@@ -147,7 +147,7 @@ const pairRowSx = {
 };
 const compactHelperSx = {
   color: "#64748B",
-  fontSize: "0.82rem",
+  fontSize: "0.85rem",
   mt: 0.45,
   ml: 0.5,
 };
@@ -487,14 +487,15 @@ const FormularioMedicamento = ({
     [isMobile],
   );
   const submitButtonSx = {
-    borderRadius: 999,
-    px: 6,
-    minWidth: "10rem",
-    textTransform: "none",
-    width: isMobile ? "100%" : "auto",
-    maxWidth: 360,
-    mt: 1,
-  };
+      borderRadius: 999,
+      px: 6,
+      minWidth: "10rem",
+      textTransform: "none",
+      width: isMobile ? "100%" : "auto",
+      maxWidth: 360,
+      mt: 1,
+      fontSize: "0.95rem",
+    };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es-mx">
@@ -510,11 +511,14 @@ const FormularioMedicamento = ({
         }}
       >
         {/* Fecha arriba a la derecha (solo referencia visual) */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Typography variant="body2" sx={{ color: "#64748B", fontSize: "1rem" }}>
-            {selectedDate.format("DD - MMM - YYYY")}
-          </Typography>
-        </Box>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#64748B", fontSize: isMobile ? "0.95rem" : "1rem" }}
+            >
+              {selectedDate.format("DD - MMM - YYYY")}
+            </Typography>
+          </Box>
 
         {/* Medicamento + Dosis */}
 
@@ -618,11 +622,11 @@ const FormularioMedicamento = ({
                   },
                 }}
               >
-                <MenuItem value="">
-                  <Typography sx={{ color: "#A7A8A9", fontSize: "0.85rem" }}>
-                    Tipo de medicina
-                  </Typography>
-                </MenuItem>
+                  <MenuItem value="">
+                    <Typography sx={{ color: "#A7A8A9", fontSize: "0.9rem" }}>
+                      Tipo de medicina
+                    </Typography>
+                  </MenuItem>
                 {PRESENTACIONES.map((p) => (
                   <MenuItem key={p} value={p}>
                     {p}
@@ -838,7 +842,7 @@ const FormularioMedicamento = ({
                     ...pillInputSx,
                     ...compactFieldSx,
                     color: "#A7A8A9",
-                    fontSize: "0.85rem",
+                    fontSize: "0.9rem",
                     position: "relative",
                     zIndex: 4,
                     backgroundColor: "#fff",
@@ -926,7 +930,7 @@ const FormularioMedicamento = ({
                       ...pillInputSx,
                       ...compactFieldSx,
                       color: "#334155",
-                      fontSize: "0.85rem",
+                      fontSize: "0.9rem",
                       position: "relative",
                       zIndex: 4,
                       backgroundColor: "#fff",
@@ -967,7 +971,7 @@ const FormularioMedicamento = ({
                     ...pillInputSx,
                     ...compactFieldSx,
                     color: "#A7A8A9",
-                    fontSize: "0.85rem",
+                    fontSize: "0.9rem",
                     position: "relative",
                     zIndex: 4,
                     backgroundColor: "#fff",
@@ -1024,7 +1028,7 @@ const FormularioMedicamento = ({
                       ...pillInputSx,
                       ...compactFieldSx,
                       color: "#A7A8A9",
-                      fontSize: "0.85rem",
+                      fontSize: "0.9rem",
                       position: "relative",
                       zIndex: 4,
                       backgroundColor: "#fff",

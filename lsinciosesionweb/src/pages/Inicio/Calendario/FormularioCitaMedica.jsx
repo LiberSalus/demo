@@ -111,10 +111,10 @@ const compactFieldSx = {
   },
 };
 const accordionMenuProps = {
-  anchorOrigin: { vertical: "bottom", horizontal: "left" },
-  transformOrigin: { vertical: "top", horizontal: "left" },
-  transitionDuration: 180,
-  PaperProps: {
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
+    transformOrigin: { vertical: "top", horizontal: "left" },
+    transitionDuration: 180,
+    PaperProps: {
     elevation: 0,
     className: styles.menuDesplegable,
     sx: {
@@ -144,8 +144,26 @@ const accordionMenuProps = {
         padding: "0.65rem 1rem",
       },
     },
-  },
-};
+    },
+  };
+const mobileMenuProps = {
+    ...accordionMenuProps,
+    PaperProps: {
+      ...accordionMenuProps.PaperProps,
+      sx: {
+        ...accordionMenuProps.PaperProps.sx,
+        mt: 0.35,
+        borderRadius: "1rem",
+      },
+    },
+    MenuListProps: {
+      ...accordionMenuProps.MenuListProps,
+      sx: {
+        ...accordionMenuProps.MenuListProps.sx,
+        maxHeight: "16.5rem",
+      },
+    },
+  };
 const createOverlayMenuProps = (topPadding) => ({
   ...accordionMenuProps,
   disablePortal: true,
@@ -260,12 +278,15 @@ const FormularioCitaMedica = ({
     <Box
       component="form"
       onSubmit={handleSubmit}
+      className={styles.FormularioCitaMedica}
       sx={{
-        width: "100%",
+        width: isMobile ? "95%" : "100%",
         maxWidth: isMobile ? "100%" : "27.31rem",
         height: "fit-content",
         display: "flex",
         flexDirection: "column",
+        alignItems: "star",
+        justifyContent: "center",
         gap: isMobile ? 0.8 : 1.1,
       }}
     >
@@ -327,7 +348,7 @@ const FormularioCitaMedica = ({
               backgroundColor: "#fff",
               ...accordionSelectSx,
             }}
-            MenuProps={specialtyMenuProps}
+            MenuProps={isMobile ? mobileMenuProps : specialtyMenuProps}
           >
             <MenuItem value="" sx={{}}>
               <p className={styles.uno}>Selecciona una especialidad</p>
@@ -378,7 +399,7 @@ const FormularioCitaMedica = ({
                   backgroundColor: "#fff",
                   ...accordionSelectSx,
                 }}
-                MenuProps={scheduleMenuProps}
+                MenuProps={isMobile ? mobileMenuProps : scheduleMenuProps}
               >
                 <MenuItem value="">
                   <p className={styles.uno}>Selecciona un horario</p>
@@ -388,11 +409,11 @@ const FormularioCitaMedica = ({
                   return (
                     <MenuItem key={h} value={h} disabled={ocupado}>
                       {ocupado ? (
-                        <Box sx={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
-                          <Typography sx={{ fontSize: "inherit", color: "#9CA3AF" }}>
+                          <Box sx={{ display: "flex", flexDirection: "column", lineHeight: 0.5 }}>
+                          <Typography sx={{ fontSize: "inherit", color: "#9CA3AF", m:0, p:0, }}>
                             {h}
                           </Typography>
-                          <Typography sx={{ fontSize: "0.82rem", color: "#9CA3AF" }}>
+                          <Typography sx={{ fontSize: "0.82rem", color: "#9CA3AF", m:0, p:0,}}>
                             Ocupado
                           </Typography>
                         </Box>
@@ -436,7 +457,7 @@ const FormularioCitaMedica = ({
                   backgroundColor: "#fff",
                   ...accordionSelectSx,
                 }}
-                MenuProps={appointmentTypeMenuProps}
+                MenuProps={isMobile ? mobileMenuProps : appointmentTypeMenuProps}
               >
                 <MenuItem value="presencial">Presencial</MenuItem>
                 <MenuItem value="en_linea">En línea</MenuItem>

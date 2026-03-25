@@ -49,6 +49,13 @@
 }
 
 @media (max-width: 600px) {
+
+  .FormularioCitaMedica {
+    justify-content: center;
+    align-items: stretch;
+    margin: 0 auto;
+  }
+
   .horarioCita {
     flex-direction: column;
     align-items: stretch;
