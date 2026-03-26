@@ -214,6 +214,7 @@ export default function Inicio() {
 
   const avatarImg = esMujer ? mona : mono;
   const manchaImg = esMujer ? manchaR : manchaA;
+  const nombreCorto = String(nombre || "Usuario").trim().split(/\s+/)[0];
 
   // ✅ Helpers para abrir modal desde tarjetas
   const openModalCitas = (tsOrDayjs) => {
@@ -245,9 +246,10 @@ export default function Inicio() {
   };
 
   return (
-    <div className={styles?.wrap || ""} style={{ padding: "0rem" }}>
+    <div className={styles?.wrap || ""}>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
+          <h2 className={styles.saludo}>Hola, {nombreCorto}</h2>
           <img className={styles.cuadro} src={cuadro}></img>
           <img className={styles.mancha} src={manchaImg} alt="" />
           <div className={styles.cntImgMono}>
@@ -312,13 +314,13 @@ export default function Inicio() {
                   ref={medsScrollRef}
                   className={`${styles.cntMedicamentos} scroll-container`}
                 >
-              <TarjetasMedicamentosIco
-                medicamentos={medicamentos}
-                day={selectedAgendaDay}
-                onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
-                onChangeMedicamentoColor={handleMedicamentoColorChange}
-              />
-            </div>
+                  <TarjetasMedicamentosIco
+                    medicamentos={medicamentos}
+                    day={selectedAgendaDay}
+                    onOpenMedicamento={(payload) => openModalMedicamentos(payload || {})}
+                    onChangeMedicamentoColor={handleMedicamentoColorChange}
+                  />
+                </div>
 
                 <button
                   type="button"
@@ -389,7 +391,7 @@ export default function Inicio() {
       </div>
 
       <div className={styles}></div>
-      
+
     </div>
   );
 }

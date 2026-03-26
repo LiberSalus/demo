@@ -17,13 +17,53 @@
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
+  min-width: 0;
 }
 
-.txt {font-size: 0.65rem;}
-.tit {font-weight: bold; font-size: 1rem;}
+.txt {
+  font-size: 0.65rem;
+  overflow-wrap: anywhere;
+}
+
+.tit {
+  font-weight: bold;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
 .inf {text-align: center; font-size: 0.5rem;}
-.cta {font-weight: 600; font-size: 1rem;}
-.pasos {font-weight: 0.75rem;}
+
+.cta {
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+}
+
+.pasos {
+  font-weight: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.img {
+  width: 30%;
+  min-width: 0;
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img > svg,
+.img > img {
+  width: 100%;
+  height: auto;
+  max-width: 8rem;
+  display: block;
+}
 
 .config {
   position: absolute;
@@ -31,6 +71,162 @@
   top:   4.3%;
   width: 4.5%;
   filter: brightness(4.5);
+}
+
+@media (min-width: 1025px) {
+  .TarjetaLogro {
+    width: 100%;
+    max-width: 16rem;
+    height: 5.7rem;
+    padding: 0.7rem 0.8rem;
+    gap: 0.65rem;
+    border-radius: 1rem;
+  }
+
+  .inf {
+    width: 68%;
+    row-gap: 0.18rem;
+    text-align: center;
+  }
+
+  .tit {
+    font-size: 0.82rem;
+  }
+
+  .txt {
+    font-size: 0.5rem;
+    line-height: 1.15;
+  }
+
+  .cta {
+    font-size: 0.96rem;
+  }
+
+  .pasos {
+    font-size: 0.56rem;
+    justify-content: center;
+    gap: 0.18rem;
+  }
+
+  .img {
+    width: 31%;
+    flex-basis: 31%;
+  }
+
+  .img > svg,
+  .img > img {
+    max-width: 5.9rem;
+  }
+
+  .config {
+    width: 0.58rem;
+    right: 0.38rem;
+    top: 0.35rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .TarjetaLogro {
+    width: 100%;
+    max-width: 20rem;
+    height: 8.3rem;
+    padding: 0.85rem 1rem;
+    gap: 0.8rem;
+    border-radius: 1rem;
+  }
+
+  .inf {
+    width: 67%;
+    row-gap: 0.25rem;
+    text-align: center;
+  }
+
+  .tit {
+    font-size: 0.95rem;
+  }
+
+  .txt {
+    font-size: 0.66rem;
+    line-height: 1.2;
+  }
+
+  .cta {
+    font-size: 1.55rem;
+  }
+
+  .pasos {
+    font-size: 0.82rem;
+    justify-content: center;
+  }
+
+  .img {
+    width: 31%;
+    flex-basis: 31%;
+  }
+
+  .img > svg,
+  .img > img {
+    max-width: 7rem;
+  }
+
+  .config {
+    width: 0.75rem;
+    right: 0.45rem;
+    top: 0.45rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .TarjetaLogro {
+    width: 100%;
+    max-width: 21rem;
+    height: 5.1rem;
+    padding: 0.6rem 0.8rem;
+    gap: 0.65rem;
+    border-radius: 0.9rem;
+  }
+
+  .inf {
+    width: 68%;
+    row-gap: 0.14rem;
+    text-align: center;
+  }
+
+  .tit {
+    font-size: 0.78rem;
+    line-height: 1.1;
+  }
+
+  .txt {
+    font-size: 0.46rem;
+    line-height: 1.15;
+  }
+
+  .cta {
+    font-size: 0.95rem;
+  }
+
+  .pasos {
+    font-size: 0.52rem;
+    justify-content: center;
+    gap: 0.2rem;
+  }
+
+  .img {
+    width: 32%;
+    flex-basis: 32%;
+  }
+
+  .img > svg,
+  .img > img {
+    max-width: 6.2rem;
+  }
+
+  .config {
+    width: 0.62rem;
+    right: 0.4rem;
+    top: 0.38rem;
+  }
 }
 
 /* .izquierda {
@@ -70,6 +266,60 @@
 
 @media (max-width: 460px) {
   .TarjetaLogro {
-    transform: scale(.9);
+    width: 100%;
+    max-width: 16.75rem;
+    height: 8.25rem;
+    padding: 0.8rem 0.9rem;
+    gap: 0.7rem;
+    transform: none;
+    border-radius: 0.95rem;
+  }
+
+  .inf {
+    width: 63%;
+    row-gap: 0.3rem;
+    text-align: center;
+    display: flex;
+  }
+
+  .tit {
+    font-size: 1.05rem;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .txt {
+    font-size: 0.64rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .cta {
+    font-size: 1.2rem;
+  }
+  
+  .pasos {
+    justify-content: center;
+    text-align: center;
+    font-size: 0.72rem;
+    margin-top: 0.2rem;
+  }
+
+  .img {
+    width: 30%;
+    flex-basis: 37%;
+    align-self: stretch;
+  }
+
+  .img > svg,
+  .img > img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .config {
+    width: 0.7rem;
+    right: 0.45rem;
+    top: 0.45rem;
   }
 } 

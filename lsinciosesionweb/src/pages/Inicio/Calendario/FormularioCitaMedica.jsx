@@ -1,22 +1,18 @@
-// src/components/Calendario/FormularioCitaMedica.jsx
+// Formulario de cita médica con campos, validación básica y selects adaptativos.
 import React, { useMemo, useState } from "react";
 import {
   Box,
   TextField,
   Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  Grid,
   Checkbox,
   FormControlLabel,
   Button,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 import styles from "./FormularioCitaMedica.module.css";
+import AdaptiveSelect from "./AdaptiveSelect";
 
 
 dayjs.locale("es-mx");
@@ -110,97 +106,6 @@ const compactFieldSx = {
     boxSizing: "border-box",
   },
 };
-const accordionMenuProps = {
-    anchorOrigin: { vertical: "bottom", horizontal: "left" },
-    transformOrigin: { vertical: "top", horizontal: "left" },
-    transitionDuration: 180,
-    PaperProps: {
-    elevation: 0,
-    className: styles.menuDesplegable,
-    sx: {
-      mt: "-0.3rem",
-      border: "2px solid #ACCCEB",
-      borderTop: "none",
-      borderRadius: "0 0 1.5rem 1.5rem",
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      boxShadow: "0px 10px 26px rgba(15, 23, 42, 0.08)",
-      overflow: "hidden",
-      backgroundColor: "#fff",
-      zIndex: -1,
-      pb: "1rem",
-      maxHeight: "16.5rem",
-    },
-  },
-  MenuListProps: {
-    sx: {
-      zIndex: -1,
-      py: 0.25,
-      overflowY: "auto",
-      overflowX: "hidden",
-      "& .MuiMenuItem-root": {
-        minHeight: "unset",
-        alignItems: "flex-start",
-        padding: "0.65rem 1rem",
-      },
-    },
-    },
-  };
-const mobileMenuProps = {
-    ...accordionMenuProps,
-    PaperProps: {
-      ...accordionMenuProps.PaperProps,
-      sx: {
-        ...accordionMenuProps.PaperProps.sx,
-        mt: 0.35,
-        borderRadius: "1rem",
-      },
-    },
-    MenuListProps: {
-      ...accordionMenuProps.MenuListProps,
-      sx: {
-        ...accordionMenuProps.MenuListProps.sx,
-        maxHeight: "16.5rem",
-      },
-    },
-  };
-const createOverlayMenuProps = (topPadding) => ({
-  ...accordionMenuProps,
-  disablePortal: true,
-  sx: {
-    zIndex: -1,
-    transform: "translateY(-1rem)",
-  },
-  PaperProps: {
-    ...accordionMenuProps.PaperProps,
-    sx: {
-      ...accordionMenuProps.PaperProps.sx,
-      pt: topPadding,
-    },
-  },
-  MenuListProps: {
-    ...accordionMenuProps.MenuListProps,
-    sx: {
-      ...accordionMenuProps.MenuListProps.sx,
-      maxHeight: `calc(16.5rem - ${topPadding})`,
-    },
-  },
-});
-const specialtyMenuProps = createOverlayMenuProps("1.2rem");
-const scheduleMenuProps = createOverlayMenuProps("1.8rem");
-const appointmentTypeMenuProps = createOverlayMenuProps("1.2rem");
-const accordionSelectSx = {
-  "& .MuiSelect-icon": {
-    fill: "#505151",
-    fontSize: "2rem",
-    right: 10,
-    transition: "transform 180ms ease, color 180ms ease",
-    transformOrigin: "center",
-  },
-  "& .MuiSelect-iconOpen": {
-    transform: "rotate(180deg)",
-  },
-};
 const checkboxLabelSx = {
   mt: 0.1,
   alignSelf: "flex-end",
@@ -225,7 +130,6 @@ const FormularioCitaMedica = ({
   citasDelDia = [],
   isMobile = false,
 }) => {
-  const [openSelect, setOpenSelect] = useState(null);
   const [form, setForm] = useState({
     medico: "",
     especialidad: "",
@@ -273,6 +177,16 @@ const FormularioCitaMedica = ({
 
   const fechaTexto = selectedDate.format("DD - MMM - YYYY");
   const esPresencial = form.tipoCita === "presencial";
+  const horarioOptions = useMemo(
+    () =>
+      horarios.map((h) => ({
+        value: h,
+        label: h,
+        disabled: horariosOcupados.has(h),
+        description: horariosOcupados.has(h) ? "Ocupado" : undefined,
+      })),
+    [horarios, horariosOcupados],
+  );
 
   return (
     <Box
@@ -324,42 +238,16 @@ const FormularioCitaMedica = ({
         <Typography variant="body2" sx={fieldLabelSx}>
           Especialidad
         </Typography>
-        <FormControl
-          fullWidth
-          size="small"
-          sx={{ position: "relative", zIndex: openSelect === "especialidad" ? 20 : 3 }}
-        >
-          <Select
-            className={styles.menuSelect}
-            name="especialidad"
-            value={form.especialidad}
-            onChange={handleChange}
-            onOpen={() => setOpenSelect("especialidad")}
-            onClose={() => setOpenSelect(null)}
-            displayEmpty
-            IconComponent={KeyboardArrowDownRoundedIcon}
-            sx={{
-              borderRadius: 999,
-              background: "white",
-              ...outlinedFieldSx,
-              ...compactFieldSx,
-              position: "relative",
-              zIndex: 4,
-              backgroundColor: "#fff",
-              ...accordionSelectSx,
-            }}
-            MenuProps={isMobile ? mobileMenuProps : specialtyMenuProps}
-          >
-            <MenuItem value="" sx={{}}>
-              <p className={styles.uno}>Selecciona una especialidad</p>
-            </MenuItem>
-            {ESPECIALIDADES.map((esp) => (
-              <MenuItem key={esp} value={esp} sx={{ background: "white",}}> 
-                {esp}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <AdaptiveSelect
+          value={form.especialidad}
+          placeholder="Selecciona una especialidad"
+          options={ESPECIALIDADES}
+          isMobile={isMobile}
+          onChange={(value) => {
+            setForm((prev) => ({ ...prev, especialidad: value }));
+            setErrorMsg("");
+          }}
+        />
       </Box>
 
       {/* Horario + Tipo de cita */}
@@ -370,61 +258,17 @@ const FormularioCitaMedica = ({
             <Typography variant="body2" sx={fieldLabelSx}>
               Horario
             </Typography>
-            {/* Horario */}
-            <FormControl
-              size="small"
-              sx={{
-                mr: 1,
-                position: "relative",
-                zIndex: openSelect === "horario" ? 20 : 3,
+            <AdaptiveSelect
+              value={form.horario}
+              placeholder="Selecciona un horario"
+              options={horarioOptions}
+              isMobile={isMobile}
+              className={styles.menuSelect}
+              onChange={(value) => {
+                setForm((prev) => ({ ...prev, horario: value }));
+                setErrorMsg("");
               }}
-              className={styles.horario}
-            >
-              <Select
-                className={styles.menuSelect}
-                name="horario"
-                value={form.horario}
-                onChange={handleChange}
-                onOpen={() => setOpenSelect("horario")}
-                onClose={() => setOpenSelect(null)}
-                displayEmpty
-                IconComponent={KeyboardArrowDownRoundedIcon}
-                sx={{
-                  borderRadius: 999,
-                  background: "white",
-                  ...outlinedFieldSx,
-                  ...compactFieldSx,
-                  position: "relative",
-                  zIndex: 4,
-                  backgroundColor: "#fff",
-                  ...accordionSelectSx,
-                }}
-                MenuProps={isMobile ? mobileMenuProps : scheduleMenuProps}
-              >
-                <MenuItem value="">
-                  <p className={styles.uno}>Selecciona un horario</p>
-                </MenuItem>
-                {horarios.map((h) => {
-                  const ocupado = horariosOcupados.has(h);
-                  return (
-                    <MenuItem key={h} value={h} disabled={ocupado}>
-                      {ocupado ? (
-                          <Box sx={{ display: "flex", flexDirection: "column", lineHeight: 0.5 }}>
-                          <Typography sx={{ fontSize: "inherit", color: "#9CA3AF", m:0, p:0, }}>
-                            {h}
-                          </Typography>
-                          <Typography sx={{ fontSize: "0.82rem", color: "#9CA3AF", m:0, p:0,}}>
-                            Ocupado
-                          </Typography>
-                        </Box>
-                      ) : (
-                        h
-                      )}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
+            />
           </Box>
         
 
@@ -434,35 +278,17 @@ const FormularioCitaMedica = ({
             <Typography variant="body2" sx={fieldLabelSx}>
               Tipo de cita
             </Typography>
-            <FormControl
-              fullWidth
-              size="small"
-              sx={{ position: "relative", zIndex: openSelect === "tipoCita" ? 20 : 3 }}
-            >
-              <Select
-                className={styles.menuSelect}
-                name="tipoCita"
-                value={form.tipoCita}
-                onChange={handleChange}
-                onOpen={() => setOpenSelect("tipoCita")}
-                onClose={() => setOpenSelect(null)}
-                IconComponent={KeyboardArrowDownRoundedIcon}
-                sx={{
-                  borderRadius: 999,
-                  background: "white",
-                  ...outlinedFieldSx,
-                  ...compactFieldSx,
-                  position: "relative",
-                  zIndex: 4,
-                  backgroundColor: "#fff",
-                  ...accordionSelectSx,
-                }}
-                MenuProps={isMobile ? mobileMenuProps : appointmentTypeMenuProps}
-              >
-                <MenuItem value="presencial">Presencial</MenuItem>
-                <MenuItem value="en_linea">En línea</MenuItem>
-              </Select>
-            </FormControl>
+            <AdaptiveSelect
+              value={form.tipoCita}
+              placeholder="Selecciona el tipo de cita"
+              options={TIPOS_CITA}
+              isMobile={isMobile}
+              className={styles.menuSelect}
+              onChange={(value) => {
+                setForm((prev) => ({ ...prev, tipoCita: value }));
+                setErrorMsg("");
+              }}
+            />
           </Box>
         </Box>
 

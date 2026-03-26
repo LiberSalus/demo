@@ -14,6 +14,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  min-width: 100%;
+}
+
 
 
 *, *::before, *::after {
@@ -25,11 +33,11 @@
 
 
 body {
-    display: flex;
+  display: block;
   /* place-items: center; */
-  width: 100vw;
+  width: 100%;
   overflow-x: hidden;
-  
+  margin: 0;
 }
 
 h1 {

@@ -204,53 +204,70 @@ const CalendarioInicio = ({
             ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
           }
         sx={{
-          width: "90%",
+          width: isMobile ? "100%" : "90%",
           "& .MuiDateCalendar-root": {
             width: "100%",
-            maxHeight: "16.5rem",
+            maxHeight: isMobile ? "15.75rem" : "16.5rem",
             overflow: "hidden",
           },
           "& .MuiDateCalendar-viewTransitionContainer": {
-            minHeight: "13.75rem",
-            maxHeight: "13.75rem",
+            minHeight: isMobile ? "12.45rem" : "13.75rem",
+            maxHeight: isMobile ? "12.45rem" : "13.75rem",
             overflow: "hidden",
           },
-          "& .MuiDayCalendar-weekContainer": {
-            minHeight: "1.2rem",
+          "& .MuiDayCalendar-header": {
+            display: "grid",
+            gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
+            columnGap: 0,
+            px: isMobile ? 0.15 : 0.35,
+          },
+          "& .MuiDayCalendar-weekDayLabel": {
             width: "100%",
-            
+            margin: 0,
+            textAlign: "center",
+            fontSize: isMobile ? "0.76rem" : "0.9rem",
+          },
+          "& .MuiDayCalendar-weekContainer": {
+            minHeight: isMobile ? "1.7rem" : "1.2rem",
+            width: "100%",
+            justifyContent: "space-between",
+            margin: 0,
           },
           "& .MuiPickersDay-root": {
-            height: "1.7rem",
-            width:  "1.7rem",
+            height: isMobile ? "1.95rem" : "1.7rem",
+            width: isMobile ? "1.95rem" : "1.7rem",
+            minWidth: isMobile ? "1.95rem" : "1.7rem",
+            minHeight: isMobile ? "1.95rem" : "1.7rem",
             padding: 0,
-            margin: "0px 13px",
-            fontSize: "0.8rem",
+            margin: isMobile ? "0 auto" : "0px 13px",
+            borderRadius: "50%",
+            lineHeight: 1,
+            fontSize: isMobile ? "0.78rem" : "0.8rem",
           },
           "& .MuiTypography-root": {
-            fontSize: "0.9rem",
-            margin: "0px 8px",
+            fontSize: isMobile ? "0.82rem" : "0.9rem",
+            margin: isMobile ? 0 : "0px 8px",
             textTransform:"capitalize"
           },
           "& .MuiPickersCalendarHeader-label": {
-            fontSize: "1.1rem",
+            fontSize: isMobile ? "0.95rem" : "1.1rem",
             fontWeight: "bold",
             textDecoration: "capitalize"
           },
           "& .MuiPickersArrowSwitcher-root": {
             justifyContent: "space-between",
-            marginBottom: "0.5rem",
-            transform: "translateY(0.25rem)",
+            marginBottom: isMobile ? "0.15rem" : "0.5rem",
+            transform: isMobile ? "translateY(0.1rem)" : "translateY(0.25rem)",
             "& button": {
               color: BRAND_BLUE,
             },
           },
           "& .MuiPickersArrowSwitcher-button": {
             color: BRAND_BLUE,
-            width: "1.5rem",
-            height: "1.5rem",
-            minWidth: " 1.5rem",
-            minHeight: "1.5rem",
+            width: isMobile ? "1.35rem" : "1.5rem",
+            height: isMobile ? "1.35rem" : "1.5rem",
+            minWidth: isMobile ? "1.35rem" : "1.5rem",
+            minHeight: isMobile ? "1.35rem" : "1.5rem",
             padding: 0,
             display: "flex",
             alignItems: "center",
@@ -277,8 +294,8 @@ const CalendarioInicio = ({
               display: "none",
             },
             "& svg": {
-              width:  "2rem",
-              height: "2rem",
+              width: isMobile ? "1.55rem" : "2rem",
+              height: isMobile ? "1.55rem" : "2rem",
               stroke: "#1976d2",
               margin: 0,
             },

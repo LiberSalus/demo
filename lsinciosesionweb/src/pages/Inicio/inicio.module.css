@@ -3,20 +3,25 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  padding: 0 1rem 1.5rem;
+  box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .seccSuperior {
   width: 100%;
+  max-width: 91rem;
   display: flex;
   justify-content: center;
   margin: 0 auto;
   gap: 1rem;
+  align-items: stretch;
 }
 
 .cntMono {
   border: 1px solid #ACCCEB;
-  width: 61rem;
-  min-width: 54rem;
+  width: min(100%, 61rem);
+  min-width: 0;
   height: 36.875rem;
   background-color: white;
   position: relative;
@@ -35,7 +40,7 @@
 
   & .mancha {
     position: absolute;
-    width: 22.375;
+    width: 22.375%;
     top: 25%;
     left: 3%;
     opacity: 0.3;
@@ -120,7 +125,7 @@
 
 .cntAgenda {
   border: 1px solid #ACCCEB;
-  width: 29.68rem;
+  width: min(100%, 29.68rem);
   min-width: 15rem;
   padding: 0 1rem;
   height: 36.875rem;
@@ -263,22 +268,24 @@
 
 .seccCentro {
   /* border: 1px solid #ACCCEB; */
-  margin:  1rem auto;
+  margin: 1rem auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 91rem;
   flex-wrap: wrap;
   /* max-width: 90.1rem; */
   gap: 1rem;
-  margin: 0;}
+}
 
 .seccInfe {
   /* border: 2px dashed green; */
-  margin: 0rem auto;
+  margin: 1rem auto 0;
   display: flex;
   justify-content: center;
-
+  width: 100%;
+  max-width: 91rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -299,30 +306,25 @@
 }
 
 @media (max-width: 968px) {
-
-  .seccSuperior {
-    /* border: 2px dashed greenyellow; */
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
-    gap: 0rem;
+  .wrap {
+    padding-inline: 0.75rem;
   }
 
+  .seccSuperior {
+    gap: 0.85rem;
+  }
 
   .cntMono {
-    width: 100vw;
+    width: 100%;
     height: auto;
     min-width: unset;
-    padding: 2rem 0;
-    gap: 2rem;
+    padding: 4.1rem 1rem 1.5rem;
+    gap: 1.5rem;
     flex-direction: column;
-    flex-wrap: wrap;
-
+    flex-wrap: nowrap;
 
     &>.cntImgMono {
       width: 100%;
-      /* border: 2px dashed red; */
 
       &>.mono {
         width: 10rem;
@@ -332,34 +334,459 @@
   }
 
   .cntPie {
-    width: 90vw;
-    min-width: 360px;
-    /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
+    width: min(100%, 20rem);
+    min-width: 0;
   }
 
-  & .mancha {
+  .cntMono .mancha {
     position: absolute;
     width: 50%;
     top: 50%;
     left: 50%;
     transform: translate(50%, -50%);
     opacity: 0.3;
-
   }
 
+  .cntCora {
+    width: 100%;
+    height: auto;
+    gap: 1rem;
+  }
+
+  .cntAgenda {
+    width: 100%;
+    min-width: 0;
+    max-width: 29.68rem;
+    margin: 0 auto;
+  }
 
   .cntAgenda>p {
     text-align: center;
   }
 
+  .seccCentro,
+  .seccInfe {
+    gap: 0.85rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cntMono {
+    max-width: 51rem;
+    height: 37rem;
+    padding: 4rem 1.55rem 1.4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 18.5rem) minmax(0, 7.25rem) minmax(0, 20rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "saludo saludo saludo"
+      "avatar pie cora";
+    align-items: center;
+    justify-items: center;
+    gap: 1rem 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .saludo {
+    position: absolute;
+    top: 1.35rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 0;
+    z-index: 2;
+  }
+
+  .cntMono .cuadro {
+    width: 7.2rem;
+    top: 2.6rem;
+    left: 2rem;
+  }
+
+  .cntMono .mancha {
+    width: 16.5rem;
+    top: auto;
+    left: 1.45rem;
+    bottom: 5.2rem;
+    transform: none;
+    opacity: 0.34;
+  }
+
+  .cntMono .cntImgMono {
+    grid-area: avatar;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cntMono .cntImgMono > img {
+    margin-top: 0;
+    width: 12rem;
+  }
+
+  .cntPie {
+    grid-area: pie;
+    width: 100%;
+    max-width: 7rem;
+    align-self: stretch;
+    justify-self: center;
+    transform: translateX(-0.15rem);
+  }
+
+  .cntCora {
+    grid-area: cora;
+    width: 100%;
+    max-width: 20rem;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "cora"
+      "mensaje"
+      "logro";
+    justify-items: center;
+    align-content: center;
+    gap: 1.15rem;
+  }
+
+  .cntCora > :first-child {
+    grid-area: cora;
+  }
+
+  .mensaje {
+    grid-area: mensaje;
+    width: 100%;
+    max-width: 19.5rem;
+    margin: 0;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.78rem;
+    line-height: 1.15;
+  }
+
+  .cntLogros {
+    grid-area: logro;
+    width: 100%;
+    max-width: 19.5rem;
+    justify-self: center;
+  }
+}
+
+.saludo {
+  position: absolute;
+  top: 1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #334155;
+  z-index: 2;
+}
+
+@media (min-width: 1025px) {
+  .cntMono {
+    max-width: 61rem;
+    height: 36.9rem;
+    padding: 3.35rem 1.5rem 1.35rem;
+    display: grid;
+    grid-template-columns: minmax(0, 18rem) minmax(0, 6.4rem) minmax(0, 19.5rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "saludo saludo saludo"
+      "avatar pie cora";
+    align-items: center;
+    justify-items: center;
+    gap: 1rem 1.1rem;
+    border-radius: 1rem;
+  }
+
+  .saludo {
+    position: absolute;
+    top: 0.95rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    margin: 0;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .cntMono .cuadro {
+    width: 6.2rem;
+    top: 1.75rem;
+    left: 1.55rem;
+  }
+
+  .cntMono .mancha {
+    width: 16rem;
+    top: auto;
+    left: 1.15rem;
+    bottom: 4.8rem;
+    transform: none;
+    opacity: 0.32;
+  }
+
+  .cntMono .cntImgMono {
+    grid-area: avatar;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cntMono .cntImgMono > img {
+    margin-top: 0;
+    width: 12.2rem;
+  }
+
+  .cntPie {
+    grid-area: pie;
+    width: 100%;
+    max-width: 6.25rem;
+    align-self: stretch;
+    justify-self: center;
+    transform: translateY(-1.2rem);
+  }
+
+  .cntCora {
+    grid-area: cora;
+    width: 100%;
+    max-width: 19.8rem;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "cora"
+      "mensaje"
+      "logro";
+    align-content: center;
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  .cntCora > :first-child {
+    grid-area: cora;
+  }
+
+  .mensaje {
+    grid-area: mensaje;
+    width: 100%;
+    max-width: 16rem;
+    margin: 0;
+    padding: 0.42rem 0.9rem;
+    font-size: 0.86rem;
+    line-height: 1.15;
+  }
+
+  .cntLogros {
+    grid-area: logro;
+    width: 100%;
+    max-width: 16rem;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .cntAgenda {
+    width: 100%;
+    min-width: 0;
+    max-width: 29.68rem;
+    height: auto;
+    margin: 0 auto;
+    padding: 0.85rem 0.75rem 1rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.7rem;
+  }
+
+  .agenda {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    transform: none;
+    transform-origin: top center;
+  }
+
+  .hr {
+    width: 88%;
+    margin: 0.15rem auto 0;
+    transform: none;
+  }
+
+  .cntTarjetasAlertas {
+    width: 100%;
+    margin-top: 0;
+    transform: none;
+    gap: 0.8rem;
+  }
+
+  .carruselBloque {
+    gap: 0.5rem;
+  }
+
+  .carruselTitulo {
+    padding: 0 1.25rem;
+    line-height: 1.1;
+  }
+
+  .carruselViewport {
+    min-height: 8.9rem;
+  }
+
+  .viewportMedicamentos,
+  .viewportCitas {
+    width: min(100%, 23rem);
+  }
+
+  .cntMedicamentos,
+  .cntCitas {
+    min-height: 8.9rem;
+    padding: 0 1.25rem;
+  }
+
+  .btnCarrusel {
+    font-size: 3rem;
+  }
+
+  .btnCarruselIzq,
+  .btnCarruselDer {
+    top: 39%;
+  }
+
+  .cntMono {
+    max-width: 42rem;
+    padding: 3.9rem 1.15rem 1rem;
+    gap: 1rem;
+    border-radius: 1rem;
+  }
+
+  .saludo {
+    top: 0.7rem;
+    font-size: 1.05rem;
+  }
+
+  .cntMono .cuadro {
+    width: 5.8rem;
+    top: 4.3rem;
+    left: 3.5rem;
+  }
+
+  .cntMono .mancha {
+    width: 12.5rem;
+    top: 8.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.34;
+  }
+
+  .cntMono .cntImgMono {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cntMono .cntImgMono > img {
+    margin-top: 0;
+    width: 9.3rem;
+  }
+
+  .cntPie {
+    width: 90%;
+    max-width: 33.625rem;
+  }
+
+  .cntCora {
+    width: 100%;
+    max-width: 31rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "cora logro"
+      "mensaje logro";
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem 1rem;
+  }
+
+  .cntCora > :first-child {
+    grid-area: cora;
+    justify-self: center;
+  }
+
+  .mensaje {
+    grid-area: mensaje;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.62rem;
+    padding: 0.5rem 0.55rem;
+    margin: 0;
+    justify-self: stretch;
+    line-height: 1.2;
+  }
+
+  .cntLogros {
+    grid-area: logro;
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+  }
 }
 
 @media (max-width: 460px) {
+  .wrap {
+    padding-inline: 0.4rem;
+  }
 
   .cntMono {
-    width: 100vw;
-    
-    
+    width: 100%;
+    padding: 3.55rem 0.55rem 1rem;
+    border-radius: 1.1rem;
+    gap: 0.95rem;
+  }
+
+  .cntMono .cuadro {
+    width: 30%;
+    top: 3rem;
+    left: 20%;
+  }
+
+  .cntMono .cntImgMono {
+    height: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cntMono .cntImgMono > img {
+    margin-top: 0;
+    width: 8.4rem;
+  }
+
+  .cntPie {
+    width: 90%;
+    max-width: 16.5rem;
+  }
+
+  .cntCora {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .cntImgMono {
@@ -370,35 +797,40 @@
 
 
   .mensaje {
-    width: 70vw;
-    font-size: 0.85rem;
+    width: 90%;
+    max-width: 16.5rem;
+    font-size: 0.82rem;
+    margin: 0 auto;
+    order: 2;
   }
 
   .cntLogros {
-    /* border: 2px dashed red; */
-    width: fit-content;
-    transform: scale(0.7);
+    width: 90%;
+    max-width: 16.5rem;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    order: 3;
   }
 
-  .cntTarjetasAlertas {
-    & > p {
-      text-align: center;
-      margin-bottom: 0.25rem;
-    }
+  .cntMono .mancha {
+    width: 10.5rem;
+    top: 14rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.38;
   }
 
-  .cntMedicamentos,
-  .cntCitas {
-    padding: 0 1.45rem;
+  .cntPie {
+    width: 90%;
+    
   }
 
-  .btnCarrusel {
-    font-size: 3rem;
-  }
-
-  .viewportMedicamentos,
-  .viewportCitas {
-    width: min(100%, 23rem);
+  .saludo {
+    top: 1rem;
+    width: 100%;
+    font-size: 1.1rem;
+    text-align: center;
   }
 
   .seccCentro {
@@ -406,21 +838,47 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50vw;
+    width: 100%;
     flex-wrap: wrap;
-    /* max-width: 90.1rem; */
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .seccInfe {
     /* border: 2px dashed green; */
-    margin: 0rem;
+    margin: 0.75rem auto 0;
     padding: 0;
     display: flex;
     justify-content: center;
     width: 100%;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .cntAgenda {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0.75rem 0.35rem 0.9rem;
+    border-radius: 1.1rem;
+  }
+
+  .carruselTitulo {
+    padding: 0 1.2rem;
+    font-size: 1rem;
+  }
+
+  .hr {
+    width: 86%;
+  }
+
+  .cntTarjetasAlertas > p {
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .cntMedicamentos,
+  .cntCitas {
+    padding: 0 1.45rem;
   }
 
 }

@@ -1,21 +1,17 @@
-// src/pages/Inicio/Calendario/FormularioMedicamento.jsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+// Formulario de medicamentos con patrones de tratamiento y selects adaptativos.
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   TextField,
   Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  Grid,
   Checkbox,
   FormControlLabel,
   Button,
   InputAdornment,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import styles from './FormularioCitaMedica.module.css'
+import AdaptiveSelect from "./AdaptiveSelect";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
@@ -175,82 +171,6 @@ const calendarFieldSx = {
     fontSize: "0.5rem",
   },
 };
-const accordionMenuProps = {
-  anchorOrigin: { vertical: "bottom", horizontal: "left" },
-  transformOrigin: { vertical: "top", horizontal: "left" },
-  transitionDuration: 180,
-  PaperProps: {
-    elevation: 0,
-    sx: {
-      mt: 0.15,
-      border: "2px solid #ACCCEB",
-      
-      borderRadius: "0 0 1.5rem 1.5rem",
-      boxShadow: "0px 10px 26px rgba(15, 23, 42, 0.08)",
-      overflow: "hidden",
-      backgroundColor: "#fff",
-    },
-  },
-  MenuListProps: {
-    sx: {
-      py: 0.25,
-      "& .MuiMenuItem-root": {
-        minHeight: "unset",
-        alignItems: "flex-start",
-        padding: "0.65rem 1rem",
-      },
-    },
-  },
-};
-const createOverlayMenuProps = (topPadding) => ({
-  ...accordionMenuProps,
-  disablePortal: true,
-  sx: {
-    zIndex: -1,
-    transform: "translateY(-1rem)",
-  },
-  PaperProps: {
-    ...accordionMenuProps.PaperProps,
-    className: styles.menuDesplegable,
-    sx: {
-      ...accordionMenuProps.PaperProps.sx,
-      mt: "-0.3rem",
-      pt: topPadding,
-      pb: "1rem",
-      maxHeight: "16.5rem",
-      overflow: "hidden",
-      zIndex: -1,
-      borderTop: "none",
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-    },
-  },
-  MenuListProps: {
-    ...accordionMenuProps.MenuListProps,
-    sx: {
-      ...accordionMenuProps.MenuListProps.sx,
-      zIndex: -1,
-      maxHeight: `calc(16.5rem - ${topPadding})`,
-      overflowY: "auto",
-      overflowX: "hidden",
-    },
-  },
-});
-const presentationMenuProps = createOverlayMenuProps("1.2rem");
-const timeMenuProps = createOverlayMenuProps("1.8rem");
-const patternMenuProps = createOverlayMenuProps("2.4rem");
-const accordionSelectSx = {
-  "& .MuiSelect-icon": {
-    fill: "#505151",
-    fontSize: "2rem",
-    right: 10,
-    transition: "transform 180ms ease, color 180ms ease",
-    transformOrigin: "center",
-  },
-  "& .MuiSelect-iconOpen": {
-    transform: "rotate(180deg)",
-  },
-};
 const checkboxLabelSx = {
   mt: 0.1,
   alignSelf: "flex-end",
@@ -266,9 +186,6 @@ const FormularioMedicamento = ({
   onGuardar,
   isMobile,
 }) => {
-  const presentationFieldRef = useRef(null);
-  const [presentationMenuWidth, setPresentationMenuWidth] = useState(null);
-  const [presentationOpen, setPresentationOpen] = useState(false);
   const [form, setForm] = useState({
     medicamento: "",
     dosis: "",
@@ -299,6 +216,23 @@ const FormularioMedicamento = ({
   });
 
   const [errorMsg, setErrorMsg] = useState("");
+  const patternOptions = useMemo(
+    () =>
+      PATRONES.map((p) => ({
+        value: p.value,
+        label: p.label,
+        description: p.help,
+      })),
+    [],
+  );
+  const frequencyOptions = useMemo(
+    () =>
+      FRECUENCIA_HORAS_OPTIONS.map((h) => ({
+        value: h,
+        label: `${h} horas`,
+      })),
+    [],
+  );
 
   // Cuando cambie el día seleccionado, si es permanente:
   // startDate se “jala” del calendario (como pediste)
@@ -335,24 +269,6 @@ const FormularioMedicamento = ({
         .format("YYYY-MM-DD"),
     }));
   }, [form.patron, form.duracionDias, selectedDate]);
-
-  useEffect(() => {
-    const node = presentationFieldRef.current;
-    if (!node) return;
-
-    const syncWidth = () => {
-      setPresentationMenuWidth(node.getBoundingClientRect().width);
-    };
-
-    syncWidth();
-
-    if (typeof ResizeObserver === "undefined") return;
-
-    const observer = new ResizeObserver(syncWidth);
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, []);
 
   const horarios = useMemo(() => generarHorarios(0, 24), []);
 
@@ -587,53 +503,17 @@ const FormularioMedicamento = ({
             <Typography variant="body2" sx={fieldLabelSx}>
               Presentación
             </Typography>
-            <FormControl
-              fullWidth
-              size="small"
-              ref={presentationFieldRef}
-              sx={{ position: "relative", zIndex: presentationOpen ? 20 : 3 }}
-            >
-              <Select
-                name="presentacion"
-                value={form.presentacion}
-                onChange={handleChange}
-                onOpen={() => setPresentationOpen(true)}
-                onClose={() => setPresentationOpen(false)}
-                displayEmpty
-                IconComponent={KeyboardArrowDownRoundedIcon}
-                sx={{
-                  ...pillInputSx,
-                  ...compactFieldSx,
-                  fontSize: "0.9rem",
-                  position: "relative",
-                  zIndex: 4,
-                  backgroundColor: "#fff",
-                  ...accordionSelectSx,
-                }}
-                MenuProps={{
-                  ...presentationMenuProps,
-                  PaperProps: {
-                    ...presentationMenuProps.PaperProps,
-                    sx: {
-                      ...presentationMenuProps.PaperProps.sx,
-                      width: presentationMenuWidth ?? undefined,
-                      minWidth: presentationMenuWidth ?? undefined,
-                    },
-                  },
-                }}
-              >
-                  <MenuItem value="">
-                    <Typography sx={{ color: "#A7A8A9", fontSize: "0.9rem" }}>
-                      Tipo de medicina
-                    </Typography>
-                  </MenuItem>
-                {PRESENTACIONES.map((p) => (
-                  <MenuItem key={p} value={p}>
-                    {p}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <AdaptiveSelect
+              value={form.presentacion}
+              placeholder="Tipo de medicina"
+              options={PRESENTACIONES}
+              isMobile={isMobile}
+              className={styles.menuSelect}
+              onChange={(value) => {
+                setForm((prev) => ({ ...prev, presentacion: value }));
+                setErrorMsg("");
+              }}
+            />
           </Box>
 
           <Box>
@@ -662,49 +542,17 @@ const FormularioMedicamento = ({
           <Typography variant="body2" sx={fieldLabelSx}>
             Patrón del tratamiento
           </Typography>
-          <FormControl
-            fullWidth
-            size="small"
-            sx={{ position: "relative", zIndex: 3 }}
-          >
-            <Select
-              className={styles.menuSelect}
-              name="patron"
-              value={form.patron}
-              onChange={handleChange}
-              IconComponent={KeyboardArrowDownRoundedIcon}
-              sx={{
-                borderRadius: 3,
-                padding: "0.15rem 0",
-                ...outlinedFieldSx,
-                ...compactFieldSx,
-                position: "relative",
-                zIndex: 4,
-                backgroundColor: "#fff",
-                "& .MuiSelect-select": {
-                  fontSize: "13.5px",
-                  paddingLeft: "1rem",
-                },
-                ...accordionSelectSx,
-              }}
-              MenuProps={patternMenuProps}
-
-
-            >
-              {PATRONES.map((p) => (
-                <MenuItem key={p.value} value={p.value} >
-                    <Box sx={{ display: "flex", flexDirection: "column", }} >
-                    <Typography sx={{ fontWeight: 600, fontSize: "0.92rem", color: "#334155" }}>
-                      {p.label}
-                    </Typography>
-                    <Typography sx={{ fontSize: "0.78rem", color: "#64748B" }}>
-                      {p.help}
-                    </Typography>
-                  </Box>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <AdaptiveSelect
+            value={form.patron}
+            placeholder="Selecciona un patrón"
+            options={patternOptions}
+            isMobile={isMobile}
+            className={styles.menuSelect}
+            onChange={(value) => {
+              setForm((prev) => ({ ...prev, patron: value }));
+              setErrorMsg("");
+            }}
+          />
 
         </Box>
 
@@ -823,41 +671,22 @@ const FormularioMedicamento = ({
               </Box>
             </Box>
 
-            <Box sx={{ width: isMobile ? "100%" : "50%" }}>
-              <Typography variant="body2" sx={fieldLabelSx}>
-                Hora de inicio
-              </Typography>
-              <FormControl
-                fullWidth
-                size="small"
-                sx={{ position: "relative", zIndex: 1 }}
-              >
-                <Select
-                  className={styles.menuSelect}
-                  name="horaInicio"
+              <Box sx={{ width: isMobile ? "100%" : "50%" }}>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Hora de inicio
+                </Typography>
+                <AdaptiveSelect
                   value={form.horaInicio}
-                  onChange={handleChange}
-                  IconComponent={KeyboardArrowDownRoundedIcon}
-                  sx={{
-                    ...pillInputSx,
-                    ...compactFieldSx,
-                    color: "#A7A8A9",
-                    fontSize: "0.9rem",
-                    position: "relative",
-                    zIndex: 4,
-                    backgroundColor: "#fff",
-                    ...accordionSelectSx,
+                  placeholder="Selecciona una hora"
+                  options={horarios}
+                  isMobile={isMobile}
+                  className={styles.menuSelect}
+                  onChange={(value) => {
+                    setForm((prev) => ({ ...prev, horaInicio: value }));
+                    setErrorMsg("");
                   }}
-                  MenuProps={timeMenuProps}
-                >
-                  {horarios.map((h) => (
-                    <MenuItem key={h} value={h}>
-                      {h}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+                />
+              </Box>
 
             {!isMobile && (
               <Box
@@ -911,82 +740,40 @@ const FormularioMedicamento = ({
                 />
               </Box>
 
-              <Box>
-                <Typography variant="body2" sx={fieldLabelSx}>
-                  Frecuencia
-                </Typography>
-                <FormControl
-                  fullWidth
-                  size="small"
-                  sx={{ position: "relative", zIndex: 1 }}
-                >
-                  <Select
-                    className={styles.menuSelect}
-                    name="frecuenciaHoras"
+                <Box>
+                  <Typography variant="body2" sx={fieldLabelSx}>
+                    Frecuencia
+                  </Typography>
+                  <AdaptiveSelect
                     value={form.frecuenciaHoras}
-                    onChange={handleChange}
-                    IconComponent={KeyboardArrowDownRoundedIcon}
-                    sx={{
-                      ...pillInputSx,
-                      ...compactFieldSx,
-                      color: "#334155",
-                      fontSize: "0.9rem",
-                      position: "relative",
-                      zIndex: 4,
-                      backgroundColor: "#fff",
-                      ...accordionSelectSx,
+                    placeholder="Selecciona frecuencia"
+                    options={frequencyOptions}
+                    isMobile={isMobile}
+                    className={styles.menuSelect}
+                    onChange={(value) => {
+                      setForm((prev) => ({ ...prev, frecuenciaHoras: value }));
+                      setErrorMsg("");
                     }}
-                    MenuProps={timeMenuProps}
-                  >
-                    {FRECUENCIA_HORAS_OPTIONS.map((h) => (
-                      <MenuItem
-                        key={h}
-                        value={h}
-                        sx={{ justifyContent: "center", textAlign: "center" }}
-                      >
-                        {h} horas
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+                  />
+                </Box>
             </Box>
 
-            <Box sx={{ width: isMobile ? "100%" : "50%" }}>
-              <Typography variant="body2" sx={fieldLabelSx}>
-                Hora de inicio
-              </Typography>
-              <FormControl
-                fullWidth
-                size="small"
-                sx={{ position: "relative", zIndex: 1 }}
-              >
-                <Select
-                  className={styles.menuSelect}
-                  name="horaInicio"
+              <Box sx={{ width: isMobile ? "100%" : "50%" }}>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Hora de inicio
+                </Typography>
+                <AdaptiveSelect
                   value={form.horaInicio}
-                  onChange={handleChange}
-                  IconComponent={KeyboardArrowDownRoundedIcon}
-                  sx={{
-                    ...pillInputSx,
-                    ...compactFieldSx,
-                    color: "#A7A8A9",
-                    fontSize: "0.9rem",
-                    position: "relative",
-                    zIndex: 4,
-                    backgroundColor: "#fff",
-                    ...accordionSelectSx,
+                  placeholder="Selecciona una hora"
+                  options={horarios}
+                  isMobile={isMobile}
+                  className={styles.menuSelect}
+                  onChange={(value) => {
+                    setForm((prev) => ({ ...prev, horaInicio: value }));
+                    setErrorMsg("");
                   }}
-                  MenuProps={timeMenuProps}
-                >
-                  {horarios.map((h) => (
-                    <MenuItem key={h} value={h}>
-                      {h}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+                />
+              </Box>
           </>
         ) : (
           <>
@@ -1009,41 +796,22 @@ const FormularioMedicamento = ({
                 />
               </Box>
 
-              <Box>
-                <Typography variant="body2" sx={fieldLabelSx}>
-                  Hora de inicio
-                </Typography>
-                <FormControl
-                  fullWidth
-                  size="small"
-                  sx={{ position: "relative", zIndex: 1 }}
-                >
-                  <Select
-                    className={styles.menuSelect}
-                    name="horaInicio"
+                <Box>
+                  <Typography variant="body2" sx={fieldLabelSx}>
+                    Hora de inicio
+                  </Typography>
+                  <AdaptiveSelect
                     value={form.horaInicio}
-                    onChange={handleChange}
-                    IconComponent={KeyboardArrowDownRoundedIcon}
-                    sx={{
-                      ...pillInputSx,
-                      ...compactFieldSx,
-                      color: "#A7A8A9",
-                      fontSize: "0.9rem",
-                      position: "relative",
-                      zIndex: 4,
-                      backgroundColor: "#fff",
-                      ...accordionSelectSx,
+                    placeholder="Selecciona una hora"
+                    options={horarios}
+                    isMobile={isMobile}
+                    className={styles.menuSelect}
+                    onChange={(value) => {
+                      setForm((prev) => ({ ...prev, horaInicio: value }));
+                      setErrorMsg("");
                     }}
-                    MenuProps={timeMenuProps}
-                  >
-                    {horarios.map((h) => (
-                      <MenuItem key={h} value={h}>
-                        {h}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+                  />
+                </Box>
             </Box>
 
             {/* Fechas inicio/fin */}

@@ -63,5 +63,57 @@
   box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 }
 
+@media (min-width: 1025px) {
+  .ProgCora {
+    width: 9.8rem;
+    height: 9.8rem;
+  }
+
+  .indicador::before {
+    width: 0.4rem;
+    height: 0.82rem;
+    top: 8.2%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ProgCora {
+    width: 10.2rem;
+    height: 10.2rem;
+  }
+
+  .indicador::before {
+    width: 0.45rem;
+    height: 0.92rem;
+    top: 8.2%;
+  }
+}
+
+@media (max-width: 768px) {
+  .ProgCora {
+    width: 7.15rem;
+    height: 7.15rem;
+  }
+
+  .indicador::before {
+    width: 0.42rem;
+    height: 0.82rem;
+    top: 8.5%;
+  }
+}
+
+@media (max-width: 460px) {
+  .ProgCora {
+    width: 7.2rem;
+    height: 7.2rem;
+  }
+
+  .indicador::before {
+    width: 0.35rem;
+    height: 0.7rem;
+    top: 9%;
+  }
+}
+
 
 

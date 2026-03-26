@@ -41,18 +41,21 @@ const TarjetaPie = ({
         <p className={styles.edad}>{edadAnimada}</p>
         <p>años</p>
       </div>
+      <span className={styles.separador} aria-hidden="true"></span>
 
       <div className={styles.datos}>
         <p>Estatura</p>
         <p className={styles.estatura}>{estaturaAnimada}</p>
         <p>cm</p>
       </div>
+      <span className={styles.separador} aria-hidden="true"></span>
 
       <div className={styles.datos}>
         <p>Peso</p>
         <p className={styles.peso}>{pesoAnimado}</p>
         <p>kg</p>
       </div>
+      <span className={styles.separador} aria-hidden="true"></span>
 
       <div className={styles.datos}>
         <p>Sangre</p>

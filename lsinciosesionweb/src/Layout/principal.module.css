@@ -10,6 +10,7 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -35,8 +36,8 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  width: calc(100vw - 5rem);
-  margin: calc(var(--header-h) + 1rem) 1rem 1rem calc(var(--sidebar-w) + 1rem);
+  width: auto;
+  margin: calc(var(--header-h) + 1rem) calc(var(--sidebar-w) + 1rem) 1rem calc(var(--sidebar-w) + 1rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -54,6 +55,7 @@
 .footer {
   position: relative;
   z-index: 1;
+  width: 100%;
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -65,9 +67,11 @@
 
   .header {
     height: var(--header-h-mobile);
+    inset: 0 0 auto 0;
   }
 
   .content {
+    width: auto;
     margin: calc(var(--header-h-mobile) + 1rem) 0.75rem 0.75rem;
   }
 }

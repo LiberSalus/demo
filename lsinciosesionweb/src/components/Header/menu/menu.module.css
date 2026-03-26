@@ -266,11 +266,17 @@
   gap: 0.35rem;
 }
 
+.mobileList,
+.mobileList li,
+.mobileList li span {
+  color: #ffffff;
+}
+
 .mobileLink {
   width: 100%;
   border: 0;
   background: transparent;
-  color: #fff;
+  color: #ffffff !important;
   text-align: center;
   font-size: var(--font24)                        ;
   font-weight: 700;
@@ -281,11 +287,20 @@
   display: block;
 }
 
+.mobileLink,
+.mobileLink span,
+.mobileLink:visited,
+.mobileLink:link {
+  color: #ffffff !important;
+}
+
 .mobileLink:hover {
+  color: #ffffff;
   opacity: 0.9;
 }
 
 .mobileActive {
+  color: #ffffff !important;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
 }

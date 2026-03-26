@@ -1,6 +1,6 @@
 .Noticia {
     margin: 0rem auto;
-    width: 38.43rem;
+    width: min(100%, 38.43rem);
     border: 1px solid var(--borde);
     border-radius: 1rem;
     overflow: hidden;
@@ -11,5 +11,26 @@
     margin: .5rem 1rem;
     & > h3 {
         margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 460px) {
+    .Noticia {
+        max-width: 22rem;
+    }
+
+    .info {
+        margin: 0.65rem 0.85rem 0.85rem;
+
+        & > h3 {
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+        }
+
+        & > p {
+            margin: 0;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
     }
 }

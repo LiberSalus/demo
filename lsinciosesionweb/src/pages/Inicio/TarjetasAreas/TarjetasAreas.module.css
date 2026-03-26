@@ -1,6 +1,6 @@
 .cntTarjetaAreas {
   margin: 0 auto;
-  width: 52.5rem;
+  width: min(100%, 52.5rem);
   max-height: 31.3125rem;
   
   border: 1px solid var(--borde);
@@ -30,7 +30,7 @@
     margin: 0 auto;
     width: 100%;
     height: auto;
-    padding: 0.1rem;
+    padding: 0.65rem;
 
     &> h3, &> p {
       text-align: center;
