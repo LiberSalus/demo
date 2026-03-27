@@ -85,6 +85,11 @@
 
 
 @media (max-width: 600px) {
+  .tabs {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
   .GraficaFrecuenciaCardiaca {
     width: 90%;
     height: auto;

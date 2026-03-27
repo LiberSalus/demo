@@ -24,6 +24,50 @@
   border: 1px solid #ACCCEB;
 }
 
+.mobileSelectWrap {
+  display: none;
+  position: relative;
+  width: 100%;
+  max-width: 18.75rem;
+  margin: 0 auto 1rem;
+}
+
+.mobileSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  min-height: 3.15rem;
+  padding: 0.72rem 3rem 0.72rem 1.1rem;
+  border: 1px solid #ACCCEB;
+  border-radius: 999px;
+  background-color: #fff;
+  color: #4a4953;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-align-last: center;
+  outline: none;
+}
+
+.mobileSelect::-ms-expand {
+  display: none;
+}
+
+.mobileSelectIcon {
+  position: absolute;
+  top: 50%;
+  right: 1.15rem;
+  transform: translateY(-50%);
+  color: #4a4953;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 0.16rem solid currentColor;
+  border-bottom: 0.16rem solid currentColor;
+  transform: translateY(-62%) rotate(45deg);
+  pointer-events: none;
+}
+
 .cntBotones {
   margin: 0 auto;
   padding: 0.25rem;
@@ -36,6 +80,20 @@
   justify-content: space-between;
   
 
+}
+
+@media (min-width: 461px) {
+  .cntBotones {
+    width: min(100%, 34rem);
+    justify-content: center;
+    gap: 0.85rem 1rem;
+    padding: 0.8rem;
+  }
+
+  .tabBtn {
+    width: 11rem;
+    padding: 0.68rem 1rem;
+  }
 }
 
 .tabBtn {
@@ -74,5 +132,30 @@
       margin: 1rem auto;
       text-align: center;
     }
+  }
+}
+
+@media (max-width: 460px) {
+  .PestañasFisica {
+    min-height: auto;
+
+    & > h3 {
+      margin: 0 0 1.5rem;
+      font-size: 2.2rem;
+      text-align: left;
+    }
+  }
+
+  .cntBlanco {
+    width: 100%;
+    padding: 1.75rem 1rem;
+  }
+
+  .mobileSelectWrap {
+    display: block;
+  }
+
+  .cntBotones {
+    display: none;
   }
 }

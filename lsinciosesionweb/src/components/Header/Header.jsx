@@ -7,15 +7,37 @@ import campana from './campana.svg'
 import usuario from './Usuario.png'
 import TarjetaLataral from './TarjetaLateral/TarjetaLateral'
 import Menu from './menu/Menu'
+import icoMedicamento from '@/pages/Inicio/Calendario/icoMedicamento.svg'
+import icoMedico from '@/pages/Inicio/Calendario/icoMedico.svg'
+import icoEnLinea from '@/pages/Inicio/Calendario/icoEnLinea.svg'
 
 const Header = ({ estados = ["e2"] }) => {
   const TRANSITION_MS = 280
+  const BELL_SHAKE_MS = 1800
+  const BELL_REPEAT_MS = 30000
+  const BELL_SECOND_SHAKE_DELAY_MS = 2000
   const [isOpen, setIsOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [fotoPerfil, setFotoPerfil] = useState(usuario)
+  const [hasPendingAlert, setHasPendingAlert] = useState(false)
+  const [isBellShaking, setIsBellShaking] = useState(false)
+  const [bellAnimationTick, setBellAnimationTick] = useState(0)
+  const [isAlertsOpen, setIsAlertsOpen] = useState(false)
+  const [alertItems, setAlertItems] = useState([])
   const triggerButtonRef = useRef(null)
   const panelRef = useRef(null)
+  const bellButtonRef = useRef(null)
+  const alertsPopoverRef = useRef(null)
+  const bellTimerRef = useRef(null)
+  const bellRepeatIntervalRef = useRef(null)
+  const bellSecondShakeTimerRef = useRef(null)
+
+  const resolveAlertIcon = (item) => {
+    if (item.type === "medicamento") return icoMedicamento
+    if (item.citaTipo === "en_linea") return icoEnLinea
+    return icoMedico
+  }
 
   const openPanel = () => {
     setIsMounted(true)
@@ -34,11 +56,154 @@ const Header = ({ estados = ["e2"] }) => {
     setIsMenuOpen(false)
   }
 
+  const clearBellFeedback = () => {
+    setHasPendingAlert(false)
+    setIsBellShaking(false)
+    setIsAlertsOpen(false)
+
+    if (bellTimerRef.current) {
+      clearTimeout(bellTimerRef.current)
+      bellTimerRef.current = null
+    }
+
+    if (bellSecondShakeTimerRef.current) {
+      clearTimeout(bellSecondShakeTimerRef.current)
+      bellSecondShakeTimerRef.current = null
+    }
+
+    if (bellRepeatIntervalRef.current) {
+      clearInterval(bellRepeatIntervalRef.current)
+      bellRepeatIntervalRef.current = null
+    }
+  }
+
+  const stopBellFeedback = () => {
+    setHasPendingAlert(false)
+    setIsBellShaking(false)
+
+    if (bellTimerRef.current) {
+      clearTimeout(bellTimerRef.current)
+      bellTimerRef.current = null
+    }
+
+    if (bellSecondShakeTimerRef.current) {
+      clearTimeout(bellSecondShakeTimerRef.current)
+      bellSecondShakeTimerRef.current = null
+    }
+
+    if (bellRepeatIntervalRef.current) {
+      clearInterval(bellRepeatIntervalRef.current)
+      bellRepeatIntervalRef.current = null
+    }
+  }
+
+  const toggleAlerts = () => {
+    setIsAlertsOpen((prev) => {
+      const next = !prev
+      if (next) {
+        stopBellFeedback()
+      }
+      return next
+    })
+  }
+
+  const triggerBellShake = () => {
+    setBellAnimationTick((prev) => prev + 1)
+    setIsBellShaking(true)
+
+    if (bellTimerRef.current) {
+      clearTimeout(bellTimerRef.current)
+    }
+
+    bellTimerRef.current = setTimeout(() => {
+      setIsBellShaking(false)
+      bellTimerRef.current = null
+    }, BELL_SHAKE_MS)
+  }
+
+  const startBellAlertCycle = () => {
+    if (bellSecondShakeTimerRef.current) {
+      clearTimeout(bellSecondShakeTimerRef.current)
+      bellSecondShakeTimerRef.current = null
+    }
+
+    if (bellRepeatIntervalRef.current) {
+      clearInterval(bellRepeatIntervalRef.current)
+      bellRepeatIntervalRef.current = null
+    }
+
+    const runCycle = () => {
+      triggerBellShake()
+
+      bellSecondShakeTimerRef.current = setTimeout(() => {
+        triggerBellShake()
+        bellSecondShakeTimerRef.current = null
+      }, BELL_SECOND_SHAKE_DELAY_MS)
+    }
+
+    runCycle()
+    bellRepeatIntervalRef.current = setInterval(runCycle, BELL_REPEAT_MS)
+  }
+
   useEffect(() => {
     if (isOpen || !isMounted) return
     const timer = setTimeout(() => setIsMounted(false), TRANSITION_MS)
     return () => clearTimeout(timer)
   }, [isOpen, isMounted])
+
+  useEffect(() => {
+    return () => {
+      if (bellTimerRef.current) {
+        clearTimeout(bellTimerRef.current)
+      }
+      if (bellSecondShakeTimerRef.current) {
+        clearTimeout(bellSecondShakeTimerRef.current)
+      }
+      if (bellRepeatIntervalRef.current) {
+        clearInterval(bellRepeatIntervalRef.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const onCalendarAlert = () => {
+      setHasPendingAlert(true)
+      startBellAlertCycle()
+    }
+
+    const onCalendarAlertDetailed = (event) => {
+      const detail = event?.detail || {}
+      const item = {
+        id: `${detail.type ?? "alerta"}-${detail.at ?? Date.now()}`,
+        type: detail.type ?? "alerta",
+        citaTipo: detail.citaTipo ?? "presencial",
+        title: detail.title ?? "Alerta",
+        timeLabel: detail.timeLabel ?? "",
+      }
+
+      setAlertItems((prev) => [item, ...prev].slice(0, 6))
+      onCalendarAlert()
+    }
+
+    window.addEventListener("calendar_alert_triggered", onCalendarAlertDetailed)
+    const onPointerDown = (event) => {
+      if (!isAlertsOpen) return
+
+      const bellElement = bellButtonRef.current
+      const popoverElement = alertsPopoverRef.current
+      const target = event.target
+
+      if (bellElement?.contains(target) || popoverElement?.contains(target)) return
+      setIsAlertsOpen(false)
+    }
+
+    window.addEventListener("pointerdown", onPointerDown)
+
+    return () => {
+      window.removeEventListener("calendar_alert_triggered", onCalendarAlertDetailed)
+      window.removeEventListener("pointerdown", onPointerDown)
+    }
+  }, [isAlertsOpen])
 
   useEffect(() => {
     if (!isMounted) return
@@ -117,10 +282,42 @@ const Header = ({ estados = ["e2"] }) => {
       </button>
       <div className={styles.cntBotonPerfil}>
         <button className={styles.boton}><img src={ayuda} alt="Ayuda" /></button>
-        <button type="button" className={styles.boton}>
-          <span className={styles.alerta}></span>
-          <img src={campana} alt="Alertas" />
+        <button
+          ref={bellButtonRef}
+          type="button"
+          className={`${styles.boton} ${isBellShaking ? styles.botonCampanaActiva : ""}`}
+          onClick={toggleAlerts}
+          aria-label={hasPendingAlert ? "Tienes alertas pendientes" : "Alertas"}
+          aria-expanded={isAlertsOpen}
+          aria-haspopup="dialog"
+        >
+          {hasPendingAlert && <span className={styles.alerta}></span>}
+                      <img key={bellAnimationTick} src={campana} alt="Alertas" />
         </button>
+        {isAlertsOpen && (
+          <div
+            ref={alertsPopoverRef}
+            className={styles.alertsPopover}
+            role="dialog"
+            aria-label="Alertas recientes"
+          >
+            {alertItems.length === 0 ? (
+              <p className={styles.alertsEmpty}>No hay alertas recientes.</p>
+            ) : (
+              alertItems.map((item) => (
+                <div key={item.id} className={styles.alertItem}>
+                  <div className={styles.alertItemHeader}>
+                    <span className={styles.alertTime}>{item.timeLabel}</span>
+                    <span className={styles.alertIcon} aria-hidden="true">
+                      <img src={resolveAlertIcon(item)} alt="" />
+                    </span>
+                  </div>
+                  <p className={styles.alertTitle}>{item.title}</p>
+                </div>
+              ))
+            )}
+          </div>
+        )}
         <button
           ref={triggerButtonRef}
           type="button"

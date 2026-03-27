@@ -775,6 +775,148 @@ const FormularioMedicamento = ({
                 />
               </Box>
           </>
+        ) : form.patron === "daily_temp" ? (
+          <>
+            <Box sx={responsivePairRowSx}>
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Duración
+                </Typography>
+                <TextField
+                  value={
+                    duracion ? `${duracion} día${duracion > 1 ? "s" : ""}` : ""
+                  }
+                  placeholder="Días de duración"
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  InputProps={{ sx: pillInputSx, readOnly: true }}
+                  sx={{ ...outlinedFieldSx, ...compactFieldSx }}
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Frecuencia
+                </Typography>
+                <AdaptiveSelect
+                  value={form.frecuenciaHoras}
+                  placeholder="Selecciona frecuencia"
+                  options={frequencyOptions}
+                  isMobile={isMobile}
+                  className={styles.menuSelect}
+                  onChange={(value) => {
+                    setForm((prev) => ({ ...prev, frecuenciaHoras: value }));
+                    setErrorMsg("");
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Box sx={{ width: isMobile ? "100%" : "50%" }}>
+              <Typography variant="body2" sx={fieldLabelSx}>
+                Hora de inicio
+              </Typography>
+              <AdaptiveSelect
+                value={form.horaInicio}
+                placeholder="Selecciona una hora"
+                options={horarios}
+                isMobile={isMobile}
+                className={styles.menuSelect}
+                onChange={(value) => {
+                  setForm((prev) => ({ ...prev, horaInicio: value }));
+                  setErrorMsg("");
+                }}
+              />
+            </Box>
+
+            {/* Fechas inicio/fin */}
+            <Box sx={responsivePairRowSx}>
+              <Box sx={{ width: "100%", minWidth: 0 }}>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Fecha de inicio
+                </Typography>
+
+                <DatePicker
+                  value={startDayjs}
+                  onChange={(d) => setDateField("startDate", d)}
+                  disabled={form.patron === "daily_perm"}
+                  format="DD/MM/YYYY"
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: "small",
+                      placeholder: "Selecciona una fecha",
+                      InputProps: {
+                        sx: {
+                          ...pillInputSx,
+                          width: "100%",
+                          fontSize: "13.5px",
+                          "& .MuiSvgIcon-root": {
+                            fontSize: "1.2rem",
+                          },
+                        },
+                      },
+                      sx: {
+                        ...outlinedFieldSx,
+                        ...compactFieldSx,
+                        ...calendarFieldSx,
+                        width: "100%",
+                        "& .MuiFormControl-root": {
+                          width: "100%",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          width: "100%",
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: "100%", minWidth: 0 }}>
+                <Typography variant="body2" sx={fieldLabelSx}>
+                  Fecha de fin
+                </Typography>
+
+                <DatePicker
+                  value={endDayjs}
+                  onChange={(d) => setDateField("endDate", d)}
+                  minDate={startDayjs}
+                  format="DD/MM/YYYY"
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: "small",
+                      placeholder: "Selecciona una fecha",
+                      InputProps: {
+                        sx: {
+                          ...pillInputSx,
+                          width: "100%",
+                          fontSize: "13.5px",
+                          "& .MuiSvgIcon-root": {
+                            fontSize: "1.2rem",
+                          },
+                        },
+                      },
+                      sx: {
+                        ...outlinedFieldSx,
+                        ...compactFieldSx,
+                        ...calendarFieldSx,
+                        width: "100%",
+                        "& .MuiFormControl-root": {
+                          width: "100%",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          width: "100%",
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+          </>
         ) : (
           <>
             {/* Duración + Hora de inicio */}

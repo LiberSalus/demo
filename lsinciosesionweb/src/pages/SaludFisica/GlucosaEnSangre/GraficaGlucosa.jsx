@@ -81,7 +81,7 @@ const GraficaGlucosa = ({
   modo = "ayunas",
 }) => {
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [vista, setVista] = useState("dia");
+  const [vista, setVista] = useState("semana");
 
   
 
@@ -106,12 +106,6 @@ const GraficaGlucosa = ({
     <div className={styles.GraficaGlucosa}>
       {/* Tabs */}
       <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${vista === "dia" ? styles.tabActiva : ""}`}
-          onClick={() => setVista("dia")}
-        >
-          Día
-        </button>
         <button
           className={`${styles.tab} ${
             vista === "semana" ? styles.tabActiva : ""

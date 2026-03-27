@@ -29,12 +29,21 @@
   max-height: 15.5rem;
   overflow-y: scroll;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 @media (max-width: 864px) {
   .cntDin {
     flex-direction: column;
+    gap: 1.15rem;
     
+  }
+
+  .cntCmp {
+    max-height: none;
+    margin-top: 1rem;
   }
 
   .VistaFisica {

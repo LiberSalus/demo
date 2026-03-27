@@ -7,8 +7,8 @@ import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarruc
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
-import mona from "./monaP.png";
-import mono from "./monoP.png";
+import mona from "./monaP.webp";
+import mono from "./monoP.webp";
 import manchaA from "./manchaA.svg";
 import manchaR from "./manchaR.svg";
 import cuadro from "./cuadro.svg";
@@ -19,7 +19,9 @@ import Derechos from "@/components/Derechos/Derechos"
 
 import dayjs from "dayjs";
 import "dayjs/locale/es";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.locale("es");
+dayjs.extend(customParseFormat);
 
 import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
@@ -38,12 +40,73 @@ import {
   loadCitasPorFecha,
   saveCitasPorFecha,
 } from "./Calendario/storageCitas";
+import {
+  buildDailyTimes,
+  isTakeDay,
+} from "./Calendario/MedicamentoUtils";
+
+import sonidoCitaMp3 from "./Calendario/Sonidos/universfield-new-notification-08-352461.mp3";
+import sonidoCitaOgg from "./Calendario/Sonidos/universfield-new-notification-08-352461.ogg";
+import sonidoMedicamentoMp3 from "./Calendario/Sonidos/universfield-new-notification-09-352705.mp3";
+import sonidoMedicamentoOgg from "./Calendario/Sonidos/universfield-new-notification-09-352705.ogg";
+import sonidoHoraMp3 from "./Calendario/Sonidos/universfield-soft-bell-ding-485895.mp3";
+import sonidoHoraOgg from "./Calendario/Sonidos/universfield-soft-bell-ding-485895.ogg";
+
+const SOUND_FILES = {
+  citaReminder: {
+    mp3: sonidoCitaMp3,
+    ogg: sonidoCitaOgg,
+  },
+  medicamentoReminder: {
+    mp3: sonidoMedicamentoMp3,
+    ogg: sonidoMedicamentoOgg,
+  },
+  dueNow: {
+    mp3: sonidoHoraMp3,
+    ogg: sonidoHoraOgg,
+  },
+};
+
+function resolvePreferredSound(files) {
+  if (typeof document === "undefined") return files.mp3;
+
+  const probe = document.createElement("audio");
+  const canPlayOgg = typeof probe.canPlayType === "function"
+    ? probe.canPlayType('audio/ogg; codecs="vorbis"')
+    : "";
+
+  return canPlayOgg ? files.ogg : files.mp3;
+}
+
+function parseStartDateTime(dateKey, timeLabel) {
+  if (!dateKey || !timeLabel) return null;
+
+  const parsedTime = dayjs(String(timeLabel).trim(), ["h:mm a", "h:mma"], true);
+  if (!parsedTime.isValid()) return null;
+
+  return dayjs(dateKey)
+    .hour(parsedTime.hour())
+    .minute(parsedTime.minute())
+    .second(0)
+    .millisecond(0);
+}
+
+function parseCitaStartDateTime(cita, fallbackDateKey) {
+  const baseDateKey = dayjs(cita?.fecha || fallbackDateKey).format("YYYY-MM-DD");
+  const horarioStr = String(cita?.horario ?? cita?.hora ?? "");
+  const startLabel = horarioStr.split("-")[0]?.trim();
+
+  return parseStartDateTime(baseDateKey, startLabel);
+}
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(false);
   const medsScrollRef = useRef(null);
   const citasScrollRef = useRef(null);
+  const audioUnlockedRef = useRef(false);
+  const preferredSoundMapRef = useRef({});
+  const firedAlertsRef = useRef(new Map());
   const [scrollState, setScrollState] = useState({
     medicamentos: { canLeft: false, canRight: false },
     citas: { canLeft: false, canRight: false },
@@ -207,6 +270,179 @@ export default function Inicio() {
     }
   }, []);
 
+  useEffect(() => {
+    preferredSoundMapRef.current = {
+      citaReminder: resolvePreferredSound(SOUND_FILES.citaReminder),
+      medicamentoReminder: resolvePreferredSound(SOUND_FILES.medicamentoReminder),
+      dueNow: resolvePreferredSound(SOUND_FILES.dueNow),
+    };
+
+    const unlockAudio = () => {
+      audioUnlockedRef.current = true;
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+
+    window.addEventListener("pointerdown", unlockAudio, { passive: true });
+    window.addEventListener("keydown", unlockAudio);
+    window.addEventListener("touchstart", unlockAudio, { passive: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+  }, []);
+
+  useEffect(() => {
+    const playSound = async (soundKey, alertMeta = null) => {
+      if (!audioUnlockedRef.current) return;
+
+      const src = preferredSoundMapRef.current?.[soundKey];
+      if (!src) return;
+
+      window.dispatchEvent(
+        new CustomEvent("calendar_alert_triggered", {
+          detail: {
+            soundKey,
+            at: Date.now(),
+            ...alertMeta,
+          },
+        }),
+      );
+
+      try {
+        const audio = new Audio(src);
+        audio.preload = "auto";
+        audio.currentTime = 0;
+        await audio.play();
+      } catch {
+        null;
+      }
+    };
+
+    const registerTrigger = (key, atTs) => {
+      const history = firedAlertsRef.current;
+      const existing = history.get(key);
+      if (existing) return false;
+
+      history.set(key, atTs);
+
+      const cutoff = atTs - 1000 * 60 * 60 * 24 * 3;
+      for (const [savedKey, savedTs] of history.entries()) {
+        if (savedTs < cutoff) history.delete(savedKey);
+      }
+
+      return true;
+    };
+
+    const runAlertCheck = () => {
+      const nowMinute = dayjs().second(0).millisecond(0);
+      const soundsToPlay = new Set();
+
+      Object.entries(citasPorFecha || {}).forEach(([dateKey, citas]) => {
+        (citas || []).forEach((cita) => {
+          const citaStart = parseCitaStartDateTime(cita, dateKey);
+          if (!citaStart?.isValid?.()) return;
+
+          if (cita?.recordar) {
+            const reminderAt = citaStart.subtract(1, "day");
+            if (reminderAt.isSame(nowMinute, "minute")) {
+              const reminderKey = `cita-reminder:${cita.id ?? citaStart.valueOf()}:${reminderAt.valueOf()}`;
+              if (registerTrigger(reminderKey, reminderAt.valueOf())) {
+                soundsToPlay.add(
+                  JSON.stringify({
+                    soundKey: "citaReminder",
+                    type: "cita",
+                    citaTipo: cita?.tipoCita ?? "presencial",
+                    title: "Alerta de cita médica",
+                    timeLabel: citaStart.format("h:mm a"),
+                  }),
+                );
+              }
+            }
+          }
+
+          if (citaStart.isSame(nowMinute, "minute")) {
+            const dueKey = `cita-due:${cita.id ?? citaStart.valueOf()}:${citaStart.valueOf()}`;
+            if (registerTrigger(dueKey, citaStart.valueOf())) {
+                soundsToPlay.add(
+                  JSON.stringify({
+                    soundKey: "dueNow",
+                    type: "cita",
+                    citaTipo: cita?.tipoCita ?? "presencial",
+                    title: "Alerta de cita médica",
+                    timeLabel: citaStart.format("h:mm a"),
+                  }),
+              );
+            }
+          }
+        });
+      });
+
+      const dayCandidates = [
+        nowMinute.subtract(1, "day"),
+        nowMinute,
+        nowMinute.add(1, "day"),
+      ];
+
+      (medicamentos || []).forEach((rule) => {
+        dayCandidates.forEach((dayRef) => {
+          const dayKey = dayRef.format("YYYY-MM-DD");
+          if (!isTakeDay(rule, dayKey)) return;
+
+          const doseTimes = buildDailyTimes(rule.frecuenciaHoras, rule.horaInicio);
+          doseTimes.forEach((timeLabel) => {
+            const doseAt = parseStartDateTime(dayKey, timeLabel);
+            if (!doseAt?.isValid?.()) return;
+
+            if (rule?.recordatorioMin != null) {
+              const reminderAt = doseAt.subtract(Number(rule.recordatorioMin || 0), "minute");
+              if (reminderAt.isSame(nowMinute, "minute")) {
+                const reminderKey = `med-reminder:${rule.id ?? doseAt.valueOf()}:${reminderAt.valueOf()}`;
+                if (registerTrigger(reminderKey, reminderAt.valueOf())) {
+                  soundsToPlay.add(
+                    JSON.stringify({
+                    soundKey: "medicamentoReminder",
+                    type: "medicamento",
+                    title: "Alerta de medicamento",
+                      timeLabel: doseAt.format("h:mm a"),
+                    }),
+                  );
+                }
+              }
+            }
+
+            if (doseAt.isSame(nowMinute, "minute")) {
+              const dueKey = `med-due:${rule.id ?? doseAt.valueOf()}:${doseAt.valueOf()}`;
+              if (registerTrigger(dueKey, doseAt.valueOf())) {
+                soundsToPlay.add(
+                  JSON.stringify({
+                    soundKey: "dueNow",
+                    type: "medicamento",
+                    title: "Alerta de medicamento",
+                    timeLabel: doseAt.format("h:mm a"),
+                  }),
+                );
+              }
+            }
+          });
+        });
+      });
+
+      soundsToPlay.forEach((payload) => {
+        const alertMeta = JSON.parse(payload);
+        playSound(alertMeta.soundKey, alertMeta);
+      });
+    };
+
+    runAlertCheck();
+    const timer = window.setInterval(runAlertCheck, 15000);
+
+    return () => window.clearInterval(timer);
+  }, [citasPorFecha, medicamentos]);
+
   // ✅ NUEVO: Persistencia citas
   useEffect(() => {
     saveCitasPorFecha(citasPorFecha);
@@ -262,9 +498,11 @@ export default function Inicio() {
           </div>
 
           <div className={styles.cntCora}>
-            <ProgCora porcentaje="50" />
-            <div className={styles.mensaje}>
-              Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
+            <div className={styles.cntCoraInfo}>
+              <ProgCora porcentaje="50" />
+              <div className={styles.mensaje}>
+                Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
+              </div>
             </div>
             <div className={styles.cntLogros}>
               <TarjetaLogro id="reto4" />

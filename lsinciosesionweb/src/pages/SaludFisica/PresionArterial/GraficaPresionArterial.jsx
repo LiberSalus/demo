@@ -78,7 +78,7 @@ const GraficaPresionArterial = ({
   dataAnio = MOCK_ANIO,
 }) => {
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [vista, setVista] = useState("dia");
+  const [vista, setVista] = useState("semana");
 
   const data = useMemo(() => {
     switch (vista) {
@@ -102,13 +102,6 @@ const GraficaPresionArterial = ({
     <div className={styles.GraficaPresionArterial}>
       {/* Tabs */}
       <div className={styles.tabs}>
-        <button
-          type="button"
-          className={`${styles.tab} ${vista === "dia" ? styles.tabActiva : ""}`}
-          onClick={() => setVista("dia")}
-        >
-          Día
-        </button>
         <button
           type="button"
           className={`${styles.tab} ${vista === "semana" ? styles.tabActiva : ""}`}

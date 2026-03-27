@@ -244,11 +244,11 @@ const CalendarioInicio = ({
             lineHeight: 1,
             fontSize: isMobile ? "0.78rem" : "0.8rem",
           },
-          "& .MuiTypography-root": {
-            fontSize: isMobile ? "0.82rem" : "0.9rem",
-            margin: isMobile ? 0 : "0px 8px",
-            textTransform:"capitalize"
-          },
+            "& .MuiTypography-root": {
+              fontSize: isMobile ? "0.82rem" : "0.9rem",
+              margin: isMobile ? 0 : "0px 8px",
+              textTransform:"capitalize"
+            },
           "& .MuiPickersCalendarHeader-label": {
             fontSize: isMobile ? "0.95rem" : "1.1rem",
             fontWeight: "bold",
@@ -328,20 +328,22 @@ const CalendarioInicio = ({
             transition: "none",
             animation: "none",
           },
-          "& .MuiPickersYear-yearButton": {
-            minHeight: "2.25rem",
-            height: "2.25rem",
-            padding: 0,
-            lineHeight: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "none",
-            animation: "none",
-            boxShadow: "none",
-            "&:hover": {
-              backgroundColor: "rgba(25, 118, 210, 0.08)",
-            },
+            "& .MuiYearCalendar-button": {
+                minHeight: "2.25rem",
+                height: "2.25rem",
+                padding: 0,
+                lineHeight: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                justifySelf: "center",
+                marginInline: "auto",
+                transition: "none",
+                animation: "none",
+                boxShadow: "none",
+                  "&:hover": {
+                    backgroundColor: "rgba(25, 118, 210, 0.08)",
+              },
             "&:focus": {
               boxShadow: "none",
             },
@@ -359,13 +361,13 @@ const CalendarioInicio = ({
             "&.Mui-focusVisible": {
               boxShadow: "none",
             },
-            "& .MuiTouchRipple-root": {
-              display: "none",
+              "& .MuiTouchRipple-root": {
+                display: "none",
+              },
             },
-          },
-          "& .MuiYearCalendar-root": {
-            width: "100%",
-            maxHeight: "13.75rem",
+            "& .MuiYearCalendar-root": {
+                width: "100%",
+              maxHeight: "13.75rem",
             overflowY: "auto",
             overflowX: "hidden",
             alignContent: "start",

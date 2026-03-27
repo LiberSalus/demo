@@ -44,3 +44,21 @@
   transition: all 0.2s ease;
   
 }
+
+@media (max-width: 460px) {
+  .cntBotonesQs {
+    margin: 0.3rem auto;
+    width: 96%;
+    max-width: 20rem;
+    padding: 0.8rem 0.7rem;
+    border-radius: 0.7rem;
+  }
+
+  .info {
+    padding-left: 1.1rem;
+  }
+
+  .titulo {
+    margin-bottom: 0.3rem;
+  }
+}

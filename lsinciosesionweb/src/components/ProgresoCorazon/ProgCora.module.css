@@ -102,6 +102,24 @@
   }
 }
 
+@media (min-width: 461px) and (max-width: 768px) {
+  .ProgCora {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .cora {
+    width: 52%;
+    transform: scale(0.86);
+  }
+
+  .indicador::before {
+    width: 0.38rem;
+    height: 0.76rem;
+    top: 8.4%;
+  }
+}
+
 @media (max-width: 460px) {
   .ProgCora {
     width: 7.2rem;

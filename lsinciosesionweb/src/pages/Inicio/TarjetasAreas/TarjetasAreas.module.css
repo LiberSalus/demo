@@ -1,12 +1,13 @@
 .cntTarjetaAreas {
   margin: 0 auto;
   width: min(100%, 52.5rem);
-  max-height: 31.3125rem;
+  height: auto;
   
   border: 1px solid var(--borde);
   border-radius: 1rem;
   padding: 1rem;
   background-color: white;
+  overflow: visible;
   & > h3 { margin: 0.5rem; }
   & > p  { 
     font-size: 0.75rem; 

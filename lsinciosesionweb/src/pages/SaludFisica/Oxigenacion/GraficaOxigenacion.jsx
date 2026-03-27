@@ -68,7 +68,7 @@ const GraficaOxigenacion = ({
   dataAnio = MOCK_ANIO,
 }) => {
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [vista, setVista] = useState("dia");
+  const [vista, setVista] = useState("semana");
 
   const { data, xDomain, xTicks, xLabelFormatter } = useMemo(() => {
     switch (vista) {
@@ -116,13 +116,6 @@ const GraficaOxigenacion = ({
     <div className={styles.GraficaOxigenacion}>
       {/* Tabs */}
       <div className={styles.tabs}>
-        <button
-          type="button"
-          className={`${styles.tab} ${vista === "dia" ? styles.tabActiva : ""}`}
-          onClick={() => setVista("dia")}
-        >
-          Día
-        </button>
         <button
           type="button"
           className={`${styles.tab} ${vista === "semana" ? styles.tabActiva : ""}`}

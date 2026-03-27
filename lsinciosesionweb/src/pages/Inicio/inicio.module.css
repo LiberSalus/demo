@@ -1,4 +1,6 @@
 .wrap {
+  --inicio-gap: 1rem;
+  --inicio-section-mt: 1rem;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -14,7 +16,7 @@
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  gap: 1rem;
+  gap: var(--inicio-gap);
   align-items: stretch;
 }
 
@@ -77,6 +79,13 @@
   align-items: center;
   justify-content: space-between;
 
+}
+
+.cntCoraInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .mensaje {
@@ -267,27 +276,34 @@
 
 
 .seccCentro {
-  /* border: 1px solid #ACCCEB; */
-  margin: 1rem auto 0;
-  display: flex;
+    /* border: 1px solid #ACCCEB; */
+    margin: var(--inicio-section-mt) auto 0;
+    display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 91rem;
   flex-wrap: wrap;
-  /* max-width: 90.1rem; */
-  gap: 1rem;
+    /* max-width: 90.1rem; */
+    gap: var(--inicio-gap);
+}
+
+@media (min-width: 1366px) {
+  .seccCentro {
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
 }
 
 .seccInfe {
   /* border: 2px dashed green; */
-  margin: 1rem auto 0;
+  margin: var(--inicio-section-mt) auto 0;
   display: flex;
   justify-content: center;
   width: 100%;
   max-width: 91rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--inicio-gap);
 }
 
 
@@ -307,11 +323,13 @@
 
 @media (max-width: 968px) {
   .wrap {
+    --inicio-gap: 0.85rem;
+    --inicio-section-mt: 0.85rem;
     padding-inline: 0.75rem;
   }
 
   .seccSuperior {
-    gap: 0.85rem;
+    gap: var(--inicio-gap);
   }
 
   .cntMono {
@@ -366,7 +384,7 @@
 
   .seccCentro,
   .seccInfe {
-    gap: 0.85rem;
+    gap: var(--inicio-gap);
   }
 }
 
@@ -375,14 +393,10 @@
     max-width: 51rem;
     height: 37rem;
     padding: 4rem 1.55rem 1.4rem;
-    display: grid;
-    grid-template-columns: minmax(0, 18.5rem) minmax(0, 7.25rem) minmax(0, 20rem);
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "saludo saludo saludo"
-      "avatar pie cora";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    justify-items: center;
     gap: 1rem 1.25rem;
     border-radius: 1rem;
   }
@@ -415,7 +429,7 @@
   }
 
   .cntMono .cntImgMono {
-    grid-area: avatar;
+    flex: 0 1 18.5rem;
     width: 100%;
     height: 100%;
     display: flex;
@@ -431,36 +445,26 @@
   }
 
   .cntPie {
-    grid-area: pie;
+    flex: 0 0 7rem;
     width: 100%;
     max-width: 7rem;
     align-self: stretch;
-    justify-self: center;
     transform: translateX(-0.15rem);
   }
 
   .cntCora {
-    grid-area: cora;
+    flex: 0 1 20rem;
     width: 100%;
     max-width: 20rem;
     height: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "cora"
-      "mensaje"
-      "logro";
-    justify-items: center;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 1.15rem;
   }
 
-  .cntCora > :first-child {
-    grid-area: cora;
-  }
-
   .mensaje {
-    grid-area: mensaje;
     width: 100%;
     max-width: 19.5rem;
     margin: 0;
@@ -470,10 +474,8 @@
   }
 
   .cntLogros {
-    grid-area: logro;
     width: 100%;
     max-width: 19.5rem;
-    justify-self: center;
   }
 }
 
@@ -494,14 +496,10 @@
     max-width: 61rem;
     height: 36.9rem;
     padding: 3.35rem 1.5rem 1.35rem;
-    display: grid;
-    grid-template-columns: minmax(0, 18rem) minmax(0, 6.4rem) minmax(0, 19.5rem);
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "saludo saludo saludo"
-      "avatar pie cora";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    justify-items: center;
     gap: 1rem 1.1rem;
     border-radius: 1rem;
   }
@@ -533,7 +531,7 @@
   }
 
   .cntMono .cntImgMono {
-    grid-area: avatar;
+    flex: 0 1 18rem;
     width: 100%;
     height: 100%;
     display: flex;
@@ -549,36 +547,26 @@
   }
 
   .cntPie {
-    grid-area: pie;
+    flex: 0 0 6.25rem;
     width: 100%;
     max-width: 6.25rem;
     align-self: stretch;
-    justify-self: center;
     transform: translateY(-1.2rem);
   }
 
   .cntCora {
-    grid-area: cora;
+    flex: 0 1 19.8rem;
     width: 100%;
     max-width: 19.8rem;
     height: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "cora"
-      "mensaje"
-      "logro";
-    align-content: center;
-    justify-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 1rem;
   }
 
-  .cntCora > :first-child {
-    grid-area: cora;
-  }
-
   .mensaje {
-    grid-area: mensaje;
     width: 100%;
     max-width: 16rem;
     margin: 0;
@@ -588,10 +576,8 @@
   }
 
   .cntLogros {
-    grid-area: logro;
     width: 100%;
     max-width: 16rem;
-    justify-self: center;
   }
 }
 
@@ -714,42 +700,98 @@
   .cntCora {
     width: 100%;
     max-width: 31rem;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-areas:
-      "cora logro"
-      "mensaje logro";
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 0.55rem 1rem;
   }
 
-  .cntCora > :first-child {
-    grid-area: cora;
-    justify-self: center;
+  .cntCoraInfo {
+    flex: 0 1 calc(50% - 0.5rem);
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .mensaje {
-    grid-area: mensaje;
+    order: initial;
+    flex: initial;
     width: 100%;
     max-width: 100%;
     font-size: 0.62rem;
     padding: 0.5rem 0.55rem;
     margin: 0;
-    justify-self: stretch;
     line-height: 1.2;
   }
 
   .cntLogros {
-    grid-area: logro;
+    flex: 0 1 calc(50% - 0.5rem);
     width: 100%;
     max-width: 100%;
-    justify-self: stretch;
+  }
+}
+
+@media (min-width: 461px) and (max-width: 768px) {
+  .cntMono .cuadro {
+    width: 8.2rem;
+    top: 5.15rem;
+    left: 50%;
+    transform: translateX(-94%);
+  }
+
+  .cntMono .mancha {
+    width: 13.6rem;
+    top: 11.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.32;
+  }
+
+  .cntCora {
+    width: 100%;
+    max-width: 34rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem 1rem;
+  }
+
+  .cntCoraInfo {
+    flex: 0 0 calc(50% - 0.5rem);
+    width: calc(50% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
+    gap: 0.95rem;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .mensaje {
+    width: 100%;
+    max-width: 15.5rem;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .cntLogros {
+    flex: 0 0 calc(50% - 0.5rem);
+    width: calc(50% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
   }
 }
 
 @media (max-width: 460px) {
   .wrap {
+    --inicio-gap: 0.75rem;
+    --inicio-section-mt: 0.75rem;
     padding-inline: 0.4rem;
   }
 
@@ -785,7 +827,13 @@
   .cntCora {
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
     align-items: center;
+    gap: 0.75rem;
+  }
+
+  .cntCoraInfo {
+    width: 100%;
     gap: 0.75rem;
   }
 
@@ -834,24 +882,24 @@
   }
 
   .seccCentro {
-    margin: 0 auto;
+    margin: var(--inicio-section-mt) auto 0;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--inicio-gap);
   }
 
   .seccInfe {
     /* border: 2px dashed green; */
-    margin: 0.75rem auto 0;
+    margin: var(--inicio-section-mt) auto 0;
     padding: 0;
     display: flex;
     justify-content: center;
     width: 100%;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--inicio-gap);
   }
 
   .cntAgenda {

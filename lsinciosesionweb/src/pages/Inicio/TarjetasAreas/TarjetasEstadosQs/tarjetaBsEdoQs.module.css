@@ -83,7 +83,22 @@
 @media (max-width: 460px) {
     .cntTarjetaBsEdoQs{
         width: 100%;
-        max-width: 350px;
+        max-width: none;
+        padding: 1rem 0.95rem;
+    }
+
+    .cntTarjetaBsEdoQs > :nth-child(1) {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0.35rem;
+    }
+
+    .cntTarjetaBsEdoQs > :nth-child(2) {
+        width: 100%;
+        text-align: left;
+        font-size: 0.72rem;
+        line-height: 1.2;
+        margin-bottom: 0.2rem;
     }
     
 }
