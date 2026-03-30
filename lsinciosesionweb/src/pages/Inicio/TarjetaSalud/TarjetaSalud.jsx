@@ -93,6 +93,10 @@ const TarjetaSalud = ({ tipo }) => {
   };
 
   const catalogoMetricas = METRICAS_SALUD[tipo] || [];
+  const placeholdersActivos = Array.from(
+    { length: Math.max(0, 4 - seleccionadas.length) },
+    (_, index) => `empty-${index}`,
+  );
 
   const BotonAñadir = () => (
     <div className={styles.contenedor} onClick={() => setModalAbierto(true)}>
@@ -108,14 +112,21 @@ const TarjetaSalud = ({ tipo }) => {
       className={styles.modalContenido}
       overlayClassName={styles.modalFondo}
     >
-
+      <button
+        type="button"
+        className={styles.modalCerrar}
+        onClick={() => setModalAbierto(false)}
+        aria-label="Cerrar modal de personalización"
+      >
+        ×
+      </button>
       <h3 className={styles.mdTit}>Personaliza tu panel de <br /> Salud Física</h3>
       <p className={styles.mdIns}>Elige hasta 4 indicadores para ver en tu pantalla principal</p>
       <p className={styles.mdActivos}>Tus indicadores activos ({seleccionadas.length}/4)</p>
       <div className={styles.seleccionadas}>
         {seleccionadas.map((titulo, i) => (
           <div key={i} className={styles.itemSeleccionado}>
-            <TarjetaMedicion titulo={titulo} valor={"--"} />
+            <TarjetaMedicion titulo={titulo} valor={"--"} variant="modalMobile" />
             <button
             
               onClick={() => {
@@ -126,10 +137,13 @@ const TarjetaSalud = ({ tipo }) => {
             </button>
           </div>
         ))}
+        {placeholdersActivos.map((key) => (
+          <div key={key} className={styles.slotVacio} aria-hidden="true" />
+        ))}
       </div>
 
 
-      <h3>Selecciona tus indicadores</h3>
+      <h3 className={styles.mdCatalogoTit}>Selecciona tus indicadores</h3>
       <div className={styles.catalogoTarjetas}>
         {catalogoMetricas.map((m, i) => (
           <div
@@ -141,7 +155,7 @@ const TarjetaSalud = ({ tipo }) => {
               }
             }}
           >
-            <TarjetaMedicion titulo={m} valor={"--"} />
+            <TarjetaMedicion titulo={m} valor={"--"} variant="modalMobile" />
           </div>
         ))}
       </div>

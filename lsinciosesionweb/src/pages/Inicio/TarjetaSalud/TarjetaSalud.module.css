@@ -117,6 +117,21 @@
   }
 }
 
+.modalCerrar {
+  display: none;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #334155;
+  font-size: 2.2rem;
+  line-height: 1;
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  z-index: 2;
+  cursor: pointer;
+}
+
 .mdTit {
   margin-bottom: 1rem;
   font-size: 1.5rem;
@@ -197,6 +212,13 @@
   background-color: transparent;
 }
 
+.slotVacio {
+  width: 9.5rem;
+  height: 3.5rem;
+  border: 1.5px dashed #bfd8f5;
+  border-radius: 0.75rem;
+}
+
 .itemSeleccionado button {
   position: absolute;
   top: -7px;
@@ -258,7 +280,7 @@
 
   .cntTarjetaSalud {
     width: 100%;
-    max-width: 22rem;
+    max-width: 95%;
     box-shadow: none;
     margin: 0;
     padding: 0.85rem 0.75rem;
@@ -288,8 +310,8 @@
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
+    justify-content: flex-start;
+    gap: 0.45rem;
     
     /* border: 2px dashed red; */
   }
@@ -297,9 +319,15 @@
   .botonTarjeta {
     background-color: transparent;
     padding: 0;
-    margin: 0.25rem;
-    flex: 0 0 auto;
+    margin: 0;
+    flex: 0 0 calc(50% - 0.225rem);
 
+  }
+
+  .contenedor {
+    margin: 0;
+    width: 100%;
+    flex: 0 0 calc(50% - 0.225rem);
   }
 
   .rango {
@@ -319,13 +347,91 @@
   }
 
   .modalContenido {
-    width: calc(80vw - 3rem);
+    position: relative;
+    width: min(100% - 1.5rem, 28rem);
+    max-height: calc(100dvh - 1.5rem);
+    height: auto;
+    padding: 1.4rem 1rem 1.2rem;
+    border-radius: 1.5rem;
+    text-align: center;
   }
 
+  .modalCerrar {
+    display: block;
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    width:  0.5rem;
+    height: 0 .5rem;
+  }
+
+  .mdTit {
+    margin: 0 2.2rem 0.65rem;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .mdIns {
+    width: min(100%, 18rem);
+    margin: 0 auto 0.7rem;
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+  .mdActivos,
+  .mdCatalogoTit {
+    margin: 0.6rem 0 1rem;
+    font-size: 0.98rem;
+    line-height: 1.15;
+  }
 
   .seleccionadas {
-    width: 95%;
+    width: 100%;
     height: auto;
-    padding: 1rem 0;
+    margin: 0 auto 1rem;
+    padding: 0;
+    gap: 0.7rem;
+    border: none;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .itemSeleccionado,
+  .slotVacio,
+  .itemCatalogo {
+    width: calc(50% - 0.35rem);
+  }
+
+  .slotVacio {
+    width: calc(50% - 0.35rem);
+    min-height: 4.4rem;
+  }
+
+  .itemSeleccionado button {
+    top: -0.45rem;
+    right: -0.35rem;
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .catalogoTarjetas {
+    width: 100%;
+    gap: 0.7rem;
+    justify-content: center;
+  }
+
+  .itemCatalogo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .limite {
+    margin-top: 0.75rem;
+  }
+
+  .confirmar {
+    width: min(100%, 14rem);
+    margin: 1rem auto 0;
+    display: block;
   }
 }

@@ -29,7 +29,7 @@ import { datosPorMedicion } from './datosPorMedicion';
 */
 
 
-const TarjetaMedicion = ({ titulo, valor }) => {
+const TarjetaMedicion = ({ titulo, valor, variant = "default" }) => {
   const datos = titulo === ""
   ? datosPorMedicion[valor] // usa el estado como clave
   : datosPorMedicion[titulo];
@@ -37,7 +37,7 @@ const TarjetaMedicion = ({ titulo, valor }) => {
   const unidad = datos?.unidad || "";
 
   return (
-    <div className={styles.TarjetaMedicion}>
+    <div className={`${styles.TarjetaMedicion} ${variant === "modalMobile" ? styles.modalMobile : ""}`}>
       {icono && <img src={icono} alt={titulo} className={styles.icono} />}
       <div className={styles.data}>
         <p>{titulo}</p>
