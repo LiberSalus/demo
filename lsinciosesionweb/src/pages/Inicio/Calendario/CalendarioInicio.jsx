@@ -1,13 +1,10 @@
-// src/pages/Inicio/Calendario/CalendarioInicio.jsx
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
@@ -15,9 +12,10 @@ import ModalCitaMedica from "./ModalCitaMedica";
 import { isTakeDay } from "./MedicamentoUtils";
 
 dayjs.locale("es-mx");
-const BRAND_BLUE = "#007CBA";
 
-function ChevronIcon({ direction = "left" }) {
+const AZUL_MARCA = "#007CBA";
+
+function IconoChevron({ direccion = "left" }) {
   return (
     <svg
       width="24"
@@ -28,7 +26,7 @@ function ChevronIcon({ direction = "left" }) {
     >
       <path
         d={
-          direction === "left"
+          direccion === "left"
             ? "M14.5 6.5L9 12l5.5 5.5"
             : "M9.5 6.5L15 12l-5.5 5.5"
         }
@@ -41,44 +39,45 @@ function ChevronIcon({ direction = "left" }) {
   );
 }
 
-function CustomDay(props) {
+function DiaCalendarioPersonalizado(props) {
   const {
     day,
     outsideCurrentMonth,
     citasPorFecha,
-    medsTieneEnFecha,
-    isMobile,
-    onOpenDay,
-    ...other
+    tieneMedicamentosEnFecha,
+    esMovil,
+    alAbrirDia,
+    ...otros
   } = props;
 
-  const key = day.format("YYYY-MM-DD");
-  const citas = citasPorFecha?.[key] || [];
-  const hayCitas = citas.length > 0;
+  const claveDia = day.format("YYYY-MM-DD");
+  const citasDelDia = citasPorFecha?.[claveDia] || [];
+  const hayCitas = citasDelDia.length > 0;
+  const hayMedicamentos = tieneMedicamentosEnFecha
+    ? tieneMedicamentosEnFecha(claveDia)
+    : false;
+  const hayEventos = hayCitas || hayMedicamentos;
 
-  const hayMeds = medsTieneEnFecha ? medsTieneEnFecha(key) : false;
-  const hayAlgo = hayCitas || hayMeds;
-
-  const dayNode = (
+  const nodoDia = (
     <PickersDay
       day={day}
       outsideCurrentMonth={outsideCurrentMonth}
-      {...other}
-      onClick={isMobile ? () => onOpenDay?.(day) : undefined}
-      onDoubleClick={!isMobile ? () => onOpenDay?.(day) : undefined}
+      {...otros}
+      onClick={esMovil ? () => alAbrirDia?.(day) : undefined}
+      onDoubleClick={!esMovil ? () => alAbrirDia?.(day) : undefined}
       sx={{
-        ...(other.sx || {}),
-        ...(hayAlgo && {
+        ...(otros.sx || {}),
+        ...(hayEventos && {
           position: "relative",
-            "&::after": {
-              content: '""',
-              width:  5,
-              height: 5,
-              borderRadius: "50%",
-              bgcolor: BRAND_BLUE,
-              position: "absolute",
-              bottom: 2,
-              left: "50%",
+          "&::after": {
+            content: '""',
+            width: 5,
+            height: 5,
+            borderRadius: "50%",
+            bgcolor: AZUL_MARCA,
+            position: "absolute",
+            bottom: 2,
+            left: "50%",
             transform: "translateX(-50%)",
           },
         }),
@@ -86,31 +85,33 @@ function CustomDay(props) {
     />
   );
 
-  if (!hayCitas || isMobile) return dayNode;
-
-  const contenidoTooltip = (
-    <Box sx={{ p: 0.5 }}>
-      <Typography sx={{ fontWeight: 600, fontSize: "0.8rem", mb: 0.5 }}>
-        {citas.length} cita{citas.length > 1 ? "s" : ""} | {day.format("D MMM")}
-      </Typography>
-
-      {citas.slice(0, 2).map((c) => (
-        <Typography key={c.id} sx={{ fontSize: "0.75rem", lineHeight: 1.2 }}>
-          • {c.medico} {c.horario}
-        </Typography>
-      ))}
-
-      {citas.length > 2 && (
-        <Typography sx={{ fontSize: "0.7rem", opacity: 0.85, mt: 0.5 }}>
-          +{citas.length - 2} más…
-        </Typography>
-      )}
-    </Box>
-  );
+  if (!hayCitas || esMovil) return nodoDia;
 
   return (
     <Tooltip
-      title={contenidoTooltip}
+      title={
+        <Box sx={{ p: 0.5 }}>
+          <Typography sx={{ fontWeight: 600, fontSize: "0.8rem", mb: 0.5 }}>
+            {citasDelDia.length} cita{citasDelDia.length > 1 ? "s" : ""} |{" "}
+            {day.format("D MMM")}
+          </Typography>
+
+          {citasDelDia.slice(0, 2).map((cita) => (
+            <Typography
+              key={cita.id}
+              sx={{ fontSize: "0.75rem", lineHeight: 1.2 }}
+            >
+              • {cita.medico} {cita.horario}
+            </Typography>
+          ))}
+
+          {citasDelDia.length > 2 && (
+            <Typography sx={{ fontSize: "0.7rem", opacity: 0.85, mt: 0.5 }}>
+              +{citasDelDia.length - 2} más…
+            </Typography>
+          )}
+        </Box>
+      }
       arrow
       placement="top"
       enterDelay={120}
@@ -129,145 +130,147 @@ function CustomDay(props) {
         arrow: { sx: { color: "white" } },
       }}
     >
-      <span>{dayNode}</span>
+      <span>{nodoDia}</span>
     </Tooltip>
   );
 }
 
-const CalendarioInicio = ({
+export default function CalendarioInicio({
   compact = false,
   citasPorFecha = {},
   setCitasPorFecha = () => {},
-
-  // ✅ medicamentos vienen de Inicio (estado central)
   medicamentos = [],
   setMedicamentos = () => {},
-
-  // ✅ selección de tratamiento (estado central)
   selectedMedId = null,
   setSelectedMedId = () => {},
-
-  // ✅ para abrir el modal en el tab correcto
   focusSection = "citas",
-
   externalSelectedDate,
   externalOpen,
   onExternalClose,
   onExternalDateChange,
-}) => {
-  const [selectedDate, setSelectedDate] = useState(externalSelectedDate || dayjs());
-  const [openModal, setOpenModal] = useState(false);
+}) {
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(
+    externalSelectedDate || dayjs()
+  );
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const esMovil = useMediaQuery("(max-width:600px)");
 
-  React.useEffect(() => {
-    if (externalSelectedDate) setSelectedDate(externalSelectedDate);
+  useEffect(() => {
+    if (externalSelectedDate) setFechaSeleccionada(externalSelectedDate);
   }, [externalSelectedDate]);
 
-  React.useEffect(() => {
-    if (typeof externalOpen === "boolean") setOpenModal(externalOpen);
+  useEffect(() => {
+    if (typeof externalOpen === "boolean") setModalAbierto(externalOpen);
   }, [externalOpen]);
 
-  const isMobile = useMediaQuery("(max-width:600px)");
-
-  const openForDay = (day) => {
-    setSelectedDate(day);
-    setOpenModal(true);
-    onExternalDateChange?.(day);
+  const abrirDia = (dia) => {
+    setFechaSeleccionada(dia);
+    setModalAbierto(true);
+    onExternalDateChange?.(dia);
   };
 
-  const medsTieneEnFecha = useMemo(() => {
-    if (!Array.isArray(medicamentos) || medicamentos.length === 0) return () => false;
-    return (dateKey) => medicamentos.some((r) => isTakeDay(r, dateKey));
+  // El calendario principal solo necesita saber si en ese día existe al menos
+  // un medicamento activo para pintar el indicador visual.
+  const tieneMedicamentosEnFecha = useMemo(() => {
+    if (!Array.isArray(medicamentos) || medicamentos.length === 0) {
+      return () => false;
+    }
+
+    return (claveFecha) =>
+      medicamentos.some((medicamento) => isTakeDay(medicamento, claveFecha));
   }, [medicamentos]);
 
-  const CalendarOnly = (
+  const calendario = (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es-mx">
       <DateCalendar
-        value={selectedDate}
-        onChange={(newDate) => setSelectedDate(newDate)}
+        value={fechaSeleccionada}
+        onChange={(nuevaFecha) => setFechaSeleccionada(nuevaFecha)}
         slots={{
-          day: CustomDay,
-          leftArrowIcon: () => <ChevronIcon direction="left" />,
-          rightArrowIcon: () => <ChevronIcon direction="right" />,
+          day: DiaCalendarioPersonalizado,
+          leftArrowIcon: () => <IconoChevron direccion="left" />,
+          rightArrowIcon: () => <IconoChevron direccion="right" />,
         }}
         slotProps={{
           day: (ownerState) => ({
             citasPorFecha,
-            medsTieneEnFecha,
-            isMobile,
-            onOpenDay: openForDay,
+            tieneMedicamentosEnFecha,
+            esMovil,
+            alAbrirDia: abrirDia,
             day: ownerState.day,
             showDaysOutsideCurrentMonth: true,
             outsideCurrentMonth: ownerState.outsideCurrentMonth,
           }),
         }}
-        dayOfWeekFormatter={(day) =>
-            ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
-          }
+        dayOfWeekFormatter={(dia) =>
+          ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][dia.day()]
+        }
         sx={{
-          width: isMobile ? "100%" : "90%",
+          width: esMovil ? "100%" : "90%",
           "& .MuiDateCalendar-root": {
             width: "100%",
-            maxHeight: isMobile ? "15.75rem" : "16.5rem",
+            maxHeight: esMovil ? "15.75rem" : "16.5rem",
             overflow: "hidden",
           },
           "& .MuiDateCalendar-viewTransitionContainer": {
-            minHeight: isMobile ? "12.45rem" : "13.75rem",
-            maxHeight: isMobile ? "12.45rem" : "13.75rem",
+            minHeight: esMovil ? "12.45rem" : "13.75rem",
+            maxHeight: esMovil ? "12.45rem" : "13.75rem",
             overflow: "hidden",
           },
           "& .MuiDayCalendar-header": {
             display: "grid",
             gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
             columnGap: 0,
-            px: isMobile ? 0.15 : 0.35,
+            px: esMovil ? 0.15 : 0.35,
           },
           "& .MuiDayCalendar-weekDayLabel": {
             width: "100%",
             margin: 0,
             textAlign: "center",
-            fontSize: isMobile ? "0.76rem" : "0.9rem",
+            fontSize: esMovil ? "0.76rem" : "0.9rem",
           },
           "& .MuiDayCalendar-weekContainer": {
-            minHeight: isMobile ? "1.7rem" : "1.2rem",
+            minHeight: esMovil ? "1.7rem" : "1.2rem",
             width: "100%",
             justifyContent: "space-between",
             margin: 0,
           },
           "& .MuiPickersDay-root": {
-            height: isMobile ? "1.95rem" : "1.7rem",
-            width: isMobile ? "1.95rem" : "1.7rem",
-            minWidth: isMobile ? "1.95rem" : "1.7rem",
-            minHeight: isMobile ? "1.95rem" : "1.7rem",
+            height: esMovil ? "1.95rem" : "1.7rem",
+            width: esMovil ? "1.95rem" : "1.7rem",
+            minWidth: esMovil ? "1.95rem" : "1.7rem",
+            minHeight: esMovil ? "1.95rem" : "1.7rem",
             padding: 0,
-            margin: isMobile ? "0 auto" : "0px 13px",
+            margin: esMovil ? "0 auto" : "0px 13px",
             borderRadius: "50%",
             lineHeight: 1,
-            fontSize: isMobile ? "0.78rem" : "0.8rem",
+            fontSize: esMovil ? "0.78rem" : "0.8rem",
           },
-            "& .MuiTypography-root": {
-              fontSize: isMobile ? "0.82rem" : "0.9rem",
-              margin: isMobile ? 0 : "0px 8px",
-              textTransform:"capitalize"
-            },
+          "& .MuiTypography-root": {
+            fontSize: esMovil ? "0.82rem" : "0.9rem",
+            margin: esMovil ? 0 : "0px 8px",
+            textTransform: "capitalize",
+          },
           "& .MuiPickersCalendarHeader-label": {
-            fontSize: isMobile ? "0.95rem" : "1.1rem",
+            fontSize: esMovil ? "0.95rem" : "1.1rem",
             fontWeight: "bold",
-            textDecoration: "capitalize"
+            textDecoration: "capitalize",
           },
           "& .MuiPickersArrowSwitcher-root": {
             justifyContent: "space-between",
-            marginBottom: isMobile ? "0.15rem" : "0.5rem",
-            transform: isMobile ? "translateY(0.1rem)" : "translateY(0.25rem)",
+            marginBottom: esMovil ? "0.15rem" : "0.5rem",
+            transform: esMovil
+              ? "translateY(0.1rem)"
+              : "translateY(0.25rem)",
             "& button": {
-              color: BRAND_BLUE,
+              color: AZUL_MARCA,
             },
           },
           "& .MuiPickersArrowSwitcher-button": {
-            color: BRAND_BLUE,
-            width: isMobile ? "1.35rem" : "1.5rem",
-            height: isMobile ? "1.35rem" : "1.5rem",
-            minWidth: isMobile ? "1.35rem" : "1.5rem",
-            minHeight: isMobile ? "1.35rem" : "1.5rem",
+            color: AZUL_MARCA,
+            width: esMovil ? "1.35rem" : "1.5rem",
+            height: esMovil ? "1.35rem" : "1.5rem",
+            minWidth: esMovil ? "1.35rem" : "1.5rem",
+            minHeight: esMovil ? "1.35rem" : "1.5rem",
             padding: 0,
             display: "flex",
             alignItems: "center",
@@ -294,8 +297,8 @@ const CalendarioInicio = ({
               display: "none",
             },
             "& svg": {
-              width: isMobile ? "1.55rem" : "2rem",
-              height: isMobile ? "1.55rem" : "2rem",
+              width: esMovil ? "1.55rem" : "2rem",
+              height: esMovil ? "1.55rem" : "2rem",
               stroke: "#1976d2",
               margin: 0,
             },
@@ -328,22 +331,22 @@ const CalendarioInicio = ({
             transition: "none",
             animation: "none",
           },
-            "& .MuiYearCalendar-button": {
-                minHeight: "2.25rem",
-                height: "2.25rem",
-                padding: 0,
-                lineHeight: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                justifySelf: "center",
-                marginInline: "auto",
-                transition: "none",
-                animation: "none",
-                boxShadow: "none",
-                  "&:hover": {
-                    backgroundColor: "rgba(25, 118, 210, 0.08)",
-              },
+          "& .MuiYearCalendar-button": {
+            minHeight: "2.25rem",
+            height: "2.25rem",
+            padding: 0,
+            lineHeight: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            justifySelf: "center",
+            marginInline: "auto",
+            transition: "none",
+            animation: "none",
+            boxShadow: "none",
+            "&:hover": {
+              backgroundColor: "rgba(25, 118, 210, 0.08)",
+            },
             "&:focus": {
               boxShadow: "none",
             },
@@ -361,13 +364,13 @@ const CalendarioInicio = ({
             "&.Mui-focusVisible": {
               boxShadow: "none",
             },
-              "& .MuiTouchRipple-root": {
-                display: "none",
-              },
+            "& .MuiTouchRipple-root": {
+              display: "none",
             },
-            "& .MuiYearCalendar-root": {
-                width: "100%",
-              maxHeight: "13.75rem",
+          },
+          "& .MuiYearCalendar-root": {
+            width: "100%",
+            maxHeight: "13.75rem",
             overflowY: "auto",
             overflowX: "hidden",
             alignContent: "start",
@@ -381,7 +384,7 @@ const CalendarioInicio = ({
   return (
     <>
       {compact ? (
-        <Box sx={{ width: "90%" }}>{CalendarOnly}</Box>
+        <Box sx={{ width: "90%" }}>{calendario}</Box>
       ) : (
         <Box
           sx={{
@@ -389,7 +392,7 @@ const CalendarioInicio = ({
             bgcolor: "#F9FAFB",
             p: 2,
             width: "90%",
-            maxWidth: isMobile ? 360 : 520,
+            maxWidth: esMovil ? 360 : 520,
             mx: "auto",
           }}
         >
@@ -397,10 +400,10 @@ const CalendarioInicio = ({
             Calendario
           </Typography>
 
-          {CalendarOnly}
+          {calendario}
 
           <Typography variant="body2" sx={{ mt: 1, color: "#64748B" }}>
-            {isMobile
+            {esMovil
               ? "Toca un día para crear o revisar una cita o medicamento."
               : "Pasa el mouse para ver citas. Doble clic para abrir."}
           </Typography>
@@ -408,17 +411,16 @@ const CalendarioInicio = ({
       )}
 
       <ModalCitaMedica
-        open={openModal}
-        selectedDate={selectedDate}
+        open={modalAbierto}
+        selectedDate={fechaSeleccionada}
         onClose={() => {
-          setOpenModal(false);
+          setModalAbierto(false);
           onExternalClose?.();
         }}
-        onChangeDate={setSelectedDate}
+        onChangeDate={setFechaSeleccionada}
         citasPorFecha={citasPorFecha}
         setCitasPorFecha={setCitasPorFecha}
         focusSection={focusSection}
-        // ✅ nuevos: estado central (Inicio)
         medicamentos={medicamentos}
         setMedicamentos={setMedicamentos}
         selectedMedId={selectedMedId}
@@ -426,6 +428,4 @@ const CalendarioInicio = ({
       />
     </>
   );
-};
-
-export default CalendarioInicio;
+}

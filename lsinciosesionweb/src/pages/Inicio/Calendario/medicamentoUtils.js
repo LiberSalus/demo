@@ -61,17 +61,17 @@ export function isTakeDay(rule, dayKey) {
   const patron = rule.patron;
 
   // diaria temporal / diaria permanente (pero aquí igual hay endDate, así que es igual)
-  if (patron === "daily_temp" || patron === "daily_perm") return true;
+  if (patron === "diario_temporal" || patron === "diario_permanente") return true;
 
   // cada cierto número de días
-  if (patron === "every_n_days") {
+  if (patron === "cada_n_dias") {
     const n = Number(rule.everyNDays || 1);
     const diff = day.diff(start, "day");
     return diff % Math.max(n, 1) === 0;
   }
 
   // tomar con pausas (toma X días, descansa Y días, y repite)
-  if (patron === "with_pauses") {
+  if (patron === "con_pausas") {
     const take = Math.max(Number(rule.takeDays || 1), 1);
     const rest = Math.max(Number(rule.restDays || 0), 0);
     const cycle = take + rest;

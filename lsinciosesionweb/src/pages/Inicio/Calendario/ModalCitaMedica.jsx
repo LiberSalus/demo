@@ -1,4 +1,3 @@
-// ModalCitaMedica.jsx
 import React, { useMemo, useState, useEffect } from "react";
 import {
   Dialog,
@@ -11,13 +10,12 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
-import styles from './ModalCitaMedica.module.css'
+import styles from "./ModalCitaMedica.module.css";
 import PanelCalendarioCitas from "./PanelCalendarioCitas";
 import FormularioCitaMedica from "./FormularioCitaMedica";
 import FormularioMedicamento from "./FormularioMedicamento";
 import Confirmacion from "./Confirmacion";
 
-// ✅ NUEVO: asegurar ids únicos con UUID
 import { ensureId } from "@/utils/ensureId";
 
 const ModalCitaMedica = ({
@@ -28,88 +26,88 @@ const ModalCitaMedica = ({
   citasPorFecha,
   setCitasPorFecha,
   focusSection = "citas",
-
-  // ✅ estado CENTRAL (viene de Inicio)
   medicamentos = [],
   setMedicamentos = () => {},
   selectedMedId = null,
   setSelectedMedId = () => {},
 }) => {
-  const isMobile = useMediaQuery("(max-width:600px)");
-  const isStacked = useMediaQuery("(max-width:900px)");
+  const esMovil = useMediaQuery("(max-width:600px)");
+  const esApilado = useMediaQuery("(max-width:900px)");
 
   const fecha = selectedDate || dayjs();
-  const keyFechaActual = fecha.format("YYYY-MM-DD");
-  const citasDelDia = citasPorFecha?.[keyFechaActual] || [];
+  const claveFechaActual = fecha.format("YYYY-MM-DD");
+  const citasDelDia = citasPorFecha?.[claveFechaActual] || [];
 
-  const initialTab =
+  const pestanaInicial =
     focusSection === "medicamento" || focusSection === "medicamentos"
       ? "medicamento"
       : "cita";
 
-  const [tab, setTab] = useState(initialTab);
+  const [pestanaActiva, setPestanaActiva] = useState(pestanaInicial);
 
-  // ✅ si abres desde tarjeta (focusSection cambia), sincroniza tab
+  // Sincroniza la pestaña cuando el modal se abre desde una tarjeta externa.
   useEffect(() => {
-    setTab(
+    setPestanaActiva(
       focusSection === "medicamento" || focusSection === "medicamentos"
         ? "medicamento"
         : "cita"
     );
   }, [focusSection, open]);
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [tipoConfirm, setTipoConfirm] = useState("cita");
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+  const [tipoConfirmacion, setTipoConfirmacion] = useState("cita");
 
   const manejarGuardarCita = (datosCita) => {
-    const key = dayjs(datosCita.fecha).format("YYYY-MM-DD");
+    const claveFecha = dayjs(datosCita.fecha).format("YYYY-MM-DD");
 
-    // ✅ compat + ts + UUID
-    const citaToSave = ensureId({
+    const citaAGuardar = ensureId({
       ...datosCita,
       tipo: datosCita.tipo ?? datosCita.tipoCita,
       lugar: datosCita.lugar ?? datosCita.ubicacion,
       _ts: datosCita?._ts ?? Date.now(),
     });
 
-    setCitasPorFecha?.((prev) => {
-      const anteriores = prev?.[key] || [];
-      const next = [...anteriores, citaToSave];
+    setCitasPorFecha?.((citasPrevias) => {
+      const citasAnteriores = citasPrevias?.[claveFecha] || [];
+      const citasSiguientes = [...citasAnteriores, citaAGuardar];
 
-      // ✅ evitar duplicados por id
-      const unique = Array.from(new Map(next.map((c) => [c.id, c])).values());
+      const citasUnicas = Array.from(
+        new Map(citasSiguientes.map((cita) => [cita.id, cita])).values()
+      );
 
       return {
-        ...prev,
-        [key]: unique,
+        ...citasPrevias,
+        [claveFecha]: citasUnicas,
       };
     });
 
-    setTipoConfirm("cita");
-    setShowConfirm(true);
+    setTipoConfirmacion("cita");
+    setMostrarConfirmacion(true);
   };
 
-  const manejarGuardarMedicamento = (rule) => {
-    // ✅ asegura UUID (por si el form no lo trae)
-    const ruleToSave = ensureId(rule);
+  const manejarGuardarMedicamento = (regla) => {
+    const reglaAGuardar = ensureId(regla);
 
-    setMedicamentos?.((prev) => [...(prev || []), ruleToSave]);
-    setSelectedMedId?.(ruleToSave.id);
+    setMedicamentos?.((medicamentosPrevios) => [
+      ...(medicamentosPrevios || []),
+      reglaAGuardar,
+    ]);
+    setSelectedMedId?.(reglaAGuardar.id);
 
-    setTipoConfirm("medicamento");
-    setShowConfirm(true);
+    setTipoConfirmacion("medicamento");
+    setMostrarConfirmacion(true);
   };
 
-  const handleChangeDate = (newDate) => onChangeDate?.(newDate);
+  const manejarCambioFecha = (nuevaFecha) => onChangeDate?.(nuevaFecha);
 
-  const computedFocusSection = useMemo(() => {
-    if (tab === "medicamento") return "medicamento";
+  const seccionEnfocada = useMemo(() => {
+    if (pestanaActiva === "medicamento") return "medicamento";
     return "citas";
-  }, [tab]);
+  }, [pestanaActiva]);
 
-  const paperWidth = isMobile
+  const anchoDialogo = esMovil
     ? "100%"
-    : isStacked
+    : esApilado
     ? "min(760px, 96vw)"
     : "min(1100px, 96vw)";
 
@@ -117,7 +115,7 @@ const ModalCitaMedica = ({
     <Dialog
       open={open}
       onClose={onClose}
-      fullScreen={isMobile}
+      fullScreen={esMovil}
       maxWidth={false}
       sx={{
         minWidth: 0,
@@ -126,11 +124,10 @@ const ModalCitaMedica = ({
       fullWidth
       PaperProps={{
         sx: {
-          width: paperWidth,
-          borderRadius: isMobile ? 0 : 3,
+          width: anchoDialogo,
+          borderRadius: esMovil ? 0 : 3,
           overflow: "hidden",
           bgcolor: "#F7F7FF",
-          
         },
       }}
     >
@@ -147,7 +144,7 @@ const ModalCitaMedica = ({
           /* bgcolor: "#F7F7FF", */
           backdropFilter: "blur(10px)",
 
-          pt: isMobile ? "calc(env(safe-area-inset-top) + 12px)" : 1.5,
+          pt: esMovil ? "calc(env(safe-area-inset-top) + 12px)" : 1.5,
         }}
       >
         <Typography
@@ -155,10 +152,10 @@ const ModalCitaMedica = ({
           sx={{
             fontFamily: "var(--font-inter)",
             fontWeight: "var(--peso700)",
-            fontSize: isMobile ? "1.15rem" : "1.5rem",
+            fontSize: esMovil ? "1.15rem" : "1.5rem",
           }}
         >
-          {tab === "medicamento" ? "Medicamentos" : "Cita médica"}
+          {pestanaActiva === "medicamento" ? "Medicamentos" : "Cita médica"}
         </Typography>
 
         <IconButton
@@ -168,7 +165,7 @@ const ModalCitaMedica = ({
             transform: "translate(-5px, -5px)",
             position: "absolute",
             right: 12,
-            top: isMobile ? "calc(env(safe-area-inset-top) + 8px)" : 12,
+            top: esMovil ? "calc(env(safe-area-inset-top) + 8px)" : 12,
           }}
         >
           <CloseIcon />
@@ -179,76 +176,71 @@ const ModalCitaMedica = ({
         dividers={false}
         sx={{
           position: "relative",
-          p: isMobile ? 1 : 2.25,
+          p: esMovil ? 1 : 2.25,
           overflowY: "auto",
-          maxHeight: isMobile
+          maxHeight: esMovil
             ? "calc(100dvh - (env(safe-area-inset-top) + 64px))"
             : "90dvh",
-          pb: isMobile ? "calc(env(safe-area-inset-bottom) + 16px)" : 3,
-          background: "#F7F7FF"
+          pb: esMovil ? "calc(env(safe-area-inset-bottom) + 16px)" : 3,
+          background: "#F7F7FF",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            flexDirection: isStacked ? "column" : "row",
-            gap: isMobile ? 2 : 3,
+            flexDirection: esApilado ? "column" : "row",
+            gap: esMovil ? 2 : 3,
             alignItems: "stretch",
-            pointerEvents: showConfirm ? "none" : "auto",
+            pointerEvents: mostrarConfirmacion ? "none" : "auto",
           }}
         >
-          {/* Panel */}
           <Box
             sx={{
-              flex: isStacked ? "0 0 auto" : "0 0 35.18rem",
-              margin: isStacked ? "0" : "0.5rem 0 auto 1rem",
+              flex: esApilado ? "0 0 auto" : "0 0 35.18rem",
+              margin: esApilado ? "0" : "0.5rem 0 auto 1rem",
               width: "100%",
               maxWidth: "37.18rem",
               borderRadius: 4,
               bgcolor: "white",
-              p: isMobile ? 0.9 : 2,
+              p: esMovil ? 0.9 : 2,
               border: "1px solid #ACCCEB",
             }}
           >
             <PanelCalendarioCitas
               selectedDate={fecha}
-              onChangeDate={handleChangeDate}
+              onChangeDate={manejarCambioFecha}
               citasPorFecha={citasPorFecha}
-              isMobile={isMobile}
-              tab={tab}
-              onTabChange={setTab}
-              focusSection={computedFocusSection}
-              // ✅ viene de Inicio
+              isMobile={esMovil}
+              tab={pestanaActiva}
+              onTabChange={setPestanaActiva}
+              focusSection={seccionEnfocada}
               medicamentos={medicamentos}
               selectedMedId={selectedMedId}
               onSelectMedId={setSelectedMedId}
             />
           </Box>
 
-          {/* Formulario */}
           <Box
             className={styles.cntFormulario}
             sx={{
               flex: 1,
               minWidth: 0,
-              width: isMobile ? "100%" : "27.31rem",
-              maxWidth: isMobile ? "100%" : "27.31rem",
-              minHeight: isMobile ? "auto" : "42.375rem",
+              width: esMovil ? "100%" : "27.31rem",
+              maxWidth: esMovil ? "100%" : "27.31rem",
+              minHeight: esMovil ? "auto" : "42.375rem",
               borderRadius: 3,
               bgcolor: "white",
-              /* boxShadow: "0 8px 30px rgba(15,23,42,0.08)", */
-              p: isMobile ? 0.9 : 2,
+              p: esMovil ? 0.9 : 2,
               background: "transparent",
-              margin: "0 auto"
-              
+              margin: "0 auto",
             }}
           >
-            {tab === "medicamento" ? (
+            {pestanaActiva === "medicamento" ? (
               <FormularioMedicamento
-              className={styles.cntFormulario}
-              selectedDate={fecha}
-              onGuardar={manejarGuardarMedicamento}
-              isMobile={isMobile}
+                className={styles.cntFormulario}
+                selectedDate={fecha}
+                onGuardar={manejarGuardarMedicamento}
+                isMobile={esMovil}
               />
             ) : (
               <FormularioCitaMedica
@@ -256,14 +248,13 @@ const ModalCitaMedica = ({
                 selectedDate={fecha}
                 onGuardar={manejarGuardarCita}
                 citasDelDia={citasDelDia}
-                isMobile={isMobile}
+                isMobile={esMovil}
               />
             )}
           </Box>
         </Box>
 
-        {/* Confirm */}
-        {showConfirm && (
+        {mostrarConfirmacion && (
           <Box
             sx={{
               position: "fixed",
@@ -281,8 +272,8 @@ const ModalCitaMedica = ({
             }}
           >
             <Confirmacion
-              tipo={tipoConfirm}
-              onClose={() => setShowConfirm(false)}
+              tipo={tipoConfirmacion}
+              onClose={() => setMostrarConfirmacion(false)}
             />
           </Box>
         )}

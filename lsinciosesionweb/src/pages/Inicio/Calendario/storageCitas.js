@@ -13,14 +13,16 @@ export const LS_CITAS_KEY = "ls_citas_por_fecha";
  * - Asegura que cada cita tenga id (UUID)
  * - Asegura que el valor por fecha siempre sea array
  */
-export function normalizeCitasPorFecha(map = {}) {
-  const out = {};
+export function normalizeCitasPorFecha(mapa = {}) {
+  const resultado = {};
 
-  for (const [dateKey, list] of Object.entries(map || {})) {
-    out[dateKey] = Array.isArray(list) ? list.map((c) => ensureId(c)) : [];
+  for (const [claveFecha, lista] of Object.entries(mapa || {})) {
+    resultado[claveFecha] = Array.isArray(lista)
+      ? lista.map((cita) => ensureId(cita))
+      : [];
   }
 
-  return out;
+  return resultado;
 }
 
 /**
@@ -29,11 +31,11 @@ export function normalizeCitasPorFecha(map = {}) {
  */
 export function loadCitasPorFecha(fallback = {}) {
   try {
-    const raw = localStorage.getItem(LS_CITAS_KEY);
-    if (!raw) return normalizeCitasPorFecha(fallback);
+    const citasGuardadas = localStorage.getItem(LS_CITAS_KEY);
+    if (!citasGuardadas) return normalizeCitasPorFecha(fallback);
 
-    const parsed = JSON.parse(raw);
-    return normalizeCitasPorFecha(parsed);
+    const citasParseadas = JSON.parse(citasGuardadas);
+    return normalizeCitasPorFecha(citasParseadas);
   } catch {
     return normalizeCitasPorFecha(fallback);
   }
@@ -42,9 +44,9 @@ export function loadCitasPorFecha(fallback = {}) {
 /**
  * Guarda el mapa de citas en localStorage
  */
-export function saveCitasPorFecha(map = {}) {
+export function saveCitasPorFecha(mapa = {}) {
   try {
-    localStorage.setItem(LS_CITAS_KEY, JSON.stringify(map));
+    localStorage.setItem(LS_CITAS_KEY, JSON.stringify(mapa));
   } catch {
     null;
   }

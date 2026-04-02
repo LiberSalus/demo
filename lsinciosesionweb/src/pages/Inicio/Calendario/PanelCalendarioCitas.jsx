@@ -55,25 +55,25 @@ const PanelCalendarioCitas = ({
 
   focusSection = "citas",
 }) => {
-  const [internalTab, setInternalTab] = useState("cita");
-  const tab = tabProp ?? internalTab;
+  const [pestanaInterna, setPestanaInterna] = useState("cita");
+  const tab = tabProp ?? pestanaInterna;
 
-  const [internalDate, setInternalDate] = useState(dayjs("2025-11-19"));
-  const selectedDate = selectedDateProp || internalDate;
+  const [fechaInterna, setFechaInterna] = useState(dayjs("2025-11-19"));
+  const selectedDate = selectedDateProp || fechaInterna;
 
-  const [internalSelectedMedId, setInternalSelectedMedId] = useState(null);
-  const selectedMedId = selectedMedIdProp ?? internalSelectedMedId;
+  const [idMedicamentoInterno, setIdMedicamentoInterno] = useState(null);
+  const selectedMedId = selectedMedIdProp ?? idMedicamentoInterno;
 
-  const citasHeaderRef = useRef(null);
+  const refEncabezadoCitas = useRef(null);
 
-  const handleTabChange = (_e, value) => {
+  const manejarCambioPestana = (_e, value) => {
     if (onTabChange) onTabChange(value);
-    else setInternalTab(value);
+    else setPestanaInterna(value);
   };
 
-  const handleDateChange = (newValue) => {
+  const manejarCambioFecha = (newValue) => {
     if (onChangeDate) onChangeDate(newValue);
-    else setInternalDate(newValue);
+    else setFechaInterna(newValue);
   };
 
   const selectedKey = useMemo(
@@ -83,13 +83,13 @@ const PanelCalendarioCitas = ({
 
   const citasDelDia = citasPorFecha[selectedKey] || [];
 
-  // scroll hacia lista (citas) cuando se abre en esa sección
+  // Cuando el modal abre en la pestaña de citas, baja al detalle del día.
   useEffect(() => {
     if (focusSection !== "citas") return;
     if (tab !== "cita") return;
 
     const t = setTimeout(() => {
-      citasHeaderRef.current?.scrollIntoView({
+      refEncabezadoCitas.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -98,19 +98,17 @@ const PanelCalendarioCitas = ({
     return () => clearTimeout(t);
   }, [focusSection, tab, selectedKey]);
 
-  // --- Medicamentos del día (tratamientos que tienen toma en selectedKey)
-  const medsDelDia = useMemo(() => {
+  const medicamentosDelDia = useMemo(() => {
     return (medicamentos || []).filter((r) => isTakeDay(r, selectedKey));
   }, [medicamentos, selectedKey]);
 
-  const selectedMedRule = useMemo(() => {
+  const reglaMedicamentoSeleccionado = useMemo(() => {
     const sel = normId(selectedMedId);
     if (!sel) return null;
 
     return (medicamentos || []).find((r) => normId(r.id) === sel) || null;
   }, [medicamentos, selectedMedId]);
 
-  // --- Pintado del calendario del modal (solo en tab medicamento)
   const monthStartKey = useMemo(
     () => selectedDate.startOf("month").format("YYYY-MM-DD"),
     [selectedDate],
@@ -120,30 +118,38 @@ const PanelCalendarioCitas = ({
     [selectedDate],
   );
 
-  const paint = useMemo(() => {
+  const pintadoCalendario = useMemo(() => {
     if (tab !== "medicamento") return null;
-    if (!selectedMedId) return null; // ✅ NUEVO: hasta que haya selección
-    if (!selectedMedRule) return null;
-    return buildCalendarPaint(selectedMedRule, monthStartKey, monthEndKey);
-  }, [tab, selectedMedId, selectedMedRule, monthStartKey, monthEndKey]);
+    if (!selectedMedId) return null;
+    if (!reglaMedicamentoSeleccionado) return null;
+    return buildCalendarPaint(
+      reglaMedicamentoSeleccionado,
+      monthStartKey,
+      monthEndKey
+    );
+  }, [
+    tab,
+    selectedMedId,
+    reglaMedicamentoSeleccionado,
+    monthStartKey,
+    monthEndKey,
+  ]);
 
-  // Citas: puntito en el calendario del modal
   const tieneCitas = (day) => {
     const key = day.format("YYYY-MM-DD");
-    const arr = citasPorFecha[key] || [];
-    return arr.length > 0;
+    const citas = citasPorFecha[key] || [];
+    return citas.length > 0;
   };
 
-  const handleSelectMed = (id) => {
-    const next = id;
+  const manejarSeleccionMedicamento = (id) => {
     if (onSelectMedId) onSelectMedId(id);
-    else setInternalSelectedMedId(id);
+    else setIdMedicamentoInterno(id);
   };
 
-  const renderHorasResumen = (rule) => {
-    const times = buildDailyTimes(rule.frecuenciaHoras, rule.horaInicio);
-    if (times.length <= 3) return times.join(", ");
-    return `${times.slice(0, 2).join(", ")} +${times.length - 2} más`;
+  const renderizarResumenHoras = (regla) => {
+    const horas = buildDailyTimes(regla.frecuenciaHoras, regla.horaInicio);
+    if (horas.length <= 3) return horas.join(", ");
+    return `${horas.slice(0, 2).join(", ")} +${horas.length - 2} más`;
   };
 
 
@@ -181,7 +187,7 @@ const PanelCalendarioCitas = ({
       >
         <Tabs
           value={tab}
-          onChange={handleTabChange}
+          onChange={manejarCambioPestana}
           TabIndicatorProps={{ style: { display: "none" } }}
           sx={{
             minHeight: 0,
@@ -219,7 +225,7 @@ const PanelCalendarioCitas = ({
         <DateCalendar
           className={styles.calendario}
           value={selectedDate}
-          onChange={handleDateChange}
+          onChange={manejarCambioFecha}
           showDaysOutsideCurrentMonth
           dayOfWeekFormatter={(day) =>
             ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][day.day()]
@@ -273,39 +279,49 @@ const PanelCalendarioCitas = ({
               const prevKey = day.subtract(1, "day").format("YYYY-MM-DD");
               const nextKey = day.add(1, "day").format("YYYY-MM-DD");
 
-              // --- Citas (puntito)
               const hayCitas = tieneCitas(day);
 
-              // --- Medicamentos (sombreado + círculo según tratamiento seleccionado)
               const inShade =
                 tab === "medicamento" &&
-                paint &&
-                key >= paint.shadeStart &&
-                key <= paint.shadeEnd;
+                pintadoCalendario &&
+                key >= pintadoCalendario.shadeStart &&
+                key <= pintadoCalendario.shadeEnd;
 
               const isCircle =
-                tab === "medicamento" && paint && paint.takeDays?.has(key);
+                tab === "medicamento" &&
+                pintadoCalendario &&
+                pintadoCalendario.takeDays?.has(key);
               const usesRangeTrackPattern =
                 tab === "medicamento" &&
-                ["with_pauses", "every_n_days"].includes(selectedMedRule?.patron);
+                ["con_pausas", "cada_n_dias"].includes(
+                  reglaMedicamentoSeleccionado?.patron
+                );
               const hasPrevInPeriod =
                 usesRangeTrackPattern &&
-                paint &&
-                prevKey >= paint.shadeStart &&
-                prevKey <= paint.shadeEnd;
+                pintadoCalendario &&
+                prevKey >= pintadoCalendario.shadeStart &&
+                prevKey <= pintadoCalendario.shadeEnd;
               const hasNextInPeriod =
                 usesRangeTrackPattern &&
-                paint &&
-                nextKey >= paint.shadeStart &&
-                nextKey <= paint.shadeEnd;
+                pintadoCalendario &&
+                nextKey >= pintadoCalendario.shadeStart &&
+                nextKey <= pintadoCalendario.shadeEnd;
               const hasPrevTake =
-                usesRangeTrackPattern && paint && paint.takeDays?.has(prevKey);
+                usesRangeTrackPattern &&
+                pintadoCalendario &&
+                pintadoCalendario.takeDays?.has(prevKey);
               const hasNextTake =
-                usesRangeTrackPattern && paint && paint.takeDays?.has(nextKey);
+                usesRangeTrackPattern &&
+                pintadoCalendario &&
+                pintadoCalendario.takeDays?.has(nextKey);
               const isPeriodStart =
-                usesRangeTrackPattern && paint && key === paint.shadeStart;
+                usesRangeTrackPattern &&
+                pintadoCalendario &&
+                key === pintadoCalendario.shadeStart;
               const isPeriodEnd =
-                usesRangeTrackPattern && paint && key === paint.shadeEnd;
+                usesRangeTrackPattern &&
+                pintadoCalendario &&
+                key === pintadoCalendario.shadeEnd;
               const isInnerTakeDay =
                 usesRangeTrackPattern && isCircle && !isPeriodStart && !isPeriodEnd;
               const rangeFillLeft =
@@ -313,7 +329,8 @@ const PanelCalendarioCitas = ({
               const rangeFillRight =
                 hasNextInPeriod ? -14 : "49%";
 
-              // Estilos combinados
+              // Esta capa mezcla el indicador de citas con el patrón visual
+              // del tratamiento seleccionado dentro del calendario del modal.
               const sx = {
                 ...(hayCitas && tab === "cita"
                   ? {
@@ -442,7 +459,7 @@ const PanelCalendarioCitas = ({
         {tab === "cita" ? (
           <>
             <Box
-              ref={citasHeaderRef}
+              ref={refEncabezadoCitas}
               sx={{
                 flex: 1,
                 display: "flex",
@@ -579,7 +596,7 @@ const PanelCalendarioCitas = ({
                 alignItems: "stretch",
               }}
             >
-              {medsDelDia.length > 0 ? (
+              {medicamentosDelDia.length > 0 ? (
                 <Card elevation={0} className={styles.agendaCard}>
                   <Box className={styles.agendaHeader}>
                     <span className={styles.agendaDay}>{agendaDay}</span>
@@ -589,18 +606,12 @@ const PanelCalendarioCitas = ({
                   </Box>
 
                   <Box className={styles.agendaScroll}>
-                    {medsDelDia.map((m) => {
-                      const selected = normId(m.id) === normId(selectedMedId);
-                      const times = buildDailyTimes(
-                        m.frecuenciaHoras,
-                        m.horaInicio,
-                      );
-
+                    {medicamentosDelDia.map((m) => {
                       return (
                         <Box
                           key={m.id}
                           className={styles.agendaEntry}
-                          onClick={() => handleSelectMed(m.id)}
+                          onClick={() => manejarSeleccionMedicamento(m.id)}
                           sx={{
                             cursor: "pointer",
 
@@ -637,7 +648,7 @@ const PanelCalendarioCitas = ({
                               className={styles.agendaLineAccent}
                               sx={{ fontSize: "inherit" }}
                             >
-                              {renderHorasResumen(m)}
+                              {renderizarResumenHoras(m)}
                             </Typography>
                           </Box>
 
@@ -652,12 +663,6 @@ const PanelCalendarioCitas = ({
                               </Typography>
                             </Box>
                           )}
-
-                          {/* <Typography className={styles.agendaHint}>
-                            {selected
-                              ? "Seleccionado para ver calendario"
-                              : "Toca para ver calendario"}
-                          </Typography> */}
                         </Box>
                       );
                     })}
