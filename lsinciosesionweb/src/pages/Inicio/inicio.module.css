@@ -319,6 +319,8 @@
     margin: 0rem auto;
     gap: 1rem;
   }
+
+  
 }
 
 @media (max-width: 968px) {
@@ -413,11 +415,11 @@
     z-index: 2;
   }
 
-  .cntMono .cuadro {
+  /* .cntMono .cuadro {
     width: 7.2rem;
     top: 2.6rem;
     left: 2rem;
-  }
+  } */
 
   .cntMono .mancha {
     width: 16.5rem;
