@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/config/routes";
 import styles from "./login.module.css";
-import logo from "./Logo.svg";
+import logo from "./icoLibersalus.svg";
 import google from './google.svg'
 import eyeIcon from "@/images/Icons _ eye-empty.png";
 import Derechos from "@/components/Derechos/Derechos";
