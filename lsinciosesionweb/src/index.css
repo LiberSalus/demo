@@ -59,11 +59,7 @@ button {
 button:hover {
   /* border-color: #646cff; */
 }
-button:focus,
-button:focus-visible {
-  outline: 2px auto #007CBA;
-  color: #007CBA;
-}
+nop
 
 @media (prefers-color-scheme: light) {
   :root {
