@@ -8,6 +8,9 @@
   padding: 0 1rem 1.5rem;
   box-sizing: border-box;
   overflow-x: clip;
+  position: relative;
+  border: 1px dashed purple;
+  
 }
 
 .seccSuperior {

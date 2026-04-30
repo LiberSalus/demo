@@ -1,0 +1,26 @@
+.Sos {
+  position: sticky;
+  top: 75%;
+  margin-left: auto;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.botonSos {
+  width: 90%;
+  background-color: #C72611;
+  height: 90%;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: bold;
+  color: white;
+  font-size: 1.75rem;
+  border: 3px solid white;
+  line-height: 0;
+  box-shadow: 0px 4px 15px 0px rgba(0,0,0,.25) ;
+}

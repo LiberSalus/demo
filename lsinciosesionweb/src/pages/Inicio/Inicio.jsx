@@ -13,6 +13,7 @@ import TarjetaLogro from "@/components/TarjetaLogro/TarjetaLogro";
 import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
 import AgendaInicio from "./Calendario/AgendaInicio";
+import Sos from "@/components/Sos/Sos";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
@@ -60,6 +61,7 @@ export default function Inicio() {
 
   return (
     <div className={styles.wrap}>
+      <Sos/>
       <div className={styles.seccSuperior}>
         <div className={styles.cntMono}>
           <h2 className={styles.saludo}>Hola, {nombreCorto}</h2>
