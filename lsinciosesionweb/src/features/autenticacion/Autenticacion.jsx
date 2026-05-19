@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ROUTES } from '@/config/routes'
+import { iniciarSesion } from '@/services/auth'
 import ContenedorAutenticacion from './componentes/ContenedorAutenticacion'
 import { configuracionInicioSesion } from './configuracion/flujoAutenticacion'
 import VistaInicioSesion from './vistas/VistaInicioSesion'
@@ -19,6 +22,10 @@ function validarInicioSesion({ correoElectronico, contrasena }) {
 }
 
 function Autenticacion() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const rutaDestino = location.state?.from?.pathname || ROUTES.INICIO
+
   const [datosInicioSesion, setDatosInicioSesion] = useState(datosInicioSesionIniciales)
   const [estadoInicioSesion, setEstadoInicioSesion] = useState({
     cargando: false,
@@ -38,7 +45,7 @@ function Autenticacion() {
     }))
   }
 
-  const enviarInicioSesion = (evento) => {
+  const enviarInicioSesion = async (evento) => {
     evento.preventDefault()
 
     const errorValidacion = validarInicioSesion(datosInicioSesion)
@@ -48,11 +55,21 @@ function Autenticacion() {
       return
     }
 
-    // Fase 1 solo valida y pinta la UI; la conexion real se integra en Fase 2.
-    setEstadoInicioSesion({
-      cargando: false,
-      error: 'Login nuevo listo visualmente. Falta conectar sesion en la siguiente fase.',
-    })
+    setEstadoInicioSesion({ cargando: true, error: '' })
+
+    try {
+      await iniciarSesion({
+        correo: datosInicioSesion.correoElectronico,
+        contrasena: datosInicioSesion.contrasena,
+      })
+
+      navigate(rutaDestino, { replace: true })
+    } catch (error) {
+      setEstadoInicioSesion({
+        cargando: false,
+        error: error.message || 'No fue posible iniciar sesión. Inténtalo de nuevo.',
+      })
+    }
   }
 
   const cambiarARegistro = () => {

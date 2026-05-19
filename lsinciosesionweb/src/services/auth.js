@@ -9,6 +9,16 @@ const PARAM_TOKEN_DEV = "dev_access_token";
 const PARAM_CORREO_DEV = "dev_email";
 const PARAM_SESION_LISTA_DEV = "dev_auth_ready";
 
+function obtenerMensajeError(error) {
+  const detalle = error?.response?.data?.detail;
+  const mensaje = error?.response?.data?.message;
+
+  if (typeof detalle === "string") return detalle;
+  if (typeof mensaje === "string") return mensaje;
+
+  return error?.message || "No fue posible completar la solicitud.";
+}
+
 function normalizarToken(valor) {
   if (typeof valor !== "string") return "";
 
@@ -88,6 +98,42 @@ function crearTokenFalso({ usuario, rol }) {
   return `${aBase64(encabezado)}.${aBase64(payload)}.`;
 }
 
+function obtenerNombreUsuario(usuario = {}, correo = "") {
+  if (usuario.first_name && usuario.last_name) {
+    return `${usuario.first_name} ${usuario.last_name}`;
+  }
+
+  return usuario.nombre || usuario.name || usuario.email || usuario.correo || correo || "Usuario";
+}
+
+function guardarSesionAutenticada({ respuesta, correo }) {
+  const token = obtenerTokenDeRespuesta(respuesta);
+
+  if (!token) {
+    throw new Error("El servidor no devolvió un token de acceso.");
+  }
+
+  const usuario =
+    respuesta && typeof respuesta === "object"
+      ? respuesta.user || respuesta.usuario || {}
+      : {};
+
+  setAuthToken(token);
+  localStorage.setItem(CLAVE_SESION_LISTA, "1");
+  localStorage.setItem(
+    CLAVE_PERFIL_MINIMO,
+    JSON.stringify({
+      nombre: obtenerNombreUsuario(usuario, correo),
+      email: usuario.email || usuario.correo || correo || "",
+      first_name: usuario.first_name,
+      last_name: usuario.last_name,
+      sexo: usuario.sexo || usuario.genero || usuario.gender,
+    })
+  );
+
+  window.dispatchEvent(new CustomEvent("perfil:update"));
+}
+
 export function estaAutenticado() {
   return Boolean(getAuthToken() || localStorage.getItem(CLAVE_SESION_LISTA));
 }
@@ -134,38 +180,52 @@ export function iniciarSesionDevDesdeUrl() {
   return true;
 }
 
-export async function iniciarSesion({ username, password, role = "paciente" }) {
+export async function iniciarSesion({
+  username,
+  password,
+  role = "paciente",
+  correo,
+  contrasena,
+  rol,
+}) {
+  const correoNormalizado = String(correo || username || "").trim();
+  const contrasenaNormalizada = contrasena || password || "";
+  const rolNormalizado = rol || role;
+
   if (USAR_MOCK_AUTH) {
-    if (!username || !password) throw new Error("Credenciales requeridas");
+    if (!correoNormalizado || !contrasenaNormalizada) {
+      throw new Error("Credenciales requeridas");
+    }
 
-    const access_token = crearTokenFalso({ usuario: username, rol: role });
-    setAuthToken(access_token);
-
-    return {
-      access_token,
+    const respuesta = {
+      // Mock solo para desarrollo: permite probar rutas protegidas sin backend.
+      // Debe permanecer apagado en ambientes reales con VITE_MOCK_AUTH=0.
+      access_token: crearTokenFalso({ usuario: correoNormalizado, rol: rolNormalizado }),
       token_type: "bearer",
       user: {
         first_name: "Dev",
         last_name: "User",
-        email: username,
+        email: correoNormalizado,
       },
     };
+
+    guardarSesionAutenticada({ respuesta, correo: correoNormalizado });
+    return respuesta;
   }
 
-  const body = new URLSearchParams();
-  body.set("grant_type", "password");
-  body.set("username", username);
-  body.set("password", password);
-  body.set("scope", role);
+  try {
+    const { data } = await api.post("sesion/autenticacion/mediciones/iniciar-sesion", {
+      identificador: correoNormalizado,
+      tipo_identificador: "correo",
+      contrasena: contrasenaNormalizada,
+    });
 
-  const { data } = await api.post("sesion/auth/token", body, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  });
+    guardarSesionAutenticada({ respuesta: data, correo: correoNormalizado });
 
-  const token = obtenerTokenDeRespuesta(data);
-  if (token) setAuthToken(token);
-
-  return data;
+    return data;
+  } catch (error) {
+    throw new Error(obtenerMensajeError(error));
+  }
 }
 
 export const decodificarToken = () =>

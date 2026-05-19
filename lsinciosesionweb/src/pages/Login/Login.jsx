@@ -45,27 +45,11 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const data = await iniciarSesion({
+      await iniciarSesion({
         username: form.email.trim(),
         password: form.password,
         role: form.role,
       });
-
-      const user = data?.user || {};
-      const fullName =
-        (user.first_name && user.last_name && `${user.first_name} ${user.last_name}`) ||
-        user.nombre ||
-        "Usuario";
-
-      localStorage.setItem("auth_ready", "1");
-      localStorage.setItem(
-        "perfil_min",
-        JSON.stringify({
-          nombre: fullName,
-          email: user.email || "",
-          // avatarUrl: user.avatar || null, // cuando exista
-        })
-      );
 
       // Notifica a la TarjetaUsuario para que se refresque
       window.dispatchEvent(new CustomEvent("perfil:update"));
