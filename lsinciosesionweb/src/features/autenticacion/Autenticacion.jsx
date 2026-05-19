@@ -4,6 +4,9 @@ import { ROUTES } from '@/config/routes'
 import { iniciarSesion } from '@/services/auth'
 import {
   enviarCodigoCorreo,
+  buscarPreregistroPorCorreo,
+  guardarCurp,
+  guardarDireccion,
   reenviarCodigo,
   registrarUsuario,
   validarCodigoCorreo,
@@ -22,11 +25,34 @@ const datosInicioSesionIniciales = {
 }
 
 const estadoInicialPreregistro = {
+  idPreregistro: null,
   correo: '',
   telefono: '',
   codeTelefono: '+52',
   contrasena: '',
   confirmarContrasena: '',
+  datosPersonales: {
+    curp: '',
+    nombre: '',
+    apellidoPaterno: '',
+    apellidoMaterno: '',
+    fechaNacimiento: '',
+    sexo: '',
+    nacionalidad: 'MEX',
+    estadoNacimiento: '',
+    abrEntidad: '',
+  },
+  domicilio: {
+    codigoPostal: '',
+    estado: '',
+    municipio: '',
+    ciudad: '',
+    colonia: '',
+    calle: '',
+    numeroExterior: '',
+    numeroInterior: '',
+    referencia: '',
+  },
 }
 
 function validarInicioSesion({ correoElectronico, contrasena }) {
@@ -37,6 +63,35 @@ function validarInicioSesion({ correoElectronico, contrasena }) {
   if (!contrasena) return 'La contraseña es obligatoria.'
 
   return ''
+}
+
+function buscarIdEnRespuesta(valor) {
+  if (!valor || typeof valor !== 'object') return null
+
+  // El backend puede envolver el identificador en distintas llaves segun el endpoint.
+  const posiblesLlaves = ['id', 'id_user', 'idUser', 'id_preregistro', 'idPreregistro']
+
+  for (const llave of posiblesLlaves) {
+    const id = Number(valor[llave])
+    if (id > 0) return id
+  }
+
+  for (const item of Object.values(valor)) {
+    const id = buscarIdEnRespuesta(item)
+    if (id) return id
+  }
+
+  return null
+}
+
+function convertirFechaIsoADiaMesAnio(fecha) {
+  const coincidencia = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(fecha || '').trim())
+
+  if (!coincidencia) return fecha
+
+  const [, anio, mes, dia] = coincidencia
+
+  return `${dia}/${mes}/${anio}`
 }
 
 function Autenticacion() {
@@ -120,6 +175,26 @@ function Autenticacion() {
     }))
   }
 
+  const actualizarDatosPersonales = (parcial) => {
+    setDatosPreregistro((estadoActual) => ({
+      ...estadoActual,
+      datosPersonales: {
+        ...estadoActual.datosPersonales,
+        ...parcial,
+      },
+    }))
+  }
+
+  const actualizarDomicilio = (parcial) => {
+    setDatosPreregistro((estadoActual) => ({
+      ...estadoActual,
+      domicilio: {
+        ...estadoActual.domicilio,
+        ...parcial,
+      },
+    }))
+  }
+
   const limpiarMensajesPreregistro = () => {
     setEstadoPreregistro((estadoActual) => ({
       ...estadoActual,
@@ -147,6 +222,13 @@ function Autenticacion() {
     }
   }
 
+  const irAPasoRegistro = (paso) => {
+    if (pasosRegistro[paso]) {
+      limpiarMensajesPreregistro()
+      setPasoRegistroActual(paso)
+    }
+  }
+
   const enviarCodigoPorCorreo = async () => {
     setEstadoPreregistro({ cargando: true, error: '', exito: '' })
 
@@ -171,17 +253,134 @@ function Autenticacion() {
         identificador: datosPreregistro.correo,
         codigo,
       })
-      await registrarUsuario({
+      const respuestaRegistro = await registrarUsuario({
         rol: 1,
         correo: datosPreregistro.correo,
         telefono: datosPreregistro.telefono,
         codeTelefono: datosPreregistro.codeTelefono,
         contrasena: datosPreregistro.contrasena,
       })
+      const idPreregistro = buscarIdEnRespuesta(respuestaRegistro)
+
+      if (idPreregistro) {
+        actualizarDatosPreregistro({ idPreregistro })
+      }
+
       setEstadoPreregistro({
         cargando: false,
         error: '',
         exito: 'Tu correo quedó validado y la cuenta fue registrada.',
+      })
+      avanzarPasoRegistro()
+    } catch (error) {
+      establecerErrorPreregistro(error.message)
+    }
+  }
+
+  const obtenerIdPreregistro = async () => {
+    if (Number(datosPreregistro.idPreregistro) > 0) {
+      return Number(datosPreregistro.idPreregistro)
+    }
+
+    // Si registro no regresa id, se consulta por correo antes de guardar CURP/domicilio.
+    const respuesta = await buscarPreregistroPorCorreo(datosPreregistro.correo)
+    const idPreregistro = buscarIdEnRespuesta(respuesta)
+
+    if (!idPreregistro) {
+      throw new Error('No pudimos obtener el identificador del preregistro.')
+    }
+
+    actualizarDatosPreregistro({ idPreregistro })
+
+    return idPreregistro
+  }
+
+  const guardarDatosPersonales = async () => {
+    const datos = datosPreregistro.datosPersonales
+    const camposRequeridos = [
+      datos.curp,
+      datos.nombre,
+      datos.apellidoPaterno,
+      datos.apellidoMaterno,
+      datos.fechaNacimiento,
+      datos.sexo,
+      datos.nacionalidad,
+      datos.estadoNacimiento,
+      datos.abrEntidad,
+    ]
+
+    if (camposRequeridos.some((valor) => !String(valor || '').trim())) {
+      establecerErrorPreregistro('Completa todos los datos personales para continuar.')
+      return
+    }
+
+    setEstadoPreregistro({ cargando: true, error: '', exito: '' })
+
+    try {
+      const id = await obtenerIdPreregistro()
+
+      await guardarCurp({
+        id,
+        curp: datos.curp.trim().toUpperCase(),
+        first_name: datos.nombre.trim(),
+        last_name: datos.apellidoPaterno.trim(),
+        second_last_name: datos.apellidoMaterno.trim(),
+        sex_curp: datos.sexo,
+        birthdate: convertirFechaIsoADiaMesAnio(datos.fechaNacimiento),
+        nacionalidad: datos.nacionalidad.trim().toUpperCase(),
+        state: datos.estadoNacimiento.trim(),
+        abr_entidad: datos.abrEntidad.trim().toUpperCase(),
+      })
+
+      setEstadoPreregistro({
+        cargando: false,
+        error: '',
+        exito: 'Guardamos tus datos personales.',
+      })
+      avanzarPasoRegistro()
+    } catch (error) {
+      establecerErrorPreregistro(error.message)
+    }
+  }
+
+  const guardarDomicilioPreregistro = async () => {
+    const datos = datosPreregistro.domicilio
+    const camposRequeridos = [
+      datos.codigoPostal,
+      datos.estado,
+      datos.municipio,
+      datos.ciudad,
+      datos.colonia,
+      datos.calle,
+    ]
+
+    if (camposRequeridos.some((valor) => !String(valor || '').trim())) {
+      establecerErrorPreregistro('Completa los datos obligatorios del domicilio.')
+      return
+    }
+
+    setEstadoPreregistro({ cargando: true, error: '', exito: '' })
+
+    try {
+      const id = await obtenerIdPreregistro()
+
+      await guardarDireccion({
+        id,
+        calle: datos.calle.trim(),
+        numero_int: datos.numeroInterior.trim() || null,
+        numero_ext: datos.numeroExterior.trim() || null,
+        codigo_postal: datos.codigoPostal.trim(),
+        delegacion: datos.municipio.trim(),
+        colonia: datos.colonia.trim(),
+        estado: datos.estado.trim(),
+        ciudad: datos.ciudad.trim(),
+        referencia: datos.referencia.trim() || null,
+      })
+
+      setEstadoPreregistro({
+        cargando: false,
+        error: '',
+        exito: 'Guardamos tu domicilio.',
       })
       avanzarPasoRegistro()
     } catch (error) {
@@ -208,11 +407,15 @@ function Autenticacion() {
     datos: datosPreregistro,
     estado: estadoPreregistro,
     actualizarDatos: actualizarDatosPreregistro,
+    actualizarDatosPersonales,
+    actualizarDomicilio,
     limpiarMensajes: limpiarMensajesPreregistro,
     establecerError: establecerErrorPreregistro,
     enviarCodigoPorCorreo,
     confirmarCodigoYRegistrar,
     reenviarCodigoCorreo,
+    guardarDatosPersonales,
+    guardarDomicilio: guardarDomicilioPreregistro,
   }
 
   return (
@@ -236,6 +439,7 @@ function Autenticacion() {
           configuracionPaso={configuracionPasoRegistro}
           preregistro={preregistro}
           onAvanzar={avanzarPasoRegistro}
+          onIrAPaso={irAPasoRegistro}
           onCambiarAInicioSesion={cambiarAInicioSesion}
         />
       )}

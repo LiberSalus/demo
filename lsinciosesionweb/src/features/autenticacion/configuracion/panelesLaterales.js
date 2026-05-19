@@ -25,4 +25,20 @@ export const panelesLaterales = {
     pasos: pasosVisuales,
     pasoActivo: 'cuenta',
   },
+  perfil: {
+    titular: 'Completa tu perfil',
+    descripcion: 'Captura tus datos personales y domicilio.',
+    nota:
+      'Estos datos permiten terminar tu preregistro antes de iniciar sesión en el dashboard.',
+    pasos: pasosVisuales,
+    pasoActivo: 'perfil',
+  },
+  confirmacion: {
+    titular: 'Registro casi listo',
+    descripcion: 'Tu información fue recibida.',
+    nota:
+      'Al finalizar, vuelve al inicio de sesión para entrar con la cuenta que acabas de crear.',
+    pasos: pasosVisuales,
+    pasoActivo: 'confirmacion',
+  },
 }

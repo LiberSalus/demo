@@ -2,7 +2,7 @@ import icoCuentaLista from '../assets/icoCuentaLista.svg'
 import BotonPrincipal from '../componentes/BotonPrincipal'
 import estilos from '../estilos/autenticacion.module.css'
 
-function PasoConfirmacionCuenta({ contenido, onAvanzar }) {
+function PasoConfirmacionPerfil({ contenido, onCambiarAInicioSesion }) {
   const { tituloEstado, descripcionEstado, textoBoton } = contenido
 
   return (
@@ -13,14 +13,13 @@ function PasoConfirmacionCuenta({ contenido, onAvanzar }) {
         alt=""
         aria-hidden="true"
       />
-
       <div className={`${estilos.estadoConfirmacion} ${estilos.estadoConfirmacionExito}`}>
         <strong>{tituloEstado}</strong>
         <p>{descripcionEstado}</p>
       </div>
-      <BotonPrincipal onClick={onAvanzar}>{textoBoton}</BotonPrincipal>
+      <BotonPrincipal onClick={onCambiarAInicioSesion}>{textoBoton}</BotonPrincipal>
     </section>
   )
 }
 
-export default PasoConfirmacionCuenta
+export default PasoConfirmacionPerfil

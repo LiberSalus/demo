@@ -112,6 +112,7 @@ src/
 - `obtenerSesionActual` ya existe, pero todavia falta usarlo en componentes del dashboard.
 - Fase 5 en curso: ya existe `src/services/preregistro.js` con rutas vigentes del Swagger de preregistro.
 - El login integrado ya puede abrir el flujo inicial de registro: cuenta, envio de codigo, validacion y confirmacion.
+- Despues de confirmar el codigo, el flujo muestra la seleccion entre captura manual y documentos, y luego continua a datos personales/domicilio antes de volver al login.
 
 ## Fases de aplicacion
 
@@ -169,6 +170,8 @@ Criterio de salida: el dashboard corre como un solo proyecto y el login externo 
 - Migrar preregistro por pasos, no de golpe.
 - Separar servicios de preregistro del flujo visual.
 - Validar entradas y mensajes de error por paso.
+- Continuar de cuenta confirmada a datos personales y domicilio.
+- Restaurar la pantalla de seleccion entre captura manual y carga de documentos.
 - Agregar recuperacion de contrasena cuando exista endpoint confirmado.
 
 Criterio de salida: registro funciona sin duplicar clientes API ni estados globales innecesarios.
@@ -200,6 +203,7 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 - Fase 2 completada: login nuevo conectado al servicio real de sesion.
 - Fase 3 completada: rutas protegidas dependen de token, se agrego lectura de sesion actual y limpieza automatica ante `401`.
 - Fase 4 completada: `/login` usa el login nuevo y el login anterior queda temporalmente en `/login-anterior`.
+- Fase 5 en curso: registro por correo validado; se agregaron seleccion de captura, documentos, datos personales y domicilio.
 
 ## Pendientes inmediatos
 
@@ -207,8 +211,9 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 2. Verificar que logout limpie sesion y regrese a `/panel/login`.
 3. Conectar `obtenerSesionActual` al layout/Header para pintar datos reales de usuario.
 4. Revisar si `src/lib/apiClient.js` sigue en uso; si no, eliminar o documentar su retiro.
-5. Probar flujo inicial de preregistro contra `src/services/preregistro.js`.
-6. Migrar perfil, CURP, domicilio y documentos en bloques separados.
+5. Probar flujo de preregistro completo: correo, codigo, cuenta, datos personales y domicilio.
+6. Confirmar con Network las respuestas de `guardar-curp` y `guardar-direccion`.
+7. Confirmar endpoints definitivos de carga de documentos para conectar la opcion de archivos al backend.
 7. Decidir si la finalizacion de registro debe iniciar sesion automaticamente o mandar a `/panel/login`.
 8. Quitar `/panel/login-anterior` cuando el login nuevo quede validado.
 9. Limpiar `integraciones/LoginLiberS` cuando ya no haga falta como referencia.

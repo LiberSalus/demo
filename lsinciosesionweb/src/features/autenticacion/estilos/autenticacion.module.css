@@ -1297,7 +1297,7 @@
 .modalAvisoLegalOverlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1310,7 +1310,9 @@
   z-index: 1;
   width: min(100%, 48rem);
   max-height: min(90vh, 44rem);
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   border-radius: 1rem;
   background: #ffffff;
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.18);
@@ -1350,6 +1352,8 @@
 .modalAvisoLegalContenido {
   display: grid;
   gap: 1rem;
+  min-height: 0;
+  overflow: auto;
   padding: 1.25rem 1.5rem 0;
 }
 
@@ -1380,8 +1384,8 @@
 .modalAvisoLegalAceptacion {
   position: relative;
   display: flex;
-  justify-content: end;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   gap: 0.9rem;
   padding: 1.25rem 1.5rem 0;
   z-index: 1;
@@ -1423,6 +1427,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
   padding: 1rem 1.5rem 1.85rem;
 }
 
