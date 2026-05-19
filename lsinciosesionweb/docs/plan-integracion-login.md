@@ -21,10 +21,10 @@ El snapshot de referencia queda en `integraciones/LoginLiberS`. Ese directorio n
 
 - El dashboard usa React 18 y `LoginLiberS` usa React 19. No se debe mezclar el `package.json` del snapshot con el dashboard.
 - El dashboard tiene `src/services/apiClient.js`, pero tambien existe `src/lib/apiClient.js`. Hay que revisar si el segundo sigue en uso antes de eliminarlo o unificarlo.
-- `src/services/auth.js` todavia usa `sesion/auth/token`; el flujo nuevo debe usar `sesion/autenticacion/mediciones/iniciar-sesion`.
+- `src/services/auth.js` ya usa `sesion/autenticacion/mediciones/iniciar-sesion` para el inicio de sesion integrado.
 - `LoginLiberS` ya tiene el endpoint correcto para mediciones, pero tambien trae su propio `apiClient`, `env` y rutas.
 - `.env` y `.env.development` aparecen versionados aunque el `.gitignore` ya los incluye. No contienen secretos en la revision actual, pero deben tratarse como riesgo de configuracion.
-- El guard actual acepta `auth_ready` como prueba de sesion. Para produccion debe preferir token valido y/o verificacion contra backend.
+- El guard actual prioriza token real. `auth_ready` queda como compatibilidad temporal para migracion/desarrollo.
 - Hay uso legitimo de `localStorage` para datos locales del dashboard, pero la autenticacion debe guardar solo lo minimo.
 - No se encontro `dangerouslySetInnerHTML` en el codigo activo revisado. Hay `innerHTML` dentro de copias de `particles.js` en demos vendorizados, no en pantallas activas.
 
@@ -101,6 +101,15 @@ src/
 ```
 
 `integraciones/LoginLiberS` queda como referencia temporal. Cuando la migracion este estable, se elimina o se mueve a documentacion externa.
+
+## Estado actual del login integrado
+
+- `/panel/login` renderiza el login nuevo integrado.
+- `/panel/login-anterior` conserva el login previo como respaldo temporal.
+- El bridge local entre `5173` y `5174` queda apagado en desarrollo con `VITE_DEV_AUTH_BRIDGE=0`.
+- El inicio de sesion llama al endpoint de mediciones y centraliza token/perfil en `src/services/auth.js`.
+- El cliente API agrega el token en `Authorization` y limpia sesion ante respuestas `401`.
+- `obtenerSesionActual` ya existe, pero todavia falta usarlo en componentes del dashboard.
 
 ## Fases de aplicacion
 
@@ -185,9 +194,19 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 ## Progreso actual
 
 - Fase 0 completada: auditoria base y reglas de integracion documentadas.
-- Fase 1 completada: login nuevo aislado disponible en `/login-nuevo`.
+- Fase 1 completada: login nuevo aislado; esa ruta temporal fue reemplazada por `/login`.
 - Fase 2 completada: login nuevo conectado al servicio real de sesion.
 - Fase 3 completada: rutas protegidas dependen de token, se agrego lectura de sesion actual y limpieza automatica ante `401`.
 - Fase 4 completada: `/login` usa el login nuevo y el login anterior queda temporalmente en `/login-anterior`.
 
-El siguiente paso recomendado es ejecutar la Fase 5: migrar registro y recuperacion de contrasena por partes, sin mezclarlo con datos reales del dashboard.
+## Pendientes inmediatos
+
+1. Probar manualmente `/panel/login` con un usuario valido del backend.
+2. Verificar que logout limpie sesion y regrese a `/panel/login`.
+3. Conectar `obtenerSesionActual` al layout/Header para pintar datos reales de usuario.
+4. Revisar si `src/lib/apiClient.js` sigue en uso; si no, eliminar o documentar su retiro.
+5. Decidir si primero migramos registro/recuperacion o si conectamos datos reales del dashboard.
+6. Quitar `/panel/login-anterior` cuando el login nuevo quede validado.
+7. Limpiar `integraciones/LoginLiberS` cuando ya no haga falta como referencia.
+
+El siguiente paso recomendado es validar el login integrado con un usuario real y luego conectar `mi-sesion` al Header/TarjetaUsuario antes de entrar al preregistro completo.
