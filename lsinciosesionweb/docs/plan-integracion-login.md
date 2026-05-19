@@ -110,7 +110,8 @@ src/
 - El inicio de sesion llama al endpoint de mediciones y centraliza token/perfil en `src/services/auth.js`.
 - El cliente API agrega el token en `Authorization` y limpia sesion ante respuestas `401`.
 - `obtenerSesionActual` ya existe, pero todavia falta usarlo en componentes del dashboard.
-- Fase 5 iniciada: ya existe `src/services/preregistro.js` con rutas vigentes del Swagger de preregistro.
+- Fase 5 en curso: ya existe `src/services/preregistro.js` con rutas vigentes del Swagger de preregistro.
+- El login integrado ya puede abrir el flujo inicial de registro: cuenta, envio de codigo, validacion y confirmacion.
 
 ## Fases de aplicacion
 
@@ -206,8 +207,8 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 2. Verificar que logout limpie sesion y regrese a `/panel/login`.
 3. Conectar `obtenerSesionActual` al layout/Header para pintar datos reales de usuario.
 4. Revisar si `src/lib/apiClient.js` sigue en uso; si no, eliminar o documentar su retiro.
-5. Conectar el boton `Regístrate` del login nuevo a la vista de registro migrada por pasos.
-6. Probar flujo de preregistro contra `src/services/preregistro.js`.
+5. Probar flujo inicial de preregistro contra `src/services/preregistro.js`.
+6. Migrar perfil, CURP, domicilio y documentos en bloques separados.
 7. Decidir si la finalizacion de registro debe iniciar sesion automaticamente o mandar a `/panel/login`.
 8. Quitar `/panel/login-anterior` cuando el login nuevo quede validado.
 9. Limpiar `integraciones/LoginLiberS` cuando ya no haga falta como referencia.
