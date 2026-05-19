@@ -9,6 +9,7 @@ import ProtectedRoute from "./protected-route";
 
 // Pages
 import Login from "@/pages/Login/Login";
+import LoginNuevo from "@/pages/LoginNuevo/LoginNuevo";
 import Inicio from "@/pages/Inicio/Inicio";
 
 import MiSaludATravesDelTiempo from "@/pages/MiSalud/SobreMi";
@@ -82,6 +83,7 @@ export const AppRouter = () => (
   <BrowserRouter basename="/panel">
     <Routes>
       <Route path={ROUTES.LOGIN} element={<Login />} />
+      <Route path={ROUTES.LOGIN_NUEVO} element={<LoginNuevo />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<Principal />}>
