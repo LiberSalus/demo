@@ -188,5 +188,6 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 - Fase 1 completada: login nuevo aislado disponible en `/login-nuevo`.
 - Fase 2 completada: login nuevo conectado al servicio real de sesion.
 - Fase 3 completada: rutas protegidas dependen de token, se agrego lectura de sesion actual y limpieza automatica ante `401`.
+- Fase 4 completada: `/login` usa el login nuevo y el login anterior queda temporalmente en `/login-anterior`.
 
-El siguiente paso recomendado es ejecutar la Fase 4: sustituir `/login` por el login nuevo de forma controlada, manteniendo una ruta de respaldo temporal para el login anterior.
+El siguiente paso recomendado es ejecutar la Fase 5: migrar registro y recuperacion de contrasena por partes, sin mezclarlo con datos reales del dashboard.
