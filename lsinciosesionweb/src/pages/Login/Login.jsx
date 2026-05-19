@@ -7,7 +7,7 @@ import logo from "./icoLibersalus.svg";
 import google from './google.svg'
 import eyeIcon from "@/images/Icons _ eye-empty.png";
 import Derechos from "@/components/Derechos/Derechos";
-import { iniciarSesion } from "@/services/auth";
+import { estaAutenticado, iniciarSesion } from "@/services/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("auth_ready")) {
+    if (estaAutenticado()) {
       navigate(from, { replace: true });
     }
   }, [from, navigate]);

@@ -72,7 +72,7 @@ export { ROUTES } from "@/config/routes";
 /*
   Flujo general del router:
   1. `LOGIN` es la unica ruta publica.
-  2. El resto pasa por `ProtectedRoute`, que valida `auth_ready` en localStorage.
+  2. El resto pasa por `ProtectedRoute`, que valida token activo y compatibilidad dev.
   3. Si el acceso es valido, `Principal` monta el layout comun de la app.
   4. Dentro de ese layout se renderiza la pagina correspondiente con nested routes.
   5. La ruta index protegida redirige a `INICIO`.

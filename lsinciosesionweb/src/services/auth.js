@@ -8,6 +8,7 @@ const CLAVE_PERFIL_MINIMO = "perfil_min";
 const PARAM_TOKEN_DEV = "dev_access_token";
 const PARAM_CORREO_DEV = "dev_email";
 const PARAM_SESION_LISTA_DEV = "dev_auth_ready";
+export const EVENTO_SESION_NO_AUTORIZADA = "sesion:no-autorizada";
 
 function obtenerMensajeError(error) {
   const detalle = error?.response?.data?.detail;
@@ -106,20 +107,16 @@ function obtenerNombreUsuario(usuario = {}, correo = "") {
   return usuario.nombre || usuario.name || usuario.email || usuario.correo || correo || "Usuario";
 }
 
-function guardarSesionAutenticada({ respuesta, correo }) {
-  const token = obtenerTokenDeRespuesta(respuesta);
-
-  if (!token) {
-    throw new Error("El servidor no devolvió un token de acceso.");
-  }
-
+function obtenerUsuarioDeRespuesta(respuesta) {
   const usuario =
     respuesta && typeof respuesta === "object"
       ? respuesta.user || respuesta.usuario || {}
       : {};
 
-  setAuthToken(token);
-  localStorage.setItem(CLAVE_SESION_LISTA, "1");
+  return usuario;
+}
+
+function guardarPerfilMinimo({ usuario, correo }) {
   localStorage.setItem(
     CLAVE_PERFIL_MINIMO,
     JSON.stringify({
@@ -131,11 +128,28 @@ function guardarSesionAutenticada({ respuesta, correo }) {
     })
   );
 
+  // Se emiten ambos eventos mientras unificamos consumidores antiguos y nuevos.
   window.dispatchEvent(new CustomEvent("perfil:update"));
+  window.dispatchEvent(new CustomEvent("perfil_min_updated"));
+}
+
+function guardarSesionAutenticada({ respuesta, correo }) {
+  const token = obtenerTokenDeRespuesta(respuesta);
+
+  if (!token) {
+    throw new Error("El servidor no devolvió un token de acceso.");
+  }
+
+  setAuthToken(token);
+  localStorage.setItem(CLAVE_SESION_LISTA, "1");
+  guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(respuesta), correo });
 }
 
 export function estaAutenticado() {
-  return Boolean(getAuthToken() || localStorage.getItem(CLAVE_SESION_LISTA));
+  const tieneToken = Boolean(getAuthToken());
+  const sesionTemporalDev = DEV_AUTH_BRIDGE && localStorage.getItem(CLAVE_SESION_LISTA) === "1";
+
+  return tieneToken || sesionTemporalDev;
 }
 
 export function limpiarSesionAutenticacion() {
@@ -221,6 +235,17 @@ export async function iniciarSesion({
     });
 
     guardarSesionAutenticada({ respuesta: data, correo: correoNormalizado });
+
+    return data;
+  } catch (error) {
+    throw new Error(obtenerMensajeError(error));
+  }
+}
+
+export async function obtenerSesionActual() {
+  try {
+    const { data } = await api.get("sesion/autenticacion/mediciones/mi-sesion");
+    guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
 
     return data;
   } catch (error) {

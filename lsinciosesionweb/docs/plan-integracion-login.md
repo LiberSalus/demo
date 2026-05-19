@@ -182,6 +182,11 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 - Los comentarios explican decisiones, no instrucciones obvias.
 - El estado de sesion puede limpiarse sin dejar al usuario atrapado.
 
-## Decision actual
+## Progreso actual
 
-El siguiente paso recomendado es ejecutar la Fase 1: migrar UI del login nuevo a una ruta temporal `/login-nuevo`, sin reemplazar todavia el login vigente.
+- Fase 0 completada: auditoria base y reglas de integracion documentadas.
+- Fase 1 completada: login nuevo aislado disponible en `/login-nuevo`.
+- Fase 2 completada: login nuevo conectado al servicio real de sesion.
+- Fase 3 completada: rutas protegidas dependen de token, se agrego lectura de sesion actual y limpieza automatica ante `401`.
+
+El siguiente paso recomendado es ejecutar la Fase 4: sustituir `/login` por el login nuevo de forma controlada, manteniendo una ruta de respaldo temporal para el login anterior.
