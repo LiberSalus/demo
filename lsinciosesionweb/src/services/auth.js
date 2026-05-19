@@ -1,81 +1,157 @@
 // src/services/auth.js
-//import api from "./apiClient";
-//
-//export async function login({ username, password, role = "paciente" }) {
-//  const body = new URLSearchParams();
-//  body.set("grant_type", "password");
-//  body.set("username", username);
-//  body.set("password", password);
-//  body.set("role", role);
-//
-//  const { data } = await api.post("sesion/auth/token", body, {
-//    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//  });
-//  // si el backend te devuelve access_token en body:
-//  if (data?.access_token) {
-//    // guardas en memoria/localStorage para el bearer
-//     setAuthToken(data.access_token) 
-//  }
-//  return data;
-//}
-//
-//export const decodeToken   = () => api.get("/auth/decode-token").then(r=>r.data);
-//export const refreshToken  = () => api.post("/auth/refresh-token").then(r=>r.data);
-//export const logout        = () => api.post("/auth/logout").then(r=>r.data);
-//
-
-// src/services/auth.js
 import api, { clearAuthToken, getAuthToken, setAuthToken } from "./apiClient";
+import { DEV_AUTH_BRIDGE } from "./env";
 
-const USE_MOCK = import.meta.env.VITE_MOCK_AUTH === "1";
-const AUTH_READY_KEY = "auth_ready";
-const PERFIL_MIN_KEY = "perfil_min";
+const USAR_MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === "1";
+const CLAVE_SESION_LISTA = "auth_ready";
+const CLAVE_PERFIL_MINIMO = "perfil_min";
+const PARAM_TOKEN_DEV = "dev_access_token";
+const PARAM_CORREO_DEV = "dev_email";
+const PARAM_SESION_LISTA_DEV = "dev_auth_ready";
 
-// JWT falso (sin firma) compatible con tu flujo actual
-function makeFakeToken({ username, role }) {
-  const header  = { alg: "none", typ: "JWT" };
-  const nowSec  = Math.floor(Date.now() / 1000);
+function normalizarToken(valor) {
+  if (typeof valor !== "string") return "";
+
+  return valor
+    .trim()
+    .replace(/^"|"$/g, "")
+    .replace(/^Bearer\s+/i, "")
+    .trim();
+}
+
+function pareceToken(valor) {
+  const token = normalizarToken(valor);
+
+  return token.length > 20 && !/\s/.test(token);
+}
+
+function buscarTokenEnObjeto(valor) {
+  if (!valor || typeof valor !== "object") return "";
+
+  // El backend ha devuelto tokens con distintas formas; priorizamos nombres
+  // explícitos antes de buscar en objetos anidados.
+  const llavesPrioritarias = [
+    "access_token",
+    "accessToken",
+    "token_acceso",
+    "tokenAcceso",
+    "token_de_acceso",
+    "tokenDeAcceso",
+    "token",
+    "jwt",
+    "access",
+    "bearer",
+    "authorization",
+  ];
+
+  for (const llave of llavesPrioritarias) {
+    const token = normalizarToken(valor[llave]);
+    if (token) return token;
+  }
+
+  for (const item of Object.values(valor)) {
+    if (pareceToken(item)) return normalizarToken(item);
+
+    const tokenAnidado = buscarTokenEnObjeto(item);
+    if (tokenAnidado) return tokenAnidado;
+  }
+
+  return "";
+}
+
+function obtenerTokenDeRespuesta(datos) {
+  if (typeof datos === "string" && datos.trim()) {
+    const texto = normalizarToken(datos);
+
+    try {
+      return obtenerTokenDeRespuesta(JSON.parse(texto));
+    } catch {
+      return texto;
+    }
+  }
+
+  return buscarTokenEnObjeto(datos);
+}
+
+function crearTokenFalso({ usuario, rol }) {
+  const encabezado = { alg: "none", typ: "JWT" };
+  const ahoraSegundos = Math.floor(Date.now() / 1000);
   const payload = {
     sub: "u-dev",
-    name: username || "Usuario Dev",
-    role: role || "paciente",
-    iat: nowSec,
-    exp: nowSec + 60 * 60 * 24, // 24h
+    name: usuario || "Usuario Dev",
+    role: rol || "paciente",
+    iat: ahoraSegundos,
+    exp: ahoraSegundos + 60 * 60 * 24,
   };
-  const b64 = (o) => btoa(JSON.stringify(o));
-  return `${b64(header)}.${b64(payload)}.`; // firma vacía
+  const aBase64 = (objeto) => btoa(JSON.stringify(objeto));
+
+  return `${aBase64(encabezado)}.${aBase64(payload)}.`;
 }
 
-export function isAuthenticated() {
-  return Boolean(getAuthToken() || localStorage.getItem(AUTH_READY_KEY));
+export function estaAutenticado() {
+  return Boolean(getAuthToken() || localStorage.getItem(CLAVE_SESION_LISTA));
 }
 
-export function clearAuthSession() {
+export function limpiarSesionAutenticacion() {
   clearAuthToken();
-  localStorage.removeItem(AUTH_READY_KEY);
-  localStorage.removeItem(PERFIL_MIN_KEY);
+  localStorage.removeItem(CLAVE_SESION_LISTA);
+  localStorage.removeItem(CLAVE_PERFIL_MINIMO);
 }
 
-export async function login({ username, password, role = "paciente" }) {
-  // 👇 Mock ultra-simple si el back no está
-  if (USE_MOCK) {
+export function iniciarSesionDevDesdeUrl() {
+  if (!DEV_AUTH_BRIDGE || typeof window === "undefined") return false;
+
+  const url = new URL(window.location.href);
+  const token = url.searchParams.get(PARAM_TOKEN_DEV);
+  const sesionLista = url.searchParams.get(PARAM_SESION_LISTA_DEV) === "1";
+
+  if (!token && !sesionLista) return false;
+
+  const correo = url.searchParams.get(PARAM_CORREO_DEV) || "";
+
+  // Puente solo para desarrollo local: LoginLiberS corre en otro puerto y
+  // comparte la sesión con el dashboard mediante parámetros temporales.
+  if (token) setAuthToken(token);
+  else clearAuthToken();
+
+  localStorage.setItem(CLAVE_SESION_LISTA, "1");
+
+  if (correo && !localStorage.getItem(CLAVE_PERFIL_MINIMO)) {
+    localStorage.setItem(
+      CLAVE_PERFIL_MINIMO,
+      JSON.stringify({
+        nombre: correo,
+        email: correo,
+      })
+    );
+  }
+
+  url.searchParams.delete(PARAM_TOKEN_DEV);
+  url.searchParams.delete(PARAM_CORREO_DEV);
+  url.searchParams.delete(PARAM_SESION_LISTA_DEV);
+  window.history.replaceState({}, document.title, `${url.pathname}${url.search}${url.hash}`);
+
+  return true;
+}
+
+export async function iniciarSesion({ username, password, role = "paciente" }) {
+  if (USAR_MOCK_AUTH) {
     if (!username || !password) throw new Error("Credenciales requeridas");
-    const access_token = makeFakeToken({ username, role });
-    setAuthToken(access_token); // lo guarda y queda disponible al interceptor
-    // Devuelve la forma que tu Login.jsx ya espera (incluye user.*)
+
+    const access_token = crearTokenFalso({ usuario: username, rol: role });
+    setAuthToken(access_token);
+
     return {
       access_token,
       token_type: "bearer",
       user: {
         first_name: "Dev",
-        last_name:  "User",
+        last_name: "User",
         email: username,
-        // avatar: null,
       },
     };
   }
 
-  // ⇣ Real (cuando el back regrese)
   const body = new URLSearchParams();
   body.set("grant_type", "password");
   body.set("username", username);
@@ -86,20 +162,24 @@ export async function login({ username, password, role = "paciente" }) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
 
-  if (data?.access_token) setAuthToken(data.access_token);
+  const token = obtenerTokenDeRespuesta(data);
+  if (token) setAuthToken(token);
+
   return data;
 }
 
-export const decodeToken = () =>
-  api.get("sesion/auth/decode-token").then((r) => r.data);
+export const decodificarToken = () =>
+  api.get("sesion/auth/decode-token").then((respuesta) => respuesta.data);
 
-export const refreshToken = () =>
-  api.post("sesion/auth/refresh-token").then((r) => r.data);
+export const refrescarToken = () =>
+  api.post("sesion/auth/refresh-token").then((respuesta) => respuesta.data);
 
-export async function logout() {
+export async function cerrarSesion() {
   try {
-    return await api.post("sesion/auth/logout").then((r) => r.data);
+    return await api.post("sesion/auth/logout").then((respuesta) => respuesta.data);
   } finally {
-    clearAuthSession();
+    // Siempre limpiamos la sesión local aunque el endpoint falle, para no dejar
+    // al usuario atrapado en el dashboard.
+    limpiarSesionAutenticacion();
   }
 }

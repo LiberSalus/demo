@@ -10,6 +10,8 @@ import Menu from './menu/Menu'
 import icoMedicamento from '@/pages/Inicio/Calendario/icoMedicamento.svg'
 import icoMedico from '@/pages/Inicio/Calendario/icoMedico.svg'
 import icoEnLinea from '@/pages/Inicio/Calendario/icoEnLinea.svg'
+import { cerrarSesion } from '@/services/auth'
+import { getLoginUrl } from '@/services/env'
 
 const Header = ({ estados = ["e2"] }) => {
   const TRANSITION_MS = 280
@@ -54,6 +56,13 @@ const Header = ({ estados = ["e2"] }) => {
 
   const closeMenu = () => {
     setIsMenuOpen(false)
+  }
+
+  const handleLogout = async () => {
+    try { await cerrarSesion() } catch {}
+    finally {
+      window.location.assign(getLoginUrl())
+    }
   }
 
   const clearBellFeedback = () => {
@@ -347,6 +356,7 @@ const Header = ({ estados = ["e2"] }) => {
             onClose={closePanel}
             fotoPerfil={fotoPerfil}
             onGuardarFoto={setFotoPerfil}
+            onLogout={handleLogout}
             />
           </div>
         </div>

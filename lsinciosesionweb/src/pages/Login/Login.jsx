@@ -7,7 +7,7 @@ import logo from "./icoLibersalus.svg";
 import google from './google.svg'
 import eyeIcon from "@/images/Icons _ eye-empty.png";
 import Derechos from "@/components/Derechos/Derechos";
-import { login } from "@/services/auth";
+import { iniciarSesion } from "@/services/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const data = await login({
+      const data = await iniciarSesion({
         username: form.email.trim(),
         password: form.password,
         role: form.role,

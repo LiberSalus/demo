@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     }, */
     server: {
       host: "localhost",
-      port: 5173,
+      port: 5174,
       strictPort: false,
     },
   };

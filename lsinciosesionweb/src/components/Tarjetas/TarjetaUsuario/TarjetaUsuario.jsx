@@ -4,7 +4,8 @@ import styles from './tarjetaUsuario.module.css';
 import defaultAvatar from './Usuario.png';
 import noti from './noti.svg';
 import TarjetaLateral from './TarjetaLateral';
-import { logout } from '@/services/auth';
+import { cerrarSesion } from '@/services/auth';
+import { getLoginUrl } from '@/services/env';
 
 // --- Hook simple para bloquear el scroll del body ---
 function useLockBodyScroll(locked) {
@@ -59,9 +60,9 @@ const TarjetaUsuario = () => {
   };
 
   const onLogout = async () => {
-    try { await logout(); } catch {}
+    try { await cerrarSesion(); } catch {}
     finally {
-      window.location.assign('/panel/login');
+      window.location.assign(getLoginUrl());
     }
   };
 

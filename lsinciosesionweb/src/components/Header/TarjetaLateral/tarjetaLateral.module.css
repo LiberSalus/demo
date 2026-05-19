@@ -445,9 +445,15 @@
   padding-top: 1rem;
   text-align: center;
   text-decoration: underline;
-  & > a {
+  & > a,
+  & > button {
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: #C72611;
-
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
 

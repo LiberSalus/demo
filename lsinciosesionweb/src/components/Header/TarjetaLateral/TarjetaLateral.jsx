@@ -15,7 +15,13 @@ import cerrar from './icoCerrar.svg'
 import resta from './icoZoomResta.svg'
 import suma  from './icoZoomSuma.svg'
 
-const TarjetaLateral = ({ estados , onClose, fotoPerfil = perfil, onGuardarFoto }) => {
+const TarjetaLateral = ({
+  estados,
+  onClose,
+  fotoPerfil = perfil,
+  onGuardarFoto,
+  onLogout = () => {},
+}) => {
   const MIN_ZOOM = 0.5
   const BASE_ZOOM = 1
   const MAX_ZOOM = 2
@@ -230,7 +236,9 @@ const TarjetaLateral = ({ estados , onClose, fotoPerfil = perfil, onGuardarFoto 
       </div>
 
       <div className={styles.cntCierre}>
-        <a href="">Cerrar sesión</a>
+        <button type="button" onClick={onLogout}>
+          Cerrar sesión
+        </button>
       </div>
 
       {isDialogOpen &&
