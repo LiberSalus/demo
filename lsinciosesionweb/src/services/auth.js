@@ -25,9 +25,11 @@
 //
 
 // src/services/auth.js
-import api, { setAuthToken } from "./apiClient"; // 👈 asegúrate de importar setAuthToken
+import api, { clearAuthToken, getAuthToken, setAuthToken } from "./apiClient";
 
 const USE_MOCK = import.meta.env.VITE_MOCK_AUTH === "1";
+const AUTH_READY_KEY = "auth_ready";
+const PERFIL_MIN_KEY = "perfil_min";
 
 // JWT falso (sin firma) compatible con tu flujo actual
 function makeFakeToken({ username, role }) {
@@ -42,6 +44,16 @@ function makeFakeToken({ username, role }) {
   };
   const b64 = (o) => btoa(JSON.stringify(o));
   return `${b64(header)}.${b64(payload)}.`; // firma vacía
+}
+
+export function isAuthenticated() {
+  return Boolean(getAuthToken() || localStorage.getItem(AUTH_READY_KEY));
+}
+
+export function clearAuthSession() {
+  clearAuthToken();
+  localStorage.removeItem(AUTH_READY_KEY);
+  localStorage.removeItem(PERFIL_MIN_KEY);
 }
 
 export async function login({ username, password, role = "paciente" }) {
@@ -68,7 +80,7 @@ export async function login({ username, password, role = "paciente" }) {
   body.set("grant_type", "password");
   body.set("username", username);
   body.set("password", password);
-  body.set("role", role);
+  body.set("scope", role);
 
   const { data } = await api.post("sesion/auth/token", body, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -78,6 +90,16 @@ export async function login({ username, password, role = "paciente" }) {
   return data;
 }
 
-export const decodeToken  = () => api.get("/auth/decode-token").then(r => r.data);
-export const refreshToken = () => api.post("/auth/refresh-token").then(r => r.data);
-export const logout       = () => api.post("/auth/logout").then(r => r.data);
+export const decodeToken = () =>
+  api.get("sesion/auth/decode-token").then((r) => r.data);
+
+export const refreshToken = () =>
+  api.post("sesion/auth/refresh-token").then((r) => r.data);
+
+export async function logout() {
+  try {
+    return await api.post("sesion/auth/logout").then((r) => r.data);
+  } finally {
+    clearAuthSession();
+  }
+}

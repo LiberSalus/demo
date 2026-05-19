@@ -61,8 +61,6 @@ const TarjetaUsuario = () => {
   const onLogout = async () => {
     try { await logout(); } catch {}
     finally {
-      localStorage.removeItem('auth_ready');
-      localStorage.removeItem('perfil_min');
       window.location.assign('/panel/login');
     }
   };

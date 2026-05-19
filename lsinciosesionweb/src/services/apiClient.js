@@ -1,14 +1,12 @@
 // src/services/apiClient.js
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API
-  /* ? "/api" */
-//  : (import.meta.env.VITE_SESION_API || "https://libersalus.com/api/sesion");
+const baseURL = import.meta.env.VITE_API || "https://libersalus.com/api/";
 
 const api = axios.create({
   baseURL,
   timeout: 300000,
-  withCredentials: false, // aquí vienes usando JWT en body, si cambias a cookie => true
+  withCredentials: false,
 });
 
 let _token = localStorage.getItem("access_token") || null;
@@ -17,6 +15,10 @@ export const setAuthToken = (t) => {
   if (t) localStorage.setItem("access_token", t);
   else localStorage.removeItem("access_token");
 };
+
+export const getAuthToken = () => _token;
+
+export const clearAuthToken = () => setAuthToken(null);
 
 api.interceptors.request.use((cfg) => {
   if (_token) cfg.headers.Authorization = `Bearer ${_token}`;
