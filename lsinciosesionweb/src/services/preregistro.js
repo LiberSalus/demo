@@ -1,15 +1,15 @@
 import api from "./apiClient";
 
 const RUTAS_PREREGISTRO = {
-  enviarCodigoTelefono: "preregistro/preregistro/enviar-codigo-telefono/",
-  validarTelefono: "preregistro/preregistro/validar-telefono/",
-  enviarCodigoCorreo: "preregistro/preregistro/enviar-codigo-correo/",
-  validarCorreo: "preregistro/preregistro/validar-correo/",
-  reenviarCodigo: "preregistro/preregistro/reenviar-codigo/",
-  registrarUsuario: "preregistro/preregistro/registro/",
-  guardarCurp: "preregistro/preregistro/guardar-curp",
-  guardarDireccion: "preregistro/guardar-direccion",
-  registrarDireccion: "preregistro/direccion/registrar",
+  enviarCodigoTelefono: "preregistro/preregistro/preregistro/enviar-codigo-telefono/",
+  validarTelefono: "preregistro/preregistro/preregistro/validar-telefono/",
+  enviarCodigoCorreo: "preregistro/preregistro/preregistro/enviar-codigo-correo/",
+  validarCorreo: "preregistro/preregistro/preregistro/validar-correo/",
+  reenviarCodigo: "preregistro/preregistro/preregistro/reenviar-codigo/",
+  registrarUsuario: "preregistro/preregistro/preregistro/registro/",
+  guardarCurp: "preregistro/preregistro/preregistro/guardar-curp",
+  guardarDireccion: "preregistro/preregistro/guardar-direccion",
+  registrarDireccion: "preregistro/preregistro/direccion/registrar",
   buscarPorCorreo: "preregistro/inicio-sesion/buscar-correo/",
   buscarPorTelefono: "preregistro/inicio-sesion/buscar-telefono/",
 };
