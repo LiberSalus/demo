@@ -1,0 +1,64 @@
+:root {
+  --color-primario: #3f7fc1;
+  --color-primario-oscuro: #2f5e97;
+  --color-primario-suave: #d8ecff;
+  --color-secundario: #f5f7ff;
+  --color-panel: #f7f8ff;
+  --color-fondo: #eaf2ff;
+  --color-superficie: #ffffff;
+  --color-borde: #c8d8f2;
+  --color-borde-fuerte: #9fbce4;
+  --color-texto: #33415c;
+  --color-texto-suave: #66748f;
+  --color-texto-inverso: #ffffff;
+  --color-exito: #dff4e8;
+  --color-sombra: 0 18px 45px rgba(51, 65, 92, 0.12);
+  --fuente-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  min-width: 320px;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  background-color: var(--color-fondo);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+}
+
+a {
+  color: var(--color-primario);
+  text-decoration: none;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+}
