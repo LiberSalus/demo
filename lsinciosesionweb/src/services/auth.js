@@ -1,14 +1,18 @@
 // src/services/auth.js
 import api, { clearAuthToken, getAuthToken, setAuthToken } from "./apiClient";
-import { DEV_AUTH_BRIDGE } from "./env";
 
 const USAR_MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === "1";
 const CLAVE_SESION_LISTA = "auth_ready";
 const CLAVE_PERFIL_MINIMO = "perfil_min";
-const PARAM_TOKEN_DEV = "dev_access_token";
-const PARAM_CORREO_DEV = "dev_email";
-const PARAM_SESION_LISTA_DEV = "dev_auth_ready";
 export const EVENTO_SESION_NO_AUTORIZADA = "sesion:no-autorizada";
+
+const RUTAS_AUTH = {
+  token: "sesion/auth/token",
+  me: "sesion/auth/me",
+  logout: "sesion/auth/logout",
+  decodeToken: "sesion/auth/decode-token",
+  refreshToken: "sesion/auth/refresh-token",
+};
 
 function obtenerMensajeError(error) {
   const detalle = error?.response?.data?.detail;
@@ -136,62 +140,29 @@ function guardarPerfilMinimo({ usuario, correo }) {
 function guardarSesionAutenticada({ respuesta, correo }) {
   const token = obtenerTokenDeRespuesta(respuesta);
 
-  if (!token) {
-    throw new Error("El servidor no devolvió un token de acceso.");
+  if (token) {
+    setAuthToken(token);
+  } else {
+    // El servicio nuevo de /auth/token devuelve la sesión en cookie HttpOnly.
+    // En ese caso no podemos leer el token desde JS, solo marcar la sesión como lista.
+    clearAuthToken();
   }
 
-  setAuthToken(token);
   localStorage.setItem(CLAVE_SESION_LISTA, "1");
   guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(respuesta), correo });
 }
 
 export function estaAutenticado() {
   const tieneToken = Boolean(getAuthToken());
-  const sesionTemporalDev = DEV_AUTH_BRIDGE && localStorage.getItem(CLAVE_SESION_LISTA) === "1";
+  const sesionLista = localStorage.getItem(CLAVE_SESION_LISTA) === "1";
 
-  return tieneToken || sesionTemporalDev;
+  return tieneToken || sesionLista;
 }
 
 export function limpiarSesionAutenticacion() {
   clearAuthToken();
   localStorage.removeItem(CLAVE_SESION_LISTA);
   localStorage.removeItem(CLAVE_PERFIL_MINIMO);
-}
-
-export function iniciarSesionDevDesdeUrl() {
-  if (!DEV_AUTH_BRIDGE || typeof window === "undefined") return false;
-
-  const url = new URL(window.location.href);
-  const token = url.searchParams.get(PARAM_TOKEN_DEV);
-  const sesionLista = url.searchParams.get(PARAM_SESION_LISTA_DEV) === "1";
-
-  if (!token && !sesionLista) return false;
-
-  const correo = url.searchParams.get(PARAM_CORREO_DEV) || "";
-
-  // Puente solo para desarrollo local: LoginLiberS corre en otro puerto y
-  // comparte la sesión con el dashboard mediante parámetros temporales.
-  if (token) setAuthToken(token);
-  else clearAuthToken();
-
-  localStorage.setItem(CLAVE_SESION_LISTA, "1");
-
-  if (correo && !localStorage.getItem(CLAVE_PERFIL_MINIMO)) {
-    localStorage.setItem(
-      CLAVE_PERFIL_MINIMO,
-      JSON.stringify({
-        nombre: correo,
-        email: correo,
-      })
-    );
-  }
-
-  url.searchParams.delete(PARAM_TOKEN_DEV);
-  url.searchParams.delete(PARAM_CORREO_DEV);
-  url.searchParams.delete(PARAM_SESION_LISTA_DEV);
-  window.history.replaceState({}, document.title, `${url.pathname}${url.search}${url.hash}`);
-
-  return true;
 }
 
 export async function iniciarSesion({
@@ -228,10 +199,19 @@ export async function iniciarSesion({
   }
 
   try {
-    const { data } = await api.post("sesion/autenticacion/mediciones/iniciar-sesion", {
-      identificador: correoNormalizado,
-      tipo_identificador: "correo",
-      contrasena: contrasenaNormalizada,
+    const formulario = new URLSearchParams();
+
+    formulario.set("grant_type", "password");
+    formulario.set("username", correoNormalizado);
+    formulario.set("password", contrasenaNormalizada);
+    formulario.set("scope", "");
+    formulario.set("client_id", "");
+    formulario.set("client_secret", "");
+
+    const { data } = await api.post(RUTAS_AUTH.token, formulario, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     guardarSesionAutenticada({ respuesta: data, correo: correoNormalizado });
@@ -244,7 +224,7 @@ export async function iniciarSesion({
 
 export async function obtenerSesionActual() {
   try {
-    const { data } = await api.get("sesion/autenticacion/mediciones/mi-sesion");
+    const { data } = await api.get(RUTAS_AUTH.me);
     guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
 
     return data;
@@ -254,14 +234,14 @@ export async function obtenerSesionActual() {
 }
 
 export const decodificarToken = () =>
-  api.get("sesion/auth/decode-token").then((respuesta) => respuesta.data);
+  api.get(RUTAS_AUTH.decodeToken).then((respuesta) => respuesta.data);
 
 export const refrescarToken = () =>
-  api.post("sesion/auth/refresh-token").then((respuesta) => respuesta.data);
+  api.post(RUTAS_AUTH.refreshToken).then((respuesta) => respuesta.data);
 
 export async function cerrarSesion() {
   try {
-    return await api.post("sesion/auth/logout").then((respuesta) => respuesta.data);
+    return await api.post(RUTAS_AUTH.logout).then((respuesta) => respuesta.data);
   } finally {
     // Siempre limpiamos la sesión local aunque el endpoint falle, para no dejar
     // al usuario atrapado en el dashboard.

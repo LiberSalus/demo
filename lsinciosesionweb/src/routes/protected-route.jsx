@@ -5,11 +5,9 @@ import { ROUTES } from "@/config/routes";
 import {
   EVENTO_SESION_NO_AUTORIZADA,
   estaAutenticado,
-  iniciarSesionDevDesdeUrl,
 } from "@/services/auth";
 
 export default function ProtectedRoute() {
-  iniciarSesionDevDesdeUrl();
   const [versionSesion, setVersionSesion] = useState(0);
   const location = useLocation();
 

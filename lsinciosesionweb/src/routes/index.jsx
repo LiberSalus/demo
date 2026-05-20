@@ -8,7 +8,6 @@ import Principal from "@/Layout/Principal";
 import ProtectedRoute from "./protected-route";
 
 // Pages
-import LoginAnterior from "@/pages/Login/Login";
 import Login from "@/pages/LoginNuevo/LoginNuevo";
 import Inicio from "@/pages/Inicio/Inicio";
 
@@ -83,7 +82,6 @@ export const AppRouter = () => (
   <BrowserRouter basename="/panel">
     <Routes>
       <Route path={ROUTES.LOGIN} element={<Login />} />
-      <Route path={ROUTES.LOGIN_ANTERIOR} element={<LoginAnterior />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<Principal />}>

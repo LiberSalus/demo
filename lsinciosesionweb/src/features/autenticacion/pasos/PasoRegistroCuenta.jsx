@@ -33,6 +33,50 @@ const avisoLegalRegistro = {
   ],
 }
 
+const opcionesLadaTelefono = [
+  { valor: '+52', etiqueta: 'MX +52', longitud: 10 },
+  { valor: '+1', etiqueta: 'US +1', longitud: 10 },
+  { valor: '+57', etiqueta: 'CO +57', longitud: 10 },
+  { valor: '+34', etiqueta: 'ES +34', longitud: 9 },
+]
+
+function obtenerErrorContrasena(contrasena) {
+  if (!contrasena) return ''
+  if (contrasena.length < 8) return 'La contraseña debe tener al menos 8 caracteres.'
+  if (contrasena.length > 20) return 'La contraseña debe tener máximo 20 caracteres.'
+  if (/\s/.test(contrasena)) return 'La contraseña no debe contener espacios.'
+  if (!/[A-Za-z]/.test(contrasena)) return 'La contraseña debe incluir al menos una letra.'
+  if (!/\d/.test(contrasena)) return 'La contraseña debe incluir al menos un número.'
+
+  return ''
+}
+
+function obtenerErrorConfirmacion(contrasena, confirmacion) {
+  if (!confirmacion) return ''
+  if (contrasena !== confirmacion) return 'Las contraseñas no coinciden.'
+
+  return ''
+}
+
+function obtenerConfiguracionLada(codeTelefono) {
+  return (
+    opcionesLadaTelefono.find((opcion) => opcion.valor === codeTelefono) ||
+    opcionesLadaTelefono[0]
+  )
+}
+
+function obtenerErrorTelefono(telefono, codeTelefono) {
+  if (!telefono) return ''
+
+  const configuracionLada = obtenerConfiguracionLada(codeTelefono)
+
+  if (telefono.length !== configuracionLada.longitud) {
+    return `El teléfono debe tener ${configuracionLada.longitud} dígitos.`
+  }
+
+  return ''
+}
+
 function PasoRegistroCuenta({
   contenido,
   preregistro,
@@ -43,6 +87,12 @@ function PasoRegistroCuenta({
   const [avisoLegalAceptado, setAvisoLegalAceptado] = useState(false)
   const [modalLegalAbierto, setModalLegalAbierto] = useState(false)
   const [confirmacionModal, setConfirmacionModal] = useState(false)
+  const errorContrasena = obtenerErrorContrasena(datos.contrasena)
+  const errorConfirmacion = obtenerErrorConfirmacion(
+    datos.contrasena,
+    datos.confirmarContrasena,
+  )
+  const errorTelefono = obtenerErrorTelefono(datos.telefono, datos.codeTelefono)
 
   const abrirModalLegal = () => {
     setModalLegalAbierto(true)
@@ -74,13 +124,23 @@ function PasoRegistroCuenta({
       return
     }
 
+    if (errorTelefono) {
+      establecerError(errorTelefono)
+      return
+    }
+
     if (!datos.contrasena.trim() || !datos.confirmarContrasena.trim()) {
       establecerError('Captura y confirma tu contraseña para continuar.')
       return
     }
 
-    if (datos.contrasena !== datos.confirmarContrasena) {
-      establecerError('Las contraseñas no coinciden.')
+    if (errorContrasena) {
+      establecerError(errorContrasena)
+      return
+    }
+
+    if (errorConfirmacion) {
+      establecerError(errorConfirmacion)
       return
     }
 
@@ -107,17 +167,53 @@ function PasoRegistroCuenta({
           }}
         />
 
-        <CampoFormulario
-          etiqueta="Teléfono celular"
-          nombre="telefono"
-          tipo="tel"
-          marcador="Tu teléfono"
-          valor={datos.telefono}
-          onChange={(evento) => {
-            limpiarMensajes()
-            actualizarDatos({ telefono: evento.target.value.replace(/\D/g, '').slice(0, 10) })
-          }}
-        />
+        <div className={estilos.grupoTelefono}>
+          <div className={estilos.grupoTelefonoEtiquetas}>
+            <span className={estilos.campoFormularioEtiqueta}>Lada</span>
+            <span className={estilos.campoFormularioEtiqueta}>Teléfono celular</span>
+          </div>
+          <div className={estilos.telefonoInternacional}>
+            <select
+              className={estilos.telefonoInternacionalSelector}
+              name="codeTelefono"
+              value={datos.codeTelefono}
+              onChange={(evento) => {
+                limpiarMensajes()
+                actualizarDatos({ codeTelefono: evento.target.value })
+              }}
+            >
+              {opcionesLadaTelefono.map((opcion) => (
+                <option key={opcion.valor} value={opcion.valor}>
+                  {opcion.etiqueta}
+                </option>
+              ))}
+            </select>
+            <input
+              className={`${estilos.telefonoInternacionalInput} ${
+                errorTelefono ? estilos.telefonoInternacionalInputError : ''
+              }`}
+              inputMode="numeric"
+              name="telefono"
+              placeholder="Tu teléfono"
+              type="tel"
+              value={datos.telefono}
+              onChange={(evento) => {
+                limpiarMensajes()
+                const longitudMaxima = obtenerConfiguracionLada(
+                  datos.codeTelefono,
+                ).longitud
+                actualizarDatos({
+                  telefono: evento.target.value.replace(/\D/g, '').slice(0, longitudMaxima),
+                })
+              }}
+            />
+          </div>
+          {errorTelefono ? (
+            <span className={estilos.campoFormularioError} role="alert" aria-live="polite">
+              {errorTelefono}
+            </span>
+          ) : null}
+        </div>
 
         <CampoFormulario
           etiqueta="Contraseña"
@@ -126,6 +222,7 @@ function PasoRegistroCuenta({
           marcador="Tu contraseña"
           permiteMostrarContrasena
           valor={datos.contrasena}
+          error={errorContrasena}
           onChange={(evento) => {
             limpiarMensajes()
             actualizarDatos({ contrasena: evento.target.value })
@@ -139,6 +236,7 @@ function PasoRegistroCuenta({
           marcador="Confirma tu contraseña"
           permiteMostrarContrasena
           valor={datos.confirmarContrasena}
+          error={errorConfirmacion}
           onChange={(evento) => {
             limpiarMensajes()
             actualizarDatos({ confirmarContrasena: evento.target.value })

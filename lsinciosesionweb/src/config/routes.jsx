@@ -3,7 +3,6 @@
 // Se conservan solo paths que hoy participan en la navegacion vigente.
 export const ROUTES = {
   LOGIN: "/login",
-  LOGIN_ANTERIOR: "/login-anterior",
   INICIO: "/inicio",
 
   // Mi Salud

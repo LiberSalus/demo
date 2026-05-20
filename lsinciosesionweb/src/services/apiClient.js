@@ -6,7 +6,7 @@ const baseURL = import.meta.env.VITE_API || "https://libersalus.com/api/";
 const api = axios.create({
   baseURL,
   timeout: 300000,
-  withCredentials: false,
+  withCredentials: true,
 });
 
 const CLAVE_ACCESS_TOKEN = "access_token";

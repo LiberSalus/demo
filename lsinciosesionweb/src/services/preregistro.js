@@ -14,6 +14,10 @@ const RUTAS_PREREGISTRO = {
   buscarPorTelefono: "preregistro/inicio-sesion/buscar-telefono/",
 };
 
+const CONFIG_PREREGISTRO_PUBLICO = {
+  withCredentials: false,
+};
+
 function obtenerMensajeError(error) {
   const detalle = error?.response?.data?.detail;
   const mensaje = error?.response?.data?.message;
@@ -60,7 +64,11 @@ export function enviarCodigoCorreo({ identificador }) {
   }
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.enviarCodigoCorreo, { identificador: identificador.trim() })
+    api.post(
+      RUTAS_PREREGISTRO.enviarCodigoCorreo,
+      { identificador: identificador.trim() },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -71,10 +79,14 @@ export function validarCodigoCorreo({ identificador, codigo }) {
   validarCodigo(codigo);
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.validarCorreo, {
-      identificador: identificador.trim(),
-      codigo: String(codigo).trim(),
-    })
+    api.post(
+      RUTAS_PREREGISTRO.validarCorreo,
+      {
+        identificador: identificador.trim(),
+        codigo: String(codigo).trim(),
+      },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -86,7 +98,11 @@ export function enviarCodigoTelefono({ identificador }) {
   }
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.enviarCodigoTelefono, { identificador: telefono })
+    api.post(
+      RUTAS_PREREGISTRO.enviarCodigoTelefono,
+      { identificador: telefono },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -99,10 +115,14 @@ export function validarCodigoTelefono({ identificador, codigo }) {
   validarCodigo(codigo);
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.validarTelefono, {
-      identificador: telefono,
-      codigo: String(codigo).trim(),
-    })
+    api.post(
+      RUTAS_PREREGISTRO.validarTelefono,
+      {
+        identificador: telefono,
+        codigo: String(codigo).trim(),
+      },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -110,7 +130,11 @@ export function reenviarCodigo({ identificador }) {
   validarIdentificador(identificador);
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.reenviarCodigo, { identificador: String(identificador).trim() })
+    api.post(
+      RUTAS_PREREGISTRO.reenviarCodigo,
+      { identificador: String(identificador).trim() },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -128,13 +152,17 @@ export function registrarUsuario({ correo, telefono, codeTelefono = "+52", contr
   }
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.registrarUsuario, {
-      rol,
-      correo: correo.trim(),
-      telefono: telefonoNormalizado,
-      code_telefono: codeTelefono,
-      contrasena,
-    })
+    api.post(
+      RUTAS_PREREGISTRO.registrarUsuario,
+      {
+        rol,
+        correo: correo.trim(),
+        telefono: telefonoNormalizado,
+        code_telefono: codeTelefono,
+        contrasena,
+      },
+      CONFIG_PREREGISTRO_PUBLICO
+    )
   );
 }
 
@@ -144,7 +172,9 @@ export function guardarCurp(datosCurp) {
     throw new Error("Falta el identificador del preregistro para guardar CURP.");
   }
 
-  return ejecutarSolicitud(() => api.post(RUTAS_PREREGISTRO.guardarCurp, datosCurp));
+  return ejecutarSolicitud(() =>
+    api.post(RUTAS_PREREGISTRO.guardarCurp, datosCurp, CONFIG_PREREGISTRO_PUBLICO)
+  );
 }
 
 export function guardarDireccion(datosDireccion) {
@@ -152,7 +182,9 @@ export function guardarDireccion(datosDireccion) {
     throw new Error("Falta el identificador del preregistro para guardar dirección.");
   }
 
-  return ejecutarSolicitud(() => api.post(RUTAS_PREREGISTRO.guardarDireccion, datosDireccion));
+  return ejecutarSolicitud(() =>
+    api.post(RUTAS_PREREGISTRO.guardarDireccion, datosDireccion, CONFIG_PREREGISTRO_PUBLICO)
+  );
 }
 
 export function registrarDireccion({ id, direccion }) {
@@ -161,7 +193,10 @@ export function registrarDireccion({ id, direccion }) {
   }
 
   return ejecutarSolicitud(() =>
-    api.post(RUTAS_PREREGISTRO.registrarDireccion, direccion, { params: { id } })
+    api.post(RUTAS_PREREGISTRO.registrarDireccion, direccion, {
+      ...CONFIG_PREREGISTRO_PUBLICO,
+      params: { id },
+    })
   );
 }
 
@@ -171,7 +206,10 @@ export function buscarPreregistroPorCorreo(correo) {
   }
 
   return ejecutarSolicitud(() =>
-    api.get(RUTAS_PREREGISTRO.buscarPorCorreo, { params: { correo: correo.trim() } })
+    api.get(RUTAS_PREREGISTRO.buscarPorCorreo, {
+      ...CONFIG_PREREGISTRO_PUBLICO,
+      params: { correo: correo.trim() },
+    })
   );
 }
 
@@ -183,6 +221,9 @@ export function buscarPreregistroPorTelefono(telefono) {
   }
 
   return ejecutarSolicitud(() =>
-    api.get(RUTAS_PREREGISTRO.buscarPorTelefono, { params: { telefono: telefonoNormalizado } })
+    api.get(RUTAS_PREREGISTRO.buscarPorTelefono, {
+      ...CONFIG_PREREGISTRO_PUBLICO,
+      params: { telefono: telefonoNormalizado },
+    })
   );
 }

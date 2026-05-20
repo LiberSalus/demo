@@ -2,14 +2,11 @@
 
 ## Objetivo
 
-Integrar la experiencia de inicio de sesion de `LoginLiberS` dentro del dashboard `lsinciosesionweb`, manteniendo un solo flujo de autenticacion, un solo cliente API y una ruta clara para consumir datos reales del backend.
-
-El snapshot de referencia queda en `integraciones/LoginLiberS`. Ese directorio no debe conectarse directo al runtime del dashboard; se usara como fuente para migrar componentes, estilos y flujos de forma controlada.
+Integrar la experiencia de inicio de sesion migrada desde `LoginLiberS` dentro del dashboard `lsinciosesionweb`, manteniendo un solo flujo de autenticacion, un solo cliente API y una ruta clara para consumir datos reales del backend.
 
 ## Principios de trabajo
 
 - Hacer cambios pequenos y verificables.
-- Mantener el login viejo como respaldo hasta que el nuevo este probado.
 - Centralizar la sesion en `src/services/auth.js`.
 - Centralizar las llamadas HTTP en `src/services/apiClient.js`.
 - Usar nombres claros en espanol para funciones nuevas o refactorizadas.
@@ -19,12 +16,11 @@ El snapshot de referencia queda en `integraciones/LoginLiberS`. Ese directorio n
 
 ## Hallazgos iniciales
 
-- El dashboard usa React 18 y `LoginLiberS` usa React 19. No se debe mezclar el `package.json` del snapshot con el dashboard.
-- El dashboard tiene `src/services/apiClient.js`, pero tambien existe `src/lib/apiClient.js`. Hay que revisar si el segundo sigue en uso antes de eliminarlo o unificarlo.
-- `src/services/auth.js` ya usa `sesion/autenticacion/mediciones/iniciar-sesion` para el inicio de sesion integrado.
-- `LoginLiberS` ya tiene el endpoint correcto para mediciones, pero tambien trae su propio `apiClient`, `env` y rutas.
+- La integracion ya vive en `src/features/autenticacion`; el snapshot de `integraciones/LoginLiberS` fue retirado para evitar duplicidad.
+- `src/lib/apiClient.js` fue eliminado; `src/services/apiClient.js` queda como unico cliente HTTP.
+- `src/services/auth.js` usa `sesion/auth/token`, `sesion/auth/me` y `sesion/auth/logout`.
 - `.env` y `.env.development` aparecen versionados aunque el `.gitignore` ya los incluye. No contienen secretos en la revision actual, pero deben tratarse como riesgo de configuracion.
-- El guard actual prioriza token real. `auth_ready` queda como compatibilidad temporal para migracion/desarrollo.
+- El guard acepta token local si existe o sesion marcada por cookie HttpOnly con `auth_ready`.
 - Hay uso legitimo de `localStorage` para datos locales del dashboard, pero la autenticacion debe guardar solo lo minimo.
 - No se encontro `dangerouslySetInnerHTML` en el codigo activo revisado. Hay `innerHTML` dentro de copias de `particles.js` en demos vendorizados, no en pantallas activas.
 
@@ -48,7 +44,7 @@ El snapshot de referencia queda en `integraciones/LoginLiberS`. Ese directorio n
 - El login nuevo debe llamar a `iniciarSesion` del dashboard, no a los servicios copiados.
 - La validacion de acceso protegido debe depender de token y posteriormente de `mi-sesion`.
 - El mock de auth debe estar apagado por defecto y nunca activarse accidentalmente en produccion.
-- El bridge de desarrollo entre puertos debe eliminarse cuando el login nuevo viva dentro del dashboard.
+- El bridge de desarrollo entre puertos fue eliminado porque login y dashboard viven en el mismo proyecto.
 
 ### Rendimiento
 
@@ -100,19 +96,17 @@ src/
     env.js
 ```
 
-`integraciones/LoginLiberS` queda como referencia temporal. Cuando la migracion este estable, se elimina o se mueve a documentacion externa.
-
 ## Estado actual del login integrado
 
 - `/panel/login` renderiza el login nuevo integrado.
-- `/panel/login-anterior` conserva el login previo como respaldo temporal.
-- El bridge local entre `5173` y `5174` queda apagado en desarrollo con `VITE_DEV_AUTH_BRIDGE=0`.
-- El inicio de sesion llama al endpoint de mediciones y centraliza token/perfil en `src/services/auth.js`.
-- El cliente API agrega el token en `Authorization` y limpia sesion ante respuestas `401`.
+- La ruta `/panel/login-anterior` y el login viejo fueron retirados.
+- El inicio de sesion llama a `sesion/auth/token` con formulario `application/x-www-form-urlencoded`.
+- El cliente API manda cookies con `withCredentials: true`, agrega `Authorization` si existe token local y limpia sesion ante respuestas `401`.
 - `obtenerSesionActual` ya existe, pero todavia falta usarlo en componentes del dashboard.
 - Fase 5 en curso: ya existe `src/services/preregistro.js` con rutas vigentes del Swagger de preregistro.
 - El login integrado ya puede abrir el flujo inicial de registro: cuenta, envio de codigo, validacion y confirmacion.
 - Despues de confirmar el codigo, el flujo muestra la seleccion entre captura manual y documentos, y luego continua a datos personales/domicilio antes de volver al login.
+- El registro valida contraseña y confirmacion mientras el usuario captura, y permite elegir lada de telefono antes de enviar preregistro.
 
 ## Fases de aplicacion
 
@@ -202,20 +196,20 @@ Criterio de salida: el dashboard pinta datos reales con token autenticado.
 - Fase 1 completada: login nuevo aislado; esa ruta temporal fue reemplazada por `/login`.
 - Fase 2 completada: login nuevo conectado al servicio real de sesion.
 - Fase 3 completada: rutas protegidas dependen de token, se agrego lectura de sesion actual y limpieza automatica ante `401`.
-- Fase 4 completada: `/login` usa el login nuevo y el login anterior queda temporalmente en `/login-anterior`.
+- Fase 4 completada: `/login` usa el login nuevo; el login anterior y `/login-anterior` fueron retirados.
 - Fase 5 en curso: registro por correo validado; se agregaron seleccion de captura, documentos, datos personales y domicilio.
+- Limpieza completada: se retiraron snapshot, login viejo, ruta anterior, cliente API duplicado, logger sin uso y bridge local.
+- Pulido de registro en curso: validacion inmediata de contraseña y selector de lada telefonica.
 
 ## Pendientes inmediatos
 
 1. Probar manualmente `/panel/login` con un usuario valido del backend.
 2. Verificar que logout limpie sesion y regrese a `/panel/login`.
 3. Conectar `obtenerSesionActual` al layout/Header para pintar datos reales de usuario.
-4. Revisar si `src/lib/apiClient.js` sigue en uso; si no, eliminar o documentar su retiro.
-5. Probar flujo de preregistro completo: correo, codigo, cuenta, datos personales y domicilio.
+4. Probar flujo de preregistro completo: correo, codigo, cuenta, datos personales y domicilio.
+5. Confirmar selector de lada con numeros reales fuera de Mexico si se habilitan mas paises.
 6. Confirmar con Network las respuestas de `guardar-curp` y `guardar-direccion`.
 7. Confirmar endpoints definitivos de carga de documentos para conectar la opcion de archivos al backend.
-7. Decidir si la finalizacion de registro debe iniciar sesion automaticamente o mandar a `/panel/login`.
-8. Quitar `/panel/login-anterior` cuando el login nuevo quede validado.
-9. Limpiar `integraciones/LoginLiberS` cuando ya no haga falta como referencia.
+8. Decidir si la finalizacion de registro debe iniciar sesion automaticamente o mandar a `/panel/login`.
 
 El siguiente paso recomendado es validar el login integrado con un usuario real y luego conectar `mi-sesion` al Header/TarjetaUsuario antes de entrar al preregistro completo.
