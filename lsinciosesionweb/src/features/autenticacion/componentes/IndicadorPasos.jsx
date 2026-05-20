@@ -30,8 +30,16 @@ function IndicadorPasos({ pasos, pasoActivo }) {
           <li className={estilos.indicadorPasosItem} key={paso.id}>
             <img className={estilos.indicadorPasosIcono} src={iconoPaso} alt={`Paso ${indice + 1}`} />
             <div className={estilos.indicadorPasosContenido}>
-              <strong>{paso.titulo}</strong>
-              <span>{paso.descripcion}</span>
+              <span className={estilos.indicadorPasosLinea}>
+                {paso.titulo}
+                {paso.tituloFuerte ? <strong>{paso.tituloFuerte}</strong> : null}
+              </span>
+              {paso.descripcion ? <span>{paso.descripcion}</span> : null}
+              {paso.descripcionFuerte ? (
+                <strong className={estilos.indicadorPasosDescripcionFuerte}>
+                  {paso.descripcionFuerte}
+                </strong>
+              ) : null}
             </div>
           </li>
         )

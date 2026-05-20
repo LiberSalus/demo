@@ -6,6 +6,7 @@ import MainMenu from "@/components/Header/menu/Menu";
 import Footer from "@/components/Footer/Footer";
 import styles from "./principal.module.css";
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
+import { sincronizarPerfilSesion } from "@/services/auth";
 
 
 export default function Principal({ children }) {
@@ -32,22 +33,25 @@ export default function Principal({ children }) {
   }, []);
 
   useEffect(() => {
-  leerPerfil(); // al montar
+    leerPerfil();
+    sincronizarPerfilSesion().catch(() => {
+      // Si la sesión ya expiró, el interceptor global se encarga de limpiar.
+    });
 
-  const handler = (e) => {
-    const v = e?.detail?.esMujer;
+    const handler = (e) => {
+      const v = e?.detail?.esMujer;
 
-    if (typeof v === "boolean") {
-      setEsMujer(v);      // ✅ directo desde Inicio
-    } else {
-      leerPerfil();       // fallback por si no viene detail
-    }
-  };
+      if (typeof v === "boolean") {
+        setEsMujer(v);
+      } else {
+        leerPerfil();
+      }
+    };
 
-  window.addEventListener("perfil_min_updated", handler);
+    window.addEventListener("perfil_min_updated", handler);
 
-  return () => window.removeEventListener("perfil_min_updated", handler);
-}, [leerPerfil]);
+    return () => window.removeEventListener("perfil_min_updated", handler);
+  }, [leerPerfil]);
 
   const content = children ?? <Outlet />;
 

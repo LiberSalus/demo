@@ -14,6 +14,11 @@ const RUTAS_AUTH = {
   refreshToken: "sesion/auth/refresh-token",
 };
 
+const CONFIG_CONSULTA_PERFIL = {
+  omitirLimpiezaSesion: true,
+};
+
+// Extrae un mensaje entendible desde las respuestas de error del backend.
 function obtenerMensajeError(error) {
   const detalle = error?.response?.data?.detail;
   const mensaje = error?.response?.data?.message;
@@ -24,6 +29,7 @@ function obtenerMensajeError(error) {
   return error?.message || "No fue posible completar la solicitud.";
 }
 
+// Limpia formatos comunes para guardar solo el valor real del token.
 function normalizarToken(valor) {
   if (typeof valor !== "string") return "";
 
@@ -34,12 +40,14 @@ function normalizarToken(valor) {
     .trim();
 }
 
+// Ayuda a reconocer tokens dentro de respuestas no estandarizadas del backend.
 function pareceToken(valor) {
   const token = normalizarToken(valor);
 
   return token.length > 20 && !/\s/.test(token);
 }
 
+// Busca el token en objetos simples o anidados cuando el backend cambia nombres de campos.
 function buscarTokenEnObjeto(valor) {
   if (!valor || typeof valor !== "object") return "";
 
@@ -74,6 +82,7 @@ function buscarTokenEnObjeto(valor) {
   return "";
 }
 
+// Acepta respuestas en texto u objeto y devuelve el token si viene expuesto.
 function obtenerTokenDeRespuesta(datos) {
   if (typeof datos === "string" && datos.trim()) {
     const texto = normalizarToken(datos);
@@ -88,6 +97,7 @@ function obtenerTokenDeRespuesta(datos) {
   return buscarTokenEnObjeto(datos);
 }
 
+// Genera una sesion local de desarrollo cuando VITE_MOCK_AUTH esta activo.
 function crearTokenFalso({ usuario, rol }) {
   const encabezado = { alg: "none", typ: "JWT" };
   const ahoraSegundos = Math.floor(Date.now() / 1000);
@@ -103,23 +113,33 @@ function crearTokenFalso({ usuario, rol }) {
   return `${aBase64(encabezado)}.${aBase64(payload)}.`;
 }
 
+// Construye un nombre visible con los campos disponibles del usuario.
 function obtenerNombreUsuario(usuario = {}, correo = "") {
   if (usuario.first_name && usuario.last_name) {
     return `${usuario.first_name} ${usuario.last_name}`;
   }
 
-  return usuario.nombre || usuario.name || usuario.email || usuario.correo || correo || "Usuario";
+  return (
+    usuario.nombre_completo ||
+    usuario.nombre ||
+    usuario.name ||
+    usuario.first_name ||
+    usuario.username ||
+    usuario.email ||
+    usuario.correo ||
+    correo ||
+    "Usuario"
+  );
 }
 
+// Aisla el usuario desde distintas formas de respuesta del servicio.
 function obtenerUsuarioDeRespuesta(respuesta) {
-  const usuario =
-    respuesta && typeof respuesta === "object"
-      ? respuesta.user || respuesta.usuario || {}
-      : {};
+  if (!respuesta || typeof respuesta !== "object") return {};
 
-  return usuario;
+  return respuesta.user || respuesta.usuario || respuesta.data || respuesta;
 }
 
+// Guarda una version minima del perfil para cabeceras y componentes del dashboard.
 function guardarPerfilMinimo({ usuario, correo }) {
   localStorage.setItem(
     CLAVE_PERFIL_MINIMO,
@@ -128,6 +148,10 @@ function guardarPerfilMinimo({ usuario, correo }) {
       email: usuario.email || usuario.correo || correo || "",
       first_name: usuario.first_name,
       last_name: usuario.last_name,
+      nombre_completo: usuario.nombre_completo,
+      username: usuario.username,
+      telefono: usuario.telefono,
+      rol: usuario.rol,
       sexo: usuario.sexo || usuario.genero || usuario.gender,
     })
   );
@@ -137,6 +161,7 @@ function guardarPerfilMinimo({ usuario, correo }) {
   window.dispatchEvent(new CustomEvent("perfil_min_updated"));
 }
 
+// Registra la sesion local; soporta token visible o cookie HttpOnly del backend.
 function guardarSesionAutenticada({ respuesta, correo }) {
   const token = obtenerTokenDeRespuesta(respuesta);
 
@@ -152,6 +177,7 @@ function guardarSesionAutenticada({ respuesta, correo }) {
   guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(respuesta), correo });
 }
 
+// Indica si el dashboard debe permitir acceso a rutas protegidas.
 export function estaAutenticado() {
   const tieneToken = Boolean(getAuthToken());
   const sesionLista = localStorage.getItem(CLAVE_SESION_LISTA) === "1";
@@ -159,12 +185,14 @@ export function estaAutenticado() {
   return tieneToken || sesionLista;
 }
 
+// Limpia cualquier rastro local de autenticacion usado por el frontend.
 export function limpiarSesionAutenticacion() {
   clearAuthToken();
   localStorage.removeItem(CLAVE_SESION_LISTA);
   localStorage.removeItem(CLAVE_PERFIL_MINIMO);
 }
 
+// Inicia sesion contra /auth/token y deja preparada la cookie/token para el dashboard.
 export async function iniciarSesion({
   username,
   password,
@@ -222,9 +250,10 @@ export async function iniciarSesion({
   }
 }
 
+// Consulta el usuario vigente para validar sesion y refrescar datos basicos de perfil.
 export async function obtenerSesionActual() {
   try {
-    const { data } = await api.get(RUTAS_AUTH.me);
+    const { data } = await api.get(RUTAS_AUTH.me, CONFIG_CONSULTA_PERFIL);
     guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
 
     return data;
@@ -233,12 +262,31 @@ export async function obtenerSesionActual() {
   }
 }
 
-export const decodificarToken = () =>
-  api.get(RUTAS_AUTH.decodeToken).then((respuesta) => respuesta.data);
+// Sincroniza el perfil del dashboard; usa /auth/me y deja /decode-token como respaldo.
+export async function sincronizarPerfilSesion() {
+  try {
+    return await obtenerSesionActual();
+  } catch (errorSesion) {
+    try {
+      const data = await decodificarToken();
+      guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
 
+      return data;
+    } catch {
+      return null;
+    }
+  }
+}
+
+// Pide al backend interpretar el token/cookie actual para diagnostico o datos de sesion.
+export const decodificarToken = () =>
+  api.get(RUTAS_AUTH.decodeToken, CONFIG_CONSULTA_PERFIL).then((respuesta) => respuesta.data);
+
+// Solicita al backend renovar la sesion cuando el servicio lo permita.
 export const refrescarToken = () =>
   api.post(RUTAS_AUTH.refreshToken).then((respuesta) => respuesta.data);
 
+// Cierra la sesion en backend y siempre limpia la sesion local al terminar.
 export async function cerrarSesion() {
   try {
     return await api.post(RUTAS_AUTH.logout).then((respuesta) => respuesta.data);

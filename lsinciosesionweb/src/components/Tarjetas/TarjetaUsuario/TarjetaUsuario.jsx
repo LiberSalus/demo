@@ -27,17 +27,27 @@ const TarjetaUsuario = () => {
   useLockBodyScroll(isOpen);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('perfil_min');
-      if (raw) {
-        const p = JSON.parse(raw);
-        const fullName =
-          (p?.first_name && p?.last_name && `${p.first_name} ${p.last_name}`) ||
-          p?.nombre || 'Usuario';
-        setNombre(fullName);
-        if (p?.email) setCorreo(p.email);
-      }
-    } catch {}
+    const leerPerfilLocal = () => {
+      try {
+        const raw = localStorage.getItem('perfil_min');
+        if (raw) {
+          const p = JSON.parse(raw);
+          const fullName =
+            p?.nombre ||
+            p?.nombre_completo ||
+            (p?.first_name && `${p.first_name} ${p.last_name ?? ''}`.trim()) ||
+            'Usuario';
+
+          setNombre(fullName);
+          if (p?.email) setCorreo(p.email);
+        }
+      } catch {}
+    };
+
+    leerPerfilLocal();
+    window.addEventListener('perfil_min_updated', leerPerfilLocal);
+
+    return () => window.removeEventListener('perfil_min_updated', leerPerfilLocal);
   }, []);
 
   // accesibilidad: cerrar con ESC

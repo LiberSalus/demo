@@ -359,10 +359,48 @@
   box-shadow: 0 0 0 0.0625rem #d71920;
 }
 
+.campoFormularioContenedorExitoTemporal {
+  animation: bordeContrasenaValida 1.1s ease-out;
+}
+
 .campoFormularioError {
   color: #d71920;
   font-size: 0.72rem;
   line-height: 1.3;
+}
+
+.listaValidacionContrasena {
+  margin: -0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.32rem;
+}
+
+.listaValidacionContrasenaItem,
+.listaValidacionContrasenaItemValido {
+  color: #66748f;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.listaValidacionContrasenaItemValido {
+  color: #1f8f4d;
+  font-weight: 700;
+}
+
+@keyframes bordeContrasenaValida {
+  0%,
+  55% {
+    border-color: #1f8f4d;
+    box-shadow: 0 0 0 0.0625rem #1f8f4d, 0 0 0 0.22rem rgba(31, 143, 77, 0.16);
+  }
+
+  100% {
+    border-color: #b7d0f3;
+    box-shadow: 0 0 0 0 rgba(31, 143, 77, 0);
+  }
 }
 
 .selectorPerfil {
@@ -687,6 +725,31 @@
   text-decoration: underline;
 }
 
+.accionTextoLegalResaltado {
+  animation: resaltarEnlaceLegal 1.15s ease-out;
+}
+
+@keyframes resaltarEnlaceLegal {
+  0% {
+    color: #005f96;
+    text-shadow:
+      0 0 0.1rem rgba(0, 124, 186, 0.95),
+      0 0 0.45rem rgba(0, 124, 186, 0.5);
+  }
+
+  55% {
+    color: #005f96;
+    text-shadow:
+      0 0 0.08rem rgba(0, 124, 186, 0.85),
+      0 0 0.35rem rgba(0, 124, 186, 0.35);
+  }
+
+  100% {
+    color: var(--color-primario);
+    text-shadow: 0 0 0 rgba(0, 124, 186, 0);
+  }
+}
+
 .mensajeFormularioError,
 .mensajeFormularioExito {
   margin: 0;
@@ -840,7 +903,8 @@
 .codigoVerificacionCasilla {
   width: 100%;
   min-width: 0;
-  min-height: 3.9rem;
+  min-height: 3.5rem;
+  height: 3.5rem;
   border: 0.0625rem solid #b7d0f3;
   border-radius: 0.55rem;
   background: #ffffff;
@@ -1858,23 +1922,23 @@
     }
 
   .panelLateralNota {
-      margin: 1.55rem 0 0;
-      max-width: 23rem;
+      margin: 1.7rem 0 0;
+      max-width: 27.5rem;
       color: rgba(255, 255, 255, 0.95);
       font-family: var(--autenticacion-fuente-cuerpo);
-      font-size: 1rem;
-      font-weight: 500;
-      line-height: 1.5;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
       text-align: left;
       white-space: pre-line;
     }
 
   .indicadorPasos {
-      margin: 1.2rem 0 0;
+      margin: 1.65rem 0 0;
       padding: 0;
       list-style: none;
       display: grid;
-      gap: 0.95rem;
+      gap: 1.05rem;
     }
 
   .indicadorPasosItem {
@@ -1891,24 +1955,40 @@
     }
 
   .indicadorPasosContenido {
-      padding-top: 0.7rem;
+      padding-top: 0.82rem;
       color: #ffffff;
       text-align: left;
     }
 
-  .indicadorPasosContenido strong,
-  .indicadorPasosContenido span {
+  .indicadorPasosContenido span,
+  .indicadorPasosDescripcionFuerte {
       display: block;
-    line-height: 1.3;
+      color: #ffffff;
+      font-family: var(--autenticacion-fuente-cuerpo);
+      line-height: 1.28;
   }
 
-  .indicadorPasosContenido strong {
-      font-size: 0.9rem;
-      font-weight: 700;
+  .indicadorPasosLinea {
+      font-size: 1.02rem;
+      font-weight: 500;
     }
 
-  .indicadorPasosContenido span {
-      font-size: 0.82rem;
+  .indicadorPasosLinea strong,
+  .indicadorPasosDescripcionFuerte {
+      display: inline;
+      font-size: inherit;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+  .indicadorPasosContenido > span:not(.indicadorPasosLinea) {
+      font-size: 0.98rem;
+      font-weight: 500;
+    }
+
+  .indicadorPasosDescripcionFuerte {
+      display: block;
+      font-size: 0.98rem;
     }
 
   .vistaAutenticacionPrincipal {
@@ -2172,23 +2252,23 @@
   }
 
   .panelLateralNota {
-    margin: 1.45rem auto;
-    max-width: 24rem;
+    margin: 1.7rem auto 0;
+    max-width: 28rem;
     color: rgba(255, 255, 255, 0.95);
     font-family: var(--autenticacion-fuente-cuerpo);
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.5;
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.35;
     text-align: left;
     white-space: pre-line;
   }
 
   .indicadorPasos {
-    margin: 1rem auto;
+    margin: 2.65rem auto 0;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 0.9rem;
+    gap: 1.05rem;
   }
 
   .indicadorPasosItem {
@@ -2206,24 +2286,40 @@
   
   .indicadorPasosContenido {
     margin-top: 0.5rem;
-    padding-top: 0.68rem;
+    padding-top: 0.72rem;
     color: #ffffff;
     text-align: left;
   }
 
-  .indicadorPasosContenido strong,
-  .indicadorPasosContenido span {
+  .indicadorPasosContenido span,
+  .indicadorPasosDescripcionFuerte {
     display: block;
-    line-height: 1.3;
+    color: #ffffff;
+    font-family: var(--autenticacion-fuente-cuerpo);
+    line-height: 1.28;
   }
 
-  .indicadorPasosContenido strong {
-    font-size: 0.96rem;
-    font-weight: 700;
+  .indicadorPasosLinea {
+    font-size: 1.05rem;
+    font-weight: 500;
   }
 
-  .indicadorPasosContenido span {
-    font-size: 0.88rem;
+  .indicadorPasosLinea strong,
+  .indicadorPasosDescripcionFuerte {
+    display: inline;
+    font-size: inherit;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .indicadorPasosContenido > span:not(.indicadorPasosLinea) {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .indicadorPasosDescripcionFuerte {
+    display: block;
+    font-size: 1rem;
   }
 
   .vistaAutenticacionPrincipal {

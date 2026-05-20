@@ -12,6 +12,7 @@ function CampoFormulario({
   prefijo,
   iconoFinal,
   error,
+  exitoTemporal = false,
   permiteMostrarContrasena = false,
   soloLectura = false,
   valor,
@@ -33,9 +34,13 @@ function CampoFormulario({
         <span className={estilos.campoFormularioDescripcion}>{descripcion}</span>
       ) : null}
       <span
-        className={`${estilos.campoFormularioContenedor} ${
-          error ? estilos.campoFormularioContenedorError : ''
-        }`}
+        className={[
+          estilos.campoFormularioContenedor,
+          error ? estilos.campoFormularioContenedorError : '',
+          !error && exitoTemporal ? estilos.campoFormularioContenedorExitoTemporal : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
       >
         {prefijo ? <span className={estilos.campoFormularioPrefijo}>{prefijo}</span> : null}
         {tipo === 'select' ? (

@@ -1,18 +1,19 @@
 const pasosVisuales = [
   {
     id: 'cuenta',
-    titulo: 'Crea tu usuario.',
-    descripcion: 'Registra y valida tu correo.',
+    titulo: 'Crea tu ',
+    tituloFuerte: 'usuario.',
+    descripcion: 'Llena tus datos personales.',
   },
   {
     id: 'perfil',
-    titulo: 'Completa tu perfil.',
-    descripcion: 'Lo migraremos en el siguiente bloque.',
+    titulo: 'Sube tus documentos.',
+    descripcionFuerte: 'CURP, INE y comprobante de domicilio.',
   },
   {
     id: 'confirmacion',
-    titulo: 'Entra al dashboard.',
-    descripcion: 'Usa tus credenciales validadas.',
+    titulo: 'Completa tus ',
+    tituloFuerte: 'cuestionarios de salud.',
   },
 ]
 
@@ -21,23 +22,23 @@ export const panelesLaterales = {
     titular: '¡Bienvenido a\nHCD Libersalus!',
     descripcion: 'Afíliate y toma control de tu bienestar',
     nota:
-      'Primero crearemos tu usuario y validaremos tu correo. Después continuaremos con perfil y domicilio.',
+      'Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.\n\nEste proceso es sencillo y solo toma 3 pasos.',
     pasos: pasosVisuales,
     pasoActivo: 'cuenta',
   },
   perfil: {
-    titular: 'Completa tu perfil',
-    descripcion: 'Captura tus datos personales y domicilio.',
+    titular: '¡Bienvenido a\nHCD Libersalus!',
+    descripcion: 'Afíliate y toma control de tu bienestar',
     nota:
-      'Estos datos permiten terminar tu preregistro antes de iniciar sesión en el dashboard.',
+      'Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.\n\nEste proceso es sencillo y solo toma 3 pasos.',
     pasos: pasosVisuales,
     pasoActivo: 'perfil',
   },
   confirmacion: {
-    titular: 'Registro casi listo',
-    descripcion: 'Tu información fue recibida.',
+    titular: '¡Bienvenido a\nHCD Libersalus!',
+    descripcion: 'Afíliate y toma control de tu bienestar',
     nota:
-      'Al finalizar, vuelve al inicio de sesión para entrar con la cuenta que acabas de crear.',
+      'Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.\n\nEste proceso es sencillo y solo toma 3 pasos.',
     pasos: pasosVisuales,
     pasoActivo: 'confirmacion',
   },

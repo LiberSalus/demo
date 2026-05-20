@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BotonPrincipal from '../componentes/BotonPrincipal'
 import CampoFormulario from '../componentes/CampoFormulario'
 import ModalAvisoLegal from '../componentes/ModalAvisoLegal'
@@ -40,15 +40,55 @@ const opcionesLadaTelefono = [
   { valor: '+34', etiqueta: 'ES +34', longitud: 9 },
 ]
 
+function obtenerReglasContrasena(contrasena) {
+  return [
+    {
+      id: 'minimo',
+      texto: 'Mínimo 8 caracteres',
+      valida: contrasena.length >= 8,
+      error: 'La contraseña debe tener al menos 8 caracteres.',
+    },
+    {
+      id: 'mayuscula',
+      texto: 'Incluye una letra mayúscula',
+      valida: /[A-Z]/.test(contrasena),
+      error: 'La contraseña debe incluir al menos una letra mayúscula.',
+    },
+    {
+      id: 'minuscula',
+      texto: 'Incluye una letra minúscula',
+      valida: /[a-z]/.test(contrasena),
+      error: 'La contraseña debe incluir al menos una letra minúscula.',
+    },
+    {
+      id: 'numero',
+      texto: 'Un número',
+      valida: /\d/.test(contrasena),
+      error: 'La contraseña debe incluir al menos un número.',
+    },
+    {
+      id: 'simbolo',
+      texto: 'Un símbolo',
+      valida: /[^A-Za-z0-9\s]/.test(contrasena),
+      error: 'La contraseña debe incluir al menos un símbolo.',
+    },
+    {
+      id: 'espacios',
+      texto: 'No uses espacios',
+      valida: Boolean(contrasena) && !/\s/.test(contrasena),
+      error: 'La contraseña no debe contener espacios.',
+    },
+  ]
+}
+
 function obtenerErrorContrasena(contrasena) {
   if (!contrasena) return ''
-  if (contrasena.length < 8) return 'La contraseña debe tener al menos 8 caracteres.'
-  if (contrasena.length > 20) return 'La contraseña debe tener máximo 20 caracteres.'
-  if (/\s/.test(contrasena)) return 'La contraseña no debe contener espacios.'
-  if (!/[A-Za-z]/.test(contrasena)) return 'La contraseña debe incluir al menos una letra.'
-  if (!/\d/.test(contrasena)) return 'La contraseña debe incluir al menos un número.'
 
-  return ''
+  const reglaInvalida = obtenerReglasContrasena(contrasena).find(
+    (regla) => !regla.valida,
+  )
+
+  return reglaInvalida?.error || ''
 }
 
 function obtenerErrorConfirmacion(contrasena, confirmacion) {
@@ -87,12 +127,42 @@ function PasoRegistroCuenta({
   const [avisoLegalAceptado, setAvisoLegalAceptado] = useState(false)
   const [modalLegalAbierto, setModalLegalAbierto] = useState(false)
   const [confirmacionModal, setConfirmacionModal] = useState(false)
+  const [resaltarContrasenaValida, setResaltarContrasenaValida] = useState(false)
+  const [intentosAceptarLegal, setIntentosAceptarLegal] = useState(0)
+  const contrasenaValidaPrevia = useRef(false)
+  const reglasContrasena = obtenerReglasContrasena(datos.contrasena)
+  const contrasenaCumpleReglas =
+    Boolean(datos.contrasena) && reglasContrasena.every((regla) => regla.valida)
+  const mostrarReglasContrasena = Boolean(
+    datos.contrasena || datos.confirmarContrasena,
+  )
   const errorContrasena = obtenerErrorContrasena(datos.contrasena)
   const errorConfirmacion = obtenerErrorConfirmacion(
     datos.contrasena,
     datos.confirmarContrasena,
   )
   const errorTelefono = obtenerErrorTelefono(datos.telefono, datos.codeTelefono)
+
+  useEffect(() => {
+    let temporizador
+
+    if (contrasenaCumpleReglas && !contrasenaValidaPrevia.current) {
+      setResaltarContrasenaValida(true)
+      temporizador = window.setTimeout(() => {
+        setResaltarContrasenaValida(false)
+      }, 1100)
+    }
+
+    if (!contrasenaCumpleReglas) {
+      setResaltarContrasenaValida(false)
+    }
+
+    contrasenaValidaPrevia.current = contrasenaCumpleReglas
+
+    return () => {
+      if (temporizador) window.clearTimeout(temporizador)
+    }
+  }, [contrasenaCumpleReglas])
 
   const abrirModalLegal = () => {
     setModalLegalAbierto(true)
@@ -109,6 +179,12 @@ function PasoRegistroCuenta({
 
     setAvisoLegalAceptado(true)
     cerrarModalLegal()
+  }
+
+  const orientarALecturaLegal = () => {
+    if (avisoLegalAceptado) return
+
+    setIntentosAceptarLegal((intentosActuales) => intentosActuales + 1)
   }
 
   const manejarCrearCuenta = () => {
@@ -222,7 +298,7 @@ function PasoRegistroCuenta({
           marcador="Tu contraseña"
           permiteMostrarContrasena
           valor={datos.contrasena}
-          error={errorContrasena}
+          exitoTemporal={resaltarContrasenaValida}
           onChange={(evento) => {
             limpiarMensajes()
             actualizarDatos({ contrasena: evento.target.value })
@@ -242,6 +318,23 @@ function PasoRegistroCuenta({
             actualizarDatos({ confirmarContrasena: evento.target.value })
           }}
         />
+
+        {mostrarReglasContrasena ? (
+          <ul className={estilos.listaValidacionContrasena} aria-label="Requisitos de contraseña">
+            {reglasContrasena.map((regla) => (
+              <li
+                key={regla.id}
+                className={
+                  regla.valida
+                    ? estilos.listaValidacionContrasenaItemValido
+                    : estilos.listaValidacionContrasenaItem
+                }
+              >
+                {regla.texto}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
 
       {estado.error ? (
@@ -249,11 +342,20 @@ function PasoRegistroCuenta({
       ) : null}
 
       <div className={estilos.aceptacionTerminos}>
-        <input checked={avisoLegalAceptado} readOnly type="checkbox" />
+        <input
+          checked={avisoLegalAceptado}
+          readOnly
+          type="checkbox"
+          aria-label="Abrir términos y aviso de privacidad desde los enlaces"
+          onClick={orientarALecturaLegal}
+        />
         <span>
           {contenido.textoAceptacionInicial}{' '}
           <button
-            className={estilos.accionTexto}
+            key={`terminos-${intentosAceptarLegal}`}
+            className={`${estilos.accionTexto} ${
+              intentosAceptarLegal ? estilos.accionTextoLegalResaltado : ''
+            }`}
             type="button"
             onClick={abrirModalLegal}
           >
@@ -261,7 +363,10 @@ function PasoRegistroCuenta({
           </button>{' '}
           {contenido.textoConectorPoliticas}{' '}
           <button
-            className={estilos.accionTexto}
+            key={`politicas-${intentosAceptarLegal}`}
+            className={`${estilos.accionTexto} ${
+              intentosAceptarLegal ? estilos.accionTextoLegalResaltado : ''
+            }`}
             type="button"
             onClick={abrirModalLegal}
           >

@@ -1,5 +1,5 @@
 //src\pages\Inicio\Inicio.jsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./inicio.module.css";
 import mona from "./monaP.webp";
 import mono from "./monoP.webp";
@@ -14,10 +14,47 @@ import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
 import AgendaInicio from "./Calendario/AgendaInicio";
 import Sos from "@/components/Sos/Sos";
+import { obtenerHomePaciente } from "@/services/dashboard";
+
+const resumenSaludInicial = {
+  edad: "50",
+  peso: "90",
+  sangre: "A+",
+  estatura: "177",
+};
+
+const mensajeInicial = "Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.";
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
   const [esMujer, setEsMujer] = useState(false);
+  const [resumenSalud, setResumenSalud] = useState(resumenSaludInicial);
+  const [mensaje, setMensaje] = useState(mensajeInicial);
+
+  const leerPerfilLocal = useCallback(() => {
+    try {
+      const raw = localStorage.getItem("perfil_min");
+      if (!raw) return;
+
+      const p = JSON.parse(raw);
+      const nombrePerfil =
+        p?.nombre ||
+        p?.nombre_completo ||
+        (p?.first_name && `${p.first_name} ${p.last_name ?? ""}`.trim());
+
+      if (nombrePerfil) setNombre(nombrePerfil);
+
+      const sexo = p?.sexo || p?.genero || p?.gender;
+      if (sexo) {
+        const s = String(sexo).toLowerCase();
+        const mujer =
+          s === "f" || s === "mujer" || s === "femenino" || s === "female";
+        setEsMujer(mujer);
+      }
+    } catch {
+      null;
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;
@@ -30,29 +67,49 @@ export default function Inicio() {
   }, [esMujer]);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("perfil_min");
-      if (raw) {
-        const p = JSON.parse(raw);
+    leerPerfilLocal();
+    window.addEventListener("perfil_min_updated", leerPerfilLocal);
 
-        if (p?.nombre) setNombre(p.nombre);
-        if (!p?.nombre && p?.first_name) {
-          setNombre(`${p.first_name} ${p.last_name ?? ""}`.trim());
-        }
+    return () => window.removeEventListener("perfil_min_updated", leerPerfilLocal);
+  }, [leerPerfilLocal]);
 
-        const sexo = p?.sexo || p?.genero || p?.gender;
+  useEffect(() => {
+    let desmontado = false;
+
+    obtenerHomePaciente()
+      .then((homePaciente) => {
+        if (desmontado || !homePaciente) return;
+
+        const nombrePaciente = homePaciente.perfil?.nombre;
+        if (nombrePaciente) setNombre(nombrePaciente);
+
+        const sexo = homePaciente.perfil?.sexo;
         if (sexo) {
-          const s = String(sexo).toLowerCase();
-          const mujer =
-            s === "f" || s === "mujer" || s === "femenino" || s === "female";
-          setEsMujer(mujer);
+          const sexoNormalizado = String(sexo).toLowerCase();
+          setEsMujer(
+            sexoNormalizado === "f" ||
+              sexoNormalizado === "mujer" ||
+              sexoNormalizado === "femenino" ||
+              sexoNormalizado === "female"
+          );
         }
 
-        window.dispatchEvent(new Event("perfil_min_updated"));
-      }
-    } catch {
-      null;
-    }
+        setResumenSalud((resumenActual) => ({
+          edad: homePaciente.resumenSalud?.edad ?? resumenActual.edad,
+          peso: homePaciente.resumenSalud?.peso ?? resumenActual.peso,
+          sangre: homePaciente.resumenSalud?.sangre ?? resumenActual.sangre,
+          estatura: homePaciente.resumenSalud?.estatura ?? resumenActual.estatura,
+        }));
+
+        if (homePaciente.mensaje) setMensaje(homePaciente.mensaje);
+      })
+      .catch(() => {
+        // El endpoint de home puede no estar listo en local; mantenemos los datos actuales.
+      });
+
+    return () => {
+      desmontado = true;
+    };
   }, []);
 
   const avatarImg = esMujer ? mona : mono;
@@ -72,15 +129,18 @@ export default function Inicio() {
           </div>
 
           <div className={styles.cntPie}>
-            <TarjetaPie edad="50" peso="90" sangre="A+" estatura="177" />
+            <TarjetaPie
+              edad={String(resumenSalud.edad)}
+              peso={String(resumenSalud.peso)}
+              sangre={String(resumenSalud.sangre)}
+              estatura={String(resumenSalud.estatura)}
+            />
           </div>
 
           <div className={styles.cntCora}>
             <div className={styles.cntCoraInfo}>
               <ProgCora porcentaje="50" />
-              <div className={styles.mensaje}>
-                Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.
-              </div>
+              <div className={styles.mensaje}>{mensaje}</div>
             </div>
             <div className={styles.cntLogros}>
               <TarjetaLogro id="reto4" />
