@@ -27,7 +27,7 @@ const mensajeInicial = "Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue c
 
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
-  const [esMujer, setEsMujer] = useState(false);
+  const [esMujer, setEsMujer] = useState(true);
   const [resumenSalud, setResumenSalud] = useState(resumenSaludInicial);
   const [mensaje, setMensaje] = useState(mensajeInicial);
 

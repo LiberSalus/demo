@@ -25,6 +25,15 @@ export default defineConfig(({ mode }) => {
       host: "localhost",
       port: 5174,
       strictPort: false,
+      open:'chrome',
+      proxy: {
+        "/api": {
+          target: "https://libersalus.com",
+          changeOrigin: true,
+          secure: true,
+          cookieDomainRewrite: "localhost",
+        },
+      },
     },
   };
 });

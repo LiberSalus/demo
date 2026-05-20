@@ -8,7 +8,6 @@ export const EVENTO_SESION_NO_AUTORIZADA = "sesion:no-autorizada";
 
 const RUTAS_AUTH = {
   token: "sesion/auth/token",
-  me: "sesion/auth/me",
   logout: "sesion/auth/logout",
   decodeToken: "sesion/auth/decode-token",
   refreshToken: "sesion/auth/refresh-token",
@@ -250,10 +249,10 @@ export async function iniciarSesion({
   }
 }
 
-// Consulta el usuario vigente para validar sesion y refrescar datos basicos de perfil.
+// Consulta la sesion vigente decodificando la cookie/token que mantiene el backend.
 export async function obtenerSesionActual() {
   try {
-    const { data } = await api.get(RUTAS_AUTH.me, CONFIG_CONSULTA_PERFIL);
+    const data = await decodificarToken();
     guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
 
     return data;
@@ -262,19 +261,12 @@ export async function obtenerSesionActual() {
   }
 }
 
-// Sincroniza el perfil del dashboard; usa /auth/me y deja /decode-token como respaldo.
+// Sincroniza el perfil del dashboard usando el endpoint oficial de decode-token.
 export async function sincronizarPerfilSesion() {
   try {
     return await obtenerSesionActual();
-  } catch (errorSesion) {
-    try {
-      const data = await decodificarToken();
-      guardarPerfilMinimo({ usuario: obtenerUsuarioDeRespuesta(data), correo: "" });
-
-      return data;
-    } catch {
-      return null;
-    }
+  } catch {
+    return null;
   }
 }
 
