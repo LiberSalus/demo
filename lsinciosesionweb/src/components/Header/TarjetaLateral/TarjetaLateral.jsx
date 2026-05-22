@@ -9,9 +9,9 @@ import ProgresoCuestionario from './ProgresoCuestionario'
 import getCroppedImage from './cropImage'
 
 import icoLapiz from './icoLapiz.svg'
-import perfil from './Usuario.png'
+import perfil from '@/shared/assets/images/perfil/usuario-default.png'
 import any from './iconNull.svg'
-import cerrar from './icoCerrar.svg'
+import cerrar from '@/shared/assets/icons/general/cerrar.svg'
 import resta from './icoZoomResta.svg'
 import suma  from './icoZoomSuma.svg'
 

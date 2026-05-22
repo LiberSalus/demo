@@ -5,7 +5,7 @@ import { ROUTES } from "@/config/routes";
 import logoLSMenuMob from './LogoLSMenuMob.svg'
 
 import LogoLSDes from "./LogoLSDescarga.svg";
-import cerrar from './icoCerrar.svg'
+import cerrar from '@/shared/assets/icons/general/cerrar.svg'
 
 import inicio from "./icoInicio.svg";
 import miSalud from "./icoMiSalud.svg";

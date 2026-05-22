@@ -28,7 +28,7 @@ src/shared/assets/
 1. Aplicado: se elimino legacy `src/pages/Panel` y `src/components/menu`.
 2. Aplicado: se elimino copia legacy de `TarjetaSalud`.
 3. Aplicado: se eliminaron copias sobrantes de `news1.png`.
-4. Ordenar iconos comunes de perfil/header.
+4. Aplicado: se centralizaron `icoCerrar.svg` y avatar default activo.
 5. Dejar para despues iconos de metricas legacy.
 6. Al migrar metricas v2, mover a compartidos solo lo que se repita entre metricas nuevas.
 
@@ -307,10 +307,12 @@ src/shared/assets/images/perfil/
 
 Mover candidatos:
 
-- `icoCerrar.svg` -> `shared/assets/icons/general/cerrar.svg`
-- `Usuario.png` -> `shared/assets/images/perfil/usuario-default.png`
+- Aplicado: `icoCerrar.svg` -> `src/shared/assets/icons/general/cerrar.svg`
+- Aplicado: `Usuario.png` activo de Header -> `src/shared/assets/images/perfil/usuario-default.png`
 
 No mover `perfil.png` hasta confirmar si `TarjetaUsuario` sigue viva.
+
+Nota: `src/components/Tarjetas/TarjetaUsuario/Usuario.png` no se movio porque no es copia exacta del avatar activo de Header.
 
 ## Grupo 7: Carrusel / opciones
 
@@ -381,7 +383,7 @@ Unificar `TarjetaSalud` y retirar su copia legacy.
 
 Unificar `news1.png`.
 
-### Commit 5
+### Commit 5 aplicado
 
 Mover `icoCerrar.svg` y avatar default a `shared/assets`.
 

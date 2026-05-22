@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './ModalCapturaFrecuencia.module.css'
-import cerrar from '../assets/icoCerrar.svg'
+import cerrar from '@/shared/assets/icons/general/cerrar.svg'
 
 const formatearFechaHoraVisual = (fechaHoraISO) => {
   if (!fechaHoraISO) return '--'

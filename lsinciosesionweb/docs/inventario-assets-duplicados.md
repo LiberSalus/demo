@@ -112,10 +112,25 @@ Accion sugerida:
 - Revisar si reporte y metricas v2 conservaran el mismo lenguaje visual.
 - Si si, mover a `src/shared/assets/icons/estado`.
 
+### Iconos comunes de header, tarjeta lateral y metricas
+
+Duplicados exactos aplicados:
+
+- `icoCerrar.svg`
+- `Usuario.png` activo de Header y TarjetaLateral
+
+Accion aplicada:
+
+- `icoCerrar.svg` vive en `src/shared/assets/icons/general/cerrar.svg`.
+- El avatar default activo vive en `src/shared/assets/images/perfil/usuario-default.png`.
+- Header, TarjetaLateral, menu y modal de frecuencia importan desde `shared/assets`.
+- `src/components/Tarjetas/TarjetaUsuario/Usuario.png` se conserva local porque no es copia exacta del avatar activo.
+
 ## Primera limpieza segura propuesta
 
 1. Cerrar commit de la limpieza 3D y refactor de frecuencia.
 2. Aplicado: eliminar `src/pages/Panel` y `src/components/menu`.
 3. Aplicado: limpiar duplicados de `TarjetaSalud`.
 4. Aplicado: limpiar copias de `news1.png`.
-5. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
+5. Aplicado: centralizar `icoCerrar.svg` y avatar default activo.
+6. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
