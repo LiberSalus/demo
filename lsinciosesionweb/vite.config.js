@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
        proxy: { '/api': { target: env.VITE_API, changeOrigin: true } }
     }, */
     server: {
-      host: "localhost",
+      host: "0.0.0.0",
       port: 5174,
       strictPort: false,
       open:'chrome',
@@ -31,7 +31,22 @@ export default defineConfig(({ mode }) => {
           target: "https://libersalus.com",
           changeOrigin: true,
           secure: true,
-          cookieDomainRewrite: "localhost",
+          // Quita el Domain de la cookie para que el navegador la acepte
+          // tanto al entrar por localhost como por la IP local de la red.
+          cookieDomainRewrite: "",
+          configure: (proxy) => {
+            proxy.on("proxyRes", (proxyRes) => {
+              const cookies = proxyRes.headers["set-cookie"];
+
+              if (!cookies) return;
+
+              proxyRes.headers["set-cookie"] = cookies.map((cookie) =>
+                cookie
+                  .replace(/;\s*Domain=[^;]+/i, "")
+                  .replace(/;\s*Secure/gi, "")
+              );
+            });
+          },
         },
       },
     },
