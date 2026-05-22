@@ -26,8 +26,8 @@ src/shared/assets/
 ## Orden de aplicacion recomendado
 
 1. Aplicado: se elimino legacy `src/pages/Panel` y `src/components/menu`.
-2. Ordenar duplicados de `TarjetaSalud`.
-3. Ordenar imagenes repetidas de Inicio.
+2. Aplicado: se elimino copia legacy de `TarjetaSalud`.
+3. Aplicado: se eliminaron copias sobrantes de `news1.png`.
 4. Ordenar iconos comunes de perfil/header.
 5. Dejar para despues iconos de metricas legacy.
 6. Al migrar metricas v2, mover a compartidos solo lo que se repita entre metricas nuevas.
@@ -128,10 +128,11 @@ Los iconos aparecen en:
 
 ### Accion recomendada
 
-Primero decidir cual tarjeta queda activa:
+Aplicado:
 
-- Si la de `pages/Inicio` es la activa, migrar imports desde ahi.
-- Si la de `components/Tarjetas` es legacy, retirarla cuando no tenga referencias.
+- Se conserva `src/pages/Inicio/TarjetaSalud`.
+- Se elimina `src/components/Tarjetas/TarjetaSalud` porque no tenia imports externos.
+- Se eliminan `TarjetaCategoria`, `mediciones.js` y CSS asociados dentro de la version activa porque ya no participaban en el render.
 
 Si ambas siguen activas:
 
@@ -176,17 +177,15 @@ Import activo detectado:
 
 - `src/pages/Inicio/TarjetaNoticia/Noticia.jsx`
 
-### Accion recomendada
+### Accion aplicada
 
-Conservar una sola:
+- Se conserva la unica imagen importada por `src/pages/Inicio/TarjetaNoticia/Noticia.jsx`:
 
 ```txt
-src/pages/Inicio/assets/news1.png
+src/pages/Inicio/TarjetaNoticia/news1.png
 ```
 
-Actualizar imports desde tarjetas de Inicio.
-
-Eliminar copias sobrantes.
+- Se eliminan las copias en `TarjetaNoticias` y `TarjetaSalud`.
 
 ## Grupo 4: Iconos de estado repetidos entre metricas legacy
 
@@ -374,11 +373,11 @@ Eliminar 3D y guardar refactor de frecuencia actual.
 
 Aplicado: `src/pages/Panel` y `src/components/menu` fueron eliminados como legacy.
 
-### Commit 3
+### Commit 3 aplicado
 
-Unificar `TarjetaSalud` y sus iconos.
+Unificar `TarjetaSalud` y retirar su copia legacy.
 
-### Commit 4
+### Commit 4 aplicado
 
 Unificar `news1.png`.
 

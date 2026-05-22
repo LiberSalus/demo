@@ -8,7 +8,6 @@ import fisica from "./icoBienFisico.svg";
 import styles from "./TarjetaSalud.module.css";
 import { ROUTES } from "@/config/routes"
 import nutricional from "./icoBienNutri.svg";
-import { GridStack } from "gridstack";
 import { useNavigate } from "react-router-dom";
 import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
 import React, { useState, useEffect } from "react";
@@ -86,7 +85,7 @@ const TarjetaSalud = ({ tipo }) => {
 
   
 
-  const frase = {
+  const frasePorTipo = {
     "Salud Física": "Moverte un poco más cada día hace la diferencia.",
     "Salud Mental": "Tu bienestar emocional también merece atención.",
     "Salud Nutricional": "Un poco más de equilibrio en tu dieta marcará la diferencia.",
@@ -222,26 +221,9 @@ const TarjetaSalud = ({ tipo }) => {
       />
 
       <ModalMetricas />
-      <p className={styles.frase}>¡Buen ritmo, sigue cuidando tu descanso!</p>
+      <p className={styles.frase}>{frasePorTipo[tipo]}</p>
     </div>
   );
 };
 
 export default TarjetaSalud;
-
-/*  TarjetaCategoria__  representa la configuración de botones en
-    el dashboard principal de salud, cada tarjeta tiene un conjunto
-    de mediciones asociadas que se muestran en forma de tarjetas
-    individuales.
-    Props:
-    - titulo: El título de la categoría de salud (e.g., "Salud Física").
-    - icono: El icono representativo de la categoría.
-    - mediciones: Un array de objetos que representan las mediciones
-      asociadas a la categoría. Cada objeto debe tener:
-        - titulo: El título de la medición (e.g., "Peso", "Pasos").
-        - valor: El valor actual de la medición (e.g., "70", "5000").
-    - nota: Una nota adicional o mensaje relacionado con la categoría.
-
-    componentes utilizados:
-    - TarjetaMedicion: Componente que representa una medición individual
-*/

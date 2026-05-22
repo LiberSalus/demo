@@ -65,12 +65,11 @@ Ejemplos:
 - `icoBienMental.svg`
 - `icoBienNutri.svg`
 
-Accion sugerida:
+Accion aplicada:
 
-- Definir cual version de `TarjetaSalud` queda activa.
-- Mover iconos compartidos a `src/shared/assets/icons/metricas`.
-- Actualizar imports de la version activa.
-- Eliminar la carpeta duplicada cuando no tenga referencias.
+- Se conserva `src/pages/Inicio/TarjetaSalud`.
+- Se elimina `src/components/Tarjetas/TarjetaSalud` porque no tenia referencias externas.
+- Se retiraron archivos internos sin uso en la version activa.
 
 ### Imagen de noticia repetida
 
@@ -80,9 +79,10 @@ Accion sugerida:
 - `src/pages/Inicio/TarjetaNoticias/news1.png`
 - `src/pages/Inicio/TarjetaSalud/news1.png`
 
-Accion sugerida:
+Accion aplicada:
 
-- Dejar una sola imagen en una carpeta de Inicio o compartida si se usa fuera de Inicio.
+- Se conserva `src/pages/Inicio/TarjetaNoticia/news1.png`, que es la unica importada.
+- Se eliminan las copias en `TarjetaNoticias` y `TarjetaSalud`.
 
 ### Iconos repetidos entre metricas legacy
 
@@ -116,5 +116,6 @@ Accion sugerida:
 
 1. Cerrar commit de la limpieza 3D y refactor de frecuencia.
 2. Aplicado: eliminar `src/pages/Panel` y `src/components/menu`.
-3. Despues limpiar duplicados de `TarjetaSalud`.
-4. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
+3. Aplicado: limpiar duplicados de `TarjetaSalud`.
+4. Aplicado: limpiar copias de `news1.png`.
+5. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
