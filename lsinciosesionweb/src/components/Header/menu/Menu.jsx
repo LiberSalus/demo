@@ -13,7 +13,6 @@ import miCuidado from "./icoMiCuidado.svg";
 import monitor from "./icoMonitor.svg";
 import franky from "./icoFranky.svg";
 import any from "./icoAny.svg"
-import dudas from "./icoDudas.svg";
 import tami from "./icoTami.svg"
 
 import activeInicio from './icoActiveInicio.svg'
@@ -22,7 +21,6 @@ import activeMiCuidado from './icoActiveMiCuidado.svg'
 import activeMonitor from './icoActiveMonitor.svg'
 import activeFranky from './icoActiveFranky.svg'
 import activeAny from './icoActiveAny.svg'
-import activeDudas from './icoActiveDudas.svg'
 import activeTami from './icoActiveTami.svg'
 
 const links = [

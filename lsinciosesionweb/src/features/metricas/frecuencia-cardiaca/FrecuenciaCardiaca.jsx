@@ -1,18 +1,11 @@
-//mesat\src\components\BorradorDos\FrecuenciaCardiaca\FrecuenciaCardiaca.jsx
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React from "react";
 import GraficaFrecuenciaCardiacaDiaria from "./components/GraficaFrecuenciaCardiacaDiaria";
 import GraficaPromedioFrecuencia from "./components/GraficaPropemidoFrecuencia";
 import ModalCapturaFrecuencia from "./components/ModalCapturaFrecuencia";
 import ModalConfirmacionFrecuencia from "./components/ModalConfirmacionFrecuencia";
 import styles from "./FrecuenciaCardiaca.module.css";
 import MarcoTarjeta from "./components/MarcoTarjeta";
-import { registrosFrecuenciaDiariaMock } from "./mocks/registrosFrecuenciaDiaria.mock";
-import { registrosFrecuenciaHistorialMock } from "./mocks/registrosFrecuenciaHistorial.mock";
-import {
-  construirOpcionesFiltroPromedio,
-  construirSeriePromedio,
-  PERIODOS_PROMEDIO,
-} from "./utils/promedioFrecuencias.utils";
+import { useFrecuenciaCardiaca } from "./hooks/useFrecuenciaCardiaca";
 
 import Capsula from "./components/Capsula";
 
@@ -32,113 +25,6 @@ import recordatorio from "./assets/icoRecordatorio.svg";
 
 import GraficaReposoActividad from "./components/GraficaReposoActividad";
 import GraficaDistribucion from "./components/GraficaDistribucion";
-import { PERIODOS_REPOSO_ACTIVIDAD } from "./utils/reposoActividad.utils";
-
-const CLAVE_STORAGE_REGISTROS_DIA = "frecuencia_cardiaca_registros_dia_v1";
-
-// Transforma registros diarios a escala continua de tiempo (hora + minuto).
-const construirSeriePorHora = (registrosDelDia) => {
-  if (!registrosDelDia.length) {
-    return [
-      { hora: 0, ppm: null },
-      { hora: 24, ppm: null },
-    ];
-  }
-
-  return [...registrosDelDia]
-    .sort(
-      (a, b) =>
-        new Date(a.fechaHoraISO).getTime() - new Date(b.fechaHoraISO).getTime(),
-    )
-    .map((registro) => {
-      const fecha = new Date(registro.fechaHoraISO);
-      const horaDecimal =
-        fecha.getHours() + fecha.getMinutes() / 60 + fecha.getSeconds() / 3600;
-
-      return {
-        hora: horaDecimal,
-        ppm: registro.ppm,
-        fechaHoraISO: registro.fechaHoraISO,
-      };
-    });
-};
-
-// Formatea fecha y hora para mostrar "dd-mm-yyyy hh:mm".
-const formatearFechaHora = (fechaHoraISO) => {
-  const fecha = new Date(fechaHoraISO);
-  const dia = String(fecha.getDate()).padStart(2, "0");
-  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-  const anio = fecha.getFullYear();
-  const hora = String(fecha.getHours()).padStart(2, "0");
-  const minuto = String(fecha.getMinutes()).padStart(2, "0");
-  return `${dia}-${mes}-${anio} ${hora}:${minuto}`;
-};
-
-// Obtiene clave de dia local en formato YYYY-MM-DD.
-const obtenerClaveDiaLocal = (fechaEntrada) => {
-  const fecha =
-    fechaEntrada instanceof Date ? fechaEntrada : new Date(fechaEntrada);
-  const anio = fecha.getFullYear();
-  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-  const dia = String(fecha.getDate()).padStart(2, "0");
-  return `${anio}-${mes}-${dia}`;
-};
-
-// Filtra solo registros que pertenecen a la clave de dia indicada.
-const filtrarRegistrosPorDia = (registros, claveDia) =>
-  registros.filter(
-    (registro) => obtenerClaveDiaLocal(registro.fechaHoraISO) === claveDia,
-  );
-
-const normalizarLecturaPromedio = (lectura) => {
-  const minimo = Number(lectura?.minimo);
-  const maximo = Number(lectura?.maximo);
-
-  if (!Number.isFinite(minimo) || !Number.isFinite(maximo)) {
-    return null;
-  }
-
-  return {
-    min: Math.min(minimo, maximo),
-    max: Math.max(minimo, maximo),
-  };
-};
-
-const leerEstadoPersistido = (claveDiaActual) => {
-  try {
-    const textoGuardado = localStorage.getItem(CLAVE_STORAGE_REGISTROS_DIA);
-    if (!textoGuardado) {
-      return {
-        claveDiaRegistros: claveDiaActual,
-        registrosDelDia: filtrarRegistrosPorDia(
-          registrosFrecuenciaDiariaMock,
-          claveDiaActual,
-        ),
-      };
-    }
-
-    const estadoGuardado = JSON.parse(textoGuardado);
-    if (
-      estadoGuardado?.claveDiaRegistros === claveDiaActual &&
-      Array.isArray(estadoGuardado?.registrosDelDia)
-    ) {
-      return {
-        claveDiaRegistros: claveDiaActual,
-        registrosDelDia: estadoGuardado.registrosDelDia,
-      };
-    }
-  } catch {
-    // Si hay error de parseo o acceso al storage, usamos fallback local.
-  }
-
-  return {
-    claveDiaRegistros: claveDiaActual,
-    registrosDelDia: filtrarRegistrosPorDia(
-      registrosFrecuenciaDiariaMock,
-      claveDiaActual,
-    ),
-  };
-};
 
 //tarjeta rango frecuencias
 
@@ -322,251 +208,40 @@ const Pildora = () => {
 };
 
 const FrecuenciaCardiaca = () => {
-  const estadoInicialPersistido = useMemo(() => {
-    const claveDiaActual = obtenerClaveDiaLocal(new Date());
-    return leerEstadoPersistido(claveDiaActual);
-  }, []);
-
-  const [claveDiaRegistros, setClaveDiaRegistros] = useState(
-    estadoInicialPersistido.claveDiaRegistros,
-  );
-  const [registrosDelDia, setRegistrosDelDia] = useState(
-    estadoInicialPersistido.registrosDelDia,
-  );
-  const [horaActiva, setHoraActiva] = useState(15);
-  const [modalCapturaAbierto, setModalCapturaAbierto] = useState(false);
-  const [fechaHoraCapturaISO, setFechaHoraCapturaISO] = useState("");
-  const [ppmCaptura, setPpmCaptura] = useState("69");
-  const [fueActividad, setFueActividad] = useState(false);
-  const [mensajeErrorCaptura, setMensajeErrorCaptura] = useState("");
-  const [modalConfirmacionAbierto, setModalConfirmacionAbierto] =
-    useState(false);
-  const [fechaHoraConfirmacionTexto, setFechaHoraConfirmacionTexto] =
-    useState("--");
-  const [periodoPromedioSeleccionado, setPeriodoPromedioSeleccionado] =
-    useState(PERIODOS_PROMEDIO.SEMANA);
-  const [
-    indiceLecturaPromedioSeleccionada,
-    setIndiceLecturaPromedioSeleccionada,
-  ] = useState(null);
-  const [periodoComparativaSeleccionado, setPeriodoComparativaSeleccionado] =
-    useState(PERIODOS_REPOSO_ACTIVIDAD.MES);
-  const [valorFiltroComparativa, setValorFiltroComparativa] = useState("");
-
-  const opcionesFiltroPromedio = useMemo(
-    () => construirOpcionesFiltroPromedio(registrosFrecuenciaHistorialMock),
-    [],
-  );
-
-  const [valorFiltroPromedio, setValorFiltroPromedio] = useState(
-    () => opcionesFiltroPromedio[PERIODOS_PROMEDIO.SEMANA]?.[0]?.valor ?? "",
-  );
-
-  // Resetea estado visual y registros cuando cambia el dia del sistema.
-  const reiniciarDia = useCallback((nuevaClaveDia) => {
-    setRegistrosDelDia([]);
-    setHoraActiva(0);
-    setFechaHoraCapturaISO("");
-    setPpmCaptura("69");
-    setFueActividad(false);
-    setMensajeErrorCaptura("");
-    setModalCapturaAbierto(false);
-    setModalConfirmacionAbierto(false);
-    setFechaHoraConfirmacionTexto("--");
-    setClaveDiaRegistros(nuevaClaveDia);
-  }, []);
-
-  // Verifica cambio de dia para mantener solo registros del dia vigente.
-  const verificarCambioDeDia = useCallback(() => {
-    const claveDiaActual = obtenerClaveDiaLocal(new Date());
-    if (claveDiaActual !== claveDiaRegistros) {
-      reiniciarDia(claveDiaActual);
-      return true;
-    }
-    return false;
-  }, [claveDiaRegistros, reiniciarDia]);
-
-  // Rango diario para la tarjeta "Rango de frecuencia cardiaca".
-  const { minDia, maxDia } = useMemo(() => {
-    const lecturasValidas = registrosDelDia
-      .map((registro) => registro.ppm)
-      .filter((ppm) => Number.isFinite(ppm));
-
-    if (!lecturasValidas.length) {
-      return { minDia: undefined, maxDia: undefined };
-    }
-
-    return {
-      minDia: Math.min(...lecturasValidas),
-      maxDia: Math.max(...lecturasValidas),
-    };
-  }, [registrosDelDia]);
-
-  // Datos diarios de la grafica construidos desde el arreglo de registros.
-  const serieGraficaDiaria = useMemo(
-    () => construirSeriePorHora(registrosDelDia),
-    [registrosDelDia],
-  );
-
-  // Valor principal mostrado arriba de la grafica.
-  const valorDestacado = useMemo(() => {
-    const registroActivo = serieGraficaDiaria.find(
-      (item) => item.hora === horaActiva,
-    );
-    if (registroActivo?.ppm != null) return registroActivo.ppm;
-
-    const ultimoConLectura = [...serieGraficaDiaria]
-      .reverse()
-      .find((item) => item.ppm != null);
-    return ultimoConLectura?.ppm ?? null;
-  }, [horaActiva, serieGraficaDiaria]);
-
-  // Fecha/hora de ultima actualizacion basada en el ultimo registro del dia.
-  const fechaActualizacionTexto = useMemo(() => {
-    const ultimoRegistro = registrosDelDia[registrosDelDia.length - 1];
-    if (!ultimoRegistro) return "--";
-    return formatearFechaHora(ultimoRegistro.fechaHoraISO);
-  }, [registrosDelDia]);
-
-  const manejarClickAgregar = () => {
-    verificarCambioDeDia();
-    // Paso 3: abrir modal con fecha/hora del momento y valores base de captura.
-    setFechaHoraCapturaISO(new Date().toISOString());
-    setPpmCaptura("69");
-    setFueActividad(false);
-    setMensajeErrorCaptura("");
-    setModalCapturaAbierto(true);
-  };
-
-  const manejarCambioPeriodoPromedio = (periodo) => {
-    setPeriodoPromedioSeleccionado(periodo);
-  };
-
-  const cerrarModalCaptura = () => {
-    setMensajeErrorCaptura("");
-    setModalCapturaAbierto(false);
-  };
-
-  const cerrarModalConfirmacion = () => {
-    setModalConfirmacionAbierto(false);
-  };
-
-  const aceptarModalCaptura = () => {
-    if (verificarCambioDeDia()) return;
-    // Paso 4: validar captura y agregar registro diario para repintar grafica.
-    const ppmNumero = Number(ppmCaptura);
-    if (!Number.isFinite(ppmNumero)) {
-      setMensajeErrorCaptura("Ingresa un valor numerico para las pulsaciones.");
-      return;
-    }
-    if (ppmNumero < 30 || ppmNumero > 220) {
-      setMensajeErrorCaptura("El valor de ppm debe estar entre 30 y 220.");
-      return;
-    }
-
-    const fechaRegistroISO = fechaHoraCapturaISO || new Date().toISOString();
-    const nuevoRegistro = {
-      id: `reg-${Date.now()}`,
-      fechaHoraISO: fechaRegistroISO,
-      ppm: Math.round(ppmNumero),
-      tipoRegistro: fueActividad ? "actividad" : "reposo",
-    };
-
-    setRegistrosDelDia((registrosActuales) => {
-      const siguientesRegistros = [...registrosActuales, nuevoRegistro];
-      siguientesRegistros.sort(
-        (a, b) =>
-          new Date(a.fechaHoraISO).getTime() -
-          new Date(b.fechaHoraISO).getTime(),
-      );
-      return siguientesRegistros;
-    });
-
-    setHoraActiva(new Date(fechaRegistroISO).getHours());
-    setFechaHoraConfirmacionTexto(formatearFechaHora(fechaRegistroISO));
-    setMensajeErrorCaptura("");
-    setModalCapturaAbierto(false);
-    setModalConfirmacionAbierto(true);
-  };
-
-  useEffect(() => {
-    const intervaloCambioDia = setInterval(() => {
-      verificarCambioDeDia();
-    }, 60_000);
-
-    return () => clearInterval(intervaloCambioDia);
-  }, [verificarCambioDeDia]);
-
-  // Mantiene un filtro valido al cambiar periodo o disponibilidad de datos.
-  useEffect(() => {
-    const opcionesPeriodoActual =
-      opcionesFiltroPromedio[periodoPromedioSeleccionado] ?? [];
-
-    const filtroExiste = opcionesPeriodoActual.some(
-      (opcion) => opcion.valor === valorFiltroPromedio,
-    );
-
-    if (!filtroExiste) {
-      setValorFiltroPromedio(opcionesPeriodoActual[0]?.valor ?? "");
-    }
-  }, [
-    opcionesFiltroPromedio,
-    periodoPromedioSeleccionado,
+  const {
+    minDia,
+    maxDia,
+    serieGraficaDiaria,
+    valorDestacado,
+    fechaActualizacionTexto,
+    modalCapturaAbierto,
+    fechaHoraCapturaISO,
+    ppmCaptura,
+    fueActividad,
+    mensajeErrorCaptura,
+    modalConfirmacionAbierto,
+    fechaHoraConfirmacionTexto,
+    opcionesFiltroActualPromedio,
     valorFiltroPromedio,
-  ]);
-
-  // Persiste registros diarios para conservarlos al refrescar.
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        CLAVE_STORAGE_REGISTROS_DIA,
-        JSON.stringify({
-          claveDiaRegistros,
-          registrosDelDia,
-        }),
-      );
-    } catch {
-      // Si localStorage no esta disponible, ignoramos sin romper el flujo.
-    }
-  }, [claveDiaRegistros, registrosDelDia]);
-
-  const opcionesFiltroActualPromedio =
-    opcionesFiltroPromedio[periodoPromedioSeleccionado] ?? [];
-
-  const seriePromedioFrecuencia = useMemo(
-    () =>
-      construirSeriePromedio({
-        registros: registrosFrecuenciaHistorialMock,
-        periodo: periodoPromedioSeleccionado,
-        valorFiltro: valorFiltroPromedio,
-      }),
-    [periodoPromedioSeleccionado, valorFiltroPromedio],
-  );
-
-  const lecturaPromedioSeleccionada = useMemo(() => {
-    if (!seriePromedioFrecuencia.length) return null;
-
-    const lecturaActual = normalizarLecturaPromedio(
-      seriePromedioFrecuencia[indiceLecturaPromedioSeleccionada],
-    );
-    if (lecturaActual) return lecturaActual;
-
-    const primeraLecturaValida = seriePromedioFrecuencia.find((lectura) =>
-      normalizarLecturaPromedio(lectura),
-    );
-
-    return normalizarLecturaPromedio(primeraLecturaValida);
-  }, [indiceLecturaPromedioSeleccionada, seriePromedioFrecuencia]);
-
-  useEffect(() => {
-    const indiceValido = seriePromedioFrecuencia.findIndex((lectura) =>
-      normalizarLecturaPromedio(lectura),
-    );
-
-    setIndiceLecturaPromedioSeleccionada(
-      indiceValido >= 0 ? indiceValido : null,
-    );
-  }, [seriePromedioFrecuencia]);
+    seriePromedioFrecuencia,
+    indiceLecturaPromedioSeleccionada,
+    lecturaPromedioSeleccionada,
+    periodoPromedioSeleccionado,
+    periodoComparativaSeleccionado,
+    valorFiltroComparativa,
+    setHoraActiva,
+    setPpmCaptura,
+    setFueActividad,
+    setValorFiltroPromedio,
+    setIndiceLecturaPromedioSeleccionada,
+    setPeriodoComparativaSeleccionado,
+    setValorFiltroComparativa,
+    manejarClickAgregar,
+    manejarCambioPeriodoPromedio,
+    cerrarModalCaptura,
+    cerrarModalConfirmacion,
+    aceptarModalCaptura,
+  } = useFrecuenciaCardiaca();
 
   return (
     <>

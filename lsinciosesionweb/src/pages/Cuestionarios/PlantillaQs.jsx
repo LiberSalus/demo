@@ -9,9 +9,6 @@ import { _pickShowIf } from "@/utils/logicPreg";
 import lista from "./lista.png";
 import tiempo from "./tiempo.png";
 
-// 3D dinámico por área
-import AreaModel from "@/components/Escena/AreaModel";
-
 // helpers de lógica/progreso/storage
 import {
   evalShowIf,
@@ -110,7 +107,7 @@ const PlantillaQs = () => {
         <div className={styles.cntMono}>
           <button>Bienestar {area}</button>
           <div className={styles.cntModelo}>
-            <AreaModel area={area} />
+            <img src={lista} alt={`Bienestar ${area}`} />
           </div>
           <p>{areaDesc}</p>
         </div>

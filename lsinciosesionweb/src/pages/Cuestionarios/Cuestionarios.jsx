@@ -7,7 +7,6 @@ import mental from "./mental.png";
 import social from "./social.png";
 import nutricional from "./nutricional.png";
 
-import Scene3D from "@/components/Escena/Scene3D";
 import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
 
@@ -86,7 +85,7 @@ const Cuestionarios = () => {
 
           <div className={styles.cntTarjetasAreas}>
             <div className={styles.cntMono}>
-              <Scene3D />
+              <img src={fisico} alt="Bienestar fisico" />
             </div>
 
             <div className={styles.cntTarjetas}>
