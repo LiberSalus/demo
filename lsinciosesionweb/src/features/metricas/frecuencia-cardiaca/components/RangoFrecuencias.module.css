@@ -1,0 +1,33 @@
+.RangoFrecuencias {
+  margin: 1rem;
+  padding: 1rem;
+  width: 440px;
+  height: 140px;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1rem;
+  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
+}
+
+.txt {
+  text-align: center;
+  color: var(--tipog);
+  &> :nth-child(1) {
+    font-family: var(--font-roboto);
+    font-size: var(--font20);
+    font-weight: var(--peso700);
+  }
+  &> :nth-child(2) {
+    font-family: var(--font-inter);
+    margin-top: 4px;
+    font-size: var(--font16);
+    font-weight: 700;
+
+    &> span {
+      color: red;
+    }
+  }
+}

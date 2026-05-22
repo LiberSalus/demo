@@ -1,0 +1,158 @@
+.card {
+  position: relative;
+  /* background: #f3f3f4; */
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 18px 16px 44px;
+  width: 100%;
+  max-width: 1298px;
+  height: 27.8125rem;
+  font-family: var(--font--roboto);
+  
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.header h3 {
+  margin: 0;
+  margin-left: 3rem;
+  font-size: var(--font16);
+  color: var(--tipog);
+  font-weight: 700;
+}
+
+.metric {
+  text-align: center;
+  line-height: 1.1;
+}
+
+.metricValue {
+  margin: 0;
+  color: var(--prnci);
+  font-size: var(--font32);
+  font-family: var(--font--roboto);
+  font-weight: var(--peso700);
+}
+
+.metricLabel, .metricDate {
+  text-align: center;
+  margin: 2px 0 0;
+  font-family: var(--font--roboto);
+  font-weight: var(--peso300);
+  font-size: var(--font10);
+  color: var(--);
+  
+}
+
+
+.axisLabel {
+  font-family: var(--font-roboto);
+  font-weight: var(--peso400);
+  font-size: var(--font14);
+  color: var(--place);  
+  transform: translateY(-14px);
+} 
+
+.YAxis {
+  /* transform: translateY(-5px); */
+  font-size: var(--font14);
+}
+
+.XAxis {
+  font-size: var(--font14);
+}
+
+.chartWrap {
+  width: 100%;
+  height: 265px;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: stretch;
+}
+
+.yAxisFixed {
+  width: 46px;
+  height: 100%;
+}
+
+.chartScrollPane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chartScroll {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chartScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.chartInner {
+  width: 100%;
+  min-width: 1105px;
+  height: 100%;
+}
+
+.xLabel {
+  text-align: center;
+  color: var(--place);
+  font-size: var(--font14);
+  transform: translateY(-20px);
+  padding-left: 46px;
+}
+
+.tooltip {
+  background: #334155;
+  color: #fff;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.addBtn {
+  position: absolute;
+  right:  14px;
+  bottom: 12px;
+  border: 1px solid var(--borde);
+  width: 106px;
+  height: 30px;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--blnco);
+  font-weight: 400;
+  font-size: var(--font14);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  background-color: var(--prnci);
+}
+
+.addIcon {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}

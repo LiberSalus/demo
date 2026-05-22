@@ -1,0 +1,404 @@
+.cntGraficaDiaria {
+  max-width: 1330px;
+  width: 100%;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Tarjetas {
+  max-width: 1330px;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  
+}
+
+
+/* Rango Frecuencias */
+
+.RangoFrecuencias {
+  /* border: 1px dashed red; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+}
+
+.txt {
+  text-align: center;
+  color: var(--tipog);
+
+  &> :nth-child(1) {
+    font-family: var(--font-roboto);
+    font-size: var(--font20);
+    font-weight: var(--peso700);
+  }
+
+  &> :nth-child(2) {
+    font-family: var(--font-inter);
+    margin-top: 4px;
+    font-size: var(--font16);
+    font-weight: 700;
+
+    &>span {
+      font-size: var(--font12);
+      color: var(--tipog);
+    }
+  }
+}
+
+
+/* Valores Referencia */
+
+.ValoresReferencia {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &> :nth-child(1) {
+    font-family: var(--font-inter);
+    font-weight: var(--peso700);
+    margin-bottom: 0.5rem;
+  }
+
+  &> :nth-child(2) {
+    display: flex;
+  }
+}
+
+.valores {
+  font-size: var(--font-inter);
+  font-weight: var(--peso500);
+  font-size: var(--font14);
+  line-height: 1.7;
+
+  &> :last-child,
+  &> :first-child {
+    color: var(--stat1);
+  }
+
+  &> :nth-child(2) {
+    color: var(--alert);
+  }
+
+  &> :nth-child(3) {
+    color: var(--stat2)
+  }
+}
+
+.nombres {
+  font-size: var(--font-inter);
+  font-weight: var(--peso500);
+  font-size: var(--font14);
+  line-height: 1.7;
+  text-align: end;
+  flex: 1;
+}
+
+.iconos {
+  width: 2rem;
+  margin-left: 2rem;
+  /* border: 1px dashed red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  &>.roja,
+  .amarilla,
+  .verde {
+    width: 10px;
+    height: 20px;
+  }
+
+  &>.roja {
+    background-color: var(--stat1);
+  }
+
+  &>.amarilla {
+    background-color: var(--alert);
+  }
+
+  &>.verde {
+    background-color: var(--stat2);
+  }
+
+}
+
+/* Tarjeta Comparación semanal */
+
+.ComparacionSemanal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  &>p {
+    font-family: var(--font-inter);
+    font-weight: var(--peso600);
+    font-size: var(--font16);
+
+    &>span {
+      color: blueviolet;
+    }
+  }
+
+  &> :nth-child(n) {
+    display: flex;
+  }
+
+  &> :nth-child(1) {
+    width: 100%;
+    justify-content: start;
+  }
+
+  &> :nth-child(2) {
+
+    justify-content: center;
+    gap: 3.75rem;
+    align-items: center;
+    font-weight: bold;
+    font-size: var(--font10);
+    font-family: var(--font-inter);
+    text-align: center;
+  }
+
+  &> :nth-child(3),
+
+  .datos {
+    width: 100%;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    align-items: center;
+
+    &> :nth-child(n) {
+      /* border: 1px dashed red; */
+      width: 25%;
+    }
+
+    &> :nth-child(2),
+    &> :nth-child(3) {
+      text-align: right;
+      font-family: var(--font-roboto);
+      font-weight: var(--peso700);
+
+
+    }
+
+    &> :nth-child(4) {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin: 0 1rem 0 2rem;
+
+    }
+
+    &> :nth-child(5) {
+      width: 2rem;
+      text-align: right;
+      font-weight: var(--peso700);
+    }
+
+
+  }
+
+
+}
+
+
+/* Alertas */
+
+.alertas {
+  display: flex;
+  /* border: 1px dashed red; */
+  max-width: 1330px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.Alerta {
+  width: 35rem;
+  max-width: 35rem;
+  text-align: center;
+  &> :nth-child(1) {
+    margin: 0 auto;
+  }
+  &> :nth-child(2) {
+    margin: 0 auto;
+    width: 75%;
+    font-family: var(--font-roboto);
+    font-size: var(--font16);
+    font-weight: var(--peso400);
+    color: var(--tipog);
+    
+  }
+  &> :nth-child(3) {
+    margin-top: 0.25rem;
+    font-weight: var(--peso300);
+    font-size: var(--font14);
+    color: #505151;
+
+  }
+}
+
+
+.promedios {
+  display: flex;
+  max-width: 1330px;
+  justify-content: center;
+  width: 100%;
+  /* border: 1px dashed red; */
+  margin: 0 auto;
+  padding: 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.recordatorio {
+  margin: 0 auto;
+  display: flex;
+  
+  width: 25rem;
+  &> img  {
+    width:2.6875rem ;
+    margin-right: 0.25rem;
+  }
+  &> p {
+    font-size: var(--font12);
+    font-style: italic;
+    color: #505151;
+  }
+}
+
+.cntAlerta {
+  display: flex;
+  border: 1px dashed red;
+  
+}
+.cntMsj {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1330px) {
+  .Tarjetas {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 440px) {
+  /* Valores Referencia */
+
+  .ValoresReferencia {
+    &> :nth-child(1) {
+      font-size: var(--font14);
+    }
+  }
+
+  .valores {
+    font-size: var(--font12);
+  }
+
+  .nombres {
+    font-size: var(--font12);
+  }
+
+  .iconos {
+
+    &>.roja,
+    .amarilla,
+    .verde {
+      height: 17px;
+    }
+  }
+
+
+  /* Tarjeta Comparación semanal */
+
+  .ComparacionSemanal {
+    
+    
+    
+    
+
+    &>p {
+      font-family: var(--font-inter);
+      font-weight: var(--peso600);
+      font-size: var(--font16);
+
+      &>span {
+        color: blueviolet;
+      }
+    }
+
+    &> :nth-child(n) {
+      display: flex;
+    }
+
+    &> :nth-child(1) {
+      width: 100%;
+      justify-content: start;
+    }
+
+    &> :nth-child(2) {
+
+      justify-content: center;
+      gap: 3.75rem;
+      align-items: center;
+      font-weight: bold;
+      font-size: var(--font10);
+      font-family: var(--font-inter);
+      text-align: center;
+    }
+
+    &> :nth-child(3),
+
+    .datos {
+      width: 100%;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+      align-items: center;
+
+      &> :nth-child(n) {
+        /* border: 1px dashed red; */
+        width: 25%;
+      }
+
+      &> :nth-child(2),
+      &> :nth-child(3) {
+        text-align: right;
+        font-family: var(--font-roboto);
+        font-weight: var(--peso700);
+
+
+      }
+
+      &> :nth-child(4) {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 0 1rem 0 2rem;
+
+      }
+
+      &> :nth-child(5) {
+        width: 2rem;
+        text-align: right;
+        font-weight: var(--peso700);
+      }
+
+
+    }
+
+
+  }
+
+}

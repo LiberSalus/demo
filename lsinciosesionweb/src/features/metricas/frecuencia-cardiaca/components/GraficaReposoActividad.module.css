@@ -1,0 +1,191 @@
+.card {
+  --alto-area-grafica: 12.75rem;
+  border: 0.0625rem solid var(--borde);
+  border-radius: 1.125rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  min-width: 27.5rem;
+  height: 24.375rem;
+  
+  padding: 1rem 1.2rem 0.9rem;
+  font-family: var(--font-roboto);
+  display: grid;
+  grid-template-rows: auto auto auto auto var(--alto-area-grafica) auto auto;
+  row-gap: 0.25rem;
+  overflow: hidden;
+}
+
+.card h3 {
+  margin: 0;
+  color: var(--tipog);
+  font-size: 1.0625rem;
+  font-family: var(--font-inter);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.periodos {
+  margin: 0.35rem auto 0.05rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+.periodo,
+.periodoActivo {
+  width: 4.5rem;
+  height: 1.875rem;
+  border-radius: 62.4375rem;
+  font-size: var(--font14);
+  border: 0.0625rem solid #d3d5d8;
+  background: transparent;
+  color: #364152;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.periodoActivo {
+  border-color: #3f7fbd;
+  box-shadow: inset 0 0 0 0.0625rem #3f7fbd;
+  color: #3f7fbd;
+  font-weight: 700;
+}
+
+.leyenda {
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-bottom: 0.1rem;
+}
+
+.leyendaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #364152;
+  font-size: var(--font12);
+}
+
+.puntoLeyendaReposo,
+.puntoLeyendaActividad {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: inline-block;
+  border: 0.1875rem solid #eaf1f9;
+}
+
+.puntoLeyendaReposo {
+  background: #67aef0;
+}
+
+.puntoLeyendaActividad {
+  background: #e5a332;
+}
+
+.ComposedChart {
+  /* border: 1px dashed red; */
+}
+
+.XAxis, .YAxis {
+  font-size: var(--font12);
+}
+
+.ejeYTitulo {
+  color: #a3a4a6;
+  font-size: var(--font12);
+  margin-left: 1.25rem;
+  line-height: 1;
+}
+
+.chartWrap {
+  width: 100%;
+  height: 100%;
+  min-height: var(--alto-area-grafica);
+}
+
+.ejeXTitulo {
+  margin: 0;
+  text-align: center;
+  color: #a3a4a6;
+  font-size: var(--font14);
+  line-height: 1;
+  transform: translateY(-0.25rem);
+}
+
+.filtroInferior {
+  position: relative;
+  width: fit-content;
+
+  max-width: 100%;
+  transform: translateY(-0.5rem);
+}
+
+.filtroInferior::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 0.125rem solid #4b5563;
+  border-bottom: 0.125rem solid #4b5563;
+  transform: translateY(-65%) rotate(45deg);
+  pointer-events: none;
+}
+
+.filtroInferior select {
+  width: min(14.3rem, 100%);
+  height: 1.875rem;
+  border-radius: 62.4375rem;
+  border: 0.0625rem solid #b8d0ef;
+  background: transparent;
+  font-size: var(--font12);
+  color: #4b5563;
+  padding: 0 2.5rem 0 0.9rem;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+@media (max-width: 700px) {
+  .card {
+    min-width: 100%;
+    height: 24.375rem;
+    padding: 0.85rem 0.85rem 0.9rem;
+  }
+
+  .periodos {
+    gap: 0.55rem;
+  }
+
+  .periodo,
+  .periodoActivo {
+    width: 5.15rem;
+    height: 2.15rem;
+    font-size: 1rem;
+  }
+
+  .leyenda {
+    gap: 1rem;
+  }
+
+  .leyendaItem {
+    font-size: 0.92rem;
+  }
+
+  .ejeYTitulo {
+    font-size: 1.1rem;
+  }
+
+  .ejeXTitulo {
+    font-size: 1.05rem;
+  }
+
+  .filtroInferior select {
+    font-size: 1rem;
+    width: min(15rem, 100%);
+  }
+}

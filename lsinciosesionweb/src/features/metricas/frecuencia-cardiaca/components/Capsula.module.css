@@ -1,0 +1,97 @@
+.cntCapsula {
+
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--borde);
+  min-width: 282px;
+  max-width: 282px ;
+  height: 24.375rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;align-items: center;
+  &> :nth-child(1) {
+    font-family: var(--font-inter);
+    font-weight: var(--peso700) ;
+  }
+  &> :nth-child(3) {
+    font-weight: var(--peso700);
+    font-size: var(--font14);
+    position: relative;
+  }
+}
+
+.cuadrito {
+  position: absolute;
+  content: '';
+  width:  10px;
+  height: 20px;
+  background-color: var(--alert);
+  left: -15px;
+  top: -4px;
+}
+
+
+.capsula {
+  min-width: 64px;
+  height: 304px;
+  border: 1px solid var(--borde);
+  border-radius: 3rem;
+  margin: 1rem 0;
+  background-color: #F7F7FF;
+  position: relative;
+  overflow: hidden;
+}
+.capsula::before,
+.capsula::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 1px;
+  border: 1px dashed #7A869A;
+}
+
+.capsula::before { top: 20%; }
+.capsula::after { bottom: 20%;}
+
+.valor {
+  position: absolute;
+  height: 0px;
+  width: 100%;
+  background-color:#FF415A;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: var(--peso700);
+  color: var(--blanco, #fff);
+  transition:
+    height 220ms ease,
+    bottom 220ms ease,
+    background-color 220ms ease;
+}
+
+.ppm {
+  font-size: var(--font14, 0.875rem);
+  line-height: 1;
+}
+
+.valorCompacto .ppm {
+  font-size: var(--font12, 0.75rem);
+}
+
+.max,
+.min {
+  position: absolute;
+}
+.max{ top: -20px; color: var(--color-bg);}
+.min{ bottom: -20px; color: var(--color-bg);}
+
+.sinDatos {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--peso700);
+  color: #7A869A;
+}
+

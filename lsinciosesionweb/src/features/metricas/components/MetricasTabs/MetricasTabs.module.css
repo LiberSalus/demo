@@ -1,0 +1,92 @@
+.MetricasTabs {
+  width: 100%;
+}
+
+.titulo {
+  margin: 0 0 1rem;
+  color: #182236;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.contenedor {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tabBtn {
+  border: 1px solid #b8d7ee;
+  border-radius: 999px;
+  background-color: #fff;
+  color: #243246;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 1rem;
+}
+
+.tabBtnActiva {
+  background-color: #007ac8;
+  border-color: #007ac8;
+  color: #fff;
+}
+
+.contenido {
+  min-width: 0;
+}
+
+.mobileSelectWrap {
+  display: none;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.mobileSelect {
+  appearance: none;
+  width: 100%;
+  border: 1px solid #b8d7ee;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  color: #243246;
+  font: inherit;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+}
+
+.mobileSelectIcon {
+  pointer-events: none;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #007ac8;
+  font-size: 0.8rem;
+}
+
+.panelVacio {
+  border: 1px dashed #b8d7ee;
+  border-radius: 0.75rem;
+  color: #6c7480;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .contenedor {
+    padding: 0.75rem;
+  }
+
+  .mobileSelectWrap {
+    display: block;
+  }
+
+  .tabs {
+    display: none;
+  }
+}

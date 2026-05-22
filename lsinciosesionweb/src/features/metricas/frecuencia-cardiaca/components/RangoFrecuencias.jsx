@@ -1,0 +1,30 @@
+// mesat/src/components/RangoFrecuencias/RangoFrecuencias.jsx
+import React from 'react'
+import styles from "./RangoFrecuencias.module.css";
+import "./FrecuenciaAmina.css"
+
+import IconFrecuencia from "../assets/icoFrecuencia.svg?react";
+
+const RangoFrecuencias = ({ minDia, maxDia }) => {
+  const formatRango = () => {
+    if (typeof minDia !== "number" || typeof maxDia !== "number") {
+      return `-- -- <span>ppm</span>`;
+    }
+    return `${minDia} - ${maxDia} <span>ppm</span>`;
+  };
+
+  return (
+    <div className={styles.RangoFrecuencias}>
+      <div className={styles.txt}>
+        <p>Rango de <br/> frecuencia cardiaca</p>
+        <p>{formatRango()}</p>
+      </div>
+
+      <div className={styles.icon}>
+        <IconFrecuencia />
+      </div>
+    </div>
+  )
+}
+
+export default RangoFrecuencias

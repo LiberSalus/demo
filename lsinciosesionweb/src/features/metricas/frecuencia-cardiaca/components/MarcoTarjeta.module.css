@@ -1,0 +1,18 @@
+.MarcoTarjeta {
+  margin: 1rem ;
+  width: 25rem;
+  min-height: 8.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 440px) {
+  .MarcoTarjeta {
+    min-width: 20rem;
+    max-width: 20rem;
+  } 
+}

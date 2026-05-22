@@ -1,0 +1,171 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 1rem;
+}
+
+.modal {
+  position: relative;
+  width: min(25.81rem, 100%);
+  height: 28.75rem;
+  border-radius: 1rem;
+  padding: 1rem 2rem;
+  border: 1px solid #d8e5f7;
+  font-family: var(--font-roboto);
+  color: #344054;
+  background-color: var(--bkgnd);
+}
+
+.botonCerrar {
+  position: absolute;
+  top:   1rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+}
+
+.titulo {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: var(--font24);
+  font-weight: 700;
+  font-family: var(--font-inter);
+  line-height: 1;
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  &> span {
+    font-size: var(--font14);
+  } 
+  &> strong {
+    font-weight: var(--peso400);
+    font-size: var(--font14);
+    color: var(--color-lbs);
+  }
+}
+
+.fila label {
+  font-size: var(--font14);
+}
+
+.fila input[type='number'] {
+  width: 8.125rem;
+  height: 2.5rem;
+  border-radius: 3rem;
+  border: 1px solid var(--borde);
+  text-align: start;
+  font-size: var(--font16);
+  font-weight: var(--peso600);
+  color: #344054;
+  outline: none;
+  padding-left: 2.25rem;
+}
+
+.ppm {
+  position: absolute;
+  right: 2rem;
+  color: var(--color-lbs);
+  transform: scale(0.9);
+}
+
+.fila input[type='checkbox'] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--prnci);
+  border-radius: 4px;
+  margin-right: 3.5rem;
+  cursor: pointer;
+  
+}
+
+.fila input[type='checkbox']:checked {
+  background-image: url("../assets/icoPaloma.svg");
+  background-position: center center;
+  background-size: 95%;
+
+  background-color: var(--prnci);
+  
+}
+
+.indicaciones {
+  margin: 2.5rem auto;
+  width: 90%;
+  color: #475467;
+}
+
+.indicaciones p {
+  
+  font-weight: var(--peso700);
+  line-height: 1.5;
+  font-size: var(--font16);
+  margin-bottom: 0.25rem;
+}
+
+.indicaciones ol {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 15px;
+}
+
+.indicaciones li {
+  margin-bottom: 6px;
+  font-size: var(--font14);
+  color: #585858;
+}
+
+.botonAceptar {
+  margin: 18px auto 0;
+  display: block;
+  width: min(9.375rem, 100%);
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: #3f7fbd;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mensajeError {
+  margin: 12px 0 0;
+  text-align: center;
+  color: #b42318;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .titulo {
+    font-size: 24px;
+  }
+
+  .fila {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 14px;
+  }
+
+  .fila input[type='number'] {
+    width: 100%;
+  }
+
+  .indicaciones p {
+    font-size: 18px;
+  }
+
+  .botonAceptar {
+    font-size: 22px;
+  }
+}
