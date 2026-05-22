@@ -307,6 +307,7 @@ Mover candidatos:
 - Aplicado: `icoCerrar.svg` -> `src/shared/assets/icons/general/cerrar.svg`
 - Aplicado: `Usuario.png` activo de Header -> `src/shared/assets/images/perfil/usuario-default.png`
 - Aplicado: `src/components/Tarjetas/TarjetaUsuario` se elimino porque no tenia imports vivos.
+- Aplicado: se eliminaron `Icons.svg`, `perfil.png`, `fotoPrueba.jpg` y `any.svg` de `src/components/Header/TarjetaLateral` porque no tenian imports reales.
 
 ## Grupo 7: Carrusel / opciones
 

@@ -134,6 +134,13 @@ Accion aplicada:
 - Header, TarjetaLateral, menu y modal de frecuencia importan desde `shared/assets`.
 - `src/components/Tarjetas/TarjetaUsuario` se elimino porque no tenia imports vivos.
 
+Tambien se eliminaron assets huerfanos de `src/components/Header/TarjetaLateral`:
+
+- `Icons.svg`
+- `perfil.png`
+- `fotoPrueba.jpg`
+- `any.svg`
+
 ### Tarjetas compartidas sin uso
 
 Se eliminaron carpetas completas sin imports vivos:
@@ -157,4 +164,5 @@ Tambien se retiraron piezas internas sin uso de `TarjetaCuestionarios`:
 5. Aplicado: centralizar `icoCerrar.svg` y avatar default activo.
 6. Aplicado: eliminar `src/components/Tarjetas/TarjetaUsuario`.
 7. Aplicado: eliminar tarjetas compartidas sin imports vivos.
-8. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
+8. Aplicado: eliminar assets huerfanos de Header/TarjetaLateral.
+9. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
