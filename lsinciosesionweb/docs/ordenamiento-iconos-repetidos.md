@@ -186,6 +186,7 @@ src/pages/Inicio/TarjetaNoticia/news1.png
 ```
 
 - Se eliminan las copias en `TarjetaNoticias` y `TarjetaSalud`.
+- Se elimina la carpeta `src/pages/Inicio/TarjetaNoticias` porque no tenia imports vivos.
 
 ## Grupo 4: Iconos de estado repetidos entre metricas legacy
 

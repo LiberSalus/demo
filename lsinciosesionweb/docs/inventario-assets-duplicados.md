@@ -83,6 +83,14 @@ Accion aplicada:
 
 - Se conserva `src/pages/Inicio/TarjetaNoticia/news1.png`, que es la unica importada.
 - Se eliminan las copias en `TarjetaNoticias` y `TarjetaSalud`.
+- Se elimina `src/pages/Inicio/TarjetaNoticias` porque no tenia imports vivos.
+
+### Imagenes de mono en Inicio
+
+Accion aplicada:
+
+- Se conserva `monaP.webp`, `monoP.webp` y `MoneP.png`, que son las imagenes importadas por `Inicio.jsx`.
+- Se eliminan `monaP.png`, `mono.png` y `monoP.png` porque no tenian imports reales.
 
 ### Iconos repetidos entre metricas legacy
 
