@@ -276,7 +276,14 @@ export const decodificarToken = () =>
 
 // Solicita al backend renovar la sesion cuando el servicio lo permita.
 export const refrescarToken = () =>
-  api.post(RUTAS_AUTH.refreshToken).then((respuesta) => respuesta.data);
+  api.post(RUTAS_AUTH.refreshToken).then((respuesta) => {
+    const token = obtenerTokenDeRespuesta(respuesta.data);
+
+    if (token) setAuthToken(token);
+    localStorage.setItem(CLAVE_SESION_LISTA, "1");
+
+    return respuesta.data;
+  });
 
 // Cierra la sesion en backend y siempre limpia la sesion local al terminar.
 export async function cerrarSesion() {

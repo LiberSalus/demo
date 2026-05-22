@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './Header.module.css'
 import logoHero from './LogoHero.svg'
 import menu from './icoMenu.svg'
@@ -12,8 +12,9 @@ import icoMedico from '@/pages/Inicio/Calendario/icoMedico.svg'
 import icoEnLinea from '@/pages/Inicio/Calendario/icoEnLinea.svg'
 import { cerrarSesion } from '@/services/auth'
 import { getLoginUrl } from '@/services/env'
+import { obtenerFotoPerfil, subirFotoPerfil } from '@/services/perfil'
 
-const Header = ({ estados = ["e2"] }) => {
+const Header = ({ estados = ["e2"], sesion = null }) => {
   const TRANSITION_MS = 280
   const BELL_SHAKE_MS = 1800
   const BELL_REPEAT_MS = 30000
@@ -34,6 +35,7 @@ const Header = ({ estados = ["e2"] }) => {
   const bellTimerRef = useRef(null)
   const bellRepeatIntervalRef = useRef(null)
   const bellSecondShakeTimerRef = useRef(null)
+  const fotoPerfilObjectUrlRef = useRef(null)
 
   const resolveAlertIcon = (item) => {
     if (item.type === "medicamento") return icoMedicamento
@@ -59,32 +61,42 @@ const Header = ({ estados = ["e2"] }) => {
   }
 
   const handleLogout = async () => {
-    try { await cerrarSesion() } catch {}
+    try { await cerrarSesion() } catch {
+      // El cierre local/redireccion debe continuar aunque el endpoint falle.
+    }
     finally {
       window.location.assign(getLoginUrl())
     }
   }
 
-  const clearBellFeedback = () => {
-    setHasPendingAlert(false)
-    setIsBellShaking(false)
-    setIsAlertsOpen(false)
+  const actualizarFotoPerfil = useCallback((foto) => {
+    if (!foto) return
 
-    if (bellTimerRef.current) {
-      clearTimeout(bellTimerRef.current)
-      bellTimerRef.current = null
+    if (fotoPerfilObjectUrlRef.current) {
+      URL.revokeObjectURL(fotoPerfilObjectUrlRef.current)
+      fotoPerfilObjectUrlRef.current = null
     }
 
-    if (bellSecondShakeTimerRef.current) {
-      clearTimeout(bellSecondShakeTimerRef.current)
-      bellSecondShakeTimerRef.current = null
+    if (foto instanceof Blob) {
+      const objectUrl = URL.createObjectURL(foto)
+      fotoPerfilObjectUrlRef.current = objectUrl
+      setFotoPerfil(objectUrl)
+      return
     }
 
-    if (bellRepeatIntervalRef.current) {
-      clearInterval(bellRepeatIntervalRef.current)
-      bellRepeatIntervalRef.current = null
+    if (typeof foto === "string") {
+      setFotoPerfil(foto)
+      return
     }
-  }
+
+    const url = foto.url || foto.foto_url || foto.photo_url || foto.path || foto.data
+    if (typeof url === "string" && url) setFotoPerfil(url)
+  }, [])
+
+  const handleGuardarFotoPerfil = useCallback(async (fotoRecortada) => {
+    await subirFotoPerfil(fotoRecortada)
+    actualizarFotoPerfil(fotoRecortada)
+  }, [actualizarFotoPerfil])
 
   const stopBellFeedback = () => {
     setHasPendingAlert(false)
@@ -171,8 +183,27 @@ const Header = ({ estados = ["e2"] }) => {
       if (bellRepeatIntervalRef.current) {
         clearInterval(bellRepeatIntervalRef.current)
       }
+      if (fotoPerfilObjectUrlRef.current) {
+        URL.revokeObjectURL(fotoPerfilObjectUrlRef.current)
+      }
     }
   }, [])
+
+  useEffect(() => {
+    let cancelado = false
+
+    obtenerFotoPerfil("original")
+      .then((foto) => {
+        if (!cancelado) actualizarFotoPerfil(foto)
+      })
+      .catch(() => {
+        // Si el usuario aun no tiene foto, conservamos la imagen por defecto.
+      })
+
+    return () => {
+      cancelado = true
+    }
+  }, [actualizarFotoPerfil])
 
   useEffect(() => {
     const onCalendarAlert = () => {
@@ -353,9 +384,10 @@ const Header = ({ estados = ["e2"] }) => {
           >
             <TarjetaLataral 
             estados={estados}
+            sesion={sesion}
             onClose={closePanel}
             fotoPerfil={fotoPerfil}
-            onGuardarFoto={setFotoPerfil}
+            onGuardarFoto={handleGuardarFotoPerfil}
             onLogout={handleLogout}
             />
           </div>

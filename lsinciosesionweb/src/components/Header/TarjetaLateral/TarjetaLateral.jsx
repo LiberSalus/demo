@@ -17,6 +17,7 @@ import suma  from './icoZoomSuma.svg'
 
 const TarjetaLateral = ({
   estados,
+  sesion = null,
   onClose,
   fotoPerfil = perfil,
   onGuardarFoto,
@@ -54,6 +55,8 @@ const TarjetaLateral = ({
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
 
   const conexion = Array.from(new Set(estados)).filter((e) => ESTADOS[e])
+  const nombreUsuario = obtenerNombreUsuario(sesion)
+  const saludoUsuario = `${obtenerSaludoDia()} ${nombreUsuario}`
   const cuestionariosActivos = [
     { id: 'c2', titulo: 'Cuestionario 2', porcentaje: 45 },
     { id: 'c3', titulo: 'Cuestionario 3', porcentaje: 35 },
@@ -105,7 +108,7 @@ const TarjetaLateral = ({
   const guardarNuevaFoto = async () => {
     if (!sourceImage || !croppedAreaPixels) return
     const croppedImage = await getCroppedImage(sourceImage, croppedAreaPixels)
-    onGuardarFoto?.(croppedImage)
+    await onGuardarFoto?.(croppedImage)
     cerrarDialogoFoto()
   }
 
@@ -166,7 +169,7 @@ const TarjetaLateral = ({
             <div
               key={cfg.id}
               className={`${styles.pill} ${styles.porDefecto}`}
-              style={cfg.color ? { color: cfg.color } : undefined}
+              style={cfg.color ? { "--estado-color": cfg.color } : undefined}
             >
               <p className={styles.txto}>
                 {cfg.txt} <span className={styles.bola}>•</span>
@@ -196,7 +199,7 @@ const TarjetaLateral = ({
       <div className={styles.cntInfo}>
         <p>Última sesión</p>
         <p>02/10/2025 01:27pm</p>
-        <p>Buenos días Alex</p>
+        <p>{saludoUsuario}</p>
         <p>Tu perfil está 40% completado</p>
       </div>
 
@@ -363,6 +366,50 @@ const TarjetaLateral = ({
         )}
     </div>
   )
+}
+
+// Construye el nombre visible desde decoded o desde el perfil minimo local.
+function obtenerNombreUsuario(sesion) {
+  const usuario = sesion?.user || sesion?.usuario || sesion?.data?.user || {};
+  const nombreDecoded =
+    usuario.nombre_completo ||
+    usuario.nombre ||
+    usuario.name ||
+    [usuario.first_name, usuario.last_name].filter(Boolean).join(" ").trim() ||
+    usuario.username ||
+    usuario.correo ||
+    usuario.email;
+
+  if (nombreDecoded) return obtenerPrimerNombre(nombreDecoded);
+
+  try {
+    const perfilLocal = JSON.parse(localStorage.getItem("perfil_min") || "{}");
+    const nombreLocal =
+      perfilLocal.nombre ||
+      perfilLocal.nombre_completo ||
+      [perfilLocal.first_name, perfilLocal.last_name].filter(Boolean).join(" ").trim() ||
+      perfilLocal.username ||
+      perfilLocal.email;
+
+    return obtenerPrimerNombre(nombreLocal || "Usuario");
+  } catch {
+    return "Usuario";
+  }
+}
+
+// Devuelve solo el primer nombre para mantener compacto el saludo del panel.
+function obtenerPrimerNombre(nombre) {
+  return String(nombre || "Usuario").trim().split(/\s+/)[0] || "Usuario";
+}
+
+// Personaliza el saludo de acuerdo con la hora local del navegador.
+function obtenerSaludoDia() {
+  const hora = new Date().getHours();
+
+  if (hora < 12) return "Buenos días";
+  if (hora < 19) return "Buenas tardes";
+
+  return "Buenas noches";
 }
 
 export default TarjetaLateral

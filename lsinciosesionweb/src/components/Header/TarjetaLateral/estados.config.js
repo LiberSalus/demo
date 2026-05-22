@@ -2,7 +2,7 @@
 export const ESTADOS = {
   e1: {
     id:'1act',
-    txt:"En Linea",
+    txt:"Conectado",
     color:"#21D127",
   },
   e2: {

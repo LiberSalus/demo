@@ -6,12 +6,13 @@ import MainMenu from "@/components/Header/menu/Menu";
 import Footer from "@/components/Footer/Footer";
 import styles from "./principal.module.css";
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
-import { sincronizarPerfilSesion } from "@/services/auth";
+import useSesionActiva from "@/hooks/useSesionActiva";
 
 
 export default function Principal({ children }) {
 
   const [esMujer, setEsMujer] = useState(true);
+  const { estadoConexion, decodedSesion } = useSesionActiva();
 
   const leerPerfil = useCallback(() => {
     try {
@@ -34,9 +35,6 @@ export default function Principal({ children }) {
 
   useEffect(() => {
     leerPerfil();
-    sincronizarPerfilSesion().catch(() => {
-      // Si la sesión ya expiró, el interceptor global se encarga de limpiar.
-    });
 
     const handler = (e) => {
       const v = e?.detail?.esMujer;
@@ -66,7 +64,7 @@ export default function Principal({ children }) {
       </aside>
 
       <header className={styles.header}>
-        <Header />
+        <Header estados={[estadoConexion]} sesion={decodedSesion} />
       </header>
 
       <main className={styles.content}>

@@ -3,8 +3,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./inicio.module.css";
 import mona from "./monaP.webp";
 import mono from "./monoP.webp";
+import mone from "./MoneP.png";
 import manchaA from "./manchaA.svg";
 import manchaR from "./manchaR.svg";
+import manchaM from "./manchaM.svg";
 import cuadro from "./cuadro.svg";
 import ProgCora from "@/components/ProgresoCorazon/ProgCora";
 import TarjetaPie from "@/components/Tarjetas/TarjetaPie/TarjetaPie";
@@ -25,12 +27,33 @@ const resumenSaludInicial = {
 
 const mensajeInicial = "Tu esfuerzo se nota. Ajusta pequeños hábitos y sigue creciendo.";
 
+// Traduce los valores de sexo del perfil a la variante visual usada por el inicio.
+function obtenerVarianteSexo(sexo) {
+  const sexoNormalizado = String(sexo || "").toLowerCase();
+
+  if (sexoNormalizado === "female") return "female";
+  if (
+    sexoNormalizado === "f" ||
+    sexoNormalizado === "mujer" ||
+    sexoNormalizado === "femenino"
+  ) {
+    return "mujer";
+  }
+
+  return "hombre";
+}
+
+// Renderiza el inicio del paciente con datos locales primero y sincronizacion del backend despues.
 export default function Inicio() {
   const [nombre, setNombre] = useState("Usuario");
-  const [esMujer, setEsMujer] = useState(true);
+  // Para maquetado puedes probar con: "female", "mujer" u "hombre".
+  const [sexo, setSexo] = useState("hombre");
   const [resumenSalud, setResumenSalud] = useState(resumenSaludInicial);
   const [mensaje, setMensaje] = useState(mensajeInicial);
 
+  const esMujer = sexo === "mujer" || sexo === "female";
+
+  // Recupera el perfil minimo guardado para personalizar saludo y avatar sin esperar al backend.
   const leerPerfilLocal = useCallback(() => {
     try {
       const raw = localStorage.getItem("perfil_min");
@@ -46,16 +69,14 @@ export default function Inicio() {
 
       const sexo = p?.sexo || p?.genero || p?.gender;
       if (sexo) {
-        const s = String(sexo).toLowerCase();
-        const mujer =
-          s === "f" || s === "mujer" || s === "femenino" || s === "female";
-        setEsMujer(mujer);
+        setSexo(obtenerVarianteSexo(sexo));
       }
     } catch {
       null;
     }
   }, []);
 
+  // Notifica a otros componentes cuando cambia el genero usado para personalizar la interfaz.
   useEffect(() => {
     if (typeof esMujer !== "boolean") return;
 
@@ -66,6 +87,7 @@ export default function Inicio() {
     );
   }, [esMujer]);
 
+  // Mantiene sincronizado el estado del inicio cuando otros modulos actualizan el perfil local.
   useEffect(() => {
     leerPerfilLocal();
     window.addEventListener("perfil_min_updated", leerPerfilLocal);
@@ -73,6 +95,7 @@ export default function Inicio() {
     return () => window.removeEventListener("perfil_min_updated", leerPerfilLocal);
   }, [leerPerfilLocal]);
 
+  // Consulta el resumen del paciente y reemplaza los valores iniciales cuando el servicio responde.
   useEffect(() => {
     let desmontado = false;
 
@@ -85,13 +108,7 @@ export default function Inicio() {
 
         const sexo = homePaciente.perfil?.sexo;
         if (sexo) {
-          const sexoNormalizado = String(sexo).toLowerCase();
-          setEsMujer(
-            sexoNormalizado === "f" ||
-              sexoNormalizado === "mujer" ||
-              sexoNormalizado === "femenino" ||
-              sexoNormalizado === "female"
-          );
+          setSexo(obtenerVarianteSexo(sexo));
         }
 
         setResumenSalud((resumenActual) => ({
@@ -112,8 +129,8 @@ export default function Inicio() {
     };
   }, []);
 
-  const avatarImg = esMujer ? mona : mono;
-  const manchaImg = esMujer ? manchaR : manchaA;
+  const avatarImg = sexo === "female" ? mone : esMujer ? mona : mono;
+  const manchaImg = sexo === "female" ? manchaM : esMujer ? manchaR : manchaA;
   const nombreCorto = String(nombre || "Usuario").trim().split(/\s+/)[0];
 
   return (

@@ -24,6 +24,20 @@
 }
 
 .cntMono {
+  --mono-cuadro-width: 8rem;
+  --mono-cuadro-top: 7.5%;
+  --mono-cuadro-left: 2.5%;
+  --mono-cuadro-transform: none;
+  --mono-mancha-width: 22.375%;
+  --mono-mancha-top: 25%;
+  --mono-mancha-left: 3%;
+  --mono-mancha-bottom: auto;
+  --mono-mancha-transform: none;
+  --mono-mancha-opacity: 0.3;
+  --mono-img-box-width: 20vw;
+  --mono-img-box-height: 100%;
+  --mono-img-width: 15.5rem;
+  --mono-img-margin-top: 1.5rem;
   border: 1px solid #ACCCEB;
   width: min(100%, 61rem);
   min-width: 0;
@@ -38,31 +52,33 @@
 
   & .cuadro {
     position: absolute;
-    top: 7.5%;
-    left: 2.5%;
-    width: 8rem;
+    top: var(--mono-cuadro-top);
+    left: var(--mono-cuadro-left);
+    width: var(--mono-cuadro-width);
+    transform: var(--mono-cuadro-transform);
   }
 
   & .mancha {
     position: absolute;
-    width: 22.375%;
-    top: 25%;
-    left: 3%;
-    opacity: 0.3;
-
+    width: var(--mono-mancha-width);
+    top: var(--mono-mancha-top);
+    left: var(--mono-mancha-left);
+    bottom: var(--mono-mancha-bottom);
+    transform: var(--mono-mancha-transform);
+    opacity: var(--mono-mancha-opacity);
+    z-index: 0;
   }
 
   & .cntImgMono {
     /* border: 1px dashed darkgoldenrod; */
-    width: 20vw;
-    height: 100%;
-    
+    width: var(--mono-img-box-width);
+    height: var(--mono-img-box-height);
     z-index: 1;
     text-align: center;
 
     &>img {
-      margin-top: 1.5rem;
-      width: 15.5rem;
+      margin-top: var(--mono-img-margin-top);
+      width: var(--mono-img-width);
     }
   }
 }
@@ -310,7 +326,6 @@
 }
 
 
-
 @media (max-width: 1360px) {
 
   .seccSuperior {
@@ -338,6 +353,13 @@
   }
 
   .cntMono {
+    --mono-mancha-width: 50%;
+    --mono-mancha-top: 50%;
+    --mono-mancha-left: 50%;
+    --mono-mancha-transform: translate(50%, -50%);
+    --mono-img-box-width: 100%;
+    --mono-img-box-height: auto;
+    --mono-img-width: 10rem;
     width: 100%;
     height: auto;
     min-width: unset;
@@ -345,29 +367,11 @@
     gap: 1.5rem;
     flex-direction: column;
     flex-wrap: nowrap;
-
-    &>.cntImgMono {
-      width: 100%;
-
-      &>.mono {
-        width: 10rem;
-        height: auto;
-      }
-    }
   }
 
   .cntPie {
     width: min(100%, 20rem);
     min-width: 0;
-  }
-
-  .cntMono .mancha {
-    position: absolute;
-    width: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(50%, -50%);
-    opacity: 0.3;
   }
 
   .cntCora {
@@ -395,6 +399,15 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .cntMono {
+    --mono-mancha-width: 16.5rem;
+    --mono-mancha-top: auto;
+    --mono-mancha-left: 1.45rem;
+    --mono-mancha-bottom: 5.2rem;
+    --mono-mancha-transform: none;
+    --mono-mancha-opacity: 0.34;
+    --mono-img-box-width: 100%;
+    --mono-img-width: 12rem;
+    --mono-img-margin-top: 0;
     max-width: 51rem;
     height: 37rem;
     padding: 4rem 1.55rem 1.4rem;
@@ -418,35 +431,12 @@
     z-index: 2;
   }
 
-  /* .cntMono .cuadro {
-    width: 7.2rem;
-    top: 2.6rem;
-    left: 2rem;
-  } */
-
-  .cntMono .mancha {
-    width: 16.5rem;
-    top: auto;
-    left: 1.45rem;
-    bottom: 5.2rem;
-    transform: none;
-    opacity: 0.34;
-  }
-
   .cntMono .cntImgMono {
     flex: 0 1 18.5rem;
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1;
-  }
-
-  .cntMono .cntImgMono > img {
-    margin-top: 0;
-    width: 12rem;
   }
 
   .cntPie {
@@ -484,6 +474,12 @@
   }
 }
 
+@media (min-width: 769px) and (max-width: 968px) {
+  .cntMono {
+    --mono-mancha-bottom: 3.2rem;
+  }
+}
+
 .saludo {
   position: absolute;
   top: 1.35rem;
@@ -498,6 +494,17 @@
 
 @media (min-width: 1025px) {
   .cntMono {
+    --mono-cuadro-width: 6.2rem;
+    --mono-cuadro-top: 1.75rem;
+    --mono-cuadro-left: 1.55rem;
+    --mono-mancha-width: 16rem;
+    --mono-mancha-top: auto;
+    --mono-mancha-left: 10%;
+    --mono-mancha-bottom: 4.8rem;
+    --mono-mancha-opacity: 0.32;
+    --mono-img-box-width: 100%;
+    --mono-img-width: 12.2rem;
+    --mono-img-margin-top: 0;
     max-width: 61rem;
     height: 36.9rem;
     padding: 3.35rem 1.5rem 1.35rem;
@@ -520,35 +527,12 @@
     text-align: center;
   }
 
-  .cntMono .cuadro {
-    width: 6.2rem;
-    top: 1.75rem;
-    left: 1.55rem;
-  }
-
-  .cntMono .mancha {
-    width: 16rem;
-    top: auto;
-    left: 1.15rem;
-    bottom: 4.8rem;
-    transform: none;
-    opacity: 0.32;
-  }
-
   .cntMono .cntImgMono {
     flex: 0 1 18rem;
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1;
-  }
-
-  .cntMono .cntImgMono > img {
-    margin-top: 0;
-    width: 12.2rem;
   }
 
   .cntPie {
@@ -660,6 +644,18 @@
   }
 
   .cntMono {
+    --mono-cuadro-width: 5.8rem;
+    --mono-cuadro-top: 4.3rem;
+    --mono-cuadro-left: 3.5rem;
+    --mono-mancha-width: 12.5rem;
+    --mono-mancha-top: 8.5rem;
+    --mono-mancha-left: 50%;
+    --mono-mancha-transform: translateX(-50%);
+    --mono-mancha-opacity: 0.34;
+    --mono-img-box-width: 100%;
+    --mono-img-box-height: auto;
+    --mono-img-width: 9.3rem;
+    --mono-img-margin-top: 0;
     max-width: 42rem;
     padding: 3.9rem 1.15rem 1rem;
     gap: 1rem;
@@ -671,30 +667,8 @@
     font-size: 1.05rem;
   }
 
-  .cntMono .cuadro {
-    width: 5.8rem;
-    top: 4.3rem;
-    left: 3.5rem;
-  }
-
-  .cntMono .mancha {
-    width: 12.5rem;
-    top: 8.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.34;
-  }
-
   .cntMono .cntImgMono {
-    width: 100%;
-    height: auto;
     position: relative;
-    z-index: 1;
-  }
-
-  .cntMono .cntImgMono > img {
-    margin-top: 0;
-    width: 9.3rem;
   }
 
   .cntPie {
@@ -739,19 +713,14 @@
 }
 
 @media (min-width: 461px) and (max-width: 768px) {
-  .cntMono .cuadro {
-    width: 8.2rem;
-    top: 5.15rem;
-    left: 50%;
-    transform: translateX(-94%);
-  }
-
-  .cntMono .mancha {
-    width: 13.6rem;
-    top: 11.2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.32;
+  .cntMono {
+    --mono-cuadro-width: 8.2rem;
+    --mono-cuadro-top: 5.15rem;
+    --mono-cuadro-left: 50%;
+    --mono-cuadro-transform: translateX(-94%);
+    --mono-mancha-width: 13.6rem;
+    --mono-mancha-top: 11.2rem;
+    --mono-mancha-opacity: 0.32;
   }
 
   .cntCora {
@@ -801,27 +770,25 @@
   }
 
   .cntMono {
+    --mono-cuadro-width: 30%;
+    --mono-cuadro-top: 3rem;
+    --mono-cuadro-left: 20%;
+    --mono-mancha-width: 10.5rem;
+    --mono-mancha-top: 14rem;
+    --mono-mancha-left: 50%;
+    --mono-mancha-transform: translateX(-50%);
+    --mono-mancha-opacity: 0.38;
+    --mono-img-box-height: auto;
+    --mono-img-width: 8.4rem;
+    --mono-img-margin-top: 0;
     width: 100%;
     padding: 3.55rem 0.55rem 1rem;
     border-radius: 1.1rem;
     gap: 0.95rem;
   }
 
-  .cntMono .cuadro {
-    width: 30%;
-    top: 3rem;
-    left: 20%;
-  }
-
   .cntMono .cntImgMono {
-    height: auto;
     position: relative;
-    z-index: 1;
-  }
-
-  .cntMono .cntImgMono > img {
-    margin-top: 0;
-    width: 8.4rem;
   }
 
   .cntPie {
@@ -842,13 +809,6 @@
     gap: 0.75rem;
   }
 
-  .cntImgMono {
-    /* border: 2px dashed red; */
-    
-  }
-
-
-
   .mensaje {
     width: 90%;
     max-width: 16.5rem;
@@ -864,14 +824,6 @@
     display: flex;
     justify-content: center;
     order: 3;
-  }
-
-  .cntMono .mancha {
-    width: 10.5rem;
-    top: 14rem;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.38;
   }
 
   .cntPie {
@@ -934,4 +886,20 @@
     padding: 0 1.45rem;
   }
 
+}
+
+@media (min-width: 1025px) and (max-width: 1360px) {
+  .cntMono {
+    --mono-mancha-width: 15.8rem;
+    --mono-mancha-top: 56%;
+    --mono-mancha-left: calc(50% - 14.15rem);
+    --mono-mancha-bottom: auto;
+    --mono-mancha-transform: translate(-50%, -43%);
+    --mono-mancha-opacity: 0.34;
+    display: grid;
+    grid-template-columns: 18rem 6.25rem 19.8rem;
+    column-gap: 1.1rem;
+    justify-content: center;
+    align-items: center;
+  }
 }

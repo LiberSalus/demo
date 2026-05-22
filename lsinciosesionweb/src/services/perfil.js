@@ -1,26 +1,66 @@
 //src\services\perfil.js
-import api from './apiClient';
+import api from "./apiClient";
 
-// GET foto
-export async function getProfilePhoto(size = 'original') {
-  // importante: NO pongas Content-Type, deja que el navegador lo maneje
-  const { data } = await api.get(`/perfil/foto/perfil`, {
+const RUTAS_PERFIL = {
+  fotoPerfil: "sesion/perfil/foto/perfil",
+};
+
+const CONFIG_CONSULTA_PERFIL = {
+  omitirLimpiezaSesion: true,
+};
+
+// Convierte un data URL generado por el cropper a File para enviarlo como multipart.
+function dataUrlAFile(dataUrl, nombre = "foto-perfil.jpg") {
+  const [metadata, contenidoBase64] = String(dataUrl).split(",");
+  const mime = metadata.match(/data:(.*?);base64/)?.[1] || "image/jpeg";
+  const binario = atob(contenidoBase64 || "");
+  const bytes = new Uint8Array(binario.length);
+
+  for (let i = 0; i < binario.length; i += 1) {
+    bytes[i] = binario.charCodeAt(i);
+  }
+
+  return new File([bytes], nombre, { type: mime });
+}
+
+// Normaliza la respuesta cuando el backend envia JSON aunque se solicite como blob.
+async function normalizarRespuestaFoto(data) {
+  if (!(data instanceof Blob) || !data.type.includes("application/json")) return data;
+
+  const texto = await data.text();
+  if (!texto) return null;
+
+  try {
+    return JSON.parse(texto);
+  } catch {
+    return texto;
+  }
+}
+
+// Obtiene la foto del perfil; normalmente llega como Blob de imagen.
+export async function obtenerFotoPerfil(size = "original") {
+  const { data } = await api.get(RUTAS_PERFIL.fotoPerfil, {
+    ...CONFIG_CONSULTA_PERFIL,
     params: { size },
-    withCredentials: true, // 👈 manda la cookie access_token
-    responseType: 'blob',   // recibimos imagen
+    responseType: "blob",
   });
-  return data; // blob
+
+  return normalizarRespuestaFoto(data);
 }
 
-// POST subir foto
-export async function uploadProfilePhoto(file) {
-  const fd = new FormData();
-  fd.append('file', file); // 👈 el backend espera el campo 'file'
+// Sube la foto de perfil usando el campo multipart "file" esperado por el backend.
+export async function subirFotoPerfil(file) {
+  const archivo = typeof file === "string" && file.startsWith("data:")
+    ? dataUrlAFile(file)
+    : file;
+  const formulario = new FormData();
 
-  const { data } = await api.post(`/perfil/foto/perfil`, fd, {
-    withCredentials: true, // 👈 manda la cookie
-    // no seteamos Content-Type para que ponga el boundary correcto
-  });
-  return data; // string o lo que devuelva tu API
+  formulario.append("file", archivo);
+
+  const { data } = await api.post(RUTAS_PERFIL.fotoPerfil, formulario);
+  return data;
 }
+
+export const getProfilePhoto = obtenerFotoPerfil;
+export const uploadProfilePhoto = subirFotoPerfil;
 
