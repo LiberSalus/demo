@@ -358,6 +358,13 @@ Revisar con `rg` antes de eliminar.
 
 Si no hay imports reales, eliminarlos en un commit de limpieza.
 
+Aplicado parcialmente:
+
+- Se elimino `src/components/Tarjetas/TarjetaAlertas`.
+- Se elimino `src/components/Tarjetas/TarjetaCarrucel`.
+- Se elimino `src/components/Tarjetas/TarjetaSeguimiento`.
+- Se eliminaron `TarjetaCuestionario.jsx`, `tarjetaCuestionario.module.css` y `candadoOpen.svg` de `TarjetaCuestionarios`.
+
 ## Aplicacion por commits
 
 ### Commit 1

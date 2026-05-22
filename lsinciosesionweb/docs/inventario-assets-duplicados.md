@@ -126,6 +126,20 @@ Accion aplicada:
 - Header, TarjetaLateral, menu y modal de frecuencia importan desde `shared/assets`.
 - `src/components/Tarjetas/TarjetaUsuario` se elimino porque no tenia imports vivos.
 
+### Tarjetas compartidas sin uso
+
+Se eliminaron carpetas completas sin imports vivos:
+
+- `src/components/Tarjetas/TarjetaAlertas`
+- `src/components/Tarjetas/TarjetaCarrucel`
+- `src/components/Tarjetas/TarjetaSeguimiento`
+
+Tambien se retiraron piezas internas sin uso de `TarjetaCuestionarios`:
+
+- `TarjetaCuestionario.jsx`
+- `tarjetaCuestionario.module.css`
+- `candadoOpen.svg`
+
 ## Primera limpieza segura propuesta
 
 1. Cerrar commit de la limpieza 3D y refactor de frecuencia.
@@ -134,4 +148,5 @@ Accion aplicada:
 4. Aplicado: limpiar copias de `news1.png`.
 5. Aplicado: centralizar `icoCerrar.svg` y avatar default activo.
 6. Aplicado: eliminar `src/components/Tarjetas/TarjetaUsuario`.
-7. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
+7. Aplicado: eliminar tarjetas compartidas sin imports vivos.
+8. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
