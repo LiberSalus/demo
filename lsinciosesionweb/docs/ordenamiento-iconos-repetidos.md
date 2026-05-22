@@ -270,17 +270,14 @@ src/shared/assets/icons/estado/
 ### Duplicados
 
 - `src/components/Header/TarjetaLateral/Icons.svg`
-- `src/components/Tarjetas/TarjetaUsuario/Icons.svg`
+- Aplicado: se elimino `src/components/Tarjetas/TarjetaUsuario/Icons.svg` junto con la carpeta legacy.
 
 - `src/components/Header/TarjetaLateral/perfil.png`
-- `src/components/Tarjetas/TarjetaUsuario/perfil.png`
+- Aplicado: se elimino `src/components/Tarjetas/TarjetaUsuario/perfil.png` junto con la carpeta legacy.
 
-- `src/components/Header/TarjetaLateral/Usuario.png`
-- `src/components/Header/Usuario.png`
+- Aplicado: `src/components/Header/TarjetaLateral/Usuario.png` y `src/components/Header/Usuario.png` se centralizaron en `src/shared/assets/images/perfil/usuario-default.png`.
 
-- `src/components/Header/menu/icoCerrar.svg`
-- `src/components/Header/TarjetaLateral/icoCerrar.svg`
-- `src/features/metricas/frecuencia-cardiaca/assets/icoCerrar.svg`
+- Aplicado: `src/components/Header/menu/icoCerrar.svg`, `src/components/Header/TarjetaLateral/icoCerrar.svg` y `src/features/metricas/frecuencia-cardiaca/assets/icoCerrar.svg` se centralizaron en `src/shared/assets/icons/general/cerrar.svg`.
 
 ### Uso detectado
 
@@ -288,7 +285,6 @@ src/shared/assets/icons/estado/
 
 - `src/components/Header/Header.jsx`
 - `src/components/Header/TarjetaLateral/TarjetaLateral.jsx`
-- `src/components/Tarjetas/TarjetaUsuario/TarjetaUsuario.jsx`
 
 `icoCerrar.svg` se usa en:
 
@@ -296,7 +292,7 @@ src/shared/assets/icons/estado/
 - tarjeta lateral
 - modal de captura de frecuencia
 
-### Accion recomendada
+### Accion aplicada
 
 Crear:
 
@@ -309,10 +305,7 @@ Mover candidatos:
 
 - Aplicado: `icoCerrar.svg` -> `src/shared/assets/icons/general/cerrar.svg`
 - Aplicado: `Usuario.png` activo de Header -> `src/shared/assets/images/perfil/usuario-default.png`
-
-No mover `perfil.png` hasta confirmar si `TarjetaUsuario` sigue viva.
-
-Nota: `src/components/Tarjetas/TarjetaUsuario/Usuario.png` no se movio porque no es copia exacta del avatar activo de Header.
+- Aplicado: `src/components/Tarjetas/TarjetaUsuario` se elimino porque no tenia imports vivos.
 
 ## Grupo 7: Carrusel / opciones
 

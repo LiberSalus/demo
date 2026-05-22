@@ -124,7 +124,7 @@ Accion aplicada:
 - `icoCerrar.svg` vive en `src/shared/assets/icons/general/cerrar.svg`.
 - El avatar default activo vive en `src/shared/assets/images/perfil/usuario-default.png`.
 - Header, TarjetaLateral, menu y modal de frecuencia importan desde `shared/assets`.
-- `src/components/Tarjetas/TarjetaUsuario/Usuario.png` se conserva local porque no es copia exacta del avatar activo.
+- `src/components/Tarjetas/TarjetaUsuario` se elimino porque no tenia imports vivos.
 
 ## Primera limpieza segura propuesta
 
@@ -133,4 +133,5 @@ Accion aplicada:
 3. Aplicado: limpiar duplicados de `TarjetaSalud`.
 4. Aplicado: limpiar copias de `news1.png`.
 5. Aplicado: centralizar `icoCerrar.svg` y avatar default activo.
-6. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
+6. Aplicado: eliminar `src/components/Tarjetas/TarjetaUsuario`.
+7. Dejar para el final los iconos de metricas legacy, porque esas pantallas se reemplazaran por v2.
