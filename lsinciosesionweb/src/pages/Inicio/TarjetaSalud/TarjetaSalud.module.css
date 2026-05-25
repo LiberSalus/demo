@@ -63,6 +63,7 @@
   margin: 0rem auto;
   border: 1px dashed lightgrey;
   border-radius: 0.5rem;
+  background: transparent;
   width: 9.5rem;
   height: 3.5rem;
   display: flex;
@@ -76,6 +77,14 @@
     color: #334155;
   }
 
+}
+
+.itemCatalogo {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
 }
 
 
