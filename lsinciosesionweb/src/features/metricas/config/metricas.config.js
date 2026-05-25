@@ -1,11 +1,36 @@
-import FrecuenciaCardiacaV2 from "../frecuencia-cardiaca/FrecuenciaCardiaca";
-import PresionArterialLegacy from "@/pages/SaludFisica/PresionArterial/PresionArterial";
-import OxigenacionLegacy from "@/pages/SaludFisica/Oxigenacion/Oxigenacion";
-import GlucosaLegacy from "@/pages/SaludFisica/GlucosaEnSangre/Glucosa";
-import ActividadFisicaLegacy from "@/pages/SaludFisica/ActividadFisica/ActividadFisica";
-import CicloMenstrualLegacy from "@/pages/SaludFisica/CicloMenstrual/CicloMenstrual";
+import { lazy } from "react";
 
 import { AREAS_METRICAS } from "./areas.config";
+
+// Carga la metrica nueva de frecuencia cardiaca solo cuando el usuario la abre.
+function cargarFrecuenciaCardiaca() {
+  return import("../frecuencia-cardiaca/FrecuenciaCardiaca");
+}
+
+// Carga la metrica legacy de presion arterial mientras termina su migracion v2.
+function cargarPresionArterialLegacy() {
+  return import("@/pages/SaludFisica/PresionArterial/PresionArterial");
+}
+
+// Carga la metrica legacy de oxigenacion mientras termina su migracion v2.
+function cargarOxigenacionLegacy() {
+  return import("@/pages/SaludFisica/Oxigenacion/Oxigenacion");
+}
+
+// Carga la metrica legacy de glucosa mientras termina su migracion v2.
+function cargarGlucosaLegacy() {
+  return import("@/pages/SaludFisica/GlucosaEnSangre/Glucosa");
+}
+
+// Carga la metrica legacy de actividad fisica mientras termina su migracion v2.
+function cargarActividadFisicaLegacy() {
+  return import("@/pages/SaludFisica/ActividadFisica/ActividadFisica");
+}
+
+// Carga la metrica legacy de ciclo menstrual mientras termina su migracion v2.
+function cargarCicloMenstrualLegacy() {
+  return import("@/pages/SaludFisica/CicloMenstrual/CicloMenstrual");
+}
 
 export const ESTADOS_METRICA = {
   ACTIVA: "activa",
@@ -31,7 +56,7 @@ export const METRICAS_V2 = [
     unidad: "ppm",
     orden: 10,
     estado: ESTADOS_METRICA.ACTIVA,
-    Component: FrecuenciaCardiacaV2,
+    Component: lazy(cargarFrecuenciaCardiaca),
   },
   {
     id: IDS_METRICAS.PRESION_ARTERIAL,
@@ -40,7 +65,7 @@ export const METRICAS_V2 = [
     unidad: "mmHg",
     orden: 20,
     estado: ESTADOS_METRICA.LEGACY,
-    Component: PresionArterialLegacy,
+    Component: lazy(cargarPresionArterialLegacy),
   },
   {
     id: IDS_METRICAS.SPO2,
@@ -49,7 +74,7 @@ export const METRICAS_V2 = [
     unidad: "%",
     orden: 30,
     estado: ESTADOS_METRICA.LEGACY,
-    Component: OxigenacionLegacy,
+    Component: lazy(cargarOxigenacionLegacy),
   },
   {
     id: IDS_METRICAS.GLUCOSA,
@@ -58,7 +83,7 @@ export const METRICAS_V2 = [
     unidad: "mg/dL",
     orden: 40,
     estado: ESTADOS_METRICA.LEGACY,
-    Component: GlucosaLegacy,
+    Component: lazy(cargarGlucosaLegacy),
   },
   {
     id: IDS_METRICAS.PASOS,
@@ -67,7 +92,7 @@ export const METRICAS_V2 = [
     unidad: "pasos",
     orden: 50,
     estado: ESTADOS_METRICA.LEGACY,
-    Component: ActividadFisicaLegacy,
+    Component: lazy(cargarActividadFisicaLegacy),
   },
   {
     id: IDS_METRICAS.CICLO_MENSTRUAL,
@@ -76,6 +101,6 @@ export const METRICAS_V2 = [
     unidad: "dias",
     orden: 60,
     estado: ESTADOS_METRICA.LEGACY,
-    Component: CicloMenstrualLegacy,
+    Component: lazy(cargarCicloMenstrualLegacy),
   },
 ];

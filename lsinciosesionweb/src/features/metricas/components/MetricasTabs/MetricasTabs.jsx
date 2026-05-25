@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import styles from "./MetricasTabs.module.css";
@@ -91,7 +91,13 @@ export default function MetricasTabs({ metricas = [], tituloSeccion }) {
         </div>
 
         <div className={styles.contenido}>
-          <ComponenteActivo metrica={metricaActiva} />
+          <Suspense
+            fallback={
+              <div className={styles.cargandoMetrica}>Cargando metrica...</div>
+            }
+          >
+            <ComponenteActivo metrica={metricaActiva} />
+          </Suspense>
         </div>
       </div>
     </section>
