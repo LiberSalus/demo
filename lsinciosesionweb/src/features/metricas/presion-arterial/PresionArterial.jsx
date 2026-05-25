@@ -1,6 +1,5 @@
-import MetricaEnPreparacion from "../components/MetricaEnPreparacion/MetricaEnPreparacion";
+import PresionArterialDashboard from "./PresionArterialDashboard.jsx";
 
-// Placeholder de presion arterial mientras se migra la version de BorradorDos.
-export default function PresionArterial({ metrica }) {
-  return <MetricaEnPreparacion metrica={metrica} />;
-}
+const PresionArterial = () => <PresionArterialDashboard />;
+
+export default PresionArterial;

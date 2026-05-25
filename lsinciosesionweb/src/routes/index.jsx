@@ -1,5 +1,5 @@
 // src/routes/index.jsx
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "@/config/routes";
 
@@ -7,32 +7,33 @@ import { ROUTES } from "@/config/routes";
 import Principal from "@/Layout/Principal";
 import ProtectedRoute from "./protected-route";
 
-// Pages
-import Login from "@/pages/LoginNuevo/LoginNuevo";
-import Inicio from "@/pages/Inicio/Inicio";
-
-import MiSaludATravesDelTiempo from "@/pages/MiSalud/SobreMi";
-import HistoriaSalud from "@/pages/MiSalud/HistoriaSalud";
-import CuerpoHistoria from "@/pages/MiSalud/CuerpoHistoria";
-import RespondeCuidate from "@/pages/MiSalud/RespondeCuidate";
-import FamiliaHerencia from "@/pages/MiSalud/FamiliaHerencia";
-
-import MiCuidadoDiario from "@/pages/MisConsultas/Areas";
-import Avance from "@/pages/MisConsultas/Avance";
-import Susurros from "@/pages/MisConsultas/Susurros";
-import LoQueDice from "@/pages/MisConsultas/LoQueDice";
-import Comprension from "@/pages/MisConsultas/Comprension";
-import PlanCuidado from "@/pages/MisConsultas/PlanCuidado";
-import ProximosPasos from "@/pages/MisConsultas/ProximosPasos";
-
-import Any from "@/pages/Any/Any";
-import FrankyTeAcompana from "@/pages/FRANKY/Franky";
-import MonitorDeSalud from "@/pages/Monitor/Monitor";
-import Tami from "@/pages/Ayuda/DudasFrecuentes";
-
-import SaludFisica from "@/pages/SaludFisica/SaludFisica";
-import SaludMental from "@/pages/SaludMental/SaludMental";
-import SaludNutricional from "@/pages/SaludNutricional/SaludNutricional";
+const Login = lazy(() => import("@/pages/LoginNuevo/LoginNuevo"));
+const Inicio = lazy(() => import("@/pages/Inicio/Inicio"));
+const RegistrosPage = lazy(() => import("@/pages/Registros/RegistrosPage"));
+const RegistroDetallePage = lazy(() =>
+  import("@/pages/Registros/RegistroDetallePage")
+);
+const MiSaludATravesDelTiempo = lazy(() => import("@/pages/MiSalud/SobreMi"));
+const HistoriaSalud = lazy(() => import("@/pages/MiSalud/HistoriaSalud"));
+const CuerpoHistoria = lazy(() => import("@/pages/MiSalud/CuerpoHistoria"));
+const RespondeCuidate = lazy(() => import("@/pages/MiSalud/RespondeCuidate"));
+const FamiliaHerencia = lazy(() => import("@/pages/MiSalud/FamiliaHerencia"));
+const MiCuidadoDiario = lazy(() => import("@/pages/MisConsultas/Areas"));
+const Avance = lazy(() => import("@/pages/MisConsultas/Avance"));
+const Susurros = lazy(() => import("@/pages/MisConsultas/Susurros"));
+const LoQueDice = lazy(() => import("@/pages/MisConsultas/LoQueDice"));
+const Comprension = lazy(() => import("@/pages/MisConsultas/Comprension"));
+const PlanCuidado = lazy(() => import("@/pages/MisConsultas/PlanCuidado"));
+const ProximosPasos = lazy(() => import("@/pages/MisConsultas/ProximosPasos"));
+const Any = lazy(() => import("@/pages/Any/Any"));
+const FrankyTeAcompana = lazy(() => import("@/pages/FRANKY/Franky"));
+const MonitorDeSalud = lazy(() => import("@/pages/Monitor/Monitor"));
+const Tami = lazy(() => import("@/pages/Ayuda/DudasFrecuentes"));
+const SaludFisica = lazy(() => import("@/pages/SaludFisica/SaludFisica"));
+const SaludMental = lazy(() => import("@/pages/SaludMental/SaludMental"));
+const SaludNutricional = lazy(() =>
+  import("@/pages/SaludNutricional/SaludNutricional")
+);
 
 const miSaludRoutes = [
   { path: ROUTES.SOBRE_MI, element: <MiSaludATravesDelTiempo /> },
@@ -65,6 +66,8 @@ const extrasRoutes = [
   { path: ROUTES.DUDAS, element: <Tami /> },
 ];
 
+const fallbackRuta = <div style={{ padding: "1rem" }}>Cargando...</div>;
+
 // Re-export para mantener un unico punto de acceso a ROUTES.
 export { ROUTES } from "@/config/routes";
 
@@ -80,34 +83,41 @@ export { ROUTES } from "@/config/routes";
 
 export const AppRouter = () => (
   <BrowserRouter basename="/panel">
-    <Routes>
-      <Route path={ROUTES.LOGIN} element={<Login />} />
+    <Suspense fallback={fallbackRuta}>
+      <Routes>
+        <Route path={ROUTES.LOGIN} element={<Login />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route element={<Principal />}>
-          <Route path={ROUTES.INICIO} element={<Inicio />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Principal />}>
+            <Route path={ROUTES.INICIO} element={<Inicio />} />
+            <Route path={ROUTES.REGISTROS} element={<RegistrosPage />} />
+            <Route
+              path={ROUTES.REGISTRO_DETALLE}
+              element={<RegistroDetallePage />}
+            />
 
-          {miSaludRoutes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
+            {miSaludRoutes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
 
-          {saludDetalleRoutes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
+            {saludDetalleRoutes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
 
-          {misConsultasRoutes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
+            {misConsultasRoutes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
 
-          {extrasRoutes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
+            {extrasRoutes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
 
-          <Route index element={<Navigate to={ROUTES.INICIO} replace />} />
+            <Route index element={<Navigate to={ROUTES.INICIO} replace />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
+      </Routes>
+    </Suspense>
   </BrowserRouter>
 );

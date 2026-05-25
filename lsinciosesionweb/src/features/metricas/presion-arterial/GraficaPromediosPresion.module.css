@@ -1,0 +1,331 @@
+.card {
+  width: 100%;
+  max-width: 500px;
+  height: 24.375rem;
+  padding: 1rem 1.125rem 0.875rem;
+  border: 0.0625rem solid #b7d5ff;
+  border-radius: 1.5rem;
+  background: #fff;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto auto;
+  row-gap: 0.5rem;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.titulo {
+  margin: 0;
+  color: #3a455d;
+  font-size: 0.96875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.periodos {
+  display: flex;
+  justify-content: center;
+  gap: 0.625rem;
+}
+
+.periodo {
+  min-width: 5rem;
+  height: 1.875rem;
+  border: 0.0625rem solid #d4d4d4;
+  border-radius: 999rem;
+  background: #fff;
+  color: #4b5568;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0;
+}
+
+.periodoActivo {
+  border-width: 0.125rem;
+  border-color: #3f7fc4;
+  color: #3f7fc4;
+  font-weight: 700;
+}
+
+.unidad {
+  color: #c1c1c1;
+  font-size: 0.9375rem;
+  line-height: 1;
+  text-align: left;
+}
+
+.areaGrafica {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  column-gap: 0.625rem;
+  align-items: start;
+}
+
+.ejeYMarco {
+  height: var(--alto-svg);
+  display: flex;
+  align-items: flex-start;
+}
+
+.ejeY {
+  height: var(--alto-trama);
+  padding-top: 0.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tickEjeY {
+  color: #a8adb6;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.zonaGrafica {
+  min-width: 0;
+  padding-top: 0.125rem;
+  height: var(--alto-svg);
+  position: relative;
+}
+
+.svgGrafica {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.ejeXHtml {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas-eje-x), minmax(0, 1fr));
+  align-items: center;
+  pointer-events: none;
+}
+
+.guiaHorizontal {
+  stroke: #ccd4de;
+  stroke-width: 1.15;
+  stroke-dasharray: 5 7;
+}
+
+.guiaRoja {
+  stroke: #ff4d4f;
+  stroke-width: 1.55;
+}
+
+.lineaBase {
+  stroke: #aeb3bf;
+  stroke-width: 2;
+}
+
+.segmentoLectura {
+  stroke: #66b8c9;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.columnaSeleccionada {
+  fill: rgba(63, 127, 196, 0.08);
+}
+
+.tickEjeX {
+  color: #a1a6ae;
+  fill: currentColor;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateY(-1.25rem);
+}
+
+.ejeXTitulo {
+  color: #c9ced7;
+  font-size: 0.9375rem;
+  line-height: 1;
+  text-align: center;
+  margin-top: -0.0625rem;
+}
+
+.filtroInferior {
+  position: relative;
+  width: 10.5rem;
+  height: 2.0625rem;
+}
+
+.filtroInferior::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 0.125rem solid #5b5b5b;
+  border-bottom: 0.125rem solid #5b5b5b;
+  transform: translateY(-62%) rotate(45deg);
+  pointer-events: none;
+}
+
+.filtroInferior select {
+  width: 100%;
+  height: 100%;
+  padding: 0 2.75rem 0 1rem;
+  border: 0.125rem solid #1f1f1f;
+  border-radius: 999rem;
+  background: #fff;
+  color: #737373;
+  font-size: var(--font14);
+  line-height: 1;
+  appearance: none;
+  cursor: pointer;
+}
+
+.capaInteractiva {
+  position: absolute;
+  inset: 0 0 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas-eje-x), minmax(0, 1fr));
+}
+
+.hitArea {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.hitArea:disabled {
+  cursor: default;
+}
+
+.hitArea:hover:not(:disabled),
+.hitAreaActiva {
+  background: transparent;
+}
+
+@media (max-width: 48rem) {
+  .card {
+    max-width: 100%;
+    height: auto;
+    min-height: 23rem;
+    padding-inline: 0.9rem;
+  }
+
+  .periodos {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .periodo {
+    min-width: 4.625rem;
+    font-size: 0.875rem;
+  }
+
+  .areaGrafica {
+    grid-template-columns: 2.1rem 1fr;
+    column-gap: 0.45rem;
+  }
+
+  .tickEjeY,
+  .tickEjeX {
+    font-size: 0.9rem;
+  }
+
+  .filtroInferior {
+    width: min(100%, 11rem);
+  }
+}
+
+@media (max-width: 36rem) {
+  .card {
+    min-height: 21.5rem;
+    padding: 0.9rem 0.75rem 0.8rem;
+    border-radius: 1.2rem;
+  }
+
+  .titulo {
+    font-size: 0.92rem;
+  }
+
+  .unidad,
+  .ejeXTitulo {
+    font-size: 0.82rem;
+  }
+
+  .periodo {
+    min-width: 4.2rem;
+    height: 1.8rem;
+    font-size: 0.82rem;
+  }
+
+  .tickEjeY,
+  .tickEjeX {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 27.5rem) {
+  .card {
+    min-height: 20rem;
+    padding: 0.75rem 0.65rem 0.75rem;
+    border-radius: 1rem;
+    row-gap: 0.4rem;
+  }
+
+  .titulo {
+    font-size: 0.88rem;
+  }
+
+  .periodos {
+    gap: 0.35rem;
+  }
+
+  .periodo {
+    min-width: 3.7rem;
+    height: 1.65rem;
+    font-size: 0.76rem;
+  }
+
+  .unidad,
+  .ejeXTitulo {
+    font-size: 0.74rem;
+  }
+
+  .areaGrafica {
+    grid-template-columns: 1.8rem 1fr;
+    column-gap: 0.35rem;
+  }
+
+  .tickEjeY {
+    font-size: 0.75rem;
+  }
+
+  .tickEjeX {
+    font-size: 0.74rem;
+    transform: translateY(-1.05rem);
+  }
+
+  .filtroInferior {
+    width: min(100%, 10rem);
+    height: 1.85rem;
+  }
+
+  .filtroInferior::after {
+    right: 0.85rem;
+    width: 0.42rem;
+    height: 0.42rem;
+  }
+
+  .filtroInferior select {
+    padding: 0 2.2rem 0 0.8rem;
+    font-size: 0.8rem;
+  }
+}

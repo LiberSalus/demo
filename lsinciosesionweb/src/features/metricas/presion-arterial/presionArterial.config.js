@@ -7,6 +7,6 @@ export const presionArterialConfig = {
   area: AREAS_METRICAS.SALUD_FISICA,
   label: "Presion arterial",
   unidad: "mmHg",
-  estado: ESTADOS_METRICA.EN_PREPARACION,
+  estado: ESTADOS_METRICA.ACTIVA,
   Component: PresionArterial,
 };

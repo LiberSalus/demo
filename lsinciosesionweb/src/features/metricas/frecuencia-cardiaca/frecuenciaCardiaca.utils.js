@@ -68,6 +68,8 @@ export function normalizarLecturaPromedio(lectura) {
   return {
     min: Math.min(minimo, maximo),
     max: Math.max(minimo, maximo),
+    claveDia: lectura?.claveDia,
+    clavePeriodo: lectura?.clavePeriodo,
   };
 }
 

@@ -134,6 +134,7 @@ export const construirSeriePromedioSemana = (registros, valorSemana) => {
     const rango = mapaRangos.get(claveDia)
 
     return {
+      claveDia,
       etiquetaX: etiqueta,
       minimo: rango?.minimo ?? null,
       maximo: rango?.maximo ?? null,
@@ -155,6 +156,7 @@ export const construirSeriePromedioMes = (registros, valorMes) => {
     const rango = mapaRangos.get(claveDia)
 
     return {
+      claveDia,
       etiquetaX: String(dia),
       minimo: rango?.minimo ?? null,
       maximo: rango?.maximo ?? null,
@@ -167,6 +169,7 @@ export const construirSeriePromedioAnio = (registros, valorAnio) => {
   const mapaRangos = construirMapaRangosDiarios(registros)
 
   return ABREVIATURAS_MESES.map((abreviatura, mesIndice) => {
+    const clavePeriodo = `${anio}-${String(mesIndice + 1).padStart(2, '0')}`
     const diasMes = new Date(anio, mesIndice + 1, 0).getDate()
     const minimos = []
     const maximos = []
@@ -181,7 +184,7 @@ export const construirSeriePromedioAnio = (registros, valorAnio) => {
     }
 
     if (!minimos.length || !maximos.length) {
-      return { etiquetaX: abreviatura, minimo: null, maximo: null }
+      return { clavePeriodo, etiquetaX: abreviatura, minimo: null, maximo: null }
     }
 
     const promedioMinimo =
@@ -190,6 +193,7 @@ export const construirSeriePromedioAnio = (registros, valorAnio) => {
       maximos.reduce((suma, valor) => suma + valor, 0) / maximos.length
 
     return {
+      clavePeriodo,
       etiquetaX: abreviatura,
       minimo: Math.round(promedioMinimo),
       maximo: Math.round(promedioMaximo),

@@ -1,0 +1,106 @@
+/* Button.module.css */
+
+/* Base: El esqueleto del botón */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espacio para los iconos  */
+  padding: 5px 24px;
+  /* border-radius: 25px;  */
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  margin: 0.5rem; /* Para separar los botones entre sí */
+  text-wrap: nowrap;
+  max-height: 150px;
+}
+
+.redondo { border-radius: 25px;}
+.cuadrado { border-radius: 8px;}
+
+/* Variantes de Color (La "Piel") */
+.primario { background-color: #0081C9; color: white; }
+.secundario { background-color: #00A3E0; color: white; }
+.registros { background-color: #00C1D4; color: white; }
+.validacion { background-color: white; color: #0081C9; border-color: #0081C9; }
+.cancel { background-color: #D22B14; color: white; }
+.grafica {background-color: white; color: var(--color-txt); border-color: var(--borde);}
+
+/* Variantes Outline (Bienestar Social/Físico) */
+.outline {
+  background-color: white;
+  color: #444;
+  border-color: #DDD;
+  border-radius: 8px; /* Estos se ven menos redondeados en la imagen */
+}
+
+/* Estados */
+.btn:disabled {
+  opacity: 0.3;
+  /* filter: grayscale(1); */
+  cursor: not-allowed;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.btn:active:not(:disabled) {
+  filter: brightness(0.8);
+}
+
+.btn:focus {
+  outline: 1px solid var(--borde);
+  border-color: var(--borde);
+  filter: brightness(1.1);
+}
+
+.loading {
+    opacity: 1;
+}
+
+.Carga {
+    /* border: 1px dashed red; */
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    zoom: 0.6;
+}
+
+.palitos {
+    position: absolute;
+    content: "";
+    width:  3.1px;
+    height: 8px;
+    background-color: currentColor;
+    filter: opacity(1);
+    animation: girar 1s linear infinite;
+    border-radius: 5px;
+}
+
+.palitos:nth-child(1) { transform: rotate(0deg)   translateY(-8px); animation-delay: 0.0s;}
+.palitos:nth-child(2) { transform: rotate(45deg)  translateY(-8px); animation-delay: 0.125s;}
+.palitos:nth-child(3) { transform: rotate(90deg)  translateY(-8px); animation-delay: 0.25s;}
+.palitos:nth-child(4) { transform: rotate(135deg) translateY(-8px); animation-delay: 0.375s;}
+.palitos:nth-child(5) { transform: rotate(180deg) translateY(-8px); animation-delay: 0.5s;}
+.palitos:nth-child(6) { transform: rotate(225deg) translateY(-8px); animation-delay: 0.625s;}
+.palitos:nth-child(7) { transform: rotate(270deg) translateY(-8px); animation-delay: 0.75s;}
+.palitos:nth-child(8) { transform: rotate(315deg) translateY(-8px); animation-delay: 0.875s;}
+
+@keyframes girar {
+    0%   { opacity: 1; }
+  100% { opacity: 0.1; }
+
+}
+
+.icon {
+  width:  12 px;  /* ajuste icono */
+  height: 12 px;
+  display: block;
+  object-fit: contain;
+}

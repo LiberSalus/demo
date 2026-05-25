@@ -1,0 +1,1414 @@
+.PresionArterial {
+    height: auto;
+    padding-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+@media (max-width: 360px) {
+    .cntUltimRegistro {
+        width: auto;
+        max-width: 100%;
+        min-width: 0;
+        flex: 1 1 auto;
+        align-self: stretch;
+        margin-inline: 0;
+        box-sizing: border-box;
+    }
+
+    .cntValoresReferencia {
+        width: auto;
+        max-width: 100%;
+        min-width: 0;
+        margin-left: 0;
+        margin-right: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntMedicamento,
+    .cntValoresReferencia {
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+    }
+
+    .cntUltimRegistro > *,
+    .cntValoresReferencia > * {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .cabeceraValores,
+    .refValores {
+        column-gap: 0.35rem;
+    }
+}
+
+@media (max-width: 440px) {
+    .centro {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        padding-inline: 0.35rem;
+        gap: 0.65rem;
+    }
+
+    .centro > * {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        align-self: stretch;
+        margin-inline: 0;
+        box-sizing: border-box;
+    }
+
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntMedicamento,
+    .cntValoresReferencia {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-inline: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    .cntUltimRegistro *,
+    .cntAlertas *,
+    .cntMedicamento *,
+    .cntValoresReferencia * {
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .cntUltimRegistro > *,
+    .cntAlertas > *,
+    .cntMedicamento > *,
+    .cntValoresReferencia > * {
+        max-width: 100%;
+    }
+
+    .cntValoresReferencia {
+        padding-left: 0.85rem;
+        padding-right: 0.95rem;
+    }
+
+    .cabeceraValores,
+    .refValores {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .cabeceraValores > *,
+    .refValores > * {
+        min-width: 0;
+    }
+}
+
+.centro > * {
+    width: 100%;
+    max-width: 400px;
+    margin-inline: auto;
+    box-sizing: border-box;
+}
+
+.cntAlertas,
+.cntMedicamento {
+    width: 100%;
+    max-width: 400px;
+}
+
+.cntAlertas > *,
+.cntMedicamento > * {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 440px) {
+    .cntUltimRegistro * {
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .cntUltimRegistro > * {
+        width: 100%;
+    }
+
+    .centro {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        padding-inline: 0.35rem;
+    }
+
+    .centro > *,
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntMedicamento,
+    .cntValoresReferencia {
+        width: min(100%, 400px);
+        min-width: 0;
+        box-sizing: border-box;
+        margin-inline: 0;
+    }
+
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntMedicamento,
+    .cntValoresReferencia {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .centro {
+        align-items: center;
+        padding-inline: 0.25rem;
+    }
+
+    .centro > * {
+        align-self: stretch;
+    }
+
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntMedicamento,
+    .cntValoresReferencia {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-inline: 0;
+    }
+
+    .cntUltimRegistro > *,
+    .cntAlertas > *,
+    .cntMedicamento > *,
+    .cntValoresReferencia > * {
+        max-width: 100%;
+        min-width: 0;
+    }
+}
+
+.arriba {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.arriba > :first-child {
+    flex: 1 1 42rem;
+    width: min(100%, 60rem);
+    min-width: 0;
+}
+
+.arriba > :last-child {
+    flex: 0 1 27.5rem;
+    width: min(100%, 27.5rem);
+    min-width: 20rem;
+}
+
+@media (min-width: 1201px) {
+    .arriba {
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    .arriba > :first-child {
+        flex: 1 1 auto;
+        width: auto;
+    }
+
+    .arriba > :last-child {
+        flex: 0 0 27.5rem;
+        width: 27.5rem;
+    }
+}
+
+@media (min-width: 441px) {
+    .cntUltimRegistro,
+    .cntMedicamento {
+        font-size: 14px;
+    }
+
+    .cntUltimRegistro p,
+    .cntUltimRegistro span,
+    .cntUltimRegistro div,
+    .cntMedicamento p,
+    .cntMedicamento span,
+    .cntMedicamento div {
+        font-size: inherit;
+    }
+}
+
+.chartCard {
+    flex: 1 1 42rem;
+    width: min(100%, 60rem);
+    min-width: 0;
+    height: auto;
+    min-height: 17.5rem;
+    margin: 0;
+    padding: 1rem 1rem 0.75rem;
+    border: 1px solid var(--borde);
+    border-radius: 1rem;
+    /* background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%); */
+}
+
+.chartHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 0.75rem;
+
+    & > p {
+        position: relative;
+        margin: 0.25rem 0 0;
+        color: #64748b;
+        font-size: 0.9rem;
+        & > span {
+            position: absolute;
+            width:  16px;
+            height: 16px;
+            /* border: 1px dashed red; */
+            left: -20px;
+        }
+    }
+    &>:nth-child(1) span {background-color: #007CBA;}
+    &>:nth-child(2) span {background-color: #00B7C8;}
+}
+
+.chartInfo {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 0;
+    min-width: 0;
+    & > h3 {
+        margin: 0;
+        font-size: 2.15rem;
+        line-height: 1;
+        color: #344054;
+    }
+
+    & > p {
+        margin-top: 0;
+        color: #64748b;
+        font-size: 0.85rem;
+    }
+}
+
+.chartLegend {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+.chartHeaderSide {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    min-width: 0;
+    width: 100%;
+}
+
+.chartLegend > p {
+    position: relative;
+    margin: 0.25rem 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    padding-left: 1.15rem;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.chartLegend > p > span {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: -0.30rem;
+    right: auto;
+    top: 50%;
+    transform: translateY(-57%);
+}
+
+.chartLegend > :nth-child(1) span {background-color: #007CBA;}
+.chartLegend > :nth-child(2) span {background-color: #00B7C8;}
+
+.chartZoom {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.8rem;
+
+    & > button {
+        width: 1.6rem;
+        height: 1.6rem;
+        min-width: 1.6rem;
+        padding: 0;
+        border: 1px solid #b7d0ea;
+        border-radius: 999px;
+        background: white;
+        color: #426789;
+        line-height: 1;
+    }
+
+    & > input {
+        width: 7rem;
+        accent-color: #007CBA;
+    }
+
+    & > span {
+        min-width: 2.2rem;
+        text-align: right;
+    }
+}
+
+.chartWrap {
+    width: 100%;
+    height: 15.5rem;
+    position: relative;
+    min-width: 0;
+    padding: 0.9rem 0.8rem 1.2rem;
+    box-sizing: border-box;
+}
+
+.chartBody {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    column-gap: 0.45rem;
+    align-items: stretch;
+}
+
+.chartYAxis {
+    height: calc(100% - 1.7rem);
+    padding-top: 0.78rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    box-sizing: border-box;
+}
+
+.chartYAxisTick {
+    color: #475569;
+    font-size: 0.75rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.chartScrollPane {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.chartScroll {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.35rem;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+}
+
+.chartScroll::-webkit-scrollbar {
+    display: none;
+}
+
+.chartInner {
+    height: 100%;
+}
+
+.mmhg, .horas {
+    position: absolute;
+    color: var(--place);
+    font-size: 0.9rem;
+}
+
+.mmhg {top: -10px;}
+
+
+.horas {
+    width: 10rem;
+    /* border: 1px dashed red;  */
+    background-color: white;
+    bottom: 0.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.chartTooltip {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #d9e2ec;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+    & p {
+        margin: 0.15rem 0;
+        font-size: 0.85rem;
+    }
+}
+
+.chartTooltipTitle {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.centro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    align-items: stretch;
+}
+
+/* ***Recordatorios */
+
+.cntAlertas {
+    margin: 0 auto 0;
+    flex: 1 1 17rem;
+    min-width: 21rem;
+    /* width: 278px; */
+    max-width: 400px;
+    height: 243px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+/*     border: 1px dashed lightgrey; */
+    border-radius: 1rem;
+}
+
+.AdministarRecordatorios, .cntMedicamento {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--borde);
+    border-radius: 1rem;
+    height: auto;
+    padding: 1rem ;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.AdministarRecordatorios {
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+    text-align: inherit;
+    box-shadow: none;
+    outline: none;
+}
+
+.AdministarRecordatorios:focus,
+.AdministarRecordatorios:focus-visible,
+.AdministarRecordatorios:hover,
+.AdministarRecordatorios:active {
+    box-shadow: none;
+    outline: none;
+}
+
+.recordatorioMeta {
+    display: none;
+}
+
+.campana {
+    position: absolute;
+    left: 1rem;
+    width: 2rem;
+}
+
+.txt {
+    width: 60%;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    text-align: center;
+}
+
+.recordatorioResumen {
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.18rem;
+}
+
+.recordatorioMeta {
+    margin: 0;
+    color: #7f8796;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    text-align: center;
+}
+
+.cntProxima {
+    padding: 0.25rem 0.35rem;
+    margin: 0;
+    line-height: 1.1;
+    &>:nth-child(1) {font-size: 12px;}
+    &>:nth-child(2) {
+        font-size: 18px; 
+        color: var(--prnci);
+        font-weight: bold;
+    }
+    &>:nth-child(3) {
+        font-size: 12px;
+    }
+}
+
+.cntProxima > * {
+    margin: 0;
+}
+
+.cntMedicamento {
+    flex-direction: column;
+    padding: 0.6rem 0.85rem 0.55rem 1rem;
+    align-items: start;
+    &>:nth-child(1) {
+        padding-left: 0.5rem;
+        font-weight: bold;
+        padding-bottom: 0.35rem;
+        font-size: 0.98rem;
+    }
+    &>:nth-child(3),
+    &>:nth-child(5) {
+        font-size: 0.72rem;
+        color: var(--place);
+        font-style: italic;
+        padding-left: 0.85rem;
+    }
+    &>:nth-child(2),
+    &>:nth-child(4) {
+        font-size: 0.95rem;
+        line-height: 1.1;
+    }
+}
+
+/* ***Valores de referencia */
+.cntValoresReferencia {
+    margin: 0 0 0.25rem;
+    flex: 1 1 23rem;
+    width: 25rem;
+    max-width: 400px;
+    height: 243px;
+    border: 1px solid var(--borde);
+    border-radius: 1rem;
+    padding: 1rem 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.tit {
+    font-weight: var(--peso700);
+    text-align: left;
+    margin-bottom: 0.5rem;
+}
+
+.refTabla {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    row-gap: 0.25rem;
+}
+
+.valor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(8.75rem, 11.4rem);
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    width: 100%;
+}
+
+/* inverso */
+
+/* .valor {flex-direction: row-reverse;}
+.condicion {
+    flex-direction: row-reverse; 
+    text-align: end; 
+    &> span {left: 0;}} */
+
+/* inverso */
+
+.mmhg {
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+}
+
+.condicion {
+    position: relative;
+    text-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
+    padding-left: 0.2rem;
+    font-size: 13px;
+    
+    &>:nth-child(2) {
+        margin-left: 1rem;
+    }
+    
+    &> span {
+        /* border: 1px dashed red; */
+        position: absolute;
+        content: "";
+        left: 0;
+        width:  8px;
+        height: 1.05rem;
+        top: 50%;
+        transform: translateY(-50%);
+
+    }
+}
+
+.cabeceras {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(8.75rem, 11.4rem);
+    align-items: end;
+    gap: 0.75rem;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 0.4rem 0 0.08rem;
+    white-space: nowrap;
+}
+
+.cabeceraSpacer {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cabeceraValores,
+.refValores {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(4rem, 1fr));
+    align-items: center;
+    gap: 1rem;
+    flex: 0 0 auto;
+}
+
+.cabeceraValores p,
+.refValores p {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+}
+
+.dia,
+.sis {
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* ***Últimos registros */
+
+.cntUltimRegistro {
+    /* margin: 1rem auto 0; */
+    padding: 1rem;
+    flex: 1 1 28rem;
+    width: 460px;
+    max-width: 400px;
+    height: 243px;
+    border: 1px solid var(--borde);
+    border-radius: 1rem;
+}
+
+.abajo {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.abajo > * {
+    flex: 1 1 28rem;
+    min-width: 0;
+}
+
+.abajo > .chartCard {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    align-self: stretch;
+}
+
+.abajo > .chartCard .chartWrap {
+    flex: 1 1 auto;
+}
+
+.abajo > .chartCard .chartHeader {
+    min-height: 3.25rem;
+}
+
+.masAbajo {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.tarjetaAlertaPromedio {
+    
+    flex: 1 1 32rem;
+    max-width: 27.5rem;
+    min-height: 14rem;
+    border: 1px solid var(--borde);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.alertaPromedio {
+    
+    max-width: 24rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.1rem;
+    text-align: center;
+}
+
+.alertaPromedioIcono {
+    width: 5.25rem;
+    height: auto;
+}
+
+.alertaPromedioMensaje {
+    margin: 0;
+    color: #4d4d4d;
+    font-size: 1rem;
+    line-height: 1.28;
+}
+
+.contextoPresion {
+    flex: 1 1 24rem;
+    max-width: 27.5rem;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 0.5rem;
+    box-sizing: border-box;
+}
+
+.contextoPresionIcono {
+    width: 3.6rem;
+    height: 3.6rem;
+    flex: 0 0 auto;
+    object-fit: contain;
+}
+
+.contextoPresionTexto {
+    color: #6c6c6c;
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.18;
+    text-align :left;
+}
+
+.contextoPresionTexto p {
+    margin: 0;
+}
+
+.contextoPresionTexto p + p {
+    margin-top: 0.7rem;
+    font-style: normal;
+    color: #909090;
+}
+
+.valores {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.propiedad,
+.otrosValores {
+    display: flex;
+    justify-content: space-between
+}
+.propiedad p:nth-child(1) {
+    font-weight: bold;
+}
+
+.otrosValores {
+    margin-top: 2rem;
+    &> :nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        &> :nth-child(2) {
+            margin-right: 1.5rem;
+        }
+    }
+}
+
+.valoresFoot {
+    position: relative;
+}
+
+.valoresFoot p:nth-child(2) {
+    font-weight: bold;
+    margin-top: 0.5rem;
+    color: var(--prnci);
+}
+
+.bolita {
+    position: absolute;
+    width:  11px;
+    height: 11px;
+    border-radius: 50%;
+    bottom: 3px;
+    right: 0;    
+}
+
+@media (max-width: 1200px) {
+    .arriba {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .arriba > * {
+        width: 100%;
+    }
+
+    .arriba > :first-child,
+    .arriba > :last-child {
+        flex: 0 1 auto;
+    }
+
+    .chartCard {
+        flex: 0 1 auto;
+    }
+
+    .abajo {
+        flex-direction: column;
+    }
+
+    .abajo > * {
+        width: 100%;
+    }
+
+    .masAbajo {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1200px) {
+    .arriba > :first-child {
+        width: min(100%, 60rem);
+    }
+
+    .arriba > :last-child {
+        width: min(100%, 27.5rem);
+    }
+}
+
+@media (max-width: 1024px) {
+    .PresionArterial {
+        padding-top: 4rem;
+    }
+
+    .centro {
+        justify-content: center;
+    }
+
+    .chartCard {
+        padding-inline: 0.875rem;
+    }
+
+    .chartHeader {
+        gap: 1rem;
+    }
+
+    .chartHeaderSide {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .chartLegend {
+        gap: 0.95rem;
+    }
+
+    .cntUltimRegistro,
+    .cntAlertas,
+    .cntValoresReferencia {
+        margin: 0;
+    }
+
+    .cntUltimRegistro {
+        flex-basis: 100%;
+    }
+
+    .cntAlertas,
+    .cntValoresReferencia {
+        flex: 1 1 22rem;
+    }
+
+    .tarjetaAlertaPromedio,
+    .contextoPresion {
+        flex-basis: auto;
+        width: 100%;
+    }
+
+    .valoresFoot:last-child p:nth-child(2) {
+        padding-right: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .PresionArterial {
+        padding-top: 3rem;
+        gap: 0.75rem;
+        padding-inline: 0.25rem;
+    }
+
+    .arriba,
+    .centro,
+    .abajo {
+        gap: 0.75rem;
+    }
+
+    .centro {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chartCard {
+        padding: 0.875rem 0.75rem 0.75rem;
+        height: auto;
+        min-height: 15.75rem;
+    }
+
+    .chartWrap {
+        height: 16.75rem;
+    }
+
+    .chartZoom > input {
+        width: 5.5rem;
+    }
+
+    .cntUltimRegistro {
+        width: 100%;
+        height: auto;
+        min-height: 243px;
+    }
+
+    .cntAlertas,
+    .cntValoresReferencia {
+        flex: 0 1 auto;
+    }
+
+    
+
+    .cntAlertas {
+        height: auto;
+        min-height: 13rem;
+    }
+
+    .cntValoresReferencia {
+        padding: 0.9rem 0.85rem 0.5rem;
+        height: auto;
+    }
+
+    .AdministarRecordatorios,
+    .cntMedicamento {
+        padding-inline: 0.9rem;
+    }
+
+    .otrosValores {
+        margin-top: 1.25rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .otrosValores > :nth-child(2) {
+        align-items: flex-start;
+    }
+
+    .otrosValores > :nth-child(2) > :nth-child(2) {
+        margin-right: 0;
+    }
+
+    .tarjetaAlertaPromedio {
+        min-height: 12rem;
+        padding: 1rem;
+    }
+
+    .contextoPresion {
+        padding: 0.5rem 0;
+        gap: 1rem;
+    }
+
+    .contextoPresionIcono {
+        width: 3.1rem;
+        height: 3.1rem;
+    }
+
+}
+
+@media (max-width: 576px) {
+    .PresionArterial {
+        padding-inline: 0;
+    }
+
+    .arriba,
+    .centro,
+    .abajo,
+    .masAbajo {
+        gap: 0.65rem;
+    }
+
+    .chartCard,
+    .cntUltimRegistro,
+    .cntValoresReferencia,
+    .tarjetaAlertaPromedio,
+    .cntAlertas {
+        border-radius: 0.85rem;
+    }
+
+    .chartCard {
+        min-height: 0;
+        height: auto;
+    }
+
+    .chartHeader {
+        margin-bottom: 0.65rem;
+        gap: 0.75rem;
+    }
+
+    .chartHeaderSide {
+        gap: 0.55rem;
+    }
+
+    .chartLegend {
+        gap: 0.8rem;
+    }
+
+    .chartLegend > p {
+        padding-left: 1rem;
+    }
+
+    .chartWrap {
+        height: 13.8rem;
+        padding: 0.55rem 0.5rem 0.85rem;
+    }
+
+    .chartBody {
+        grid-template-columns: 2.15rem minmax(0, 1fr);
+        column-gap: 0.38rem;
+    }
+
+    .chartYAxis {
+        height: calc(100% - 1.05rem);
+        padding-top: 0.72rem;
+    }
+
+    .cabeceras {
+        margin-top: 0.35rem;
+        margin-bottom: 0.02rem;
+    }
+
+    .cntValoresReferencia {
+        padding: 0.95rem 0.95rem 0.55rem;
+        height: auto;
+    }
+
+    .condicion {
+        text-wrap: wrap;
+        align-items: flex-start;
+        padding-left: 0.35rem;
+    }
+
+    .condicion > :nth-child(2) {
+        margin-left: 0.9rem;
+    }
+
+    .masAbajo {
+        gap: 1rem;
+    }
+
+    .cntAlertas {
+        height: auto;
+        min-height: 14rem;
+        margin: 0;
+        justify-content: flex-start;
+        gap: 1.15rem;
+    }
+
+    .AdministarRecordatorios,
+    .cntMedicamento,
+    .cntUltimRegistro,
+    .cntValoresReferencia,
+    .tarjetaAlertaPromedio,
+    .chartCard {
+        padding-inline: 0.85rem;
+    }
+
+    .txt {
+        width: 70%;
+    }
+
+    .recordatorioResumen {
+        width: 72%;
+    }
+
+    .cntProxima {
+        width: 100%;
+        padding: 0.25rem 0.1rem 0.35rem;
+    }
+
+    .cabeceras {
+        white-space: nowrap;
+        margin-top: 0.32rem;
+        margin-bottom: 0.04rem;
+    }
+
+    .cabeceraValores,
+    .refValores {
+        grid-template-columns: repeat(2, minmax(3.8rem, 1fr));
+        width: auto;
+        gap: 0.7rem;
+    }
+
+    .valor {
+        align-items: flex-start;
+    }
+
+    .dia,
+    .sis {
+        white-space: nowrap;
+    }
+
+    .propiedad,
+    .otrosValores {
+        gap: 0.75rem;
+    }
+
+    .propiedad {
+        align-items: flex-start;
+    }
+
+    .alertaPromedioMensaje {
+        line-height: 1.24;
+    }
+
+    .alertaPromedio {
+        gap: 0.85rem;
+    }
+
+    .alertaPromedioIcono {
+        width: 4.5rem;
+    }
+
+    .contextoPresion {
+        align-items: flex-start;
+    }
+
+    .contextoPresionTexto {
+        line-height: 1.24;
+    }
+
+}
+
+@media (max-width: 440px) {
+    .PresionArterial {
+        gap: 0.6rem;
+    }
+
+    .chartCard {
+        padding: 0.75rem 0.6rem 0.65rem;
+        min-height: 0;
+        height: auto;
+    }
+
+    .chartWrap {
+        height: 13.2rem;
+        padding: 0.45rem 0.35rem 0.45rem;
+    }
+
+    .chartBody {
+        grid-template-columns: 2rem minmax(0, 1fr);
+        column-gap: 0.35rem;
+    }
+
+    .chartYAxis {
+        height: calc(100% - 0.95rem);
+        height: calc(100% - 0.9rem);
+        padding-top: 0.62rem;
+    }
+
+    .horas {
+        width: 7.2rem;
+        bottom: 0.05rem;
+    }
+
+    .mmhg {
+        top: -0.1rem;
+        left: 0.15rem;
+    }
+
+    .chartLegend {
+        gap: 0.7rem;
+    }
+
+    .chartLegend > p {
+        padding-left: 0.9rem;
+    }
+
+    .txt {
+        width: 72%;
+    }
+
+    .recordatorioResumen {
+        width: 74%;
+    }
+
+    .campana {
+        width: 1.8rem;
+        left: 0.8rem;
+    }
+
+    .cabeceras {
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 0.3rem;
+        margin-bottom: 0;
+    }
+
+    .cntValoresReferencia {
+        width: 93vw;
+    }
+
+    .refTabla {
+        row-gap: 0;
+    }
+
+    .tit {
+        font-size: 0.9rem;
+    }
+
+    .condicion {
+        text-wrap: nowrap;
+        font-size: 0.84rem;
+    }
+
+    .cabeceraValores,
+    .refValores {
+        
+        grid-template-columns: repeat(2, minmax(2.5rem, 1fr));
+        width: auto;
+        gap: 0.8rem;
+    }
+
+    .cabeceras {
+        font-size: 0.76rem;
+    }
+
+    .refValores p {
+        font-size: 0.84rem;
+    }
+
+    .condicion > span {
+        height: 0.95rem;
+    }
+
+    .valor {
+        margin: 0.18rem auto;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .dia,
+    .sis {
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .otrosValores {
+        margin-top: 1rem;
+    }
+
+    .tarjetaAlertaPromedio {
+        min-height: 11rem;
+        padding: 0.9rem 0.8rem;
+    }
+
+    .alertaPromedioIcono {
+        width: 4rem;
+    }
+
+    .contextoPresion {
+        gap: 0.8rem;
+    }
+
+    .contextoPresionIcono {
+        width: 2.8rem;
+        height: 2.8rem;
+    }
+
+}
+
+@media (max-width: 360px) {
+    .cabeceras,
+    .valor {
+        grid-template-columns: minmax(0, 0.92fr) minmax(7.6rem, 8rem);
+        gap: 0.45rem;
+    }
+
+    .cabeceraValores,
+    .refValores {
+        grid-template-columns: repeat(2, minmax(3.5rem, 1fr));
+        gap: 1.5rem;
+    }
+
+    .refValores p {
+        font-size: 0.78rem;
+    }
+}

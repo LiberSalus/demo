@@ -1,7 +1,15 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
+import { ROUTES } from "@/config/routes";
 import styles from "./MetricasTabs.module.css";
+
+const METRICAS_REGISTROS = {
+  frecuencia_cardiaca: "FrecuenciaCardiaca",
+  presion_arterial: "PresionArterial",
+  spo2: "Oxigenacion",
+  glucosa: "Glucosa",
+};
 
 // Define que metrica debe mostrarse al entrar segun la URL o el orden configurado.
 const obtenerMetricaInicial = (metricas, metricaUrl) => {
@@ -11,6 +19,7 @@ const obtenerMetricaInicial = (metricas, metricaUrl) => {
 
 // Renderiza las pestañas de metricas y mantiene sincronizada la metrica activa con la URL.
 export default function MetricasTabs({ metricas = [], tituloSeccion }) {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const metricaUrl = searchParams.get("metric");
   const metricaInicial = useMemo(
@@ -49,10 +58,33 @@ export default function MetricasTabs({ metricas = [], tituloSeccion }) {
   const metricaActiva =
     metricas.find((metrica) => metrica.id === metricaActivaId) || metricas[0];
   const ComponenteActivo = metricaActiva.Component;
+  const metricaRegistros = METRICAS_REGISTROS[metricaActiva.id];
+
+  // Navega al listado de registros usando la clave esperada por BorradorDos.
+  const verRegistros = () => {
+    if (!metricaRegistros) return;
+    navigate(`${ROUTES.REGISTROS}?metrica=${metricaRegistros}`);
+  };
 
   return (
     <section className={styles.MetricasTabs}>
-      {tituloSeccion && <h3 className={styles.titulo}>{tituloSeccion}</h3>}
+      <div className={styles.encabezado}>
+        {tituloSeccion && <h3 className={styles.titulo}>{tituloSeccion}</h3>}
+        {metricaRegistros && (
+          <button
+            type="button"
+            className={styles.btnRegistros}
+            onClick={verRegistros}
+          >
+            Ver Registros
+            <span className={styles.btnRegistrosIcono} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        )}
+      </div>
 
       <div className={styles.contenedor}>
         <div className={styles.mobileSelectWrap}>

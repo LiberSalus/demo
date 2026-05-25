@@ -1,0 +1,481 @@
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(37, 43, 54, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem 1.15rem;
+  overflow-y: auto;
+}
+
+.modal {
+  width: min(30rem, 96vw);
+  max-height: min(96dvh, 46rem);
+  overflow-y: auto;
+  background: #f7f8ff;
+  border-radius: 1.45rem;
+  padding: 1.35rem 1.7rem 1.2rem;
+  border: 0.12rem solid #a9c6f2;
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.18);
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.modalHead h4 {
+  margin: 0;
+  width: 100%;
+  padding-left: 1.9rem;
+  text-align: center;
+  font-size: 2.15rem;
+  line-height: 1.05;
+  color: #3b4760;
+  font-weight: 700;
+}
+
+.close {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  padding: 0;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #5d6473;
+}
+
+.formRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.9rem 0;
+  padding-inline: clamp(0.15rem, 1.4vw, 0.8rem);
+}
+
+.formRowCompacta {
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.formRowCompacta label {
+  padding-top: 0.15rem;
+}
+
+.formRowCompacta .fechaHoraValor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.1rem;
+}
+
+.formRow label,
+.formLabel {
+  flex: 0 1 13rem;
+  min-width: 0;
+  color: #3d4658;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.formLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding-top: 0.8rem;
+}
+
+.fechaHoraValor {
+  width: 14rem;
+  text-align: center;
+  color: #a4a8b1;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.sfj {
+  font-size: 0.7rem;
+  color: #b5b7bf;
+}
+
+.campoCapsula {
+  width: 11.9rem;
+  flex: 0 0 11.9rem;
+  height: 3.1rem;
+  border: 0.1rem solid #b7d5ff;
+  border-radius: 999rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.75rem;
+}
+
+.inputCapsula {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #4d5566;
+  font-size: 1.15rem;
+  text-align: center;
+  padding: 0;
+}
+
+.inputCapsula::placeholder {
+  color: #4d5566;
+  opacity: 1;
+  letter-spacing: 0.04em;
+}
+
+.unidad {
+  color: #a4a8b1;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.recos {
+  margin-top: 1.35rem;
+  color: #575c67;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.recos h5 {
+  margin: 0 0 0.45rem;
+  font-size: 1.2rem;
+  color: #4b4f57;
+}
+
+.recosTitulo {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #5a5d65;
+}
+
+.recos ol {
+  margin: 0;
+  padding-left: 1.45rem;
+}
+
+.recos ol > li {
+  margin-bottom: 0.45rem;
+  color: #5b606a;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.recosNota {
+  margin: 1rem 0 0;
+  text-align: center;
+  color: #b8bcc4;
+  font-size: 0.88rem;
+  line-height: 1.2;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+
+.btnSec {
+  display: none;
+}
+
+.btnPri {
+  min-width: 13.5rem;
+  height: 3.65rem;
+  padding: 0 1.8rem;
+  border-radius: 3rem;
+  border: 1px solid transparent;
+  background: #aeb1b6;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btnPri:disabled {
+  background-color: #aeb1b6;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.btnPri:not(:disabled) {
+  background: #007cba;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  color: transparent;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    width: min(32rem, 96vw);
+    max-height: min(97dvh, 42rem);
+    padding: 1.05rem 1.15rem 1rem;
+  }
+
+  .modalHead h4 {
+    padding-left: 1rem;
+    font-size: 1.7rem;
+  }
+
+  .formRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0.75rem 0;
+    padding-inline: clamp(0.2rem, 2.8vw, 0.9rem);
+  }
+
+  .formLabel {
+    flex: 1 1 auto;
+    padding-top: 0;
+  }
+
+  .campoCapsula {
+    width: 10.6rem;
+    flex-basis: 10.6rem;
+    height: 2.9rem;
+    padding: 0 0.85rem;
+  }
+
+  .formRowCompacta .fechaHoraValor {
+    min-height: 2.9rem;
+  }
+
+  .inputCapsula {
+    font-size: 1rem;
+  }
+
+  .unidad {
+    font-size: 0.88rem;
+  }
+
+  .recos {
+    margin-top: 1rem;
+    padding-left: 0.35rem;
+  }
+
+  .recos h5 {
+    font-size: 1.05rem;
+  }
+
+  .recosTitulo {
+    font-size: 0.9rem;
+  }
+
+  .recos ol {
+    padding-left: 1.2rem;
+  }
+
+  .recos ol > li {
+    font-size: 0.84rem;
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+  }
+
+  .recosNota {
+    margin-top: 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  .btnPri {
+    min-width: 11rem;
+    height: 3.25rem;
+  }
+}
+
+@media (max-width: 27.5rem) {
+  .modalBackdrop {
+    padding: 0.85rem 1rem;
+    align-items: center;
+  }
+
+  .modal {
+    width: min(100%, 22rem);
+    max-height: min(97dvh, 39.5rem);
+    border-radius: 1.1rem;
+    padding: 0.9rem 1rem 0.9rem;
+  }
+
+  .modalHead {
+    margin-bottom: 0.8rem;
+  }
+
+  .modalHead h4 {
+    padding-left: 0.6rem;
+    font-size: 1.45rem;
+    line-height: 1.05;
+  }
+
+  .close {
+    font-size: 2rem;
+  }
+
+  .formRow {
+    gap: 0.55rem;
+    margin: 0.65rem 0;
+    padding-inline: 0.2rem;
+  }
+
+  .formRow label,
+  .formLabel {
+    flex: 1 1 auto;
+    font-size: 0.86rem;
+  }
+
+  .formLabel {
+    gap: 0.25rem;
+  }
+
+  .sfj {
+    font-size: 0.64rem;
+  }
+
+  .fechaHoraValor {
+    width: 100%;
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  .campoCapsula {
+    width: 9.4rem;
+    flex: 0 0 9.4rem;
+    height: 2.65rem;
+    padding: 0 0.7rem;
+    gap: 0.55rem;
+  }
+
+  .formRowCompacta .fechaHoraValor {
+    min-height: 2.65rem;
+  }
+
+  .inputCapsula {
+    font-size: 0.92rem;
+  }
+
+  .unidad {
+    font-size: 0.76rem;
+  }
+
+  .recos {
+    margin-top: 0.8rem;
+    padding-left: 0.15rem;
+  }
+
+  .recos h5 {
+    font-size: 0.98rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .recosTitulo {
+    font-size: 0.84rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .recos ol {
+    padding-left: 1.05rem;
+  }
+
+  .recos ol > li {
+    font-size: 0.78rem;
+    line-height: 1.15;
+    margin-bottom: 0.28rem;
+  }
+
+  .recosNota {
+    margin-top: 0.7rem;
+    font-size: 0.76rem;
+    line-height: 1.15;
+  }
+
+  .actions {
+    margin-top: 0.95rem;
+  }
+
+  .btnPri {
+    min-width: 9.75rem;
+    height: 2.95rem;
+    font-size: 0.94rem;
+  }
+}
+
+@media (max-height: 540px) and (orientation: landscape) {
+  .modalBackdrop {
+    align-items: flex-start;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .modal {
+    max-height: calc(100dvh - 1rem);
+    padding: 0.9rem 1rem 0.9rem;
+    border-radius: 1.1rem;
+  }
+
+  .modalHead {
+    margin-bottom: 0.7rem;
+  }
+
+  .modalHead h4 {
+    font-size: 1.25rem;
+    padding-left: 0.5rem;
+  }
+
+  .close {
+    font-size: 1.8rem;
+  }
+
+  .formRow {
+    gap: 0.45rem;
+    margin: 0.55rem 0;
+    padding-inline: 0.1rem;
+  }
+
+  .formRow label,
+  .formLabel,
+  .fechaHoraValor,
+  .recosTitulo,
+  .recosNota,
+  .unidad {
+    font-size: 0.8rem;
+  }
+
+  .recos {
+    margin-top: 0.65rem;
+  }
+
+  .recos h5 {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .recos ol > li {
+    font-size: 0.74rem;
+    margin-bottom: 0.22rem;
+  }
+
+  .actions {
+    margin-top: 0.75rem;
+  }
+
+  .btnPri {
+    min-width: 9.5rem;
+    height: 2.8rem;
+    font-size: 0.88rem;
+  }
+}

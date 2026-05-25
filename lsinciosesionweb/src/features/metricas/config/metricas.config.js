@@ -7,19 +7,19 @@ function cargarFrecuenciaCardiaca() {
   return import("../frecuencia-cardiaca/FrecuenciaCardiaca");
 }
 
-// Carga la metrica legacy de presion arterial mientras termina su migracion v2.
-function cargarPresionArterialLegacy() {
-  return import("@/pages/SaludFisica/PresionArterial/PresionArterial");
+// Carga la metrica nueva de presion arterial solo cuando el usuario la abre.
+function cargarPresionArterial() {
+  return import("../presion-arterial/PresionArterial");
 }
 
-// Carga la metrica legacy de oxigenacion mientras termina su migracion v2.
-function cargarOxigenacionLegacy() {
-  return import("@/pages/SaludFisica/Oxigenacion/Oxigenacion");
+// Carga la metrica nueva de oxigenacion solo cuando el usuario la abre.
+function cargarOxigenacion() {
+  return import("../oxigenacion/Oxigenacion");
 }
 
-// Carga la metrica legacy de glucosa mientras termina su migracion v2.
-function cargarGlucosaLegacy() {
-  return import("@/pages/SaludFisica/GlucosaEnSangre/Glucosa");
+// Carga la metrica nueva de glucosa solo cuando el usuario la abre.
+function cargarGlucosa() {
+  return import("../glucosa/Glucosa");
 }
 
 // Carga la metrica legacy de actividad fisica mientras termina su migracion v2.
@@ -112,8 +112,8 @@ export const METRICAS_V2 = [
     label: "Presion arterial",
     unidad: "mmHg",
     orden: 20,
-    estado: ESTADOS_METRICA.LEGACY,
-    Component: lazy(cargarPresionArterialLegacy),
+    estado: ESTADOS_METRICA.ACTIVA,
+    Component: lazy(cargarPresionArterial),
   },
   {
     id: IDS_METRICAS.SPO2,
@@ -121,8 +121,8 @@ export const METRICAS_V2 = [
     label: "Oxigenacion",
     unidad: "%",
     orden: 30,
-    estado: ESTADOS_METRICA.LEGACY,
-    Component: lazy(cargarOxigenacionLegacy),
+    estado: ESTADOS_METRICA.ACTIVA,
+    Component: lazy(cargarOxigenacion),
   },
   {
     id: IDS_METRICAS.GLUCOSA,
@@ -130,8 +130,8 @@ export const METRICAS_V2 = [
     label: "Glucosa en sangre",
     unidad: "mg/dL",
     orden: 40,
-    estado: ESTADOS_METRICA.LEGACY,
-    Component: lazy(cargarGlucosaLegacy),
+    estado: ESTADOS_METRICA.ACTIVA,
+    Component: lazy(cargarGlucosa),
   },
   {
     id: IDS_METRICAS.PASOS,

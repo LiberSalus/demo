@@ -9,7 +9,6 @@ import { useFrecuenciaCardiaca } from "./hooks/useFrecuenciaCardiaca";
 
 import Capsula from "./components/Capsula";
 
-import arribaAlert from "./assets/icoArribaAlert.svg";
 import verdeArriba from "./assets/icoTrianVerdeArriba.svg";
 import verdeAbajo from "./assets/icoTrianVerdeAbajo.svg";
 import amariArriba from "./assets/icoTrianAmarArriba.svg";
@@ -90,41 +89,69 @@ const ValoresReferencia = () => {
   );
 };
 
-//Tarjeta Comparacion semanal
-const ComparaciónSemanal = ({ promAct, promAnt }) => {
-  let diferenciaPromedio = (promAnt - promAct) * -1;
-  /* let valorPresente = promAnt - diferenciaPromedio; */
+// Formatea valores ppm cuando aun no existe lectura del dia.
+const formatearPpm = (valor) =>
+  typeof valor === "number" ? `${valor} ppm` : "-- ppm";
 
-  let triangulo; /*  */
-  switch (true) {
-    case promAct > 121 && diferenciaPromedio > 0:
-      triangulo = rojoArriba;
-      break;
-    case promAct > 121 && diferenciaPromedio < 0:
-      triangulo = rojoAbajo;
-      break;
-    case promAct >= 101 && promAct <= 120 && diferenciaPromedio > 0:
-      triangulo = amariArriba;
-      break;
-    case promAct >= 101 && promAct <= 120 && diferenciaPromedio < 0:
-      triangulo = amariAbajo;
-      break;
-    case promAct >= 60 && promAct <= 100 && diferenciaPromedio > 0:
-      triangulo = verdeArriba;
-      break;
-    case promAct >= 60 && promAct <= 100 && diferenciaPromedio < 0:
-      triangulo = verdeAbajo;
-      break;
-    case promAct < 60 && diferenciaPromedio > 0:
-      triangulo = rojoArriba;
-      break;
-    case promAct < 60 && diferenciaPromedio < 0:
-      triangulo = rojoAbajo;
-      break;
-    default:
-      triangulo = paloma;
+// Calcula la diferencia entre el valor actual y el de la semana anterior.
+const calcularDiferenciaSemanal = (actual, anterior) => {
+  if (typeof actual !== "number" || typeof anterior !== "number") return null;
+  return actual - anterior;
+};
+
+// Selecciona el icono de tendencia segun rango cardiaco y direccion del cambio.
+const obtenerIconoTendencia = (valorActual, diferencia) => {
+  if (typeof valorActual !== "number" || typeof diferencia !== "number") {
+    return paloma;
   }
 
+  switch (true) {
+    case valorActual > 121 && diferencia > 0:
+      return rojoArriba;
+    case valorActual > 121 && diferencia < 0:
+      return rojoAbajo;
+    case valorActual >= 101 && valorActual <= 120 && diferencia > 0:
+      return amariArriba;
+    case valorActual >= 101 && valorActual <= 120 && diferencia < 0:
+      return amariAbajo;
+    case valorActual >= 60 && valorActual <= 100 && diferencia > 0:
+      return verdeArriba;
+    case valorActual >= 60 && valorActual <= 100 && diferencia < 0:
+      return verdeAbajo;
+    case valorActual < 60 && diferencia > 0:
+      return rojoArriba;
+    case valorActual < 60 && diferencia < 0:
+      return rojoAbajo;
+    default:
+      return paloma;
+  }
+};
+
+// Renderiza una fila de comparacion semanal para ppm alta o baja.
+const FilaComparacionSemanal = ({ etiqueta, lectura }) => {
+  const diferencia = calcularDiferenciaSemanal(
+    lectura?.actual,
+    lectura?.anterior
+  );
+  const iconoTendencia = obtenerIconoTendencia(lectura?.actual, diferencia);
+
+  return (
+    <div className={styles.datos}>
+      <p>{etiqueta}</p>
+      <p>{formatearPpm(lectura?.actual)}</p>
+      <p>{formatearPpm(lectura?.anterior)}</p>
+      <img
+        className={styles.icono}
+        src={iconoTendencia}
+        alt="Tendencia de frecuencia cardiaca"
+      />
+      <p>{typeof diferencia === "number" ? diferencia : "--"}</p>
+    </div>
+  );
+};
+
+//Tarjeta Comparacion semanal
+const ComparaciónSemanal = ({ comparacion }) => {
   return (
     <div className={styles.ComparacionSemanal}>
       <p>
@@ -133,28 +160,18 @@ const ComparaciónSemanal = ({ promAct, promAnt }) => {
       <div>
         <p>Actual</p>
         <p>
-          Senama <br />
+          Semana <br />
           anterior
         </p>
       </div>
-      <div className={styles.datos}>
-        <p>PPM alta</p>
-        <p>{promAct} ppm</p>
-        <p>{promAnt} ppm</p>
-        <img
-          className={styles.icono}
-          src={triangulo}
-          alt="{Frecuencia cardiaca normal}"
-        />
-        <p>{diferenciaPromedio}</p>
-      </div>
-      <div className={styles.datos}>
-        <p>PPM baja</p>
-        <p>86 ppm</p>
-        <p>89 ppm</p>
-        <img className={styles.icono} src={arribaAlert} alt="{}" />
-        <p>-3</p>
-      </div>
+      <FilaComparacionSemanal
+        etiqueta="PPM alta"
+        lectura={comparacion?.alta}
+      />
+      <FilaComparacionSemanal
+        etiqueta="PPM baja"
+        lectura={comparacion?.baja}
+      />
     </div>
   );
 };
@@ -211,6 +228,7 @@ const FrecuenciaCardiaca = () => {
   const {
     minDia,
     maxDia,
+    comparacionSemanal,
     serieGraficaDiaria,
     valorDestacado,
     fechaActualizacionTexto,
@@ -225,7 +243,7 @@ const FrecuenciaCardiaca = () => {
     valorFiltroPromedio,
     seriePromedioFrecuencia,
     indiceLecturaPromedioSeleccionada,
-    lecturaPromedioSeleccionada,
+    lecturaCapsulaSeleccionada,
     periodoPromedioSeleccionado,
     periodoComparativaSeleccionado,
     valorFiltroComparativa,
@@ -280,7 +298,7 @@ const FrecuenciaCardiaca = () => {
           </MarcoTarjeta>
 
           <MarcoTarjeta>
-            <ComparaciónSemanal promAct={65} promAnt={80} />
+            <ComparaciónSemanal comparacion={comparacionSemanal} />
           </MarcoTarjeta>
         </div>
         <div className={styles.promedios}>
@@ -296,8 +314,8 @@ const FrecuenciaCardiaca = () => {
           />
 
           <Capsula
-            min={lecturaPromedioSeleccionada?.min}
-            max={lecturaPromedioSeleccionada?.max}
+            min={lecturaCapsulaSeleccionada?.min}
+            max={lecturaCapsulaSeleccionada?.max}
           />
 
           <GraficaReposoActividad

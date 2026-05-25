@@ -1,0 +1,729 @@
+/* src\assets\components\Fisica\Glucosa\Glucosa.module.css */
+
+.Glucosa {
+  width: 100%;
+  padding: 1rem 0 2rem;
+  box-sizing: border-box;
+}
+
+.cntPanelGlucosa {
+  width: min(100%, 85rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  position: relative;
+  isolation: isolate;
+}
+
+.centro {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.abajo {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.masAbajo {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.controlRadioEstilos {
+  margin-right: 15rem;
+  justify-content: end;
+  transform: translateY(-2.75rem);
+
+  &>:nth-child(n) {
+    flex-direction: row-reverse;
+    gap: 1rem;
+  }
+}
+
+
+
+@media (max-width: 600px) {
+  .controlRadioEstilos {
+    margin-right: 9.5rem;
+    
+    flex-direction: column;
+  }
+}
+
+
+/* Ultimo Valor Glucosa */
+.UltimoValorGlucosa,
+.ValoresGlucosa {
+  width: min(100%, 27.5rem);
+  flex: 1 1 27.5rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  align-items: start;
+  column-gap: 1rem;
+
+}
+
+.tarjetaRecordatoriosGlucosa {
+  margin: 0;
+  flex: 1 1 27.5rem;
+  min-width: 27.5rem;
+  max-width: 27.5rem;
+}
+
+.ulheader,
+.vgheader {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.ultit,
+.vgtit {
+  margin-right: 1rem;
+}
+
+.ulbase,
+.vgbase {
+  color: var(--color-lbs);
+  font-size: var(--font12);
+}
+
+.uldatos {
+  display: flex;
+  margin-top: 1rem;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+}
+
+.ularriba,
+.ulabajo {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ulcntUltimo,
+.ulcntAnterior {
+  /* border: 1px dashed red; */
+  color: var(--color-lbs);
+  font-size: var(--font12);
+  text-align: left;
+}
+
+.ulbgcondicion {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  &>.ulbg {
+    background-color: #3FAD58;
+    width: 0.5rem;
+    height: 1.5rem;
+  }
+
+  &>.ulcondicion {
+    color: var(--color-txt);
+    font-size: var(--font16);
+  }
+}
+
+.ulvalor {
+  padding-top: 1.25rem;
+  font-weight: bold;
+}
+
+.ulCntfcha {
+  padding-top: 1.25rem;
+  font-size: var(--font12);
+  color: var(--color-lbs);
+}
+
+
+
+
+
+
+.vgcntValores {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+.vgfila {
+  display: flex;
+  justify-content: space-between;
+}
+.vgcondicion {
+  display: flex;
+  gap: 0.5rem;
+}
+.vgbg {
+  width: 0.5rem;
+  height: 1.5rem;
+}
+
+
+
+/* estilos de modal */
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.ModalRegistroGlucosa {
+  margin: 0 auto;
+  width: 90%;
+  width: min(90%, 25rem);
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  background-color: #F7F7FF;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding: 1rem 0.5rem;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.modalClose {
+  border: none;
+  background: transparent;
+  color: var(--color-txt);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mdcntCaptura {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.mdfecha {
+  color: var(--place);
+}
+
+
+.mdlabelchkbox {
+  width: 60%;
+}
+
+.ControlCheckbox {
+  
+}
+
+.mdcntfcha,
+.mdcntinput,
+.mdcntcheckbox {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25rem 1rem;
+  text-align: left;
+}
+
+.InpTexto {
+  width: min(100%, 8.75rem) !important;
+  text-align: end;
+  padding-right: 1rem;
+}
+.mdcntSelects {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: end;
+  
+  
+}
+
+.mdcntSelectclase {
+  /* border: 1px dashed red; */
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.mdselectlabel {
+  color: var(--color-txt);
+  font-size: var(--font14);
+}
+
+.opcionGlucosa {
+  margin-left: auto;
+  font-size: 14px;
+  
+}
+.opcionActividad {
+  margin-left: auto;
+  font-size: 14px;
+  
+}
+.opcionGlucometro {
+  margin-left: auto;
+  font-size: 14px;
+  
+}
+
+.modalSelectBoton {
+  font-size: 14px;
+}
+
+
+.mdcntRecomendaciones {
+  text-align: left;
+  margin-left: 1rem;
+}
+.mdRecomendaciones {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.mdSub {
+  font-weight: bold;
+  line-height: 1.6;
+}
+
+.pasos {
+  margin: 0 auto;
+  width: 90%;
+  font-size: var(--font14);
+  padding-bottom: 0.5rem;
+  &> ol {
+    
+  }
+  &> li {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 540px), (max-height: 760px) {
+  .modalBackdrop {
+    align-items: flex-start;
+    padding: 0.75rem;
+  }
+
+  .ModalRegistroGlucosa {
+    width: min(100%, 22rem);
+    max-height: calc(100dvh - 1.5rem);
+    row-gap: 0.75rem;
+    padding: 0.875rem 0.5rem;
+  }
+
+  .mdcntCaptura,
+  .mdcntSelects {
+    row-gap: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .mdcntRecomendaciones {
+    margin-left: 0.5rem;
+  }
+
+  .modalActions {
+    justify-content: stretch;
+  }
+
+  .modalActions > * {
+    width: 100%;
+  }
+}
+
+@media (max-height: 540px) and (orientation: landscape) {
+  .modalBackdrop {
+    align-items: flex-start;
+    padding: 0.5rem;
+  }
+
+  .ModalRegistroGlucosa {
+    width: min(100%, 22.5rem);
+    max-height: calc(100dvh - 1rem);
+    row-gap: 0.6rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .mdcntCaptura,
+  .mdcntSelects {
+    row-gap: 0.6rem;
+    gap: 0.6rem;
+  }
+
+  .mdcntfcha,
+  .mdcntinput,
+  .mdcntcheckbox,
+  .mdcntSelectclase {
+    margin: 0.15rem 0.65rem;
+  }
+
+  .mdcntRecomendaciones,
+  .pasos {
+    width: 95%;
+    margin-left: 0.35rem;
+  }
+
+  .mdRecomendaciones,
+  .mdSub,
+  .mdselectlabel,
+  .mdlabelchkbox,
+  .mdfecha,
+  .pasos {
+    font-size: 0.85rem;
+  }
+}
+
+.AlertasGlucosa {
+  margin: 1rem 0 0;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  width: min(100%, 27.5rem);
+  height: 210px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 0 1 27.5rem;
+  padding: 1.5rem;
+  gap: 0.75rem;
+  background-color: #fff;
+  & > p {
+    margin: 0;
+    color: #24355f;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  &>.icono {
+    margin: 0 auto;
+    width: 20%;
+  }
+}
+
+.infoGlucosa {
+  flex: 1 1 28rem;
+  min-width: min(100%, 20rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0.5rem 1rem 0;
+}
+
+.infoIcono {
+  flex: 0 0 2rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background-color: #eba434;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.infoTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  color: #6e6e6e;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.25;
+  & > p {
+    margin: 0;
+  }
+}
+
+
+/* Confirmacion registro modal */
+
+.ConfirmacionAlerta, .ConfirmacionRegistro {
+  margin: 1rem auto;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 25rem;
+  width: min(100%, 25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ConfirmacionAlerta {
+  width: 33rem;
+  width: min(100%, 33rem);
+}
+.glCntIcoMsjRegistro, .glCntIcoMsjAlerta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glCntIcoMsjRegistro {
+  flex-direction: column;
+}
+
+@media (max-width: 540px) {
+  .masAbajo {
+    gap: 1rem;
+  }
+
+  .AlertasGlucosa {
+    margin: 0;
+    width: 100%;
+  }
+
+  .infoGlucosa {
+    min-width: 100%;
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .tarjetaRecordatoriosGlucosa {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .glCntIcoMsjAlerta{
+      flex-direction: column;
+    }
+}
+
+.glmsjTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.glTxtmsj {
+  font-weight: bold;
+
+}
+.glTxtfcha {
+  font-size: var(--font13);
+}
+
+
+/* GraficaPromedio */
+
+.ulheader {
+  padding-left: 0.5rem;
+}
+
+.labelY {
+  padding-left: 1.4rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--font14);
+  color: var(--color-lbs);
+}
+
+.GraficaPromedio {
+  margin: 0;
+  width: min(100%, 34.5rem);
+  
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.glPromedioChart {
+  width: 100%;
+  height: 17.75rem;
+}
+
+.glSelectControl {
+  width: 13rem !important;
+  
+}
+
+.glSelectBoton {
+  font-size: 0.85rem;
+}
+
+.glSelectPanel {
+  z-index: 4;
+  background-color: #fff;
+  box-shadow: 0 12px 24px rgba(36, 53, 95, 0.12);
+  overflow: hidden;
+}
+
+.glSelectOpcion {
+  font-size: 0.85rem;
+  white-space: normal;
+  text-wrap: nowrap;
+}
+
+.tooltipGlucosa, .tooltipDiaria {
+  background: #37445d;
+  color: white;
+  border-radius: 999px;
+  padding: 0.15rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tooltipValor {
+  font-weight: 500;
+}
+
+.tooltipFecha {
+  opacity: 0.95;
+}
+
+
+.GraficaDiaria {
+  margin: 0;
+  width: 53.875rem;
+  width: min(100%, 53.875rem);
+  height: 24.375rem;
+  border: 1px solid var(--borde);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.glAxisLabel {
+  text-align-last: left;
+  padding-left: 0.75rem;
+  margin-top: 1.5rem;
+  font-size: var(--font14);
+  color: var(--color-lbs);
+  /* border: 1px dashed red; */
+  
+}
+
+.glDiariaWrap {
+  margin-top: 1rem;
+  width: 100%;
+  height: 18.5rem;
+  display: flex;
+  gap: 0.35rem;
+  align-items: stretch;
+}
+
+.glDiariaYAxis {
+  flex: 0 0 44px;
+  height: 100%;
+}
+
+.glDiariaScrollPane {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.glDiariaScroll {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.glDiariaScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.glDiariaInner {
+  width: 100%;
+  min-width: 48rem;
+  height: 100%;
+}
+
+.GraficaDiaria :focus,
+.GraficaDiaria :focus-visible {
+  outline: transparent;
+}
+
+.cntGraficaPromedio {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 84rem) {
+  .cntGraficaPromedio,
+  .centro,
+  .abajo,
+  .masAbajo {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .Glucosa {
+    padding: 0.75rem 0 1.5rem;
+  }
+
+  .cntPanelGlucosa {
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .glDiariaInner {
+    min-width: 48rem;
+  }
+}
+
+
+.glSelectfecha {
+  margin-top: 1.25rem;
+  position: relative;
+  z-index: 3;
+}

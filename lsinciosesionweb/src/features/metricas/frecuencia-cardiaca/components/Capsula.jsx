@@ -7,19 +7,23 @@ const PIXELES_POR_PPM = ALTO_CAPSULA_PX / MAX_PPM_CAPSULA;
 const FACTOR_AMPLIFICACION_VISUAL = 2;
 const ALTURA_MINIMA_VISUAL_PX = 24;
 
+// Define el color clinico del rango segun los limites de referencia.
 const obtenerColorRango = (min, max) => {
   if (min < 60 || max > 120) return "#FF415A";
   if (max >= 101) return "#F8A737";
   return "#3FAD58";
 };
 
-const frase = (max) => {
+// Devuelve la etiqueta descriptiva que acompaña a la capsula.
+const obtenerFraseRango = (max) => {
+  if (!Number.isFinite(max)) return "Sin datos";
   if (max < 60) return "Bradicardia";
-  if (max >= 61 && max <= 100) return "Frecuencia normal";
-  if (max > 101 && max <= 120) return "Taquicardia (leve)";
-  if (max >= 121 ) return "Taquicardia"
-} 
+  if (max <= 100) return "Frecuencia normal";
+  if (max <= 120) return "Taquicardia (leve)";
+  return "Taquicardia";
+};
 
+// Pinta el rango seleccionado dentro de una capsula vertical.
 const Capsula = ({ max, min }) => {
   const hayRangoValido =
     Number.isFinite(min) && Number.isFinite(max) && min <= max;
@@ -89,7 +93,7 @@ const Capsula = ({ max, min }) => {
           className={styles.cuadrito}
           style={{ background: colorRango }}
           ></span>
-          {frase(max)}
+          {obtenerFraseRango(max)}
       </p>
     </div>
   );

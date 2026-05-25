@@ -4,6 +4,8 @@
 export const ROUTES = {
   LOGIN: "/login",
   INICIO: "/inicio",
+  REGISTROS: "/inicio/registros",
+  REGISTRO_DETALLE: "/inicio/registros/detalle",
 
   // Mi Salud
   SOBRE_MI: "/mi-salud/sobre-mi",

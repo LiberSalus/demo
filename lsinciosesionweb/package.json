@@ -16,18 +16,14 @@
     "@mui/material": "^7.3.5",
     "@mui/x-date-pickers": "^8.19.0",
     "axios": "^1.11.0",
-    "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
-    "dom": "^0.0.3",
-    "gridstack": "^12.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.5.6",
     "react-is": "^18.3.1",
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.9.0",
-    "recharts": "^3.4.1",
-    "router": "^2.2.0"
+    "recharts": "^3.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

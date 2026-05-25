@@ -20,6 +20,17 @@ import {
 } from "../frecuenciaCardiaca.utils";
 
 const CLAVE_STORAGE_REGISTROS_DIA = "frecuencia_cardiaca_registros_dia_v1";
+const PPM_ALTA_SEMANA_ANTERIOR_MOCK = 80;
+const PPM_BAJA_SEMANA_ANTERIOR_MOCK = 89;
+
+// Integra las capturas actuales al historico temporal evitando duplicar el dia vigente.
+function combinarHistorialConDiaActual(registrosHistoricos, registrosDia, claveDia) {
+  const historicoSinDiaActual = registrosHistoricos.filter(
+    (registro) => obtenerClaveDiaLocal(registro.fechaHoraISO) !== claveDia
+  );
+
+  return [...historicoSinDiaActual, ...registrosDia];
+}
 
 // Recupera registros diarios temporales desde localStorage o vuelve al mock del dia.
 function leerEstadoPersistido(claveDiaActual) {
@@ -91,9 +102,19 @@ export function useFrecuenciaCardiaca() {
     useState(PERIODOS_REPOSO_ACTIVIDAD.MES);
   const [valorFiltroComparativa, setValorFiltroComparativa] = useState("");
 
+  const registrosPromedio = useMemo(
+    () =>
+      combinarHistorialConDiaActual(
+        registrosFrecuenciaHistorialMock,
+        registrosDelDia,
+        claveDiaRegistros
+      ),
+    [claveDiaRegistros, registrosDelDia]
+  );
+
   const opcionesFiltroPromedio = useMemo(
-    () => construirOpcionesFiltroPromedio(registrosFrecuenciaHistorialMock),
-    []
+    () => construirOpcionesFiltroPromedio(registrosPromedio),
+    [registrosPromedio]
   );
 
   const [valorFiltroPromedio, setValorFiltroPromedio] = useState(
@@ -137,6 +158,21 @@ export function useFrecuenciaCardiaca() {
   const valorDestacado = useMemo(
     () => obtenerValorDestacado(serieGraficaDiaria, horaActiva),
     [horaActiva, serieGraficaDiaria]
+  );
+
+  // Resume el rango diario para alimentar la columna actual de comparacion semanal.
+  const comparacionSemanal = useMemo(
+    () => ({
+      alta: {
+        actual: maxDia,
+        anterior: PPM_ALTA_SEMANA_ANTERIOR_MOCK,
+      },
+      baja: {
+        actual: minDia,
+        anterior: PPM_BAJA_SEMANA_ANTERIOR_MOCK,
+      },
+    }),
+    [maxDia, minDia]
   );
 
   const fechaActualizacionTexto = useMemo(() => {
@@ -243,6 +279,7 @@ export function useFrecuenciaCardiaca() {
           registrosDelDia,
         })
       );
+      window.dispatchEvent(new CustomEvent("metricas_resumen_actualizado"));
     } catch {
       // Si localStorage no esta disponible, ignoramos sin romper el flujo.
     }
@@ -254,11 +291,11 @@ export function useFrecuenciaCardiaca() {
   const seriePromedioFrecuencia = useMemo(
     () =>
       construirSeriePromedio({
-        registros: registrosFrecuenciaHistorialMock,
+        registros: registrosPromedio,
         periodo: periodoPromedioSeleccionado,
         valorFiltro: valorFiltroPromedio,
       }),
-    [periodoPromedioSeleccionado, valorFiltroPromedio]
+    [periodoPromedioSeleccionado, registrosPromedio, valorFiltroPromedio]
   );
 
   const lecturaPromedioSeleccionada = useMemo(() => {
@@ -276,6 +313,18 @@ export function useFrecuenciaCardiaca() {
     return normalizarLecturaPromedio(primeraLecturaValida);
   }, [indiceLecturaPromedioSeleccionada, seriePromedioFrecuencia]);
 
+  // Decide si la capsula usa la seleccion historica o el rango vivo del dia actual.
+  const lecturaCapsulaSeleccionada = useMemo(() => {
+    if (lecturaPromedioSeleccionada?.claveDia === claveDiaRegistros) {
+      return {
+        min: minDia,
+        max: maxDia,
+      };
+    }
+
+    return lecturaPromedioSeleccionada;
+  }, [claveDiaRegistros, lecturaPromedioSeleccionada, maxDia, minDia]);
+
   useEffect(() => {
     const indiceValido = seriePromedioFrecuencia.findIndex((lectura) =>
       normalizarLecturaPromedio(lectura)
@@ -289,6 +338,7 @@ export function useFrecuenciaCardiaca() {
   return {
     minDia,
     maxDia,
+    comparacionSemanal,
     serieGraficaDiaria,
     valorDestacado,
     fechaActualizacionTexto,
@@ -304,6 +354,7 @@ export function useFrecuenciaCardiaca() {
     seriePromedioFrecuencia,
     indiceLecturaPromedioSeleccionada,
     lecturaPromedioSeleccionada,
+    lecturaCapsulaSeleccionada,
     periodoPromedioSeleccionado,
     periodoComparativaSeleccionado,
     valorFiltroComparativa,

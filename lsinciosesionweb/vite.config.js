@@ -50,5 +50,37 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          // Separa librerias pesadas para que el bundle inicial no cargue todo junto.
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return undefined;
+            const rutaModulo = id.replace(/\\/g, "/");
+
+            if (
+              rutaModulo.includes("/node_modules/@mui/") ||
+              rutaModulo.includes("/node_modules/@emotion/")
+            ) {
+              return "mui-vendor";
+            }
+            if (
+              /\/node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(
+                rutaModulo
+              )
+            ) {
+              return "react-vendor";
+            }
+            if (rutaModulo.includes("/node_modules/recharts/")) {
+              return "recharts-vendor";
+            }
+            if (rutaModulo.includes("/node_modules/dayjs/")) {
+              return "date-vendor";
+            }
+            return undefined;
+          },
+        },
+      },
+    },
   };
 });

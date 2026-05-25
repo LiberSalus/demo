@@ -1,0 +1,247 @@
+.card {
+  position: relative;
+  width: 100%;
+  height: 24.375rem;
+  padding: 1rem 1rem 3.5rem 1rem;
+  border: 1px solid #b7d5ff;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-sizing: border-box;
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.titulo {
+  margin: 0;
+  color: #344054;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.leyenda p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #111827;
+  font-size: 0.92rem;
+}
+
+.puntoLeyenda {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chartWrap {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.tooltip {
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #d0dbe8;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
+.tooltip p {
+  margin: 0.2rem 0;
+  color: #475467;
+  font-size: 0.84rem;
+}
+
+.tooltipTitulo {
+  color: #101828 !important;
+  font-weight: 700;
+}
+
+.etiquetaEjeY {
+  position: absolute;
+  left: 0.2rem;
+  top: 10.8rem;
+  transform: rotate(-90deg) translateY(-3rem);
+  /* transform-origin: left top; */
+  margin: 0;
+  color: #c2c7d0;
+  font-size: 0.8rem;
+}
+
+.etiquetaEjeX {
+  position: absolute;
+  left: 50%;
+  bottom: 4.25rem;
+  transform: translateX(-50%);
+  margin: 0;
+  color: #b0b7c3;
+  font-size: 0.85rem;
+}
+
+.descripcion {
+  position: absolute;
+  left: 1.35rem;
+  right: 1.35rem;
+  bottom: 1rem;
+  margin: 0;
+  color: #9aa3af;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: auto;
+    min-height: 28rem;
+    padding: 1rem 0.9rem 4.4rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leyenda {
+    justify-content: flex-start;
+  }
+
+  .chartWrap {
+    height: 18rem;
+  }
+
+  .etiquetaEjeY {
+    left: 0.1rem;
+    top: 10rem;
+    font-size: 0.72rem;
+  }
+
+  .etiquetaEjeX {
+    bottom: 5.15rem;
+    font-size: 0.8rem;
+  }
+
+  .descripcion {
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .card {
+    height: auto;
+    min-height: 25.5rem;
+    padding: 0.9rem 0.75rem 4rem;
+    border-radius: 1.2rem;
+  }
+
+  .titulo {
+    font-size: 0.92rem;
+  }
+
+  .leyenda {
+    gap: 0.75rem;
+  }
+
+  .leyenda p {
+    font-size: 0.82rem;
+  }
+
+  .puntoLeyenda {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .chartWrap {
+    height: 16.5rem;
+  }
+
+  .etiquetaEjeY {
+    left: -0.15rem;
+    top: 9.4rem;
+    font-size: 0.68rem;
+  }
+
+  .etiquetaEjeX {
+    bottom: 4.7rem;
+    font-size: 0.76rem;
+  }
+
+  .descripcion {
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.8rem;
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 27.5rem) {
+  .card {
+    height: auto;
+    min-height: 23.5rem;
+    padding: 0.75rem 0.65rem 3.6rem;
+    border-radius: 1rem;
+  }
+
+  .header {
+    gap: 0.65rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .titulo {
+    font-size: 0.88rem;
+  }
+
+  .leyenda {
+    gap: 0.55rem;
+  }
+
+  .leyenda p {
+    gap: 0.4rem;
+    font-size: 0.74rem;
+  }
+
+  .puntoLeyenda {
+    width: 0.82rem;
+    height: 0.82rem;
+  }
+
+  .chartWrap {
+    height: 15rem;
+  }
+
+  .etiquetaEjeY {
+    left: -0.45rem;
+    top: 8.7rem;
+    font-size: 0.62rem;
+  }
+
+  .etiquetaEjeX {
+    bottom: 4.35rem;
+    font-size: 0.7rem;
+  }
+
+  .descripcion {
+    left: 0.8rem;
+    right: 0.8rem;
+    bottom: 0.7rem;
+    font-size: 0.66rem;
+    line-height: 1.18;
+  }
+}

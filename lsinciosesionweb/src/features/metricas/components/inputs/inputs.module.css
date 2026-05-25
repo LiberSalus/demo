@@ -1,0 +1,181 @@
+.Inputs {
+  display: flex;
+  flex-direction: column;
+  color: currentColor;
+}
+
+.InTexto,
+.InPassword,
+.InBusqueda,
+.InFecha {
+  max-width: 29rem;
+  width: min(100%,  );
+  height: 2rem !important;
+  border: 1px solid var(--borde);
+  border-radius: 3rem;
+  padding: 0.15rem 1rem;
+
+  &>:focus,
+  &>:focus-visible {
+    outline: 2px solid var(--borde);
+    outline-offset: 2px;
+  }
+}
+
+input[type="date"]::-webkit-input-placeholder {
+  color: #888;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: block;
+  /* -webkit-appearance: none; */
+  padding-right: 1.5rem;
+  filter: opacity(0);
+  z-index: 1;
+  cursor: pointer;
+}
+
+input[type="date"] {
+  /* -moz-appearance: textfield; */
+}
+
+.cntInBusqueda,
+.cntInPassword,
+.cntInFecha {
+  position: relative;
+}
+
+.InBusqueda {
+  padding: 0.35rem 2.25rem;
+}
+
+.icoBusqueda,
+.icoOjo,
+.icoCalendario {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  transition: transform 0.3s ease, transform-origin 0.3s ease;
+}
+
+.icoBusqueda {
+  left: 1.25rem;
+}
+
+.icoOjo {
+  right: 0.75em;
+  cursor: pointer;
+}
+
+.icoCalendario {
+  right: 1rem;
+}
+
+.InBusqueda:focus+.icoBusqueda {
+  transform: rotate(90deg) translateY(-40%);
+  transform-origin: 60% 10%;
+}
+
+.InPassword:focus+.icoOjo {
+}
+
+.InPassword + .parpadea {
+  animation: ojo 0.9s ease-in-out;
+}
+
+@keyframes ojo {
+  0%   {transform: translateY(-50%) scaleY(1);}
+  25%  {transform: translateY(-50%) scaleY(0.8);}
+  50%  {transform: translateY(-50%) scaleY(1);}
+  75%  {transform: translateY(-50%) scaleY(0.3);}
+  100% {transform: translateY(-50%) scaleY(1);}
+}
+
+/* Input select */
+.InpSelect {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 8.75rem);
+  border: 2px solid var(--borde);
+  border-radius: 1rem;
+  background-color: white;
+}
+
+.botonMain {
+  width: 100%;
+  height: 2rem;
+  padding: 0.15rem 1rem;
+  background: var(--fondo);
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+  position: relative;
+  text-wrap: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.botonMain:hover {
+  background: var(--hover);
+}
+
+.expandedBtn {
+  position: relative;
+  background: var(--activo);
+}
+
+.iconoFlecha {
+  background-color: white;
+  border-radius: 1rem;
+  position: absolute;
+  right: 0.1rem;
+  transition: transform 0.3s ease;
+  padding-right: 0.25rem;
+  
+}
+
+.expandedBtn .iconoFlecha {
+  transform: rotate(180deg);
+}
+
+.panelOpciones {
+  overflow: hidden;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.opcion {
+  
+  display: block;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.opcion:hover {
+  background: #deefff;
+}
+
+/* Scrollbar estilizado */
+.panelOpciones::-webkit-scrollbar {
+  width: 6px;
+}
+.panelOpciones::-webkit-scrollbar-thumb {
+  background: var(--borde);
+  border-radius: 3px;
+}
+
+

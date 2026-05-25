@@ -62,7 +62,7 @@
   justify-content: center;
   align-items: center;
   font-weight: var(--peso700);
-  color: var(--blanco, #fff);
+  color: #182236;
   transition:
     height 220ms ease,
     bottom 220ms ease,
@@ -81,9 +81,11 @@
 .max,
 .min {
   position: absolute;
+  color: #182236;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.75);
 }
-.max{ top: -20px; color: var(--color-bg);}
-.min{ bottom: -20px; color: var(--color-bg);}
+.max{ top: -20px;}
+.min{ bottom: -20px;}
 
 .sinDatos {
   position: absolute;
@@ -94,4 +96,3 @@
   font-weight: var(--peso700);
   color: #7A869A;
 }
-

@@ -21,7 +21,9 @@ import consumidas  from './icoConsumidas.svg';
 export const datosPorMedicion = {
   "Peso": {icono: peso,unidad: "kg"},
   "SpO2": {icono: oxigeno,unidad: "%"},
+  "Oxigenacion": {icono: oxigeno,unidad: "%"},
   "Pasos": {icono: pasos,unidad: "pasos"},
+  "Actividad fisica": {icono: pasos,unidad: "pasos"},
   "Feliz": {icono: feliz,unidad: ""},
   "Estrés": {icono: estres,unidad: "%"},
   "Triste": {icono: triste,unidad: ""},
@@ -35,6 +37,7 @@ export const datosPorMedicion = {
   "Estado de ánimo": {icono: estado, unidad: ""},
   "Ciclo menstrual": {icono: ciclo,unidad: "semanas"},
   "Presión arterial": {icono: presion,unidad: "mmHg"},
+  "Presion arterial": {icono: presion,unidad: "mmHg"},
   "Glucosa en sangre": {icono: tipo,unidad: "mg/dL"},
   "Frecuencia cardiaca": {icono: frecuencia,unidad: "ppm"},
   "kCal quemadas": {icono: calorias,unidad: "ppm"},

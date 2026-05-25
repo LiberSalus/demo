@@ -1,5 +1,4 @@
 //src\pages\Inicio\TarjetaSalud\TarjetaSalud.jsx
-import "gridstack/dist/gridstack.min.css";
 import Modal from "react-modal";
 import config from "./icoConfig.svg";
 import añadir from "./icoAnadir.svg";
@@ -13,6 +12,7 @@ import TarjetaMedicion from "./TarjetaMedicion/TarjetaMedicion";
 import React, { useMemo, useState, useEffect } from "react";
 import { AREAS_METRICAS } from "@/features/metricas/config/areas.config";
 import { METRICAS_V2 } from "@/features/metricas/config/metricas.config";
+import { obtenerUltimaLecturaMetrica } from "@/features/metricas/services/resumenMetricasInicio";
 
 import eliminar from './icoEliminar.svg'
 
@@ -56,6 +56,14 @@ function obtenerMetricasSeleccionadas(valoresGuardados = [], catalogo = []) {
     .filter(Boolean);
 }
 
+// Crea el mapa de ultimas lecturas para las metricas visibles en la tarjeta.
+function obtenerLecturasPorMetrica(metricas = []) {
+  return metricas.reduce((lecturas, metricaId) => {
+    lecturas[metricaId] = obtenerUltimaLecturaMetrica(metricaId);
+    return lecturas;
+  }, {});
+}
+
 const TarjetaSalud = ({ tipo }) => {
   
   const navigate = useNavigate();
@@ -64,6 +72,7 @@ const TarjetaSalud = ({ tipo }) => {
   const [tarjetas, setTarjetas] = useState([]);
   const [rango, setRango] = useState(50);
   const [seleccionadas, setSeleccionadas] = useState([]);
+  const [lecturasMetricas, setLecturasMetricas] = useState({});
 
   const salud = {
     "Salud Física": { tituloTrj: "Salud Física", iconoTrj: fisica },
@@ -105,6 +114,22 @@ const TarjetaSalud = ({ tipo }) => {
       console.error("Error leyendo métricas guardadas:", err);
     }
   }, [storageKey, catalogoMetricas]);
+
+  // Sincroniza las tarjetas de Inicio cuando una metrica guarda una nueva lectura.
+  useEffect(() => {
+    const actualizarLecturas = () => {
+      setLecturasMetricas(obtenerLecturasPorMetrica(tarjetas));
+    };
+
+    actualizarLecturas();
+    window.addEventListener("metricas_resumen_actualizado", actualizarLecturas);
+    window.addEventListener("storage", actualizarLecturas);
+
+    return () => {
+      window.removeEventListener("metricas_resumen_actualizado", actualizarLecturas);
+      window.removeEventListener("storage", actualizarLecturas);
+    };
+  }, [tarjetas]);
   
 
   // Abre el detalle correcto usando el id estable de la metrica.
@@ -256,7 +281,10 @@ const TarjetaSalud = ({ tipo }) => {
                 className={styles.botonTarjeta}
                 onClick={() => irADetalle(metricaId)}
               >
-                <TarjetaMedicion titulo={metrica?.label || metricaId} valor={"118/68"} />
+                <TarjetaMedicion
+                  titulo={metrica?.label || metricaId}
+                  valor={lecturasMetricas[metricaId] ?? "--"}
+                />
               </button>
             );
           })}
