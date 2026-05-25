@@ -32,6 +32,46 @@ function cargarCicloMenstrualLegacy() {
   return import("@/pages/SaludFisica/CicloMenstrual/CicloMenstrual");
 }
 
+// Carga la metrica legacy de estres mientras se prepara su version v2.
+function cargarEstresLegacy() {
+  return import("@/pages/SaludMental/Estres/Estres");
+}
+
+// Carga la metrica legacy de energia mientras se prepara su version v2.
+function cargarEnergiaLegacy() {
+  return import("@/pages/SaludMental/Energia/Energia");
+}
+
+// Carga la metrica legacy de descanso mientras se prepara su version v2.
+function cargarDescansoLegacy() {
+  return import("@/pages/SaludMental/Descanso/Descanso");
+}
+
+// Carga la metrica legacy de estado de animo mientras se prepara su version v2.
+function cargarEstadoAnimoLegacy() {
+  return import("@/pages/SaludMental/EstadoAnimo/EstadoAnimo");
+}
+
+// Carga la metrica legacy de peso mientras se prepara su version v2.
+function cargarPesoLegacy() {
+  return import("@/pages/SaludNutricional/Peso/Peso");
+}
+
+// Carga la metrica legacy de hidratacion mientras se prepara su version v2.
+function cargarHidratacionLegacy() {
+  return import("@/pages/SaludNutricional/Hidratacion/Hidratacion");
+}
+
+// Carga la metrica legacy de calorias quemadas mientras se prepara su version v2.
+function cargarKcalQuemadasLegacy() {
+  return import("@/pages/SaludNutricional/KcalQuemadas/KcalQuemadas");
+}
+
+// Carga la metrica legacy de calorias consumidas mientras se prepara su version v2.
+function cargarKcalConsumidasLegacy() {
+  return import("@/pages/SaludNutricional/KcalConsumidas/KcalConsumidas");
+}
+
 export const ESTADOS_METRICA = {
   ACTIVA: "activa",
   LEGACY: "legacy",
@@ -45,6 +85,14 @@ export const IDS_METRICAS = {
   GLUCOSA: "glucosa",
   PASOS: "pasos",
   CICLO_MENSTRUAL: "ciclo_menstrual",
+  ESTRES: "estres",
+  ENERGIA: "energia",
+  DESCANSO: "descanso",
+  ESTADO_ANIMO: "estado_animo",
+  PESO: "peso",
+  HIDRATACION: "hidratacion",
+  KCAL_QUEMADAS: "kcal_quemadas",
+  KCAL_CONSUMIDAS: "kcal_consumidas",
 };
 
 // Puente temporal: mantiene viva la vista actual mientras migramos metricas desde BorradorDos.
@@ -102,5 +150,77 @@ export const METRICAS_V2 = [
     orden: 60,
     estado: ESTADOS_METRICA.LEGACY,
     Component: lazy(cargarCicloMenstrualLegacy),
+  },
+  {
+    id: IDS_METRICAS.ESTRES,
+    area: AREAS_METRICAS.SALUD_MENTAL,
+    label: "Estrés",
+    unidad: "",
+    orden: 10,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarEstresLegacy),
+  },
+  {
+    id: IDS_METRICAS.ENERGIA,
+    area: AREAS_METRICAS.SALUD_MENTAL,
+    label: "Energía",
+    unidad: "",
+    orden: 20,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarEnergiaLegacy),
+  },
+  {
+    id: IDS_METRICAS.DESCANSO,
+    area: AREAS_METRICAS.SALUD_MENTAL,
+    label: "Descanso",
+    unidad: "",
+    orden: 30,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarDescansoLegacy),
+  },
+  {
+    id: IDS_METRICAS.ESTADO_ANIMO,
+    area: AREAS_METRICAS.SALUD_MENTAL,
+    label: "Estado de ánimo",
+    unidad: "",
+    orden: 40,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarEstadoAnimoLegacy),
+  },
+  {
+    id: IDS_METRICAS.PESO,
+    area: AREAS_METRICAS.SALUD_NUTRICIONAL,
+    label: "Peso",
+    unidad: "kg",
+    orden: 10,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarPesoLegacy),
+  },
+  {
+    id: IDS_METRICAS.HIDRATACION,
+    area: AREAS_METRICAS.SALUD_NUTRICIONAL,
+    label: "Hidratación",
+    unidad: "ml",
+    orden: 20,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarHidratacionLegacy),
+  },
+  {
+    id: IDS_METRICAS.KCAL_QUEMADAS,
+    area: AREAS_METRICAS.SALUD_NUTRICIONAL,
+    label: "kCal quemadas",
+    unidad: "kcal",
+    orden: 30,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarKcalQuemadasLegacy),
+  },
+  {
+    id: IDS_METRICAS.KCAL_CONSUMIDAS,
+    area: AREAS_METRICAS.SALUD_NUTRICIONAL,
+    label: "kCal consumidas",
+    unidad: "kcal",
+    orden: 40,
+    estado: ESTADOS_METRICA.LEGACY,
+    Component: lazy(cargarKcalConsumidasLegacy),
   },
 ];

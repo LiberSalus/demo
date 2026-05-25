@@ -1,39 +1,14 @@
 //src\pages\SaludMental\SaludMental.jsx
-import React from "react";
-import { METRICAS_SALUD } from "@/config/metricasSalud";
-import PestañasSalud from "../SaludCompartida/PestañasSalud";
+import MetricasTabs from "@/features/metricas/components/MetricasTabs/MetricasTabs";
+import { AREAS_METRICAS } from "@/features/metricas/config/areas.config";
+import { useMetricasArea } from "@/features/metricas/hooks/useMetricasArea";
 
-import Estres from "./Estres/Estres";
-import Energia from "./Energia/Energia";
-import Descanso from "./Descanso/Descanso";
-import EstadoAnimo from "./EstadoAnimo/EstadoAnimo";
-
-const mapComponentByMetric = {
-    "Estrés": Estres,
-    "Energía": Energia,
-    "Descanso": Descanso,
-    "Estado de ánimo": EstadoAnimo,
-
-};
-
+// Contenedor de Salud Mental conectado al registro compartido de metricas.
 const SaludMental = () => {
-  const metricas = METRICAS_SALUD["Salud Mental"] || [];
-
-  const tabs = metricas.map((nombre) => ({
-    medidor: nombre,
-    Component: mapComponentByMetric[nombre] || (() => (
-      <div>
-        <h4>{nombre}</h4>
-        <p>Contenido pendiente para esta métrica.</p>
-      </div>
-    )),
-  }));
+  const metricas = useMetricasArea(AREAS_METRICAS.SALUD_MENTAL);
 
   return (
-    <PestañasSalud
-      tituloSeccion="Salud Mental"
-      tabs={tabs}
-    />
+    <MetricasTabs tituloSeccion="Salud Mental" metricas={metricas} />
   );
 };
 
