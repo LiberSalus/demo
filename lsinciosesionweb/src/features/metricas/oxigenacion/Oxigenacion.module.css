@@ -417,6 +417,92 @@
   box-sizing: border-box;
 }
 
+.graficaPromedioManual {
+  width: 100%;
+  height: var(--alto-svg-promedio);
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  column-gap: 0.625rem;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.ejeYPromedio {
+  height: var(--alto-trama-promedio);
+  padding-top: 0.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tickEjeYPromedio {
+  color: #3f4b63;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-align: right;
+}
+
+.zonaPromedio {
+  min-width: 0;
+  height: var(--alto-svg-promedio);
+  position: relative;
+}
+
+.svgPromedio {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.guiaPromedio {
+  stroke: #c9cfdb;
+  stroke-width: 1.5;
+  stroke-dasharray: 8 8;
+}
+
+.lineaBasePromedio {
+  stroke: #aeb3bf;
+  stroke-width: 2.5;
+}
+
+.segmentoPromedio {
+  stroke: #89d1f4;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.ejeXPromedio {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas-eje-x-promedio), minmax(0, 1fr));
+  align-items: center;
+  pointer-events: none;
+}
+
+.tickEjeXPromedio {
+  color: #3f4b63;
+  font-size: var(--font12);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateY(-1.25rem);
+}
+
+.tituloEjeXPromedio {
+  margin-top: -2rem;
+  color: #c1c1c1;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-align: center;
+}
+
 .paloPromedio {
   width: 0.35rem;
   border-radius: 999px;

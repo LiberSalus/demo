@@ -578,6 +578,107 @@
   height: 17.75rem;
 }
 
+.glPromedioManual {
+  width: 100%;
+  height: 17.75rem;
+  box-sizing: border-box;
+}
+
+.glPromedioArea {
+  width: 100%;
+  height: var(--alto-svg-promedio);
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  column-gap: 0.625rem;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.glPromedioEjeY {
+  height: var(--alto-trama-promedio);
+  padding-top: 0.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.glPromedioTickY {
+  color: #4b5563;
+  font-size: 0.75rem;
+  line-height: 1;
+  text-align: right;
+}
+
+.glPromedioZona {
+  min-width: 0;
+  height: var(--alto-svg-promedio);
+  position: relative;
+}
+
+.glPromedioSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.glPromedioGuia {
+  stroke: #c9cfdb;
+  stroke-width: 1.5;
+  stroke-dasharray: 8 8;
+}
+
+.glPromedioBase {
+  stroke: #aeb3bf;
+  stroke-width: 2.5;
+}
+
+.glPromedioAreaRelleno {
+  fill: url("#glucosaPromedioArea");
+  stroke: none;
+}
+
+.glPromedioLinea {
+  stroke: #f8a83a;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.glPromedioPunto {
+  fill: #f8a83a;
+  stroke: none;
+}
+
+.glPromedioEjeX {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas-eje-x-promedio), minmax(0, 1fr));
+  align-items: center;
+  pointer-events: none;
+}
+
+.glPromedioTickX {
+  color: #4b5563;
+  font-size: var(--font12);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateY(-1.25rem);
+}
+
+.glPromedioTituloX {
+  margin-top: -2rem;
+  color: #b5b5b5;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-align: center;
+}
+
 .glSelectControl {
   width: 13rem !important;
   

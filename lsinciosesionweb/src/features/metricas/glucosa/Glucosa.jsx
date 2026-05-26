@@ -10,10 +10,6 @@ import GraficaDistribucionGlucosa from "./GraficaDistribucionGlucosa";
 import ModalRecordatoriosPresion from "../presion-arterial/ModalRecordatoriosPresion.jsx";
 
 import {
-  DataGlucosaContrato,
-  DataGlucosaDiariaContrato,
-} from "./dataGlucosa";
-import {
   formatearCuentaRegresivaRecordatorioGlucosa,
   formatearDiasRecordatorioGlucosa,
   formatearHoraRecordatorioGlucosa,
@@ -24,7 +20,6 @@ import {
 } from "./glucosaRecordatorios.utils.js";
 
 import {
-  AreaChart,
   Area,
   XAxis,
   YAxis,
@@ -46,23 +41,149 @@ const TIPOS_POSTPRANDIAL = [
 ];
 
 const CLAVE_STORAGE_GLUCOSA_DIA = "glucosa_registros_dia_v1";
-
-// Lee el contrato diario guardado de glucosa sin bloquear la vista si hay datos invalidos.
-const leerContratoGlucosaGuardado = () => {
-  try {
-    const textoGuardado = localStorage.getItem(CLAVE_STORAGE_GLUCOSA_DIA);
-    const estadoGuardado = textoGuardado ? JSON.parse(textoGuardado) : null;
-    return estadoGuardado?.medicionesPorFiltro ? estadoGuardado : null;
-  } catch {
-    return null;
-  }
+const ABREVIATURAS_DIAS_GLUCOSA = ["L", "M", "M", "J", "V", "S", "D"];
+const ABREVIATURAS_MESES_GLUCOSA = [
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
+];
+const NOMBRES_MESES_GLUCOSA = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+const PERIODOS_PROMEDIO_GLUCOSA = {
+  SEMANA: "semana",
+  MES: "mes",
+  ANIO: "ano",
 };
+const PERIODOS_PROMEDIO_UI_GLUCOSA = [
+  { valor: PERIODOS_PROMEDIO_GLUCOSA.SEMANA, etiqueta: "Semana" },
+  { valor: PERIODOS_PROMEDIO_GLUCOSA.MES, etiqueta: "Mes" },
+  { valor: PERIODOS_PROMEDIO_GLUCOSA.ANIO, etiqueta: "Año" },
+];
+const ANCHO_BASE_PROMEDIO_GLUCOSA = 1000;
+const ALTO_BASE_PROMEDIO_GLUCOSA = 180;
+const ALTO_CARRIL_X_PROMEDIO_GLUCOSA = 78;
+const DOMINIO_FALLBACK_PROMEDIO_GLUCOSA = [60, 140];
+const TICKS_FALLBACK_PROMEDIO_GLUCOSA = [60, 80, 100, 120, 140];
 
 const crearClaveFecha = (fecha) => {
   const year = fecha.getFullYear();
   const month = `${fecha.getMonth() + 1}`.padStart(2, "0");
   const day = `${fecha.getDate()}`.padStart(2, "0");
   return `${year}-${month}-${day}`;
+};
+
+const crearEtiquetaFiltroGlucosa = (fecha) =>
+  fecha.toLocaleDateString("es-MX", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+// Valida lecturas reales y descarta la semilla anterior de maqueta.
+const esMedicionRealGlucosa = (medicion) =>
+  !["glu-1", "glu-2", "glu-3"].includes(String(medicion?.id ?? "")) &&
+  Boolean(medicion?.fechaHoraISO) &&
+  Number.isFinite(Number(medicion?.toma)) &&
+  Number(medicion?.toma) > 0;
+
+// Crea el contrato diario base sin lecturas simuladas.
+const crearContratoGlucosaVacio = (fechaBase = new Date()) => {
+  const claveFecha = crearClaveFecha(fechaBase);
+  const etiquetaFiltro = crearEtiquetaFiltroGlucosa(fechaBase);
+
+  return {
+    metadatos: {
+      unidad: "mg/dL",
+      resolucion: "hora",
+      periodo: "dia",
+    },
+    filtros: [{ value: claveFecha, label: etiquetaFiltro }],
+    seleccionActual: claveFecha,
+    medicionesPorFiltro: {
+      [claveFecha]: {
+        etiquetaFiltro,
+        puntos: [],
+      },
+    },
+  };
+};
+
+// Normaliza el contrato guardado para que solo entren lecturas reales.
+const normalizarContratoGlucosaGuardado = (contrato) => {
+  if (!contrato?.medicionesPorFiltro) return crearContratoGlucosaVacio();
+
+  const medicionesPorFiltro = Object.entries(contrato.medicionesPorFiltro).reduce(
+    (acumulado, [claveFecha, bloque]) => {
+      const puntos = (bloque?.puntos ?? [])
+        .filter(esMedicionRealGlucosa)
+        .map((medicion) => ({
+          ...medicion,
+          toma: Number(medicion.toma),
+        }))
+        .sort(ordenarPorFechaAsc);
+
+      acumulado[claveFecha] = {
+        etiquetaFiltro: bloque?.etiquetaFiltro ?? claveFecha,
+        puntos,
+      };
+
+      return acumulado;
+    },
+    {},
+  );
+  const contratoNormalizado = {
+    ...contrato,
+    medicionesPorFiltro,
+  };
+  const filtros = obtenerFiltrosDiarios(contratoNormalizado).sort(
+    (a, b) => new Date(a.value) - new Date(b.value),
+  );
+  const claveHoy = crearClaveFecha(new Date());
+  const seleccionActual = medicionesPorFiltro[claveHoy]
+    ? claveHoy
+    : filtros.at(-1)?.value ?? claveHoy;
+
+  if (!medicionesPorFiltro[seleccionActual]) {
+    return crearContratoGlucosaVacio();
+  }
+
+  return {
+    ...contratoNormalizado,
+    filtros,
+    seleccionActual,
+  };
+};
+
+// Lee el contrato diario guardado de glucosa sin bloquear la vista si hay datos invalidos.
+const leerContratoGlucosaGuardado = () => {
+  try {
+    const textoGuardado = localStorage.getItem(CLAVE_STORAGE_GLUCOSA_DIA);
+    const estadoGuardado = textoGuardado ? JSON.parse(textoGuardado) : null;
+    return normalizarContratoGlucosaGuardado(estadoGuardado);
+  } catch {
+    return crearContratoGlucosaVacio();
+  }
 };
 
 const formatearFechaHora = (fecha) => {
@@ -85,6 +206,36 @@ const formatearHoraLabel = (fecha) =>
     minute: "2-digit",
     hour12: true,
   });
+
+const formatearFechaTarjetaGlucosa = (fecha) =>
+  fecha.toLocaleDateString("es-MX", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+
+// Clasifica una lectura de glucosa segun si fue tomada en ayuno o despues de comer.
+const obtenerEstadoGlucosa = (toma, esAyuno) => {
+  const valor = Number(toma);
+  const [hipoglucemia, normal, prediabetes, hiperglucemia] =
+    GlTxt.textosGenerales.condiciones;
+
+  if (!Number.isFinite(valor)) {
+    return { condicion: "--", bg: "#B5B7BF" };
+  }
+
+  if (valor < 70) return hipoglucemia;
+
+  if (esAyuno) {
+    if (valor <= 99) return normal;
+    if (valor <= 125) return prediabetes;
+    return hiperglucemia;
+  }
+
+  if (valor < 140) return normal;
+  if (valor <= 199) return prediabetes;
+  return hiperglucemia;
+};
 
 const construirMedicionDiaria = ({
   glucosa,
@@ -170,7 +321,10 @@ const NavegacionTipoGlucosa = ({ valor, alCambiar }) => {
 
 // pinta componente Ultimo valor glucosa
 
-const UltimoValorGlucosa = ({ esAyuno }) => {
+const UltimoValorGlucosa = ({ esAyuno, ultimaLectura, lecturaAnterior }) => {
+  const estadoUltimo = obtenerEstadoGlucosa(ultimaLectura?.toma, esAyuno);
+  const estadoAnterior = obtenerEstadoGlucosa(lecturaAnterior?.toma, esAyuno);
+
   return (
     <div className={styles.UltimoValorGlucosa}>
       <div className={styles.ulheader}>
@@ -186,14 +340,27 @@ const UltimoValorGlucosa = ({ esAyuno }) => {
           <div className={styles.ulcntUltimo}>
             <p className={styles.ultxtUltimo}>{GlTxt.CompUltimoValor.ultimo}</p>
             <div className={styles.ulbgcondicion}>
-              <div className={styles.ulbg}></div>
-              <p className={styles.ulcondicion}>Hiperglusemia crítica</p>
+              <div
+                className={styles.ulbg}
+                style={{ backgroundColor: estadoUltimo.bg }}
+              ></div>
+              <p className={styles.ulcondicion}>{estadoUltimo.condicion}</p>
             </div>
           </div>
-          <p className={styles.ulvalor}>75 {GlTxt.textosGenerales.unidad}</p>
+          <p className={styles.ulvalor}>
+            {ultimaLectura?.toma ?? "--"} {GlTxt.textosGenerales.unidad}
+          </p>
           <div className={styles.ulCntfcha}>
-            <p className={styles.ulfcha}>13 - abril - 2026</p>
-            <p className={styles.ulhora}>08:55 am</p>
+            <p className={styles.ulfcha}>
+              {ultimaLectura
+                ? formatearFechaTarjetaGlucosa(new Date(ultimaLectura.fechaHoraISO))
+                : "--"}
+            </p>
+            <p className={styles.ulhora}>
+              {ultimaLectura
+                ? formatearHoraLabel(new Date(ultimaLectura.fechaHoraISO))
+                : "--"}
+            </p>
           </div>
         </div>
 
@@ -203,14 +370,29 @@ const UltimoValorGlucosa = ({ esAyuno }) => {
               {GlTxt.CompUltimoValor.anterior}
             </p>
             <div className={styles.ulbgcondicion}>
-              <div className={styles.ulbg}></div>
-              <p className={styles.ulcondicion}>Hiperglusemia crítica</p>
+              <div
+                className={styles.ulbg}
+                style={{ backgroundColor: estadoAnterior.bg }}
+              ></div>
+              <p className={styles.ulcondicion}>{estadoAnterior.condicion}</p>
             </div>
           </div>
-          <p className={styles.ulvalor}>75 {GlTxt.textosGenerales.unidad}</p>
+          <p className={styles.ulvalor}>
+            {lecturaAnterior?.toma ?? "--"} {GlTxt.textosGenerales.unidad}
+          </p>
           <div className={styles.ulCntfcha}>
-            <p className={styles.ulfcha}>13 - abril - 2026</p>
-            <p className={styles.ulhora}>08:55 am</p>
+            <p className={styles.ulfcha}>
+              {lecturaAnterior
+                ? formatearFechaTarjetaGlucosa(
+                    new Date(lecturaAnterior.fechaHoraISO),
+                  )
+                : "--"}
+            </p>
+            <p className={styles.ulhora}>
+              {lecturaAnterior
+                ? formatearHoraLabel(new Date(lecturaAnterior.fechaHoraISO))
+                : "--"}
+            </p>
           </div>
         </div>
       </div>
@@ -661,44 +843,343 @@ const TooltipGlucosa = ({ active, payload, label }) => {
 };
 
 const graficaPr = GlTxt.CompGraficaProm;
-//pinta grafica promedio
-const GraficaPromedio = ({ esAyuno }) => {
-  const [periodoSeleccionado, setPeriodoSeleccionado] = useState("semana");
-  const [etiquetaActiva, setEtiquetaActiva] = useState(null);
 
-  const bloqueInicial = DataGlucosaContrato.semana;
-  const [valorFiltro, setValorFiltro] = useState(
-    bloqueInicial?.seleccionActual ?? bloqueInicial?.filtros?.[0]?.value ?? "",
-  );
+// Obtiene el lunes de una semana para construir filtros estables.
+const obtenerInicioSemanaGlucosa = (fechaEntrada) => {
+  const fecha = new Date(fechaEntrada);
+  const dia = fecha.getDay();
+  const desfase = dia === 0 ? -6 : 1 - dia;
+  fecha.setHours(0, 0, 0, 0);
+  fecha.setDate(fecha.getDate() + desfase);
 
-  const bloquePeriodo = DataGlucosaContrato[periodoSeleccionado];
-  const filtrosPeriodo = bloquePeriodo?.filtros ?? [];
+  return fecha;
+};
 
-  const puntosPeriodo =
-    bloquePeriodo?.seriesPorFiltro?.[valorFiltro]?.puntos ?? [];
+// Obtiene el domingo de una semana para mostrar el rango del selector.
+const obtenerFinSemanaGlucosa = (inicioSemana) => {
+  const finSemana = new Date(inicioSemana);
+  finSemana.setDate(finSemana.getDate() + 6);
+  finSemana.setHours(23, 59, 59, 999);
 
-  const datosFiltrados = puntosPeriodo.filter((item) =>
-    esAyuno
-      ? item.tipo === "ayuno"
-      : TIPOS_POSTPRANDIAL.includes(item.tipo),
-  );
+  return finSemana;
+};
 
-  const opcionesFiltro = filtrosPeriodo.map((item) => ({
-    label: item.label,
-    value: item.value,
-  }));
+// Formatea dia y mes corto para los filtros inferiores.
+const formatearDiaMesGlucosa = (fecha) => {
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  const mes = ABREVIATURAS_MESES_GLUCOSA[fecha.getMonth()];
 
-  const cambiarPeriodo = (periodo) => {
-    const siguienteBloque = DataGlucosaContrato[periodo];
-    if (!siguienteBloque) return;
+  return `${dia}, ${mes}`;
+};
 
-    setPeriodoSeleccionado(periodo);
-    setValorFiltro(
-      siguienteBloque?.seleccionActual ??
-        siguienteBloque?.filtros?.[0]?.value ??
-        "",
-    );
+// Agrupa lecturas por dia y calcula el promedio para la grafica de glucosa.
+const construirMapaPromediosGlucosa = (lecturas) => {
+  const mapa = new Map();
+
+  lecturas.filter(esMedicionRealGlucosa).forEach((lectura) => {
+    const claveDia = crearClaveFecha(new Date(lectura.fechaHoraISO));
+    const toma = Number(lectura.toma);
+    const existente = mapa.get(claveDia);
+
+    if (!existente) {
+      mapa.set(claveDia, { suma: toma, cantidad: 1 });
+      return;
+    }
+
+    existente.suma += toma;
+    existente.cantidad += 1;
+  });
+
+  return mapa;
+};
+
+// Crea filtros semana/mes/anio desde las lecturas reales disponibles.
+const construirOpcionesFiltroPromedioGlucosa = (lecturas) => {
+  const mapaSemanas = new Map();
+  const mapaMeses = new Map();
+  const mapaAnios = new Map();
+  const lecturasValidas = lecturas.filter(esMedicionRealGlucosa);
+  const fechaActual = new Date();
+
+  lecturasValidas.forEach((lectura) => {
+    const fecha = new Date(lectura.fechaHoraISO);
+    const inicioSemana = obtenerInicioSemanaGlucosa(fecha);
+    const finSemana = obtenerFinSemanaGlucosa(inicioSemana);
+    const valorSemana = crearClaveFecha(inicioSemana);
+    const anio = fecha.getFullYear();
+    const mes = fecha.getMonth();
+    const valorMes = `${anio}-${String(mes + 1).padStart(2, "0")}`;
+
+    if (!mapaSemanas.has(valorSemana)) {
+      mapaSemanas.set(valorSemana, {
+        value: valorSemana,
+        label: `Lun ${formatearDiaMesGlucosa(inicioSemana)} - Dom ${formatearDiaMesGlucosa(finSemana)}`,
+      });
+    }
+
+    if (!mapaMeses.has(valorMes)) {
+      mapaMeses.set(valorMes, {
+        value: valorMes,
+        label: `${NOMBRES_MESES_GLUCOSA[mes]} - ${anio}`,
+      });
+    }
+
+    if (!mapaAnios.has(String(anio))) {
+      mapaAnios.set(String(anio), { value: String(anio), label: String(anio) });
+    }
+  });
+
+  if (!lecturasValidas.length) {
+    const inicioSemana = obtenerInicioSemanaGlucosa(fechaActual);
+    const finSemana = obtenerFinSemanaGlucosa(inicioSemana);
+    const anio = fechaActual.getFullYear();
+    const mes = fechaActual.getMonth();
+    const valorMes = `${anio}-${String(mes + 1).padStart(2, "0")}`;
+
+    mapaSemanas.set(crearClaveFecha(inicioSemana), {
+      value: crearClaveFecha(inicioSemana),
+      label: `Lun ${formatearDiaMesGlucosa(inicioSemana)} - Dom ${formatearDiaMesGlucosa(finSemana)}`,
+    });
+    mapaMeses.set(valorMes, {
+      value: valorMes,
+      label: `${NOMBRES_MESES_GLUCOSA[mes]} - ${anio}`,
+    });
+    mapaAnios.set(String(anio), { value: String(anio), label: String(anio) });
+  }
+
+  return {
+    [PERIODOS_PROMEDIO_GLUCOSA.SEMANA]: [...mapaSemanas.values()].sort(
+      (actual, siguiente) => (actual.value < siguiente.value ? 1 : -1),
+    ),
+    [PERIODOS_PROMEDIO_GLUCOSA.MES]: [...mapaMeses.values()].sort(
+      (actual, siguiente) => (actual.value < siguiente.value ? 1 : -1),
+    ),
+    [PERIODOS_PROMEDIO_GLUCOSA.ANIO]: [...mapaAnios.values()].sort(
+      (actual, siguiente) => Number(siguiente.value) - Number(actual.value),
+    ),
   };
+};
+
+// Construye la serie de promedio para semana, mes o anio usando lecturas reales.
+const construirSeriePromedioGlucosa = ({ lecturas, periodo, valorFiltro }) => {
+  if (!valorFiltro) return [];
+
+  const mapaPromedios = construirMapaPromediosGlucosa(lecturas);
+
+  if (periodo === PERIODOS_PROMEDIO_GLUCOSA.SEMANA) {
+    const inicio = new Date(`${valorFiltro}T00:00:00`);
+
+    return ABREVIATURAS_DIAS_GLUCOSA.map((etiqueta, indice) => {
+      const fecha = new Date(inicio);
+      fecha.setDate(inicio.getDate() + indice);
+      const promedio = mapaPromedios.get(crearClaveFecha(fecha));
+
+      return {
+        etiqueta,
+        toma: promedio ? Math.round(promedio.suma / promedio.cantidad) : null,
+      };
+    });
+  }
+
+  if (periodo === PERIODOS_PROMEDIO_GLUCOSA.MES) {
+    const [anioTxt, mesTxt] = valorFiltro.split("-");
+    const anio = Number(anioTxt);
+    const mesIndice = Number(mesTxt) - 1;
+    const diasMes = new Date(anio, mesIndice + 1, 0).getDate();
+
+    return Array.from({ length: diasMes }, (_, indice) => {
+      const dia = indice + 1;
+      const fecha = new Date(anio, mesIndice, dia);
+      const promedio = mapaPromedios.get(crearClaveFecha(fecha));
+
+      return {
+        etiqueta: String(dia),
+        toma: promedio ? Math.round(promedio.suma / promedio.cantidad) : null,
+      };
+    });
+  }
+
+  const anio = Number(valorFiltro);
+
+  return ABREVIATURAS_MESES_GLUCOSA.map((etiqueta, mesIndice) => {
+    const diasMes = new Date(anio, mesIndice + 1, 0).getDate();
+    const valores = [];
+
+    for (let dia = 1; dia <= diasMes; dia += 1) {
+      const fecha = new Date(anio, mesIndice, dia);
+      const promedio = mapaPromedios.get(crearClaveFecha(fecha));
+      if (!promedio) continue;
+      valores.push(promedio.suma / promedio.cantidad);
+    }
+
+    return {
+      etiqueta,
+      toma: valores.length
+        ? Math.round(valores.reduce((suma, valor) => suma + valor, 0) / valores.length)
+        : null,
+    };
+  });
+};
+
+// Normaliza puntos para que solo las lecturas reales entren a la capa de dibujo.
+const normalizarSeriePromedioGlucosa = (serie = []) =>
+  serie.map((item, indice) => {
+    const toma = Number(item?.toma);
+    const tieneLectura = Number.isFinite(toma) && toma > 0;
+
+    return {
+      indice,
+      etiqueta: item?.etiqueta ?? String(indice + 1),
+      toma: tieneLectura ? toma : null,
+      tieneLectura,
+    };
+  });
+
+const redondearAbajoGlucosa = (valor, paso) => Math.floor(valor / paso) * paso;
+const redondearArribaGlucosa = (valor, paso) => Math.ceil(valor / paso) * paso;
+
+// Calcula una escala Y legible para promedio, sin amontonar ticks.
+const construirEscalaPromedioGlucosa = (datos) => {
+  const valores = datos
+    .filter((dato) => dato.tieneLectura)
+    .map((dato) => dato.toma);
+
+  if (!valores.length) {
+    return {
+      minimo: DOMINIO_FALLBACK_PROMEDIO_GLUCOSA[0],
+      maximo: DOMINIO_FALLBACK_PROMEDIO_GLUCOSA[1],
+      ticks: TICKS_FALLBACK_PROMEDIO_GLUCOSA,
+    };
+  }
+
+  const minimoCrudo = Math.min(...valores) - 20;
+  const maximoCrudo = Math.max(...valores) + 20;
+  const rango = maximoCrudo - minimoCrudo;
+  const paso = rango > 120 ? 40 : rango > 70 ? 20 : 10;
+  const minimo = Math.max(0, redondearAbajoGlucosa(Math.min(60, minimoCrudo), paso));
+  const maximo = redondearArribaGlucosa(Math.max(140, maximoCrudo), paso);
+  const ticks = [];
+
+  for (let tick = minimo; tick <= maximo; tick += paso) {
+    ticks.push(tick);
+  }
+
+  return { minimo, maximo, ticks };
+};
+
+// Convierte mg/dL a coordenada Y para el SVG de promedio.
+const convertirGlucosaAY = (valor, escala) => {
+  const rango = escala.maximo - escala.minimo || 1;
+
+  return ALTO_BASE_PROMEDIO_GLUCOSA -
+    ((valor - escala.minimo) / rango) * ALTO_BASE_PROMEDIO_GLUCOSA;
+};
+
+// Construye puntos, tramos y area inferior solo con lecturas reales.
+const construirTrazosPromedioGlucosa = (datos, escala) => {
+  if (!datos.length) return { puntos: [], lineas: [], area: "" };
+
+  const anchoPaso = ANCHO_BASE_PROMEDIO_GLUCOSA / datos.length;
+  const puntos = datos
+    .filter((dato) => dato.tieneLectura)
+    .map((dato) => ({
+      indice: dato.indice,
+      etiqueta: dato.etiqueta,
+      toma: dato.toma,
+      x: anchoPaso * dato.indice + anchoPaso / 2,
+      y: convertirGlucosaAY(dato.toma, escala),
+    }));
+  const lineas = [];
+
+  for (let indice = 1; indice < puntos.length; indice += 1) {
+    lineas.push({
+      origen: puntos[indice - 1],
+      destino: puntos[indice],
+    });
+  }
+
+  const area =
+    puntos.length >= 2
+      ? [
+          `M ${puntos[0].x} ${ALTO_BASE_PROMEDIO_GLUCOSA}`,
+          ...puntos.map((punto) => `L ${punto.x} ${punto.y}`),
+          `L ${puntos[puntos.length - 1].x} ${ALTO_BASE_PROMEDIO_GLUCOSA}`,
+          "Z",
+        ].join(" ")
+      : "";
+
+  return { puntos, lineas, area };
+};
+
+// Ajusta la densidad de etiquetas del eje X segun el periodo activo.
+const formatearEtiquetaPromedioGlucosa = (dato, indice, total, periodo) => {
+  if (periodo === PERIODOS_PROMEDIO_GLUCOSA.SEMANA) return dato.etiqueta;
+
+  if (periodo === PERIODOS_PROMEDIO_GLUCOSA.MES) {
+    const numeroDia = Number(dato.etiqueta);
+    const diaVisible =
+      Number.isFinite(numeroDia) &&
+      (numeroDia === 1 ||
+        numeroDia === total ||
+        numeroDia % 5 === 0 ||
+        numeroDia === 15);
+
+    return diaVisible ? String(numeroDia) : "";
+  }
+
+  return String(dato.etiqueta).slice(0, 3);
+};
+
+//pinta grafica promedio
+const GraficaPromedio = ({ esAyuno, lecturas = [] }) => {
+  const [periodoSeleccionado, setPeriodoSeleccionado] = useState(
+    PERIODOS_PROMEDIO_GLUCOSA.SEMANA,
+  );
+  const opcionesFiltroPorPeriodo = useMemo(
+    () => construirOpcionesFiltroPromedioGlucosa(lecturas),
+    [lecturas],
+  );
+  const [filtrosSeleccionados, setFiltrosSeleccionados] = useState(() => ({
+    [PERIODOS_PROMEDIO_GLUCOSA.SEMANA]:
+      opcionesFiltroPorPeriodo[PERIODOS_PROMEDIO_GLUCOSA.SEMANA]?.[0]?.value ?? "",
+    [PERIODOS_PROMEDIO_GLUCOSA.MES]:
+      opcionesFiltroPorPeriodo[PERIODOS_PROMEDIO_GLUCOSA.MES]?.[0]?.value ?? "",
+    [PERIODOS_PROMEDIO_GLUCOSA.ANIO]:
+      opcionesFiltroPorPeriodo[PERIODOS_PROMEDIO_GLUCOSA.ANIO]?.[0]?.value ?? "",
+  }));
+  const seriePromedio = useMemo(
+    () =>
+      construirSeriePromedioGlucosa({
+        lecturas,
+        periodo: periodoSeleccionado,
+        valorFiltro: filtrosSeleccionados[periodoSeleccionado],
+      }),
+    [filtrosSeleccionados, lecturas, periodoSeleccionado],
+  );
+  const datosGrafica = useMemo(
+    () => normalizarSeriePromedioGlucosa(seriePromedio),
+    [seriePromedio],
+  );
+  const escalaPromedio = useMemo(
+    () => construirEscalaPromedioGlucosa(datosGrafica),
+    [datosGrafica],
+  );
+  const trazosPromedio = useMemo(
+    () => construirTrazosPromedioGlucosa(datosGrafica, escalaPromedio),
+    [datosGrafica, escalaPromedio],
+  );
+  const etiquetasEjeX = useMemo(
+    () =>
+      datosGrafica.map((dato, indice) =>
+        formatearEtiquetaPromedioGlucosa(
+          dato,
+          indice,
+          datosGrafica.length,
+          periodoSeleccionado,
+        ),
+      ),
+    [datosGrafica, periodoSeleccionado],
+  );
 
   const prGlSelect = {
     contenedor: styles.glSelectControl,
@@ -706,6 +1187,27 @@ const GraficaPromedio = ({ esAyuno }) => {
     panelOpciones: styles.glSelectPanel,
     opcion: styles.glSelectOpcion,
   };
+  const variablesGrafica = {
+    "--alto-svg-promedio": `${ALTO_BASE_PROMEDIO_GLUCOSA + ALTO_CARRIL_X_PROMEDIO_GLUCOSA}px`,
+    "--alto-trama-promedio": `${ALTO_BASE_PROMEDIO_GLUCOSA}px`,
+    "--columnas-eje-x-promedio": String(Math.max(datosGrafica.length, 1)),
+  };
+
+  useEffect(() => {
+    // Mantiene el filtro seleccionado dentro de las opciones disponibles.
+    const opcionesPeriodo = opcionesFiltroPorPeriodo[periodoSeleccionado] ?? [];
+    const valorActual = filtrosSeleccionados[periodoSeleccionado];
+    const existeValorActual = opcionesPeriodo.some(
+      (opcion) => opcion.value === valorActual,
+    );
+
+    if (!existeValorActual) {
+      setFiltrosSeleccionados((prev) => ({
+        ...prev,
+        [periodoSeleccionado]: opcionesPeriodo[0]?.value ?? "",
+      }));
+    }
+  }, [filtrosSeleccionados, opcionesFiltroPorPeriodo, periodoSeleccionado]);
 
   return (
     <div className={styles.GraficaPromedio}>
@@ -718,99 +1220,124 @@ const GraficaPromedio = ({ esAyuno }) => {
         </p>
       </div>
       <div className={styles.grnav}>
-        <Boton
-          variant="grafica"
-          forma="redondo"
-          isLoading={false}
-          onClick={() => cambiarPeriodo("semana")}
-        >
-          {graficaPr.botones[0]}
-        </Boton>
-        <Boton
-          variant="grafica"
-          forma="redondo"
-          isLoading={false}
-          onClick={() => cambiarPeriodo("mes")}
-        >
-          {graficaPr.botones[1]}
-        </Boton>
-        <Boton
-          variant="grafica"
-          forma="redondo"
-          isLoading={false}
-          onClick={() => cambiarPeriodo("ano")}
-        >
-          {graficaPr.botones[2]}
-        </Boton>
-      </div>
-      <div className={styles.glPromedioChart}>
-        <p className={styles.labelY}>{graficaPr.unidad}</p>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={datosFiltrados}
-            margin={{ top: 28, right: 8, left: 30, bottom: 13 }}
+        {PERIODOS_PROMEDIO_UI_GLUCOSA.map((periodo) => (
+          <Boton
+            key={periodo.valor}
+            variant="grafica"
+            forma="redondo"
+            isLoading={false}
+            onClick={() => setPeriodoSeleccionado(periodo.valor)}
           >
-            <defs>
-              <linearGradient id="gradiente" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="15%" stopColor="#f8aa3d" stopOpacity="0.8"></stop>
-                <stop offset="95%" stopColor="#f8aa3d" stopOpacity="0.10"></stop>
-              </linearGradient>
-            </defs>
-            <Area
-              type="linear"
-              dataKey="toma"
-              stroke="#f8a83a"
-              fill="url(#gradiente)"
-            />
-            <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} />
-            <XAxis
-              dataKey="etiqueta"
-              axisLine={true}
-              tickLine={false}
-              height={42}
-              tickMargin={10}
-              tick={{ dy: 5, fill: "#4B5563", fontSize: 12 }}
-              label={{
-                value: periodoSeleccionado === "ano" ? "Meses" : "Días",
-                position: "insideBottom",
-                offset: -10,
-                fill: "#B5B5B5",
-              }}
-            />
-            <YAxis
-              domain={[
-                (dataMin) => Math.min(60, Math.floor((dataMin - 20) / 10) * 10),
-                (dataMax) => Math.max(140, Math.ceil((dataMax + 20) / 10) * 10),
-              ]}
-              axisLine={false}
-              tickLine={false}
-              ticks={[60, 70, 80, 90, 100, 110, 120, 130, 140]}
-              width={40}
-              tickMargin={8}
-              tick={{ dy: -3, fill: "#4B5563", fontSize: 12 }}
-            />
-            <Tooltip
-              content={TooltipGlucosa}
-              cursor={true}
-              onMouseMove={(state) => {
-                if (state?.activeLabel) {
-                  setEtiquetaActiva(state.activeLabel);
-                }
-              }}
-            />
-            <ReferenceLine
-              x={etiquetaActiva}
-              stroke="#7D8AA5"
-              strokeDasharray="4 4"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+            {periodo.etiqueta}
+          </Boton>
+        ))}
+      </div>
+      <div className={styles.glPromedioManual} style={variablesGrafica}>
+        <p className={styles.labelY}>{graficaPr.unidad}</p>
+        <div className={styles.glPromedioArea}>
+          <div className={styles.glPromedioEjeY}>
+            {escalaPromedio.ticks
+              .slice()
+              .reverse()
+              .map((tick) => (
+                <span key={tick} className={styles.glPromedioTickY}>
+                  {tick}
+                </span>
+              ))}
+          </div>
+
+          <div className={styles.glPromedioZona}>
+            <svg
+              className={styles.glPromedioSvg}
+              viewBox={`0 0 ${ANCHO_BASE_PROMEDIO_GLUCOSA} ${
+                ALTO_BASE_PROMEDIO_GLUCOSA + ALTO_CARRIL_X_PROMEDIO_GLUCOSA
+              }`}
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="glucosaPromedioArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#f8a83a" stopOpacity="0.76" />
+                  <stop offset="100%" stopColor="#f8a83a" stopOpacity="0.18" />
+                </linearGradient>
+              </defs>
+
+              {escalaPromedio.ticks.map((tick) => {
+                const y = convertirGlucosaAY(tick, escalaPromedio);
+                return (
+                  <line
+                    key={`glucosa-guia-${tick}`}
+                    className={styles.glPromedioGuia}
+                    x1="0"
+                    y1={y}
+                    x2={ANCHO_BASE_PROMEDIO_GLUCOSA}
+                    y2={y}
+                  />
+                );
+              })}
+
+              <line
+                className={styles.glPromedioBase}
+                x1="0"
+                y1={ALTO_BASE_PROMEDIO_GLUCOSA}
+                x2={ANCHO_BASE_PROMEDIO_GLUCOSA}
+                y2={ALTO_BASE_PROMEDIO_GLUCOSA}
+              />
+
+              {trazosPromedio.area && (
+                <path
+                  className={styles.glPromedioAreaRelleno}
+                  d={trazosPromedio.area}
+                />
+              )}
+
+              {trazosPromedio.lineas.map((linea, indice) => (
+                <line
+                  key={`glucosa-linea-${indice}`}
+                  className={styles.glPromedioLinea}
+                  x1={linea.origen.x}
+                  y1={linea.origen.y}
+                  x2={linea.destino.x}
+                  y2={linea.destino.y}
+                />
+              ))}
+
+              {trazosPromedio.puntos.map((punto) => (
+                <circle
+                  key={`glucosa-punto-${punto.indice}`}
+                  className={styles.glPromedioPunto}
+                  cx={punto.x}
+                  cy={punto.y}
+                  r="3"
+                />
+              ))}
+            </svg>
+
+            <div className={styles.glPromedioEjeX}>
+              {etiquetasEjeX.map((etiqueta, indice) => (
+                <span key={`glucosa-eje-x-${indice}`} className={styles.glPromedioTickX}>
+                  {etiqueta}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={styles.glPromedioTituloX}>
+          {periodoSeleccionado === PERIODOS_PROMEDIO_GLUCOSA.ANIO
+            ? "Meses"
+            : "Días"}
+        </div>
       </div>
       <div className={styles.glSelectfecha}>
         <InpSelect
-          opciones={opcionesFiltro}
-          value={valorFiltro}
-          onChange={setValorFiltro}
+          opciones={opcionesFiltroPorPeriodo[periodoSeleccionado] ?? []}
+          value={filtrosSeleccionados[periodoSeleccionado]}
+          onChange={(valor) =>
+            setFiltrosSeleccionados((prev) => ({
+              ...prev,
+              [periodoSeleccionado]: valor,
+            }))
+          }
           placeholder="Selecciona un periodo"
           estilos={prGlSelect}
         />
@@ -825,7 +1352,7 @@ const Glucosa = () => {
     GlTxt.estadosGlucosa[0],
   );
   const [contratoDiario, setContratoDiario] = useState(
-    () => leerContratoGlucosaGuardado() ?? DataGlucosaDiariaContrato
+    leerContratoGlucosaGuardado,
   );
   const [modalAbierto, setModalAbierto] = useState(false);
   const [tipoModal, setTipoModal] = useState("ayuno");
@@ -853,6 +1380,8 @@ const Glucosa = () => {
 
   const ultimaLectura =
     lecturasTotalesFiltradas[lecturasTotalesFiltradas.length - 1] ?? null;
+  const lecturaAnterior =
+    lecturasTotalesFiltradas[lecturasTotalesFiltradas.length - 2] ?? null;
   const tipoMedidor = esAyuno ? "ayunas" : "despuesComer";
   const proximoRecordatorioGlucosa = useMemo(
     () => obtenerProximoRecordatorioGlucosa(recordatoriosGlucosa),
@@ -993,7 +1522,11 @@ const Glucosa = () => {
         </div>
 
         <div className={styles.centro}>
-          <UltimoValorGlucosa esAyuno={esAyuno} />
+          <UltimoValorGlucosa
+            esAyuno={esAyuno}
+            ultimaLectura={ultimaLectura}
+            lecturaAnterior={lecturaAnterior}
+          />
             <TarjetaAlertasPresion
               className={styles.tarjetaRecordatoriosGlucosa}
               ultimoRegistro={ultimaLectura}
@@ -1019,7 +1552,10 @@ const Glucosa = () => {
           />
         </div>
         <div className={styles.abajo}>
-          <GraficaPromedio esAyuno={esAyuno} />
+          <GraficaPromedio
+            esAyuno={esAyuno}
+            lecturas={lecturasTotalesFiltradas}
+          />
           <GraficaDistribucionGlucosa
             esAyuno={esAyuno}
             lecturas={lecturasTotalesFiltradas}

@@ -73,7 +73,11 @@ function obtenerResumenOxigenacion() {
   const registrosGuardados = estadoGuardado?.registrosDelDia;
   const ultimoRegistro = Array.isArray(registrosGuardados)
     ? registrosGuardados
-        .filter((registro) => Number.isFinite(Number(registro?.valor)))
+        .filter(
+          (registro) =>
+            !String(registro?.id ?? "").startsWith("spo2-inicial-") &&
+            Number.isFinite(Number(registro?.valor))
+        )
         .sort(
           (actual, siguiente) =>
             new Date(siguiente?.fechaHoraISO).getTime() -

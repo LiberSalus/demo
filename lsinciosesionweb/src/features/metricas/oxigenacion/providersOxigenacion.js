@@ -49,7 +49,7 @@ export const opcionesSentir = [
 ];
 
 export const tarjetaRango = {
-  titulo: "Rango de frecuencia cardiaca",
+  titulo: "Última frecuencia cardiaca",
   unidad: "ppm",
 };
 

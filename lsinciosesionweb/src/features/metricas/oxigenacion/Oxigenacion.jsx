@@ -2,16 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Oxigenacion.module.css";
 import * as OxTxt from "./providersOxigenacion.js";
 import {
-  datosOxigenacionDiaria,
   histogramaOxigenacion,
-  promedioOxigenacion,
-  resumenOxigenacion,
 } from "./dataOxigenacion.js";
+import { IDS_METRICAS } from "../config/metricas.config";
+import { obtenerUltimaLecturaMetrica } from "../services/resumenMetricasInicio";
+import { obtenerClaveDiaLocal } from "../utils/fechasMetricas";
 import {
   Area,
   AreaChart,
   Bar,
-  BarChart,
   CartesianGrid,
   Cell,
   ComposedChart,
@@ -49,16 +48,34 @@ const coloresSentir = {
 
 const CLAVE_STORAGE_OXIGENACION_DIA = "oxigenacion_registros_dia_v1";
 
-// Lee registros guardados de oxigenacion sin romper la pantalla si el storage falla.
+// Valida que la lectura pertenezca a oxigenacion y no a la semilla anterior de maqueta.
+const esRegistroRealOxigenacion = (registro) =>
+  !String(registro?.id ?? "").startsWith("spo2-inicial-") &&
+  Number.isFinite(Number(registro?.valor)) &&
+  Boolean(registro?.fechaHoraISO);
+
+// Lee registros guardados de oxigenacion del dia actual sin romper la pantalla si el storage falla.
 const leerRegistrosOxigenacionGuardados = () => {
   try {
     const textoGuardado = localStorage.getItem(CLAVE_STORAGE_OXIGENACION_DIA);
     const estadoGuardado = textoGuardado ? JSON.parse(textoGuardado) : null;
-    return Array.isArray(estadoGuardado?.registrosDelDia)
+    const registrosGuardados = Array.isArray(estadoGuardado?.registrosDelDia)
       ? estadoGuardado.registrosDelDia
-      : null;
+      : [];
+    const diaActual = obtenerClaveDiaLocal();
+
+    return registrosGuardados
+      .filter(
+        (registro) =>
+          esRegistroRealOxigenacion(registro) &&
+          obtenerClaveDiaLocal(registro.fechaHoraISO) === diaActual,
+      )
+      .map((registro) => ({
+        ...registro,
+        valor: Number(registro.valor),
+      }));
   } catch {
-    return null;
+    return [];
   }
 };
 
@@ -114,27 +131,16 @@ const construirRegistroOxigenacion = ({
 });
 
 const construirRegistrosIniciales = () => {
-  const registrosGuardados = leerRegistrosOxigenacionGuardados();
-  if (registrosGuardados) return registrosGuardados;
-
-  const base = new Date();
-
-  return datosOxigenacionDiaria.map((item, index) => {
-    const fecha = new Date(base);
-    fecha.setHours(Number(item.hora), index % 2 === 0 ? 0 : 25, 0, 0);
-
-    return {
-      id: `spo2-inicial-${item.hora}-${index}`,
-      valor: item.valor,
-      contexto: "noEspecificado",
-      sentir: "bien",
-      fechaHoraISO: fecha.toISOString(),
-    };
-  });
+  return leerRegistrosOxigenacionGuardados();
 };
 
 const construirPuntosDiarios = (registros) =>
   [...registros]
+    .filter(
+      (registro) =>
+        esRegistroRealOxigenacion(registro) &&
+        obtenerClaveDiaLocal(registro.fechaHoraISO) === obtenerClaveDiaLocal(),
+    )
     .sort((a, b) => new Date(a.fechaHoraISO) - new Date(b.fechaHoraISO))
     .map((registro) => {
       const fecha = new Date(registro.fechaHoraISO);
@@ -144,24 +150,422 @@ const construirPuntosDiarios = (registros) =>
         hora: String(fecha.getHours()).padStart(2, "0"),
         horaDecimal,
         horaTooltip: formatearHoraCorta(fecha),
-        valor: registro.valor,
+        valor: Number(registro.valor),
         fechaHoraISO: registro.fechaHoraISO,
       };
     });
 
+// Consulta la ultima frecuencia cardiaca conocida para compartirla con la tarjeta de oxigenacion.
+const obtenerUltimaFrecuenciaCardiaca = () =>
+  obtenerUltimaLecturaMetrica(IDS_METRICAS.FRECUENCIA_CARDIACA);
+
 const LIMITE_MIN_PROMEDIO = 88;
 const LIMITE_MAX_PROMEDIO = 100;
+const LIMITE_MIN_DIARIO_OXIGENACION = 86;
+const LIMITE_MAX_DIARIO_OXIGENACION = 100;
+const ABREVIATURAS_MESES_OXIGENACION = [
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
+];
+const NOMBRES_MESES_OXIGENACION = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+const ABREVIATURAS_DIAS_OXIGENACION = ["L", "M", "M", "J", "V", "S", "D"];
+const PERIODOS_PROMEDIO_OXIGENACION = {
+  SEMANA: "semana",
+  MES: "mes",
+  ANIO: "anio",
+};
+const PERIODOS_PROMEDIO_UI_OXIGENACION = [
+  { valor: PERIODOS_PROMEDIO_OXIGENACION.SEMANA, etiqueta: "Semana" },
+  { valor: PERIODOS_PROMEDIO_OXIGENACION.MES, etiqueta: "Mes" },
+  { valor: PERIODOS_PROMEDIO_OXIGENACION.ANIO, etiqueta: "Año" },
+];
+const ANCHO_BASE_PROMEDIO_OXIGENACION = 1000;
+const ALTO_BASE_PROMEDIO_OXIGENACION = 180;
+const ALTO_CARRIL_X_PROMEDIO_OXIGENACION = 78;
 
-const construirPuntosPromedio = (puntos) =>
+// Redondea hacia abajo para que el eje Y abra espacio cuando hay lecturas bajas.
+const redondearAbajoPorPaso = (valor, paso) =>
+  Math.floor(valor / paso) * paso;
+
+// Construye una escala legible para SpO2 sin comprimir valores fuera del rango normal.
+const construirEscalaDiariaOxigenacion = (puntos) => {
+  const valores = puntos
+    .map((punto) => Number(punto.valor))
+    .filter((valor) => Number.isFinite(valor));
+  const valorMinimo = valores.length
+    ? Math.min(...valores, LIMITE_MIN_DIARIO_OXIGENACION)
+    : LIMITE_MIN_DIARIO_OXIGENACION;
+  const minimo = Math.max(0, redondearAbajoPorPaso(valorMinimo, 5));
+  const paso = LIMITE_MAX_DIARIO_OXIGENACION - minimo > 20 ? 5 : 2;
+  const ticks = [];
+
+  for (
+    let tick = minimo;
+    tick <= LIMITE_MAX_DIARIO_OXIGENACION;
+    tick += paso
+  ) {
+    ticks.push(tick);
+  }
+
+  if (!ticks.includes(LIMITE_MAX_DIARIO_OXIGENACION)) {
+    ticks.push(LIMITE_MAX_DIARIO_OXIGENACION);
+  }
+
+  return {
+    dominio: [minimo, LIMITE_MAX_DIARIO_OXIGENACION],
+    ticks,
+  };
+};
+
+// Obtiene el lunes de la semana para armar filtros consistentes.
+const obtenerInicioSemanaOxigenacion = (fechaEntrada) => {
+  const fecha = new Date(fechaEntrada);
+  const dia = fecha.getDay();
+  const desfase = dia === 0 ? -6 : 1 - dia;
+  fecha.setHours(0, 0, 0, 0);
+  fecha.setDate(fecha.getDate() + desfase);
+
+  return fecha;
+};
+
+// Obtiene el domingo de la semana para mostrar el rango del selector.
+const obtenerFinSemanaOxigenacion = (inicioSemana) => {
+  const finSemana = new Date(inicioSemana);
+  finSemana.setDate(finSemana.getDate() + 6);
+  finSemana.setHours(23, 59, 59, 999);
+
+  return finSemana;
+};
+
+// Formatea dia y mes corto para las opciones del filtro inferior.
+const formatearDiaMesOxigenacion = (fecha) => {
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  const mes = ABREVIATURAS_MESES_OXIGENACION[fecha.getMonth()];
+
+  return `${dia}, ${mes}`;
+};
+
+// Agrupa lecturas por dia y conserva minimo/maximo para la grafica de promedio.
+const construirMapaRangosOxigenacion = (registros) => {
+  const mapa = new Map();
+
+  registros.filter(esRegistroRealOxigenacion).forEach((registro) => {
+    const claveDia = obtenerClaveDiaLocal(registro.fechaHoraISO);
+    const valor = Number(registro.valor);
+    const existente = mapa.get(claveDia);
+
+    if (!existente) {
+      mapa.set(claveDia, { valorMin: valor, valorMax: valor });
+      return;
+    }
+
+    existente.valorMin = Math.min(existente.valorMin, valor);
+    existente.valorMax = Math.max(existente.valorMax, valor);
+  });
+
+  return mapa;
+};
+
+// Crea filtros por semana, mes y anio desde las lecturas disponibles.
+const construirOpcionesFiltroPromedioOxigenacion = (registros) => {
+  const mapaSemanas = new Map();
+  const mapaMeses = new Map();
+  const mapaAnios = new Map();
+  const registrosValidos = registros.filter(esRegistroRealOxigenacion);
+  const fechaActual = new Date();
+
+  registrosValidos.forEach((registro) => {
+    const fecha = new Date(registro.fechaHoraISO);
+    const inicioSemana = obtenerInicioSemanaOxigenacion(fecha);
+    const finSemana = obtenerFinSemanaOxigenacion(inicioSemana);
+    const valorSemana = obtenerClaveDiaLocal(inicioSemana);
+    const anio = fecha.getFullYear();
+    const mes = fecha.getMonth();
+    const valorMes = `${anio}-${String(mes + 1).padStart(2, "0")}`;
+
+    if (!mapaSemanas.has(valorSemana)) {
+      mapaSemanas.set(valorSemana, {
+        value: valorSemana,
+        label: `Lun ${formatearDiaMesOxigenacion(inicioSemana)} - Dom ${formatearDiaMesOxigenacion(finSemana)}`,
+      });
+    }
+
+    if (!mapaMeses.has(valorMes)) {
+      mapaMeses.set(valorMes, {
+        value: valorMes,
+        label: `${NOMBRES_MESES_OXIGENACION[mes]} - ${anio}`,
+      });
+    }
+
+    if (!mapaAnios.has(String(anio))) {
+      mapaAnios.set(String(anio), { value: String(anio), label: String(anio) });
+    }
+  });
+
+  if (!registrosValidos.length) {
+    const inicioSemana = obtenerInicioSemanaOxigenacion(fechaActual);
+    const finSemana = obtenerFinSemanaOxigenacion(inicioSemana);
+    const anio = fechaActual.getFullYear();
+    const mes = fechaActual.getMonth();
+
+    mapaSemanas.set(obtenerClaveDiaLocal(inicioSemana), {
+      value: obtenerClaveDiaLocal(inicioSemana),
+      label: `Lun ${formatearDiaMesOxigenacion(inicioSemana)} - Dom ${formatearDiaMesOxigenacion(finSemana)}`,
+    });
+    mapaMeses.set(`${anio}-${String(mes + 1).padStart(2, "0")}`, {
+      value: `${anio}-${String(mes + 1).padStart(2, "0")}`,
+      label: `${NOMBRES_MESES_OXIGENACION[mes]} - ${anio}`,
+    });
+    mapaAnios.set(String(anio), { value: String(anio), label: String(anio) });
+  }
+
+  return {
+    [PERIODOS_PROMEDIO_OXIGENACION.SEMANA]: [...mapaSemanas.values()].sort(
+      (actual, siguiente) => (actual.value < siguiente.value ? 1 : -1),
+    ),
+    [PERIODOS_PROMEDIO_OXIGENACION.MES]: [...mapaMeses.values()].sort(
+      (actual, siguiente) => (actual.value < siguiente.value ? 1 : -1),
+    ),
+    [PERIODOS_PROMEDIO_OXIGENACION.ANIO]: [...mapaAnios.values()].sort(
+      (actual, siguiente) => Number(siguiente.value) - Number(actual.value),
+    ),
+  };
+};
+
+// Construye la serie visible para el periodo seleccionado en promedio.
+const construirSeriePromedioOxigenacion = ({ registros, periodo, valorFiltro }) => {
+  if (!valorFiltro) return [];
+
+  const mapaRangos = construirMapaRangosOxigenacion(registros);
+
+  if (periodo === PERIODOS_PROMEDIO_OXIGENACION.SEMANA) {
+    const inicio = new Date(`${valorFiltro}T00:00:00`);
+
+    return ABREVIATURAS_DIAS_OXIGENACION.map((etiqueta, indice) => {
+      const fecha = new Date(inicio);
+      fecha.setDate(inicio.getDate() + indice);
+      const rango = mapaRangos.get(obtenerClaveDiaLocal(fecha));
+
+      return {
+        etiqueta,
+        valorMin: rango?.valorMin ?? null,
+        valorMax: rango?.valorMax ?? null,
+      };
+    });
+  }
+
+  if (periodo === PERIODOS_PROMEDIO_OXIGENACION.MES) {
+    const [anioTxt, mesTxt] = valorFiltro.split("-");
+    const anio = Number(anioTxt);
+    const mesIndice = Number(mesTxt) - 1;
+    const diasMes = new Date(anio, mesIndice + 1, 0).getDate();
+
+    return Array.from({ length: diasMes }, (_, indice) => {
+      const dia = indice + 1;
+      const fecha = new Date(anio, mesIndice, dia);
+      const rango = mapaRangos.get(obtenerClaveDiaLocal(fecha));
+
+      return {
+        etiqueta: String(dia),
+        valorMin: rango?.valorMin ?? null,
+        valorMax: rango?.valorMax ?? null,
+      };
+    });
+  }
+
+  const anio = Number(valorFiltro);
+
+  return ABREVIATURAS_MESES_OXIGENACION.map((etiqueta, mesIndice) => {
+    const diasMes = new Date(anio, mesIndice + 1, 0).getDate();
+    const minimos = [];
+    const maximos = [];
+
+    for (let dia = 1; dia <= diasMes; dia += 1) {
+      const fecha = new Date(anio, mesIndice, dia);
+      const rango = mapaRangos.get(obtenerClaveDiaLocal(fecha));
+      if (!rango) continue;
+      minimos.push(rango.valorMin);
+      maximos.push(rango.valorMax);
+    }
+
+    if (!minimos.length || !maximos.length) {
+      return { etiqueta, valorMin: null, valorMax: null };
+    }
+
+    return {
+      etiqueta,
+      valorMin: Math.round(
+        minimos.reduce((suma, valor) => suma + valor, 0) / minimos.length,
+      ),
+      valorMax: Math.round(
+        maximos.reduce((suma, valor) => suma + valor, 0) / maximos.length,
+      ),
+    };
+  });
+};
+
+// Calcula una escala Y dinamica para promedio sin ocultar lecturas bajas.
+const construirEscalaPromedioOxigenacion = (puntos) => {
+  const valores = puntos.flatMap((punto) =>
+    Number.isFinite(Number(punto.valorMin)) &&
+    Number.isFinite(Number(punto.valorMax))
+      ? [Number(punto.valorMin), Number(punto.valorMax)]
+      : [],
+  );
+  const valorMinimo = valores.length
+    ? Math.min(...valores, LIMITE_MIN_PROMEDIO)
+    : LIMITE_MIN_PROMEDIO;
+  const margenInferior = valores.length ? 4 : 0;
+  const minimoTentativo = Math.max(0, valorMinimo - margenInferior);
+  const rangoTentativo = LIMITE_MAX_PROMEDIO - minimoTentativo;
+  const paso =
+    rangoTentativo > 60
+      ? 20
+      : rangoTentativo > 30
+        ? 10
+        : rangoTentativo > 16
+          ? 5
+          : 2;
+  const minimo = Math.max(0, redondearAbajoPorPaso(minimoTentativo, paso));
+  const ticks = [];
+
+  for (let tick = minimo; tick <= LIMITE_MAX_PROMEDIO; tick += paso) {
+    ticks.push(tick);
+  }
+
+  if (!ticks.includes(LIMITE_MAX_PROMEDIO)) {
+    ticks.push(LIMITE_MAX_PROMEDIO);
+  }
+
+  return {
+    minimo,
+    maximo: LIMITE_MAX_PROMEDIO,
+    ticks,
+  };
+};
+
+const construirPuntosPromedio = (puntos, escala) =>
   puntos.map((item) => {
-    const valorMin = Math.max(LIMITE_MIN_PROMEDIO, item.valorMin);
-    const valorMax = Math.min(LIMITE_MAX_PROMEDIO, item.valorMax);
+    const valorMin = Number(item.valorMin);
+    const valorMax = Number(item.valorMax);
+    const tieneLectura =
+      Number.isFinite(valorMin) && Number.isFinite(valorMax);
+
+    if (!tieneLectura) {
+      return {
+        ...item,
+        tieneLectura: false,
+        base: 0,
+        rango: null,
+      };
+    }
+
     return {
       ...item,
-      base: valorMin - LIMITE_MIN_PROMEDIO,
+      tieneLectura: true,
+      valorMin,
+      valorMax,
+      base: valorMin - escala.minimo,
       rango: Math.max(valorMax - valorMin, 0.35),
     };
   });
+
+// Normaliza la serie de promedio para dibujar solo lecturas reales en SVG.
+const normalizarSeriePromedioOxigenacion = (serie = []) =>
+  serie.map((item, indice) => {
+    const minimoOriginal = Number(item?.valorMin);
+    const maximoOriginal = Number(item?.valorMax);
+    const tieneLectura =
+      Number.isFinite(minimoOriginal) &&
+      Number.isFinite(maximoOriginal) &&
+      minimoOriginal > 0 &&
+      maximoOriginal > 0;
+
+    return {
+      indice,
+      etiqueta: item?.etiqueta ?? String(indice + 1),
+      minimo: tieneLectura ? Math.min(minimoOriginal, maximoOriginal) : null,
+      maximo: tieneLectura ? Math.max(minimoOriginal, maximoOriginal) : null,
+      tieneLectura,
+    };
+  });
+
+// Convierte un valor SpO2 a coordenada Y dentro del SVG del promedio.
+const convertirValorPromedioAY = (valor, escala) => {
+  const rango = escala.maximo - escala.minimo || 1;
+
+  return (
+    ALTO_BASE_PROMEDIO_OXIGENACION -
+    ((valor - escala.minimo) / rango) * ALTO_BASE_PROMEDIO_OXIGENACION
+  );
+};
+
+// Construye un segmento vertical por cada periodo que si tiene registro.
+const construirSegmentosPromedioOxigenacion = (datos, escala) => {
+  if (!datos.length) return [];
+
+  const anchoPaso = ANCHO_BASE_PROMEDIO_OXIGENACION / datos.length;
+
+  return datos
+    .filter((dato) => dato.tieneLectura)
+    .map((dato) => ({
+      indice: dato.indice,
+      x: anchoPaso * dato.indice + anchoPaso / 2,
+      y1: convertirValorPromedioAY(dato.maximo, escala),
+      y2: convertirValorPromedioAY(dato.minimo, escala),
+    }));
+};
+
+// Ajusta la densidad de etiquetas del eje X segun semana, mes o anio.
+const formatearEtiquetaPromedioOxigenacion = (
+  dato,
+  indice,
+  total,
+  periodo,
+) => {
+  if (periodo === PERIODOS_PROMEDIO_OXIGENACION.SEMANA) return dato.etiqueta;
+
+  if (periodo === PERIODOS_PROMEDIO_OXIGENACION.MES) {
+    const numeroDia = Number(dato.etiqueta);
+    const diaVisible =
+      Number.isFinite(numeroDia) &&
+      (numeroDia === 1 ||
+        numeroDia === total ||
+        numeroDia % 5 === 0 ||
+        numeroDia === 15);
+
+    return diaVisible ? String(numeroDia) : "";
+  }
+
+  if (periodo === PERIODOS_PROMEDIO_OXIGENACION.ANIO) {
+    return String(dato.etiqueta).slice(0, 3);
+  }
+
+  return indice === 0 || indice === total - 1 ? dato.etiqueta : "";
+};
 
 const TooltipOxigenacionDiaria = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -211,7 +615,11 @@ const TooltipHistogramaOxigenacion = ({ active, payload, label }) => {
   );
 };
 
-const BarraRangoPromedio = ({ x, y, width, height, fill }) => {
+const BarraRangoPromedio = ({ x, y, width, height, fill, payload }) => {
+  if (!payload?.tieneLectura || !Number.isFinite(height) || height <= 0) {
+    return null;
+  }
+
   const ancho = 10;
   const altoVisual = Math.max(height, 10);
   const posicionX = x + width / 2 - ancho / 2;
@@ -422,6 +830,10 @@ const EncabezadoOxigenacion = () => (
 
 const GraficaDiariaOxigenacion = ({ data, resumenActual, onAgregar }) => {
   const [puntoActivo, setPuntoActivo] = useState(null);
+  const escalaOxigenacion = useMemo(
+    () => construirEscalaDiariaOxigenacion(data),
+    [data],
+  );
 
   return (
     <div className={styles.tarjetaAncha}>
@@ -481,10 +893,10 @@ const GraficaDiariaOxigenacion = ({ data, resumenActual, onAgregar }) => {
               />
 
               <YAxis
-                domain={[86, 100]}
+                domain={escalaOxigenacion.dominio}
                 axisLine={false}
                 tickLine={false}
-                ticks={[86, 88, 90, 92, 94, 96, 98, 100]}
+                ticks={escalaOxigenacion.ticks}
                 tickFormatter={(valor) => `${valor}%`}
                 tick={{ fill: "#33415c", fontSize: 12 }}
                 width={46}
@@ -508,9 +920,10 @@ const GraficaDiariaOxigenacion = ({ data, resumenActual, onAgregar }) => {
             <Area
               type="monotone"
               dataKey="valor"
-              stroke="transparent"
+              stroke="#15c3ee"
               strokeWidth={2}
               fill="url(#rellenoOxigenacionDiaria)"
+              dot={{ r: 3.5, fill: "#15c3ee", stroke: "#ffffff", strokeWidth: 2 }}
               activeDot={{ r: 4, fill: "#15c3ee", stroke: "#ffffff", strokeWidth: 2 }}
             />
           </AreaChart>
@@ -530,12 +943,12 @@ const GraficaDiariaOxigenacion = ({ data, resumenActual, onAgregar }) => {
     </div>
   );
 };
-const TarjetaRangoOxigenacion = () => (
+const TarjetaRangoOxigenacion = ({ ultimaFrecuenciaCardiaca }) => (
   <div className={styles.tarjetaRango}>
     <div className={styles.bloqueRangoTexto}>
       <p className={styles.rangoTitulo}>{OxTxt.tarjetaRango.titulo}</p>
       <p className={styles.rangoValor}>
-        {resumenOxigenacion.rangoDiario.minimo}-{resumenOxigenacion.rangoDiario.maximo}{" "}
+        {ultimaFrecuenciaCardiaca ?? "--"}{" "}
         <span>{OxTxt.tarjetaRango.unidad}</span>
       </p>
     </div>
@@ -630,38 +1043,95 @@ const TarjetaUltimoValorOxigenacion = ({ ultimoRegistro, valorAnterior }) => {
   );
 };
 
-const TarjetaPromedioOxigenacion = () => {
-  const periodos = ["semana", "mes", "anio"];
-  const [periodoActivo, setPeriodoActivo] = useState("semana");
-  const [filtrosSeleccionados, setFiltrosSeleccionados] = useState({
-    semana: promedioOxigenacion.semana.seleccionActual,
-    mes: promedioOxigenacion.mes.seleccionActual,
-    anio: promedioOxigenacion.anio.seleccionActual,
-  });
-
-  const bloqueActivo = promedioOxigenacion[periodoActivo];
-  const puntos = useMemo(
-    () => construirPuntosPromedio(bloqueActivo.puntos),
-    [bloqueActivo],
+const TarjetaPromedioOxigenacion = ({ registros }) => {
+  const [periodoActivo, setPeriodoActivo] = useState(
+    PERIODOS_PROMEDIO_OXIGENACION.SEMANA,
+  );
+  const opcionesFiltro = useMemo(
+    () => construirOpcionesFiltroPromedioOxigenacion(registros),
+    [registros],
+  );
+  const [filtrosSeleccionados, setFiltrosSeleccionados] = useState(() => ({
+    [PERIODOS_PROMEDIO_OXIGENACION.SEMANA]:
+      opcionesFiltro[PERIODOS_PROMEDIO_OXIGENACION.SEMANA]?.[0]?.value ?? "",
+    [PERIODOS_PROMEDIO_OXIGENACION.MES]:
+      opcionesFiltro[PERIODOS_PROMEDIO_OXIGENACION.MES]?.[0]?.value ?? "",
+    [PERIODOS_PROMEDIO_OXIGENACION.ANIO]:
+      opcionesFiltro[PERIODOS_PROMEDIO_OXIGENACION.ANIO]?.[0]?.value ?? "",
+  }));
+  const seriePromedio = useMemo(
+    () =>
+      construirSeriePromedioOxigenacion({
+        registros,
+        periodo: periodoActivo,
+        valorFiltro: filtrosSeleccionados[periodoActivo],
+      }),
+    [filtrosSeleccionados, periodoActivo, registros],
+  );
+  const escalaPromedio = useMemo(
+    () => construirEscalaPromedioOxigenacion(seriePromedio),
+    [seriePromedio],
+  );
+  const datosGrafica = useMemo(
+    () => normalizarSeriePromedioOxigenacion(seriePromedio),
+    [seriePromedio],
+  );
+  const segmentosPromedio = useMemo(
+    () => construirSegmentosPromedioOxigenacion(datosGrafica, escalaPromedio),
+    [datosGrafica, escalaPromedio],
+  );
+  const etiquetasEjeX = useMemo(
+    () =>
+      datosGrafica.map((dato, indice) =>
+        formatearEtiquetaPromedioOxigenacion(
+          dato,
+          indice,
+          datosGrafica.length,
+          periodoActivo,
+        ),
+      ),
+    [datosGrafica, periodoActivo],
   );
 
-  const etiquetaEjeX = periodoActivo === "anio" ? "Meses" : "Días";
+  const etiquetaEjeX =
+    periodoActivo === PERIODOS_PROMEDIO_OXIGENACION.ANIO ? "Meses" : "Días";
+  const variablesGrafica = {
+    "--alto-svg-promedio": `${ALTO_BASE_PROMEDIO_OXIGENACION + ALTO_CARRIL_X_PROMEDIO_OXIGENACION}px`,
+    "--alto-trama-promedio": `${ALTO_BASE_PROMEDIO_OXIGENACION}px`,
+    "--columnas-eje-x-promedio": String(Math.max(datosGrafica.length, 1)),
+  };
+
+  useEffect(() => {
+    // Mantiene el filtro actual dentro de las opciones disponibles del periodo.
+    const opcionesPeriodo = opcionesFiltro[periodoActivo] ?? [];
+    const valorActual = filtrosSeleccionados[periodoActivo];
+    const existeValorActual = opcionesPeriodo.some(
+      (opcion) => opcion.value === valorActual,
+    );
+
+    if (!existeValorActual) {
+      setFiltrosSeleccionados((prev) => ({
+        ...prev,
+        [periodoActivo]: opcionesPeriodo[0]?.value ?? "",
+      }));
+    }
+  }, [filtrosSeleccionados, opcionesFiltro, periodoActivo]);
 
   return (
     <div className={styles.tarjetaPromedio}>
       <h3 className={styles.tituloSecundario}>{OxTxt.graficaPromedio.titulo}</h3>
 
       <div className={styles.navegacionPromedio}>
-        {periodos.map((periodo, index) => {
-          const activo = periodoActivo === periodo;
+        {PERIODOS_PROMEDIO_UI_OXIGENACION.map((periodo) => {
+          const activo = periodoActivo === periodo.valor;
           return (
             <button
-              key={periodo}
+              key={periodo.valor}
               type="button"
               className={activo ? styles.chipPeriodoActivo : styles.chipPeriodo}
-              onClick={() => setPeriodoActivo(periodo)}
+              onClick={() => setPeriodoActivo(periodo.valor)}
             >
-              {OxTxt.graficaPromedio.botones[index]}
+              {periodo.etiqueta}
             </button>
           );
         })}
@@ -669,54 +1139,72 @@ const TarjetaPromedioOxigenacion = () => {
 
       <span className={styles.etiquetaUnidadPromedio}>{OxTxt.textosGenerales.unidad}</span>
 
-      <div className={styles.graficaPromedioBase}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={puntos}
-            margin={{ top: 10, right: 6, left: 6, bottom: 22 }}
-            barCategoryGap="36%"
+      <div className={styles.graficaPromedioManual} style={variablesGrafica}>
+        <div className={styles.ejeYPromedio}>
+          {escalaPromedio.ticks
+            .slice()
+            .reverse()
+            .map((tick) => (
+              <span key={tick} className={styles.tickEjeYPromedio}>
+                {tick}%
+              </span>
+            ))}
+        </div>
+
+        <div className={styles.zonaPromedio}>
+          <svg
+            className={styles.svgPromedio}
+            viewBox={`0 0 ${ANCHO_BASE_PROMEDIO_OXIGENACION} ${
+              ALTO_BASE_PROMEDIO_OXIGENACION + ALTO_CARRIL_X_PROMEDIO_OXIGENACION
+            }`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
           >
-            <CartesianGrid
-              vertical={false}
-              stroke="#c9cfdb"
-              strokeDasharray="8 8"
-              strokeWidth={1.5}
+            {escalaPromedio.ticks.map((tick) => {
+              const y = convertirValorPromedioAY(tick, escalaPromedio);
+              return (
+                <line
+                  key={`promedio-guia-${tick}`}
+                  className={styles.guiaPromedio}
+                  x1="0"
+                  y1={y}
+                  x2={ANCHO_BASE_PROMEDIO_OXIGENACION}
+                  y2={y}
+                />
+              );
+            })}
+
+            <line
+              className={styles.lineaBasePromedio}
+              x1="0"
+              y1={ALTO_BASE_PROMEDIO_OXIGENACION}
+              x2={ANCHO_BASE_PROMEDIO_OXIGENACION}
+              y2={ALTO_BASE_PROMEDIO_OXIGENACION}
             />
-            <XAxis
-              dataKey="etiqueta"
-              axisLine={true}
-              tickLine={false}
-              tick={{ fill: "#3f4b63", fontSize: 12, fontWeight: 500 }}
-              tickMargin={14}
-              label={{
-                value: etiquetaEjeX,
-                position: "insideBottom",
-                offset: -18,
-                fill: "#c1c1c1",
-              }}
-            />
-            <YAxis
-              domain={[0, LIMITE_MAX_PROMEDIO - LIMITE_MIN_PROMEDIO]}
-              ticks={[0, 2, 4, 6, 8, 10, 12]}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#3f4b63", fontSize: 14 }}
-              tickMargin={12}
-              width={54}
-              tickFormatter={(valor) => `${valor + LIMITE_MIN_PROMEDIO}%`}
-            />
-            <Tooltip cursor={false} content={<TooltipPromedioOxigenacion />} />
-            {<Bar dataKey="base" stackId="promedio" fill="transparent" isAnimationActive={false} />}
-            {<Bar
-              dataKey="rango"
-              stackId="promedio"
-              fill="#6ed3f7"
-              shape={(props) => <BarraRangoPromedio {...props} />}
-              isAnimationActive={false}
-            />}
-          </BarChart>
-        </ResponsiveContainer>
+
+            {segmentosPromedio.map((segmento) => (
+              <line
+                key={`promedio-segmento-${segmento.indice}`}
+                className={styles.segmentoPromedio}
+                x1={segmento.x}
+                y1={segmento.y1}
+                x2={segmento.x}
+                y2={segmento.y2}
+              />
+            ))}
+          </svg>
+
+          <div className={styles.ejeXPromedio}>
+            {etiquetasEjeX.map((etiqueta, indice) => (
+              <span key={`promedio-eje-x-${indice}`} className={styles.tickEjeXPromedio}>
+                {etiqueta}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
+
+      <div className={styles.tituloEjeXPromedio}>{etiquetaEjeX}</div>
 
       <div className={styles.selectorPeriodoWrap}>
         <select
@@ -729,7 +1217,7 @@ const TarjetaPromedioOxigenacion = () => {
             }))
           }
         >
-          {bloqueActivo.filtros.map((filtro) => (
+          {(opcionesFiltro[periodoActivo] ?? []).map((filtro) => (
             <option key={filtro.value} value={filtro.value}>
               {filtro.label}
             </option>
@@ -857,6 +1345,9 @@ const Oxigenacion = () => {
   const [registrosOxigenacion, setRegistrosOxigenacion] = useState(
     construirRegistrosIniciales,
   );
+  const [ultimaFrecuenciaCardiaca, setUltimaFrecuenciaCardiaca] = useState(
+    obtenerUltimaFrecuenciaCardiaca,
+  );
 
   const puntosDiarios = useMemo(
     () => construirPuntosDiarios(registrosOxigenacion),
@@ -875,15 +1366,18 @@ const Oxigenacion = () => {
   const valorAnterior = registrosOrdenados.at(-2) ?? null;
   const resumenActual = useMemo(
     () => ({
-      valor: ultimoRegistro?.valor ?? resumenOxigenacion.actual.valor,
+      valor: ultimoRegistro?.valor ?? "--",
       fecha: ultimoRegistro
         ? formatearFechaHora(new Date(ultimoRegistro.fechaHoraISO))
-        : resumenOxigenacion.actual.fecha,
+        : "Sin registros de hoy",
     }),
     [ultimoRegistro],
   );
   const colorAlertaActual = useMemo(
-    () => obtenerColorAlertaOxigenacion(ultimoRegistro?.valor ?? resumenOxigenacion.actual.valor),
+    () =>
+      ultimoRegistro
+        ? obtenerColorAlertaOxigenacion(ultimoRegistro.valor)
+        : "verde",
     [ultimoRegistro],
   );
 
@@ -914,6 +1408,29 @@ const Oxigenacion = () => {
     }
   }, [registrosOxigenacion]);
 
+  useEffect(() => {
+    // Sincroniza la tarjeta cuando frecuencia cardiaca cambia en otra metrica.
+    const actualizarUltimaFrecuenciaCardiaca = () => {
+      setUltimaFrecuenciaCardiaca(obtenerUltimaFrecuenciaCardiaca());
+    };
+
+    window.addEventListener(
+      "metricas_resumen_actualizado",
+      actualizarUltimaFrecuenciaCardiaca,
+    );
+    window.addEventListener("storage", actualizarUltimaFrecuenciaCardiaca);
+    window.addEventListener("focus", actualizarUltimaFrecuenciaCardiaca);
+
+    return () => {
+      window.removeEventListener(
+        "metricas_resumen_actualizado",
+        actualizarUltimaFrecuenciaCardiaca,
+      );
+      window.removeEventListener("storage", actualizarUltimaFrecuenciaCardiaca);
+      window.removeEventListener("focus", actualizarUltimaFrecuenciaCardiaca);
+    };
+  }, []);
+
   return (
     <div className={styles.Oxigenacion}>
       {/* <EncabezadoOxigenacion /> */}
@@ -928,7 +1445,9 @@ const Oxigenacion = () => {
         </div>
 
         <div className={styles.centro}>
-          <TarjetaRangoOxigenacion />
+          <TarjetaRangoOxigenacion
+            ultimaFrecuenciaCardiaca={ultimaFrecuenciaCardiaca}
+          />
           <TarjetaValoresOxigenacion />
           <TarjetaUltimoValorOxigenacion
             ultimoRegistro={ultimoRegistro}
@@ -937,7 +1456,7 @@ const Oxigenacion = () => {
         </div>
 
         <div className={styles.abajo}>
-          <TarjetaPromedioOxigenacion />
+          <TarjetaPromedioOxigenacion registros={registrosOxigenacion} />
           <TarjetaHistogramaOxigenacion />
         </div>
 
