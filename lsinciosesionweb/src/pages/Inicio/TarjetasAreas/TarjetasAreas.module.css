@@ -1,14 +1,22 @@
 .cntTarjetaAreas {
   margin: 0 auto;
-  width: min(100%, 52.5rem);
+  width: 100%;
+  max-width: 52.5rem;
+  min-width: 0;
+  flex: 1 1 38rem;
   height: auto;
   
-  border: 1px solid var(--borde);
-  border-radius: 1rem;
+  border: var(--surface-card-border);
+  border-radius: var(--surface-card-radius);
   padding: 1rem;
-  background-color: white;
+  background-color: var(--surface-card-bg);
   overflow: visible;
-  & > h3 { margin: 0.5rem; }
+  & > h3 {
+    margin: 0.35rem 0.5rem 0.85rem;
+    color: #334155;
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
   & > p  { 
     font-size: 0.75rem; 
     padding-left: 0.5rem;
@@ -19,10 +27,22 @@
 .cntPestañas {
   margin-top: 0.25rem;
   width: 100%;
+  min-width: 0;
   height: auto;
-  border-radius: 1rem;
-  padding: 0.5rem;
+  border-radius: var(--surface-card-radius);
+  padding: 0;
   
+}
+
+.fisica,
+.emocional,
+.social,
+.nutricional {
+  border-color: #007cba;
+  color: #007cba;
+  font-weight: 700;
+  background-color: rgba(0, 124, 186, 0.06);
+  box-shadow: inset 0 0 0 1px #007cba;
 }
 
 @media (max-width: 947px) {
@@ -30,6 +50,7 @@
     /* border: 1px dashed lightgreen; */
     margin: 0 auto;
     width: 100%;
+    max-width: none;
     height: auto;
     padding: 0.65rem;
 

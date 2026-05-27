@@ -301,32 +301,31 @@
 
 
 .seccCentro {
-    /* border: 1px solid #ACCCEB; */
-    margin: var(--inicio-section-mt) auto 0;
-    display: flex;
+  --inicio-tarjeta-salud-min: 22rem;
+  --inicio-tarjeta-salud-max: 29.93rem;
+  margin: var(--inicio-section-mt) auto 0;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
-  max-width: 91rem;
+  max-width: var(--layout-content-max);
   flex-wrap: wrap;
-    /* max-width: 90.1rem; */
-    gap: var(--inicio-gap);
+  gap: var(--inicio-gap);
 }
 
 @media (min-width: 1366px) {
   .seccCentro {
     flex-wrap: nowrap;
-    align-items: stretch;
   }
 }
 
 .seccInfe {
-  /* border: 2px dashed green; */
   margin: var(--inicio-section-mt) auto 0;
   display: flex;
   justify-content: center;
+  align-items: stretch;
   width: 100%;
-  max-width: 90%;
+  max-width: var(--layout-content-max);
   flex-wrap: wrap;
   gap: var(--inicio-gap);
 }

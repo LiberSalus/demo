@@ -20,8 +20,8 @@ const TarjetaAreas = () => {
         <PestañaSalud
           tabs={[
             { titulo: "Bienestar Físico", componente: <VistaFisica />, estilo: styles.fisica },
-            { titulo: "Bienestar Social", componente: <VistaSocial />, estilo: styles.social },
             { titulo: "Bienestar Emocional", componente: <VistaEmocional />, estilo: styles.emocional },
+            { titulo: "Bienestar Social", componente: <VistaSocial />, estilo: styles.social },
             { titulo: "Bienestar Nutricional", componente: <VistaNutricional />,  estilo: styles.nutricional },
           ]}
         />

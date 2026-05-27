@@ -1,28 +1,39 @@
 .TarjetaMedicion {
-  margin: 0rem auto;
-  width: 9.5rem;
-  border: 1px solid lightblue;
+  margin: 0;
+  width: 100%;
+  min-height: 3.5rem;
+  border: var(--surface-card-border);
   border-radius: 0.75rem;
-  height: 3.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
-  /* background-color: red; */
+  gap: 0.75rem;
+  padding: 0.45rem 0.6rem;
+  background-color: var(--surface-card-bg);
   transition: box-shadow 0.4s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+
   & > img {
     width: 2rem;
-    margin-left: 0.5rem;
+    flex: 0 0 auto;
+    margin-left: 0;
   }
 
   & .data {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+
     & > :nth-child(1) {
       font-size: 0.75rem;
+      line-height: 1.08;
+      overflow-wrap: anywhere;
     }
+
     & > :nth-child(2) {
       font-weight: 600;
+      line-height: 1.1;
+
       & > span {
         font-size: 0.5rem;
         font-weight: 400;

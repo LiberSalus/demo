@@ -2,18 +2,20 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: stretch;
+  min-width: 0;
 }
 
 .encabezado {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  margin: 0 auto 0.5rem;
-  border: 1px solid #ACCCEB;
-  padding: 0.35rem;
-  border-radius: 1rem;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  border: var(--surface-card-border);
+  padding: 0.3rem;
+  border-radius: var(--surface-card-radius);
   flex-wrap: wrap;
+  gap: 0.28rem;
 
 }
 
@@ -23,11 +25,16 @@
   outline: none;
   border: 1px solid lightskyblue;
   background: none;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.8rem;
   border-radius: 0.75rem !important;
   cursor: pointer;
   text-wrap: nowrap;
-  width: 11rem;
+  flex: 1 1 10rem;
+  min-width: min(100%, 9.5rem);
+  max-width: 11rem;
+  min-height: 2.35rem;
+  color: #334155;
+  font-size: 0.94rem;
   /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
   transition: box-shadow 0.4s ease;
 
@@ -46,9 +53,9 @@
 }
 
 .boton {
-  border: 1px solid #ACCCEB;
+  border: var(--surface-card-border);
   background-color: transparent;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.8rem;
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 6px;

@@ -67,7 +67,7 @@ const BotonesQs = ({edoQs, av, activo, onClick}) => {
   const texto = (estado) => {
     switch (estado) {
       case "edo1":
-        return <p>Completado el: </p>;
+        return <p>Completado el: DD/MM/AAAA</p>;
       case "edo2":
         return <BarraProgreso porcentaje={porcentaje} />;
       case "edo3":
@@ -119,7 +119,7 @@ const BotonesQs = ({edoQs, av, activo, onClick}) => {
     <div 
     onClick={onClick}
     style={{backgroundColor:btnbg(edoQs)}}
-    className={`${styles.cntBotonesQs} ${activo ? styles.activo : ""}`}
+    className={`${styles.cntBotonesQs} ${styles[edoQs] || ""} ${activo ? styles.activo : ""}`}
 >
       <div 
       className={styles.info}

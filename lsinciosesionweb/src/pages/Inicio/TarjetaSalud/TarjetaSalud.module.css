@@ -1,25 +1,23 @@
 .cntTarjetaSalud {
-  margin: 1rem 0;
+  margin: 0;
   padding: 1rem;
   min-width: 0;
-  width: min(100%, 29.93rem);
-  flex: 1 1 29.93rem;
-  /* box-shadow: 0 6px 16px rgba(31, 41, 55, .06); */
-  border: 1px solid #ACCCEB;
+  width: 100%;
+  max-width: var(--inicio-tarjeta-salud-max, 29.93rem);
+  flex: 1 1 var(--inicio-tarjeta-salud-min, 22rem);
+  border: var(--surface-card-border);
   backdrop-filter: blur(4px);
-  border-radius: 1rem;
+  border-radius: var(--surface-card-radius);
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  background-color: var(--surface-card-bg);
 }
 
 @media (min-width: 461px) and (max-width: 1365px) {
   .cntTarjetaSalud {
-    flex: 0 1 29.93rem;
-    min-width: 29.25rem;
-    max-width: 29.93rem;
-    margin: 0;
+    flex: 1 1 min(100%, 29.93rem);
+    min-width: min(100%, 22rem);
   }
 }
 
@@ -27,14 +25,13 @@
   .cntTarjetaSalud {
     flex: 1 1 0;
     width: auto;
-    max-width: 28.75rem;
-    margin: 0;
+    max-width: none;
   }
 }
 
 .encabezado {
   margin: 0 auto;
-  width: 90%;
+  width: 100%;
 
   display: flex;
   align-items: center;
@@ -45,7 +42,7 @@
   }
 
   &> :nth-child(3) {
-    transform: translate(1.5rem, -1.5rem);
+    transform: translate(0.5rem, -1.5rem);
   }
 }
 
@@ -60,12 +57,12 @@
 }
 
 .contenedor {
-  margin: 0rem auto;
-  border: 1px dashed lightgrey;
-  border-radius: 0.5rem;
+  margin: 0;
+  border: 1px dashed var(--color-border-soft);
+  border-radius: 0.75rem;
   background: transparent;
-  width: 9.5rem;
-  height: 3.5rem;
+  width: 100%;
+  min-height: 3.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -273,6 +270,8 @@
   flex: 0 0 calc(50% - 0.3rem);
   padding: 0;
   margin: 0;
+  border: 0;
+  cursor: pointer;
 }
 
 .botonTarjeta:focus {
