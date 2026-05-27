@@ -1,21 +1,8 @@
-import React from 'react'
+import PaginaEnConstruccion from "@/components/PaginaEnConstruccion/PaginaEnConstruccion";
 
+// Renderiza la pantalla temporal de Any mientras se define su flujo final.
 const Any = () => {
-  return (
-    <div style={
-      { height:"70vh", 
-        width:"calc(100% - 3rem)",
-        display: "flex",
-        justifyContent:"center",
-        alignItems: "center",
-        fontSize: "1.5rem",
-        fontWeight: "bold"
-      }
-      
-      }>
-      ANY
-    </div>
-  )
-}
+  return <PaginaEnConstruccion titulo="ANY" />;
+};
 
-export default Any
+export default Any;

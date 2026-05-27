@@ -1,21 +1,8 @@
-import React from 'react'
+import PaginaEnConstruccion from "@/components/PaginaEnConstruccion/PaginaEnConstruccion";
 
+// Renderiza la pantalla temporal de Franky mientras se define su flujo final.
 const FrankyTeAcompana = () => {
-  return (
-    <div style={
-      { height:"70vh", 
-        width:"calc(100% - 3rem)",
-        display: "flex",
-        justifyContent:"center",
-        alignItems: "center",
-        fontSize: "1.5rem",
-        fontWeight: "bold"
-      }
-      
-      }>
-      FRANKY TE ACOMPAÑA
-    </div>
-  )
-}
+  return <PaginaEnConstruccion titulo="FRANKY TE ACOMPAÑA" />;
+};
 
-export default FrankyTeAcompana
+export default FrankyTeAcompana;

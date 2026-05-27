@@ -1,21 +1,8 @@
-import React from 'react'
+import PaginaEnConstruccion from "@/components/PaginaEnConstruccion/PaginaEnConstruccion";
 
+// Renderiza la pantalla temporal de Monitor mientras se define su flujo final.
 const MonitorDeSalud = () => {
-  return (
-    <div style={
-      { height:"70vh", 
-        width:"calc(100% - 3rem)",
-        display: "flex",
-        justifyContent:"center",
-        alignItems: "center",
-        fontSize: "1.5rem",
-        fontWeight: "bold"
-      }
-      
-      }>
-      MONITOR DE SALUD
-    </div>
-  )
-}
+  return <PaginaEnConstruccion titulo="MONITOR DE SALUD" />;
+};
 
-export default MonitorDeSalud
+export default MonitorDeSalud;
