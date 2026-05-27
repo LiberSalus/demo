@@ -14,9 +14,13 @@
 }
 
 .seccSuperior {
+  --inicio-mono-max: 61rem;
+  --inicio-agenda-max: 29.68rem;
   width: 100%;
   max-width: var(--layout-content-max);
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   margin: 0 auto;
   gap: var(--inicio-gap);
@@ -39,7 +43,8 @@
   --mono-img-width: 15.5rem;
   --mono-img-margin-top: 1.5rem;
   border: var(--surface-card-border);
-  width: min(100%, 61rem);
+  width: 100%;
+  max-width: var(--inicio-mono-max);
   min-width: 0;
   height: 36.875rem;
   background-color: var(--surface-card-bg);
@@ -153,7 +158,8 @@
 
 .cntAgenda {
   border: var(--surface-card-border);
-  width: min(100%, 29.68rem);
+  width: 100%;
+  max-width: var(--inicio-agenda-max);
   min-width: 15rem;
   padding: 0 1rem;
   height: 36.875rem;
@@ -330,12 +336,11 @@
 
   .seccSuperior {
     width: 100%;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     margin: 0rem auto;
-    gap: 1rem;
+    gap: var(--inicio-gap);
   }
 
   
@@ -383,7 +388,7 @@
   .cntAgenda {
     width: 100%;
     min-width: 0;
-    max-width: 29.68rem;
+    max-width: var(--inicio-agenda-max);
     margin: 0 auto;
   }
 
@@ -398,6 +403,10 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
+  .seccSuperior {
+    --inicio-agenda-max: 37.5rem;
+  }
+
   .cntMono {
     --mono-mancha-width: 16.5rem;
     --mono-mancha-top: auto;
@@ -499,20 +508,20 @@
     --mono-cuadro-left: 1.55rem;
     --mono-mancha-width: 16rem;
     --mono-mancha-top: auto;
-    --mono-mancha-left: 10%;
-    --mono-mancha-bottom: 4.8rem;
+    --mono-mancha-left: 8.25%;
+    --mono-mancha-bottom: 4.25rem;
     --mono-mancha-opacity: 0.32;
     --mono-img-box-width: 100%;
-    --mono-img-width: 12.2rem;
+    --mono-img-width: 15.9rem;
     --mono-img-margin-top: 0;
     max-width: 61rem;
     height: 36.9rem;
-    padding: 3.35rem 1.5rem 1.35rem;
+    padding: 3.35rem 1.6rem 1.35rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1rem 1.1rem;
+    gap: 1.25rem;
     border-radius: 1rem;
   }
 
@@ -528,7 +537,7 @@
   }
 
   .cntMono .cntImgMono {
-    flex: 0 1 18rem;
+    flex: 0 1 20.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -544,9 +553,9 @@
   }
 
   .cntCora {
-    flex: 0 1 19.8rem;
+    flex: 0 1 22.5rem;
     width: 100%;
-    max-width: 19.8rem;
+    max-width: 22.5rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -557,20 +566,24 @@
 
   .mensaje {
     width: 100%;
-    max-width: 16rem;
+    max-width: 20rem;
     margin: 0;
-    padding: 0.42rem 0.9rem;
-    font-size: 0.86rem;
+    padding: 0.52rem 1rem;
+    font-size: 1rem;
     line-height: 1.15;
   }
 
   .cntLogros {
     width: 100%;
-    max-width: 16rem;
+    max-width: 20rem;
   }
 }
 
 @media (max-width: 768px) {
+  .seccSuperior {
+    --inicio-agenda-max: 42rem;
+  }
+
   .cntAgenda {
     width: 100%;
     min-width: 0;
@@ -896,9 +909,9 @@
     --mono-mancha-bottom: auto;
     --mono-mancha-transform: translate(-50%, -43%);
     --mono-mancha-opacity: 0.34;
-    display: grid;
-    grid-template-columns: 18rem 6.25rem 19.8rem;
-    column-gap: 1.1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
     justify-content: center;
     align-items: center;
   }
