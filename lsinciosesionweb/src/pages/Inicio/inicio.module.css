@@ -1,11 +1,11 @@
 .wrap {
-  --inicio-gap: 1rem;
-  --inicio-section-mt: 1rem;
+  --inicio-gap: var(--layout-gap);
+  --inicio-section-mt: var(--layout-gap);
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 0 1rem 1.5rem;
+  padding: 0 var(--layout-page-padding) var(--layout-gap-lg);
   box-sizing: border-box;
   overflow-x: clip;
   position: relative;
@@ -15,7 +15,7 @@
 
 .seccSuperior {
   width: 100%;
-  max-width: 91rem;
+  max-width: var(--layout-content-max);
   display: flex;
   justify-content: center;
   margin: 0 auto;
@@ -38,13 +38,13 @@
   --mono-img-box-height: 100%;
   --mono-img-width: 15.5rem;
   --mono-img-margin-top: 1.5rem;
-  border: 1px solid #ACCCEB;
+  border: var(--surface-card-border);
   width: min(100%, 61rem);
   min-width: 0;
   height: 36.875rem;
-  background-color: white;
+  background-color: var(--surface-card-bg);
   position: relative;
-  border-radius: 0.8vw;
+  border-radius: var(--surface-card-radius);
   display: flex;
   overflow: hidden;
   align-items: center;
@@ -108,9 +108,9 @@
 }
 
 .mensaje {
-  border: 1px solid #ACCCEB;
+  border: var(--surface-card-border);
   margin: 1rem 0 5.4rem 0;
-  border-radius: 1rem;
+  border-radius: var(--surface-card-radius);
   width: 19.875rem;
   max-width: 25rem;
   padding: 0.5rem;
@@ -152,13 +152,13 @@
 }
 
 .cntAgenda {
-  border: 1px solid #ACCCEB;
+  border: var(--surface-card-border);
   width: min(100%, 29.68rem);
   min-width: 15rem;
   padding: 0 1rem;
   height: 36.875rem;
-  border-radius: 1vw;
-  background-color: white;
+  border-radius: var(--surface-card-radius);
+  background-color: var(--surface-card-bg);
   overflow: hidden;
   flex-direction: column;
   justify-content: space-evenly;

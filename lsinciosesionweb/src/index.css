@@ -78,13 +78,11 @@ button:hover {
 }
 
 :root {
-
-  /* Fuentes */
-
-  --font-roboto:"Roboto", sans-serif;
+  /* Fuentes base */
+  --font-roboto: "Roboto", sans-serif;
   --font-inter: "Inter", sans-serif;
 
-  /* Colores */
+  /* Colores legacy conservados durante la migracion gradual */
   --prnci: #007CBA;
   --bkgnd: #F7F7FF;
   --menul: #F2F2F6;
@@ -96,8 +94,40 @@ button:hover {
   --alert: #F8A737;
   --stat1: #C72611;
   --stat2: #3FAD58;
- 
-  /* fuentes 10 12 14 16 24 32*/
+
+  /* Tokens semanticos de color */
+  --color-brand-primary: var(--prnci);
+  --color-brand-primary-hover: #006fa7;
+  --color-panel-bg: var(--bkgnd);
+  --color-menu-bg: var(--menul);
+  --color-surface: var(--blnco);
+  --color-border-soft: var(--borde);
+  --color-text-primary: var(--tipog);
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-danger: var(--stat1);
+  --color-success: var(--stat2);
+  --color-warning: var(--alert);
+
+  /* Tokens semanticos de superficie */
+  --surface-card-bg: var(--color-surface);
+  --surface-card-border: 1px solid var(--color-border-soft);
+  --surface-card-radius: 1rem;
+  --surface-card-shadow: 0 6px 16px rgba(31, 41, 55, 0.06);
+  --surface-card-shadow-raised: 0 10px 24px rgba(15, 23, 42, 0.08);
+
+  /* Tokens semanticos de layout */
+  --layout-sidebar-width: 5rem;
+  --layout-header-height: 110px;
+  --layout-header-height-mobile: 80px;
+  --layout-content-max: 91rem;
+  --layout-gap: 1rem;
+  --layout-gap-lg: 1.5rem;
+  --layout-gap-sm: 0.75rem;
+  --layout-gap-xs: 0.5rem;
+  --layout-page-padding: 1rem;
+
+  /* Fuentes 10 12 14 16 18 20 24 32 */
   --font10: 0.625rem;
   --font12: 0.75rem;
   --font14: 0.875rem;
@@ -107,11 +137,23 @@ button:hover {
   --font24: 1.5rem;
   --font32: 2rem;
 
-  /* pesos en fuentes */
-  --peso600:600;
-  --peso700:700;
-  --peso500:500;
-  --peso400:400;
-  --peso300:300;
+  /* Tokens semanticos de texto */
+  --text-xs: var(--font10);
+  --text-sm: var(--font12);
+  --text-md: var(--font16);
+  --text-lg: var(--font18);
+  --text-xl: var(--font24);
+  --text-2xl: var(--font32);
 
+  /* Pesos legacy y semanticos */
+  --peso600: 600;
+  --peso700: 700;
+  --peso500: 500;
+  --peso400: 400;
+  --peso300: 300;
+  --font-weight-light: var(--peso300);
+  --font-weight-regular: var(--peso400);
+  --font-weight-medium: var(--peso500);
+  --font-weight-semibold: var(--peso600);
+  --font-weight-bold: var(--peso700);
 }
