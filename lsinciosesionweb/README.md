@@ -116,3 +116,79 @@ src/
 | Sincronización en segundo plano | Imposible | Registrar tareas pendientes (ej. guardar métricas sin conexión) |
 | Actualización silenciosa | Requiere recargar página | Service worker descarga y actualiza en background |
 | Precarga de assets | Bajo demanda, más lentos | Precargados en la instalación inicial |
+
+## Push Notifications en PWAs
+
+### Qué son
+
+Permiten que un backend envíe mensajes a la PWA incluso cuando la app está cerrada, el navegador no está abierto o el dispositivo está bloqueado. Funcionan mediante Service Workers, Push API, Notification API y la infraestructura push del navegador (FCM / APNS / Mozilla Push).
+
+### Arquitectura
+
+```
+Backend → Push Service (Google/Apple/Mozilla) → Browser → Service Worker → Notification UI
+```
+
+### Componentes
+
+| Componente | Rol |
+|---|---|
+| Frontend PWA | Solicita permisos y registra la suscripción push |
+| Service Worker | Proceso background que recibe eventos push y muestra notificaciones sin la app abierta |
+| Push Service | Infraestructura del navegador (Chrome → FCM, Firefox → Mozilla Push, Safari → APNS). El backend nunca se comunica directamente con el dispositivo |
+| Backend | Guarda subscriptions, decide cuándo enviar pushes y envía payloads mediante Web Push Protocol |
+
+### Flujo completo
+
+1. **Registrar Service Worker** — `navigator.serviceWorker.register('/sw.js')`
+2. **Solicitar permisos** — `Notification.requestPermission()`
+3. **Crear subscription** — `registration.pushManager.subscribe(...)` genera `{ endpoint, keys: { p256dh, auth } }`
+4. **Enviar subscription al backend** — guarda endpoint, auth, p256dh y user_id
+5. **Backend envía push** — usando `web-push` (Node.js) o `pywebpush` (Python)
+6. **Push Service entrega mensaje** — el navegador recibe el push y despierta el Service Worker
+7. **Service Worker muestra notificación** — `self.registration.showNotification(...)`
+
+### Características clave
+
+- **Funciona con app cerrada** — el navegador despierta el Service Worker automáticamente
+- **Requiere internet** — necesita conexión para recibir el mensaje
+- **Almacenamiento temporal** — el Push Service guarda el mensaje mientras el usuario está offline (no es permanente)
+- **TTL (Time To Live)** — define cuánto tiempo conservar el push (ej. 3600s, máximo 28 días)
+- **No garantiza entrega** — los pushes pueden perderse, expirar, retrasarse o ser descartados
+- **Payload cifrado** — Web Push cifra usando p256dh y auth keys
+- **HTTPS obligatorio** — solo localhost es excepción
+
+### Diferencia con WebSocket
+
+| WebSocket | Push |
+|---|---|
+| Conexión persistente | Sin conexión persistente |
+| Bidireccional | Orientado a eventos |
+| Realtime continuo | Puede despertar apps cerradas |
+
+### Casos de uso
+
+**Adecuados:** mensajes offline, alertas, recordatorios, promociones, updates importantes.
+
+**No adecuados:** gaming realtime, colaboración live, streaming continuo, trading de baja latencia.
+
+### Arquitectura recomendada
+
+La base de datos del backend es la fuente real de verdad; la push es una señal temporal que indica "tienes nuevos datos". Luego la app sincroniza desde API.
+
+### Debugging
+
+Chrome DevTools → Application → Service Workers: inspeccionar workers, ver cache, probar pushes, revisar logs.
+
+### Limitaciones
+
+- **iOS:** Push en PWAs disponible desde iOS 16.4+, requiere "Add to Home Screen" y Safari/WebKit.
+
+### Librerías comunes
+
+- **Frontend:** Workbox, vite-plugin-pwa
+- **Backend:** pywebpush, web-push, Firebase Admin SDK
+
+### Resumen
+
+Push Notifications permiten comunicación backend → usuario mediante Service Workers y Push Services del navegador. Son ideales para alertas y eventos offline, pero no reemplazan bases de datos, colas persistentes ni WebSockets realtime.
