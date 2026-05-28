@@ -1,5 +1,6 @@
 // src/services/auth.js
 import api, { clearAuthToken, getAuthToken, setAuthToken } from "./apiClient";
+import { notificar } from "@/shared/utils/notificacionNativa";
 
 const USAR_MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === "1";
 const CLAVE_SESION_LISTA = "auth_ready";
@@ -222,6 +223,13 @@ export async function iniciarSesion({
     };
 
     guardarSesionAutenticada({ respuesta, correo: correoNormalizado });
+
+    const perfil = JSON.parse(localStorage.getItem("perfil_min") || "{}");
+    notificar(`Bienvenido, ${perfil.nombre || "Usuario"}`, {
+      body: "Has iniciado sesión en Libersalus.",
+      icon: "/vite.svg",
+    });
+
     return respuesta;
   }
 
@@ -242,6 +250,12 @@ export async function iniciarSesion({
     });
 
     guardarSesionAutenticada({ respuesta: data, correo: correoNormalizado });
+
+    const perfil = JSON.parse(localStorage.getItem("perfil_min") || "{}");
+    notificar(`Bienvenido, ${perfil.nombre || "Usuario"}`, {
+      body: "Has iniciado sesión en Libersalus.",
+      icon: "/vite.svg",
+    });
 
     return data;
   } catch (error) {

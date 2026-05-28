@@ -7,28 +7,51 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const base = env.VITE_BASE || "/";
   return {
-    base: env.VITE_BASE || "/",
+    base,
     plugins: [react(), 
       svgr(),
       VitePWA({
         registerType: "autoUpdate",
         includeAssets: ["vite.svg"],
+        workbox: {
+          globPatterns: ["**/*.{js,css,html,svg,png,ico,json,woff2}"],
+          runtimeCaching: [
+            {
+              urlPattern: /^https?:\/\/libersalus\.com\/api\/.*/i,
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "api-cache",
+                expiration: {
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 60 * 24,
+                },
+              },
+            },
+          ],
+        },
         manifest: {
           name: "Libersalus",
           short_name: "Libersalus",
           description: "Gestión de salud",
-          start_url: "/panel/",
-          scope: "/panel/",
+          start_url: base,
+          scope: base,
           display: "standalone",
+          orientation: "any",
           background_color: "#ffffff",
           theme_color: "#ffffff",
+          lang: "es",
           icons: [
             {
               src: "vite.svg",
               sizes: "any",
               type: "image/svg+xml",
+              purpose: "any maskable",
             },
+            // Íconos PNG — descomentar cuando se generen:
+            // { src: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+            // { src: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
           ],
         },
       })
