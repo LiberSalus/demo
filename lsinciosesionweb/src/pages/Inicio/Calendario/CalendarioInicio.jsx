@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
 import ModalCitaMedica from "./ModalCitaMedica";
-import { isTakeDay } from "./MedicamentoUtils";
+import { isTakeDay } from "./medicamentoUtils";
 
 dayjs.locale("es-mx");
 

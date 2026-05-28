@@ -17,7 +17,7 @@ import "dayjs/locale/es-mx";
 
 import styles from "./FormularioCitaMedica.module.css";
 import AdaptiveSelect from "./AdaptiveSelect";
-import { generarHorarios, durationDays } from "./MedicamentoUtils";
+import { generarHorarios, durationDays } from "./medicamentoUtils";
 
 dayjs.locale("es-mx");
 

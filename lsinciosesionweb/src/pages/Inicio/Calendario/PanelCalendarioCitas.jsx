@@ -30,7 +30,7 @@ import {
   buildCalendarPaint,
   isTakeDay,
   buildDailyTimes,
-} from "./MedicamentoUtils";
+} from "./medicamentoUtils";
 
 dayjs.locale("es-mx");
 

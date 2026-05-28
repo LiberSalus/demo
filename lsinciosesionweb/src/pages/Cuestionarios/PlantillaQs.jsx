@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import cuestionario from "./propuesta2.json"; // JSON con show_if
 import PreguntasQs from "./PreguntasQs";
-import styles from "./plantillaQS.module.css";
+import styles from "./plantillaQs.module.css";
 import { _pickShowIf } from "@/utils/logicPreg";
 
 // assets (ajusta rutas si cambian)

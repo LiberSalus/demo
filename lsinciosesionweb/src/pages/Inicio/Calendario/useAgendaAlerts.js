@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
-import { buildDailyTimes, isTakeDay } from "./MedicamentoUtils";
+import { buildDailyTimes, isTakeDay } from "./medicamentoUtils";
 
 import sonidoCitaMp3 from "./Sonidos/universfield-new-notification-08-352461.mp3";
 import sonidoCitaOgg from "./Sonidos/universfield-new-notification-08-352461.ogg";

@@ -6,7 +6,7 @@ import TarjetaMedicamentoIco from "./TarjetaMedicamentoIco";
 import styles from "./TarjetasMedicamentos.module.css";
 import "./animaIcoMedicamentos.css";
 
-import { isTakeDay, buildDailyTimes } from "@/pages/Inicio/Calendario/MedicamentoUtils";
+import { isTakeDay, buildDailyTimes } from "@/pages/Inicio/Calendario/medicamentoUtils";
 
 // SVGs como componentes
 import JarabeIcon from "./icoJarabe.svg?react";
