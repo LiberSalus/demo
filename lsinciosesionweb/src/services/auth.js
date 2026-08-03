@@ -1,8 +1,12 @@
 // src/services/auth.js
 import api, { clearAuthToken, getAuthToken, setAuthToken } from "./apiClient";
 import { notificar } from "@/shared/utils/notificacionNativa";
+import {
+  DEMO_ACTIVO,
+  DEMO_CREDENCIALES,
+  construirRespuestaLogin,
+} from "@/config/demo.config";
 
-const USAR_MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === "1";
 const CLAVE_SESION_LISTA = "auth_ready";
 const CLAVE_PERFIL_MINIMO = "perfil_min";
 export const EVENTO_SESION_NO_AUTORIZADA = "sesion:no-autorizada";
@@ -97,22 +101,6 @@ function obtenerTokenDeRespuesta(datos) {
   return buscarTokenEnObjeto(datos);
 }
 
-// Genera una sesion local de desarrollo cuando VITE_MOCK_AUTH esta activo.
-function crearTokenFalso({ usuario, rol }) {
-  const encabezado = { alg: "none", typ: "JWT" };
-  const ahoraSegundos = Math.floor(Date.now() / 1000);
-  const payload = {
-    sub: "u-dev",
-    name: usuario || "Usuario Dev",
-    role: rol || "paciente",
-    iat: ahoraSegundos,
-    exp: ahoraSegundos + 60 * 60 * 24,
-  };
-  const aBase64 = (objeto) => btoa(JSON.stringify(objeto));
-
-  return `${aBase64(encabezado)}.${aBase64(payload)}.`;
-}
-
 // Construye un nombre visible con los campos disponibles del usuario.
 function obtenerNombreUsuario(usuario = {}, correo = "") {
   if (usuario.first_name && usuario.last_name) {
@@ -196,37 +184,30 @@ export function limpiarSesionAutenticacion() {
 export async function iniciarSesion({
   username,
   password,
-  role = "paciente",
   correo,
   contrasena,
-  rol,
 }) {
   const correoNormalizado = String(correo || username || "").trim();
   const contrasenaNormalizada = contrasena || password || "";
-  const rolNormalizado = rol || role;
 
-  if (USAR_MOCK_AUTH) {
-    if (!correoNormalizado || !contrasenaNormalizada) {
-      throw new Error("Credenciales requeridas");
+  // Modo demo: valida las credenciales definidas y crea la sesion sin backend.
+  if (DEMO_ACTIVO) {
+    if (
+      correoNormalizado !== DEMO_CREDENCIALES.correo ||
+      contrasenaNormalizada !== DEMO_CREDENCIALES.contrasena
+    ) {
+      throw new Error("Credenciales demo inválidas.");
     }
 
-    const respuesta = {
-      // Mock solo para desarrollo: permite probar rutas protegidas sin backend.
-      // Debe permanecer apagado en ambientes reales con VITE_MOCK_AUTH=0.
-      access_token: crearTokenFalso({ usuario: correoNormalizado, rol: rolNormalizado }),
-      token_type: "bearer",
-      user: {
-        first_name: "Dev",
-        last_name: "User",
-        email: correoNormalizado,
-      },
-    };
-
-    guardarSesionAutenticada({ respuesta, correo: correoNormalizado });
+    const respuesta = construirRespuestaLogin();
+    guardarSesionAutenticada({
+      respuesta,
+      correo: DEMO_CREDENCIALES.correo,
+    });
 
     const perfil = JSON.parse(localStorage.getItem("perfil_min") || "{}");
     notificar(`Bienvenido, ${perfil.nombre || "Usuario"}`, {
-      body: "Has iniciado sesión en Libersalus.",
+      body: "Has iniciado sesión en el modo demo de Libersalus.",
       icon: "/vite.svg",
     });
 

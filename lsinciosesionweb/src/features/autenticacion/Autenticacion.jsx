@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ROUTES } from '@/config/routes'
 import { iniciarSesion } from '@/services/auth'
 import {
+  DEMO_ACTIVO,
+  DEMO_CREDENCIALES,
+} from '@/config/demo.config'
+import {
   enviarCodigoCorreo,
   buscarPreregistroPorCorreo,
   guardarCurp,
@@ -161,6 +165,25 @@ function Autenticacion() {
     setPasoRegistroActual('registroCuenta')
     setDatosPreregistro(estadoInicialPreregistro)
     setEstadoPreregistro({ cargando: false, error: '', exito: '' })
+  }
+
+  // Entra directo con las credenciales demo definidas sin escribir el form.
+  const entrarEnModoDemo = async () => {
+    setEstadoInicioSesion({ cargando: true, error: '' })
+
+    try {
+      await iniciarSesion({
+        correo: DEMO_CREDENCIALES.correo,
+        contrasena: DEMO_CREDENCIALES.contrasena,
+      })
+
+      navigate(rutaDestino, { replace: true })
+    } catch (error) {
+      setEstadoInicioSesion({
+        cargando: false,
+        error: error.message || 'No fue posible entrar en modo demo.',
+      })
+    }
   }
 
   const cambiarAInicioSesion = () => {
@@ -433,6 +456,8 @@ function Autenticacion() {
           onCambiarARegistro={cambiarARegistro}
           onEnviarInicioSesion={enviarInicioSesion}
           onInputInicioSesionChange={actualizarDatosInicioSesion}
+          demoActivo={DEMO_ACTIVO}
+          onEntrarDemo={entrarEnModoDemo}
         />
       ) : (
         <VistaRegistro
