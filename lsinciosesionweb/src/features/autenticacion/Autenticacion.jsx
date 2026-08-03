@@ -447,6 +447,9 @@ function Autenticacion() {
         vistaActual === 'registro' && configuracionPasoRegistro.mostrarPanelLateral
       }
       panelLateral={panelLateralRegistro}
+      demoActivo={DEMO_ACTIVO}
+      demoCargando={estadoInicioSesion.cargando}
+      onEntrarDemo={entrarEnModoDemo}
     >
       {vistaActual === 'inicioSesion' ? (
         <VistaInicioSesion
@@ -456,8 +459,6 @@ function Autenticacion() {
           onCambiarARegistro={cambiarARegistro}
           onEnviarInicioSesion={enviarInicioSesion}
           onInputInicioSesionChange={actualizarDatosInicioSesion}
-          demoActivo={DEMO_ACTIVO}
-          onEntrarDemo={entrarEnModoDemo}
         />
       ) : (
         <VistaRegistro

@@ -11,8 +11,6 @@ function PasoInicioSesion({
   onCambiarARegistro,
   onEnviar,
   onInputChange,
-  demoActivo = false,
-  onEntrarDemo,
 }) {
   return (
     <form className={estilos.pasoFormulario} onSubmit={onEnviar} noValidate>
@@ -47,17 +45,6 @@ function PasoInicioSesion({
       <BotonPrincipal tipo="submit" cargando={cargando}>
         {cargando ? 'Iniciando...' : 'Iniciar sesión'}
       </BotonPrincipal>
-
-      {demoActivo ? (
-        <BotonPrincipal
-          tipo="button"
-          variante="secundario"
-          deshabilitado={cargando}
-          onClick={onEntrarDemo}
-        >
-          Entrar en modo demo
-        </BotonPrincipal>
-      ) : null}
 
       <div className={estilos.accionesSecundarias}>
         <button className={estilos.accionTexto} type="button">

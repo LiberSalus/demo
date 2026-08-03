@@ -11,8 +11,6 @@ function VistaInicioSesion({
   onCambiarARegistro,
   onEnviarInicioSesion,
   onInputInicioSesionChange,
-  demoActivo = false,
-  onEntrarDemo,
 }) {
   return (
     <section className={`${estilos.vistaAutenticacion} ${estilos.vistaAutenticacionInicio}`}>
@@ -33,8 +31,6 @@ function VistaInicioSesion({
           onCambiarARegistro={onCambiarARegistro}
           onEnviar={onEnviarInicioSesion}
           onInputChange={onInputInicioSesionChange}
-          demoActivo={demoActivo}
-          onEntrarDemo={onEntrarDemo}
         />
         <PieAutenticacion />
       </div>

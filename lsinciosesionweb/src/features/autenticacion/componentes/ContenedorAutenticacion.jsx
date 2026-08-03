@@ -5,6 +5,9 @@ function ContenedorAutenticacion({
   children,
   mostrarPanelLateral = false,
   panelLateral,
+  demoActivo = false,
+  demoCargando = false,
+  onEntrarDemo,
 }) {
   const clasesMarco = [
     estilos.autenticacionMarco,
@@ -17,6 +20,17 @@ function ContenedorAutenticacion({
 
   return (
     <main className={estilos.autenticacion}>
+      {demoActivo ? (
+        <button
+          type="button"
+          className={estilos.botonModoDemo}
+          disabled={demoCargando}
+          onClick={onEntrarDemo}
+          aria-label="Entrar en modo demo"
+        >
+          {demoCargando ? 'Entrando...' : 'Modo demo'}
+        </button>
+      ) : null}
       <section className={clasesMarco}>
         {mostrarPanelLateral && panelLateral ? (
           <PanelLateralAutenticacion {...panelLateral} />
