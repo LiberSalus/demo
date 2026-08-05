@@ -22,6 +22,7 @@ import { pasosRegistro, secuenciaPasoRegistro } from './configuracion/pasosRegis
 import { obtenerConfiguracionPaso } from './utilidades/obtenerConfiguracionPaso'
 import VistaInicioSesion from './vistas/VistaInicioSesion'
 import VistaRegistro from './vistas/VistaRegistro'
+import VistaSeleccionDemo from './vistas/VistaSeleccionDemo'
 
 const datosInicioSesionIniciales = {
   correoElectronico: '',
@@ -167,14 +168,21 @@ function Autenticacion() {
     setEstadoPreregistro({ cargando: false, error: '', exito: '' })
   }
 
-  // Entra directo con las credenciales demo definidas sin escribir el form.
-  const entrarEnModoDemo = async () => {
+  // Abre la pantalla en la que el usuario elige con que persona entrar a la demo.
+  const abrirSeleccionDemo = () => {
+    setVistaActual('seleccionDemo')
+    setEstadoInicioSesion({ cargando: false, error: '' })
+  }
+
+  // Entra al panel con la persona demo elegida por el usuario.
+  const entrarEnModoDemo = async (clavePersona) => {
     setEstadoInicioSesion({ cargando: true, error: '' })
 
     try {
       await iniciarSesion({
         correo: DEMO_CREDENCIALES.correo,
         contrasena: DEMO_CREDENCIALES.contrasena,
+        persona: clavePersona,
       })
 
       navigate(rutaDestino, { replace: true })
@@ -449,7 +457,7 @@ function Autenticacion() {
       panelLateral={panelLateralRegistro}
       demoActivo={DEMO_ACTIVO}
       demoCargando={estadoInicioSesion.cargando}
-      onEntrarDemo={entrarEnModoDemo}
+      onEntrarDemo={abrirSeleccionDemo}
     >
       {vistaActual === 'inicioSesion' ? (
         <VistaInicioSesion
@@ -459,6 +467,12 @@ function Autenticacion() {
           onCambiarARegistro={cambiarARegistro}
           onEnviarInicioSesion={enviarInicioSesion}
           onInputInicioSesionChange={actualizarDatosInicioSesion}
+        />
+      ) : vistaActual === 'seleccionDemo' ? (
+        <VistaSeleccionDemo
+          estadoDemo={estadoInicioSesion}
+          onEntrarDemo={entrarEnModoDemo}
+          onVolver={cambiarAInicioSesion}
         />
       ) : (
         <VistaRegistro

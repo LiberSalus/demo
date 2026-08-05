@@ -1,0 +1,72 @@
+.VistaTodos {
+  & > h3 {font-size: 1rem; margin-bottom: 0.25rem;}
+  & > p  {font-size: .75rem;}
+  flex-wrap: wrap;
+  width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+  display: flex;
+}
+
+.cntDin {
+  --cuestionario-columna-ancho: 23.25rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin: 0rem auto;
+}
+
+.cntStd {
+  flex: 1 1 21.875rem;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.cntCmp {
+  width: 100%;
+  flex: 1 1 var(--cuestionario-columna-ancho);
+  min-width: 0;
+  padding: 0.2rem 0.35rem;
+  max-height: 15.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+}
+
+@media (max-width: 864px) {
+  .VistaTodos {
+    justify-content: center;
+  }
+
+  .cntDin {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.15rem;
+  }
+
+  .cntCmp {
+    flex-basis: auto;
+    width: min(100%, var(--cuestionario-columna-ancho));
+    max-height: none;
+    margin-top: 1rem;
+  }
+
+  .cntStd {
+    width: min(100%, var(--cuestionario-columna-ancho));
+    padding: 0;
+  }
+
+  .VistaTodos {
+    width: 100%;
+    & > h3, & > p {
+      text-align: center;
+    }
+  }
+}

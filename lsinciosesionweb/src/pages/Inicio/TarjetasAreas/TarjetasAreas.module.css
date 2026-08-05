@@ -37,7 +37,8 @@
 .fisica,
 .emocional,
 .social,
-.nutricional {
+.nutricional,
+.todos {
   border-color: #007cba;
   color: #007cba;
   font-weight: 700;

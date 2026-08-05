@@ -370,8 +370,11 @@ const TarjetaLateral = ({
 
 // Construye el nombre visible desde decoded o desde el perfil minimo local.
 function obtenerNombreUsuario(sesion) {
+  const claims = sesion?.claims || sesion?.data?.claims || {};
   const usuario = sesion?.user || sesion?.usuario || sesion?.data?.user || {};
   const nombreDecoded =
+    sesion?.name ||
+    claims.name ||
     usuario.nombre_completo ||
     usuario.nombre ||
     usuario.name ||

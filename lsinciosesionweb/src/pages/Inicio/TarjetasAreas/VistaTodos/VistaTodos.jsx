@@ -1,21 +1,21 @@
-import React, {useState} from 'react'
-import styles from './VistaNutricional.module.css'
+import React, { useState } from "react";
+import styles from "./VistaTodos.module.css";
 
 import BotonesQs from "../TarjetasEstadosQs/BotonesQs";
 import TarjetaBsEdoQs from "../TarjetasEstadosQs/TarjetaBsEdoQs";
-import { obtenerTarjetasPorArea } from "../catalogoCuestionarios";
+import { obtenerTarjetasTodas } from "../catalogoCuestionarios";
 
-const VistaNutricional = () => {
-  const tarjetas = obtenerTarjetasPorArea("nutricional");
-  const [tarjetaActiva, setTarjetaActiva] = useState(3);
+// Muestra el listado conjunto de cuestionarios de todas las areas de salud.
+const VistaTodos = () => {
+  const tarjetas = obtenerTarjetasTodas();
+  const [tarjetaActiva, setTarjetaActiva] = useState(0);
 
   return (
-    <div className={styles.VistaNutricional}>
+    <div className={styles.VistaTodos}>
       <h3>Mis Cuestionarios</h3>
       <p>
-        Tu alimentación es parte esencial de tu cuidado. Estos cuestionarios te
-        permiten revisar tus hábitos, hidratación y porciones para comer mejor
-        cada día.
+        Todos tus cuestionarios de salud en un solo lugar. Selecciona uno para
+        consultar su avance.
       </p>
       <div className={styles.cntDin}>
         <div className={styles.cntCmp}>
@@ -36,7 +36,7 @@ const VistaNutricional = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VistaNutricional
+export default VistaTodos;

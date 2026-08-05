@@ -4,7 +4,9 @@ import { notificar } from "@/shared/utils/notificacionNativa";
 import {
   DEMO_ACTIVO,
   DEMO_CREDENCIALES,
+  PERSONAS_DEMO,
   construirRespuestaLogin,
+  establecerPersonaDemo,
 } from "@/config/demo.config";
 
 const CLAVE_SESION_LISTA = "auth_ready";
@@ -124,7 +126,14 @@ function obtenerNombreUsuario(usuario = {}, correo = "") {
 function obtenerUsuarioDeRespuesta(respuesta) {
   if (!respuesta || typeof respuesta !== "object") return {};
 
-  return respuesta.user || respuesta.usuario || respuesta.data || respuesta;
+  return (
+    respuesta.user ||
+    respuesta.usuario ||
+    respuesta.data?.user ||
+    respuesta.data ||
+    respuesta.claims ||
+    respuesta
+  );
 }
 
 // Guarda una version minima del perfil para cabeceras y componentes del dashboard.
@@ -186,6 +195,7 @@ export async function iniciarSesion({
   password,
   correo,
   contrasena,
+  persona,
 }) {
   const correoNormalizado = String(correo || username || "").trim();
   const contrasenaNormalizada = contrasena || password || "";
@@ -199,6 +209,7 @@ export async function iniciarSesion({
       throw new Error("Credenciales demo inválidas.");
     }
 
+    if (persona) establecerPersonaDemo(persona);
     const respuesta = construirRespuestaLogin();
     guardarSesionAutenticada({
       respuesta,
@@ -288,5 +299,11 @@ export async function cerrarSesion() {
     // Siempre limpiamos la sesión local aunque el endpoint falle, para no dejar
     // al usuario atrapado en el dashboard.
     limpiarSesionAutenticacion();
+
+    // En demo se regresa a la primera persona para que la proxima sesion no
+    // arrastre la seleccion anterior del selector.
+    if (DEMO_ACTIVO && PERSONAS_DEMO[0]) {
+      establecerPersonaDemo(PERSONAS_DEMO[0].clave);
+    }
   }
 }
