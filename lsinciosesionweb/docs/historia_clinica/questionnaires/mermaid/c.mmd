@@ -1,0 +1,474 @@
+%% Diagrama Mermaid de la tab "C" - ANTECEDENTES PERSONALES PATOLÓGICOS
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina C)
+%% Mantiene TODOS los nodos y aristas del original, incluyendo lazos
+%% ( registrar otra lesion / hospitalizacion / cirugia ) y notas sueltas
+%% como "VIENE EN Q", "(Poner texto introductorio)" y "Agregar loop".
+flowchart TD
+
+c2(["C. ANTECEDENTES PERSONALES PATOLÓGICOS"]):::titulo
+c396(["(Poner texto introductorio)"]):::nota
+c2 --> c396 --> c73
+
+%% ============ 2.0 ENFERMEDADES (checklist por sistemas) ============
+c73["2.0 ¿Padece o ha padecido alguna de las siguientes enfermedades alguna vez en tu vida?"]
+
+subgraph S_enf["Enfermedades por sistema (checklist)"]
+  c74["2.1 Diabetes, colesterol y metabolismo"]
+  c75(["2.1.1 Diabetes (Block 2-5A1)"]):::opt
+  c76(["2.1.2 Prediabetes (5A40)"]):::opt
+  c77(["2.1.3 Obesidad (5B81)"]):::opt
+  c78(["2.1.4 Colesterol o triglicéridos altos (5C80)"]):::opt
+  c79(["2.1.5 Hipotiroidismo (5A00)"]):::opt
+  c80(["2.1.6 Otro"]):::opt
+
+  c81["2.2 Presión alta y corazón"]
+  c82(["2.2.1 Presión alta (BA00)"]):::opt
+  c83(["2.2.2 Infarto (BlockL1-BA4)"]):::opt
+  c84(["2.2.3 Arritmias (Block1-BC6)"]):::opt
+  c85(["2.2.4 Insuficiencia cardiaca (BlockL1-BD1)"]):::opt
+  c86(["2.2.5 Otro"]):::opt
+
+  c89["2.3 Cerebro y sistema nervioso"]
+  c90(["2.3.1 Embolia o derrame cerebral (BlockL1-8B0)"]):::opt
+  c91(["2.3.2 Alzheimer (8A20)"]):::opt
+  c92(["2.3.3 Demencia / Problemas de memoria (BlockL1-6D7)"]):::opt
+  c93(["2.3.4 Parkinson (8A00)"]):::opt
+  c94(["2.3.5 Epilepsias (BlockL1-8A6)"]):::opt
+  c95(["2.3.6 Otro"]):::opt
+
+  c98["2.4 Emociones, aprendizaje y desarrollo"]
+  c99(["2.4.1 Depresión (BlockL2-6A7)"]):::opt
+  c100(["2.4.2 Ansiedad (BlockL1-6B0)"]):::opt
+  c101(["2.4.3 Trastorno bipolar (BlockL2-6A6)"]):::opt
+  c102(["2.4.4 Autismo (6A02)"]):::opt
+  c103(["2.4.5 TDAH (6A05)"]):::opt
+  c104(["2.4.6 Otro"]):::opt
+
+  c107["2.5 Pulmones y respiración"]
+  c108(["2.5.1 Asma (CA23)"]):::opt
+  c109(["2.5.2 EPOC (CA22)"]):::opt
+  c110(["2.5.3 Rinitis alérgica (CA08)"]):::opt
+  c111(["2.5.4 Ronquidos / apnea del sueño (7A41)"]):::opt
+  c112(["2.5.5 Fibrosis pulmonar (BlockL1-CB0)"]):::opt
+  c113(["2.5.6 Otro"]):::opt
+
+  c116["2.6 Visión y ojos"]
+  c117(["2.6.1 Cataratas (9B10)"]):::opt
+  c118(["2.6.2 Glaucoma (BlockL1-9C6)"]):::opt
+  c119(["2.6.3 Problemas de graduación (9D00)"]):::opt
+  c120(["2.6.4 Retinopatía diabética (9B71.0)"]):::opt
+  c121(["2.6.5 Otro"]):::opt
+
+  c124["2.7 Estómago, intestino y digestión"]
+  c125(["2.7.1 Gastritis o úlceras (DA42)"]):::opt
+  c126(["2.7.2 Reflujo (DA22)"]):::opt
+  c127(["2.7.3 Colitis o intestino irritable (DD91.0)"]):::opt
+  c128(["2.7.4 Enf. inflamatoria intestinal (Crohn/Colitis Ulc.) (BlockL1-DD7)"]):::opt
+  c129(["2.7.5 Piedras en la vesícula (DC11)"]):::opt
+  c130(["2.7.6 Otro"]):::opt
+
+  c133["2.8 Hígado, riñón y páncreas"]
+  c134(["2.8.1 Hígado graso (DB92)"]):::opt
+  c135(["2.8.2 Hepatitis por virus (BlockL1-1E5)"]):::opt
+  c136(["2.8.3 Cirrosis o daño hepático (DB93)"]):::opt
+  c137(["2.8.4 Enfermedad renal crónica (GB61)"]):::opt
+  c138(["2.8.5 Piedras en los riñones (GB70.0)"]):::opt
+  c139(["2.8.6 Pancreatitis (BlockL1-DC3)"]):::opt
+  c140(["2.8.7 Otro"]):::opt
+
+  c143["2.9 Huesos, músculos y articulaciones"]
+  c144(["2.9.1 Artritis reumatoide (BlockL2-FA2)"]):::opt
+  c145(["2.9.2 Osteoporosis / Huesos frágiles (FB83)"]):::opt
+  c146(["2.9.3 Desgaste de articulaciones (BlockL2-FA0)"]):::opt
+  c147(["2.9.4 Fibromialgia (MG30.01)"]):::opt
+  c148(["2.9.5 Otro"]):::opt
+
+  c151["2.10 Piel, cabello y uñas"]
+  c152(["2.10.1 Piel sensible o dermatitis (BlockL2-EA8)"]):::opt
+  c153(["2.10.2 Psoriasis (EA90)"]):::opt
+  c154(["2.10.3 Vitiligo (manchas blancas) (ED63.0)"]):::opt
+  c155(["2.10.4 Alopecia o caída del pelo (ED70)"]):::opt
+  c156(["2.10.5 Otro"]):::opt
+
+  c159["2.11 Cáncer y tumores"]
+  c160(["2.11.1 Cáncer de mama (BlockL3-2C6)"]):::opt
+  c161(["2.11.2 Cáncer de próstata (2C82)"]):::opt
+  c162(["2.11.3 Cáncer de colon (2B90)"]):::opt
+  c163(["2.11.4 Leucemia (2B33)"]):::opt
+  c164(["2.11.5 Otro"]):::opt
+
+  c167["2.12 Enfermedades hereditarias y autoinmunes"]
+  c168(["2.12.1 Síndrome de Down (LD40.0)"]):::opt
+  c169(["2.12.2 Lupus (4A40)"]):::opt
+  c170(["2.12.3 Esclerosis múltiple (8A40)"]):::opt
+  c171(["2.12.4 Fibrosis quística (CA25)"]):::opt
+  c172(["2.12.5 Otro"]):::opt
+
+  c175["2.13 Enfermedades de la sangre y vasculares"]
+  c176(["2.13.1 Anemia (BlockL1-3A0)"]):::opt
+  c177(["2.13.2 Problemas de coagulación (BlockL1-3B1)"]):::opt
+  c178(["2.13.3 Várices (BD74)"]):::opt
+  c179(["2.13.4 Trombosis venosa (BD71)"]):::opt
+  c180(["2.13.5 Otro"]):::opt
+end
+
+c73 --> c74 --> c75
+c74 --> c76
+c74 --> c77
+c74 --> c78
+c74 --> c79
+c74 --> c80
+c73 --> c81 --> c82
+c81 --> c83
+c81 --> c84
+c81 --> c85
+c81 --> c86
+c73 --> c89 --> c90
+c89 --> c91
+c89 --> c92
+c89 --> c93
+c89 --> c94
+c89 --> c95
+c73 --> c98 --> c99
+c98 --> c100
+c98 --> c101
+c98 --> c102
+c98 --> c103
+c98 --> c104
+c73 --> c107 --> c108
+c107 --> c109
+c107 --> c110
+c107 --> c111
+c107 --> c112
+c107 --> c113
+c73 --> c116 --> c117
+c116 --> c118
+c116 --> c119
+c116 --> c120
+c116 --> c121
+c73 --> c124 --> c125
+c124 --> c126
+c124 --> c127
+c124 --> c128
+c124 --> c129
+c124 --> c130
+c73 --> c133 --> c134
+c133 --> c135
+c133 --> c136
+c133 --> c137
+c133 --> c138
+c133 --> c139
+c133 --> c140
+c73 --> c143 --> c144
+c143 --> c145
+c143 --> c146
+c143 --> c147
+c143 --> c148
+c73 --> c151 --> c152
+c151 --> c153
+c151 --> c154
+c151 --> c155
+c151 --> c156
+c73 --> c159 --> c160
+c159 --> c161
+c159 --> c162
+c159 --> c163
+c159 --> c164
+c73 --> c167 --> c168
+c167 --> c169
+c167 --> c170
+c167 --> c171
+c167 --> c172
+c73 --> c175 --> c176
+c175 --> c177
+c175 --> c178
+c175 --> c179
+c175 --> c180
+
+%% Conexion 3.0 tabaco (nodo c56) hacia nodos "Otro" de varios sistemas.
+%% Estan en el drawio original como aristas; se conservan punteadas por si
+%% son artefactos de layout, sin alterar el contenido.
+c56["3.0 ¿Cómo describiría su consumo de tabaco?"]
+c56 -.-> c80
+c56 -.-> c86
+c56 -.-> c104
+c56 -.-> c113
+c56 -.-> c130
+c56 -.-> c140
+c56 -.-> c148
+
+%% ============ 3.0 TABACO ============
+c8(["3.1 Fuma a diario"]):::opt
+c6(["3.2 Fuma ocasionalmente"]):::opt
+c232(["3.3 Ex fumador/a"]):::opt
+c233(["3.4 Nunca ha fumado"]):::opt
+c241(["3.5 Prefiere no decirlo"]):::opt
+c235["3.1.1 ¿Cuántos cigarros fuma al día?"]
+c237["3.3.1 ¿Cuántos cigarros fumaba al día?"]
+c238["3.3.2 ¿A qué edad empezó a fumar?"]
+c240["3.3.3 ¿A qué edad dejó fumar?"]
+
+c56 --> c8 --> c235
+c56 --> c6 --> c235
+c56 --> c232 --> c237 --> c240 --> c238
+c56 --> c233
+c56 --> c241
+
+%% ============ 3.0A EXPOSICIÓN AL HUMO ============
+c227["3.0A ¿Alguien cercano a usted fuma?"]
+c229(["3.0A.1 SÍ"]):::opt
+c230(["3.0A.2 NO"]):::opt
+c255["3.0A.1.1 ¿Dónde ocurre la exposición?"]
+c257(["3.0A.1.1 Hogar"]):::opt
+c259(["3.0A.1.2 Trabajo"]):::opt
+c261(["3.0A.1.3 Lugares sociales"]):::opt
+c263["3.0A.1.2 ¿Aproximadamente durante cuántas horas al día?"]
+c264["3.0A.1.3 ¿Desde hace cuántos años?"]
+
+c56 --> c227
+c227 --> c229 --> c255
+c227 --> c230
+c227 --> c247
+c255 --> c257 --> c263
+c255 --> c259 --> c263
+c255 --> c261 --> c263
+c263 --> c264
+
+%% ============ 3.0B VAPEADORES ============
+c247["3.0B ¿Usa o ha usado vapeadores?"]
+c249(["3.0B.1 Sí, los uso actualmente"]):::opt
+c251(["3.0B.2 Estoy intentando dejarlos"]):::opt
+c281(["3.0B.3 Los usaba antes"]):::opt
+c282(["3.0B.4 Nunca he usado"]):::opt
+c268["3.0B.1.1 ¿Qué sustancia usa/usaba?"]
+c270(["3.0B.1.1.1 Nicotina"]):::opt
+c272(["3.0B.1.1.2 Cannabis/THC"]):::opt
+c274(["3.0B.1.1.3 Sólo sabor sin nicotina"]):::opt
+c279["3.0B.1.2 ¿Cada cuánto lo hace?"]
+c283(["3.0B.1.2.1 A diario"]):::opt
+c284(["3.0B.1.2.2 Varias veces a la semana"]):::opt
+c285(["3.0B.1.2.3 Una vez a la semana o menos"]):::opt
+c286(["3.0B.1.2.4 Rara vez"]):::opt
+c287(["VIENE EN Q"]):::nota
+
+c247 --> c249 --> c268
+c247 --> c251 --> c268
+c247 --> c281 --> c268
+c247 --> c282
+c247 --> c12
+c268 --> c270 --> c279
+c268 --> c272 --> c279
+c268 --> c274 --> c279
+c279 --> c283
+c279 --> c284
+c279 --> c285
+c279 --> c286
+
+%% ============ 4.0 ALCOHOL ============
+c12["4.0 ¿Consume bebidas alcohólicas?"]
+c14(["4.1 SÍ"]):::opt
+c13(["4.2 NO"]):::opt
+c12 --> c14 --> c58
+c12 --> c13 --> c58
+
+%% ============ 5.0 DROGAS ============
+c58["5.0 ¿Ha consumido algún tipo de droga?"]
+c19(["5.1 SÍ"]):::opt
+c17(["5.2 NO"]):::opt
+c44["5.1.1 ¿Cuál(es)?"]
+c58 --> c19 --> c44
+c58 --> c17
+c58 --> c59
+
+%% ============ 6.0 ALERGIAS ============
+c59["6.0 ¿Padece algún tipo de alergia?"]
+c25(["6.1 SÍ"]):::opt
+c23(["6.2 NO"]):::opt
+c49["6.1.1 ¿A qué?"]
+c349(["6.1.1.1 Medicamentos (penicilina, ibuprofeno...)"]):::opt
+c395(["6.1.1.1A Conexión a Vademecum"]):::todo
+c351(["6.1.1.2 Alimentos (leche, huevo, mariscos, nueces...)"]):::opt
+c353(["6.1.1.3 Ambiente (polvo, animales, materiales/sustancias)"]):::opt
+c355(["6.1.1.4 Otro tipo"]):::opt
+c376["6.1.1.4 Especifique"]
+c364["6.1.1.2A Especifique (alimentos)"]
+c365(["6.1.1.2.1 Cereales con gluten"]):::opt
+c366(["6.1.1.2.2 Crustáceos"]):::opt
+c367(["6.1.1.2.3 Huevo"]):::opt
+c368(["6.1.1.2.4 Pescados"]):::opt
+c369(["6.1.1.2.5 Cacahuate"]):::opt
+c370(["6.1.1.2.6 Soya"]):::opt
+c371(["6.1.1.2.7 Leche"]):::opt
+c372(["6.1.1.2.8 Semillas"]):::opt
+c373(["6.1.1.2.9 Moluscos"]):::opt
+c374(["6.1.1.2.10 Sulfitos"]):::opt
+c375(["6.1.1.2.11 Otro"]):::opt
+c362["6.1.1.3A Especifique (ambiente)"]
+c357(["6.1.1.3.1 Polvo, polen, moho o ácaros"]):::opt
+c358(["6.1.1.3.2 Animales (pelo, caspa o plumas)"]):::opt
+c359(["6.1.1.3.3 Picaduras de insectos"]):::opt
+c360(["6.1.1.3.4 Látex"]):::opt
+c361(["6.1.1.3.5 Sustancias químicas"]):::opt
+%% c363 es un nodo "Otra" suelto en el original (sin aristas):
+c363(["6.1.1.2.7 Otra __________"]):::opt
+
+c59 --> c25 --> c49
+c59 --> c23
+c59 --> c60
+c49 --> c349 --> c395
+c49 --> c351 --> c364
+c364 --> c365
+c364 --> c366
+c364 --> c367
+c364 --> c368
+c364 --> c369
+c364 --> c370
+c364 --> c371
+c364 --> c372
+c364 --> c373
+c364 --> c374
+c364 --> c375
+c49 --> c353 --> c362
+c362 --> c357
+c362 --> c358
+c362 --> c359
+c362 --> c360
+c362 --> c361
+c49 --> c355 --> c376
+
+%% ============ 7.0 CIRUGÍAS ============
+c60["7.0 ¿Ha tenido alguna operación o cirugía?"]
+c31(["7.1 SÍ"]):::opt
+c29(["7.2 NO"]):::opt
+c51["7.1.1 ¿De qué?"]
+c382["7.1.2 Indique la fecha"]
+c378["7.1.3 Agregar otra cirugía"]
+c379(["7.1.4 Finalizar registro"]):::opt
+
+c60 --> c31 --> c51 --> c382 --> c378 --> c51
+c382 --> c379
+c60 --> c29
+c60 --> c61
+
+%% ============ 8.0 TRANSFUSIÓN ============
+c61["8.0 ¿Le han transfundido sangre?"]
+c37(["8.1 SÍ"]):::opt
+c35(["8.2 NO"]):::opt
+c289["8.1.1 Indique la fecha"]
+c290["8.1.2 ¿Cuál fue el motivo?"]
+
+c61 --> c37 --> c289 --> c290
+c61 --> c35
+c61 --> c40
+
+%% ============ 9.0 DONACIÓN DE SANGRE ============
+c40["9.0 ¿Ha donado sangre?"]
+c42(["9.1 SÍ"]):::opt
+c41(["9.2 NO"]):::opt
+c40 --> c42 --> c66
+c40 --> c41 --> c66
+
+%% ============ 10.0 LESIONES ============
+c66["10.0 ¿Ha sufrido alguna de las siguientes lesiones?"]
+c70(["10.1 Fractura"]):::opt
+c68(["10.2 Luxación"]):::opt
+c292(["10.3 Esguince"]):::opt
+c293(["10.4 Ninguna"]):::opt
+c295["10.1.1 ¿Qué huesos o zonas resultaron afectadas?"]
+c296(["10.1.1.1 Cadera (1.0)"]):::opt
+c297(["10.1.1.2 Muñeca (2.0)"]):::opt
+c298(["10.1.1.3 Cráneo (3.0)"]):::opt
+c299(["10.1.1.4 Cara (4.0)"]):::opt
+c300(["10.1.1.5 Cuello (5.0)"]):::opt
+c301(["10.1.1.6 Hombro (6.0)"]):::opt
+c302(["10.1.1.7 Brazo (7.0)"]):::opt
+c303(["10.1.1.8 Mano (8.0)"]):::opt
+c304(["10.1.1.9 Tórax (11.0)"]):::opt
+c305(["10.1.1.10 Columna torácica (13.0)"]):::opt
+c306(["10.1.1.11 Columna lumbar (14.0)"]):::opt
+c307(["10.1.1.12 Pelvis (15.0)"]):::opt
+c308(["10.1.1.13 Coxis (16.0)"]):::opt
+c309(["10.1.1.14 Pierna (17.0)"]):::opt
+c310(["10.1.1.15 Tobillo (18.0)"]):::opt
+c311(["10.1.1.16 Pie (19.0)"]):::opt
+c312(["Otro (66953-1)"]):::opt
+c317["10.1.2 ¿Qué lado del cuerpo se vio afectado?"]
+c319(["10.1.2.1 Derecho"]):::opt
+c321(["10.1.2.2 Izquierdo"]):::opt
+c323(["10.1.2.3 Ambos"]):::opt
+c325(["10.1.2.4 No aplica"]):::opt
+c328["10.1.1 ¿El hueso quedó expuesto o visible?"]
+c332(["10.1.1.1 SÍ"]):::opt
+c330(["10.1.1.2 NO"]):::opt
+c334["10.1.3 Indique la fecha en que ocurrió"]
+c339["10.1.4 ¿Actualmente presenta alguna de las siguientes secuelas?"]
+c341(["10.1.4.1 Dolor persistente o recurrente"]):::opt
+c343(["10.1.4.2 Dificultad para mover la zona"]):::opt
+c345(["10.1.4.3 Cambios en la forma o apariencia"]):::opt
+c347(["10.1.4.4 Entumecimiento, hormigueo o alteraciones sensibilidad"]):::opt
+c394["10.1.5 ¿Desea registrar otra lesión?"]
+c384(["10.1.5.1 Sí, registrar"]):::opt
+c385(["10.1.5.2 No, terminar registro"]):::opt
+
+c66 --> c70 --> c328
+c66 --> c68 --> c295
+c66 --> c292 --> c295
+c66 --> c293
+c66 --> c186
+c295 --> c317
+c317 --> c319 --> c334
+c317 --> c321 --> c334
+c317 --> c323 --> c334
+c317 --> c325 --> c334
+c328 --> c332 --> c295
+c328 --> c330 --> c295
+c334 --> c339
+c339 --> c341 --> c394
+c339 --> c343 --> c394
+c339 --> c345 --> c394
+c339 --> c347 --> c394
+c394 --> c384 --> c70
+c394 --> c385
+
+%% ============ 11.0 HOSPITALIZACIÓN ============
+c186["11.0 ¿Ha estado hospitalizado alguna vez?"]
+c187(["11.1 Sí"]):::opt
+c188(["11.2 No"]):::opt
+c190["11.1.1 ¿Cuál fue el motivo?"]
+c193["11.1.2 ¿En qué fecha ingresó?"]
+c198["11.1.3 ¿Durante cuánto tiempo estuvo hospitalizado/a?"]
+c207(["11.1.4.1 1–7 días (estancia corta)"]):::opt
+c209(["11.1.4.2 8–14 días (estancia media)"]):::opt
+c211(["11.1.4.3 15–30 días (estancia larga)"]):::opt
+c213(["11.1.4.4 Más de 30 días"]):::opt
+c201["11.1.5 ¿La atención fue programada o de urgencia?"]
+c215(["11.1.5.1 Urgencia"]):::opt
+c217(["11.1.5.2 Programada"]):::opt
+c205["11.1.6 ¿De dónde fue trasladado a hospitalización?"]
+c219(["11.1.6.1 De su casa"]):::opt
+c221(["11.1.6.2 Por consulta externa"]):::opt
+c223(["11.1.6.3 Lo trasladaron de otro hospital"]):::opt
+c391["11.1.7 ¿Ha tenido otra hospitalización?"]
+c387(["11.1.7.1 Sí, registrar"]):::opt
+c388(["11.1.7.1 No, terminar registro"]):::opt
+c397(["Agregar loop"]):::nota
+
+c186 --> c187 --> c190 --> c193 --> c198
+c198 --> c207 --> c201
+c198 --> c209 --> c201
+c198 --> c211 --> c201
+c198 --> c213 --> c201
+c201 --> c215 --> c205
+c201 --> c217 --> c205
+c205 --> c219 --> c391
+c205 --> c221 --> c391
+c205 --> c223 --> c391
+c391 --> c387 --> c190
+c391 --> c388
+c186 --> c188
+c391 -.-> c397
+
+classDef titulo fill:#1a1a1a,stroke:#000,color:#fff;
+classDef opt fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef todo fill:#ffce00,stroke:#b38600,color:#1a1a1a;

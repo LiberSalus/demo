@@ -1,98 +1,62 @@
 # AGENTS.md
 
-Guia de trabajo para continuar el proyecto `lsinciosesionweb` sin perder el contexto de arquitectura, limpieza y decisiones tomadas.
+Guia compacta de trabajo del proyecto `lsinciosesionweb`.
 
 ## Forma de trabajar
 
-- Antes de hacer cualquier tarea es importante que leas este archivo de contexto 
-- Hablar con el usuario en espanol, tono cercano y claro.
-- El usuario suele llamar al asistente "maestro"; mantener ese estilo colaborativo.
-- Antes de modificar, revisar el arbol y entender si el archivo esta activo, en transicion o legacy.
-- Hacer cambios pequenos, verificables y con commits cortos cuando el usuario lo autorice o cuando se cierre una limpieza clara.
-- No borrar archivos legacy directamente si hay duda: moverlos a `afuera/` conservando su ruta relativa cuando sea posible.
-- No revertir cambios del usuario. Si aparece algo nuevo o distinto, asumir que lo cambio el usuario y trabajar alrededor.
-- Despues de cambios en codigo activo o assets importados, correr `npm run build`.
+- Leer este archivo antes de cada tarea.
+- Espanol, tono cercano y claro.
+- Cambios pequenos y verificables; commits cortos solo cuando el usuario lo autorice.
+- No borrar legacy si hay duda: mover a `afuera/` conservando ruta relativa.
+- No revertir cambios del usuario.
+- Tras cambios en codigo activo o assets, correr `npm run build`.
 
 ## Reglas de codigo
 
-- Usar nombres de funciones claros en espanol cuando se agreguen o refactoricen funciones propias del proyecto.
-- Cada funcion nueva o funcion refactorizada debe llevar un comentario breve en espanol que explique su responsabilidad.
-- Preferir componentes reutilizables cuando haya duplicacion real, pero sin sobrerrefactorizar.
-- Mantener estilos por modulo CSS cuando el patron del componente ya vive asi.
-- Usar imports con alias `@/` cuando el proyecto ya lo permite.
-- Evitar cambios grandes mezclados: primero estructura, luego comportamiento, luego estilos.
+- Funciones con nombres claros en espanol y un comentario breve de responsabilidad.
+- Reutilizar componentes si hay duplicacion real, sin sobrerrefactorizar.
+- Estilos por modulo CSS si el patron ya vive asi; imports con alias `@/`.
+- Orden: estructura -> comportamiento -> estilos.
 
 ## Arquitectura actual
 
-- `src/routes/index.jsx` concentra las rutas del panel.
-- `src/config/routes.jsx` contiene las constantes de rutas activas.
-- `src/Layout/Principal.jsx` monta el layout privado del panel.
-- `src/components/Header` contiene header, menu lateral y tarjeta lateral de perfil.
-- `src/components/Footer` contiene el footer activo.
-- `src/features/autenticacion` contiene el flujo nuevo de autenticacion.
-- `src/features/metricas` contiene el modulo principal de metricas.
-- `src/pages/Inicio` contiene dashboard inicial, calendario, tarjetas de salud, citas, medicamentos y noticias.
-- `src/shared/assets` guarda assets compartidos de uso transversal, como `usuario-default.png`.
-- `afuera/` es el area de resguardo para piezas removidas del arbol activo.
+- Rutas: `src/routes/index.jsx`; constantes en `src/config/routes.jsx`.
+- Layout privado: `src/Layout/Principal.jsx`.
+- `src/components/Header` (header, menu lateral, tarjeta de perfil) y `src/components/Footer`.
+- Modulos nuevos: `src/features/autenticacion` y `src/features/metricas`.
+- `src/pages/Inicio`: dashboard, calendario, tarjetas de salud, citas, medicamentos, noticias.
+- `src/shared/assets`: assets transversales (p. ej. `usuario-default.png`).
+- `afuera/`: resguardo de piezas removidas del arbol activo.
 
 ## Decisiones tomadas
 
-- Las metricas nuevas viven bajo `src/features/metricas`.
-- Frecuencia cardiaca, presion arterial, oxigenacion y glucosa ya estan conectadas a la nueva estructura de metricas.
-- El boton de registros ya se trajo al flujo nuevo y se conserva dentro de `features/metricas/registros`.
-- Las graficas viejas y componentes legacy se estan moviendo gradualmente a `afuera/`.
-- Los cuestionarios se conservan por ahora porque se van a retomar mas adelante.
-- `Any`, `Monitor` y `Franky` usan `PaginaEnConstruccion` como pantalla temporal reutilizable.
-- Las rutas placeholder se mantienen vivas para no romper menu/navegacion mientras diseno y producto definen pantallas finales.
-
-## Limpieza ya realizada
-
-- Se movieron a `afuera/` carpetas y piezas legacy de paginas no activas.
-- Se movieron assets duplicados o sin referencias activas.
-- Se movio `GraficaFrecuenciaCardiaca` fuera del arbol activo.
-- Se movio `backgroundPanel` y se limpiaron sus referencias.
-- Se movieron archivos de configuracion de metricas viejas que ya no participaban en el registro central.
-- Se centralizo el avatar default en `src/shared/assets/images/perfil/usuario-default.png`.
-- Se creo `PaginaEnConstruccion` para reducir duplicacion en pantallas temporales.
-
-## Metricas
-
-- La configuracion central esta en `src/features/metricas/config/metricas.config.js`.
-- Las areas estan en `src/features/metricas/config/areas.config.js`.
-- Los servicios compartidos de metricas estan en `src/features/metricas/services`.
-- Utilidades comunes viven en `src/features/metricas/utils`.
-- Cada metrica debe mantener su logica especifica dentro de su carpeta.
-- Si se agrega una nueva metrica, primero registrar su metadata, despues su vista y al final conectar resumen/inicio si aplica.
-- Evitar traer de regreso componentes legacy si ya existe una version nueva conectada.
+- Metricas en `src/features/metricas`: config en `config/metricas.config.js` y `config/areas.config.js`, servicios en `services/`, utils en `utils/`. FC, presion, oxigenacion y glucosa conectadas; registros en `features/metricas/registros`. Nueva metrica: metadata -> vista -> resumen/inicio.
+- Legacy se mueve a `afuera/`; no traer de regreso versiones viejas si ya existe la nueva.
+- `Any`, `Monitor` y `Franky` usan `PaginaEnConstruccion`; rutas placeholder vivas mientras diseno/producto definen pantallas.
+- Cuestionarios se conservan por ahora (se retoman mas adelante).
 
 ## Sesion y perfil
 
-- `src/services/auth.js` maneja autenticacion, decode-token, refresh y logout.
-- `src/hooks/useSesionActiva.js` centraliza el estado funcional de sesion activa.
-- La tarjeta lateral del header ya esta preparada para mostrar estado conectado/desconectado.
-- Los datos que aun dependen de backend deben dejarse preparados con fallback claro.
-- La foto de perfil usa servicios en `src/services/perfil.js`.
+- `src/services/auth.js`: autenticacion, decode-token, refresh, logout. `src/services/perfil.js`: foto.
+- `src/hooks/useSesionActiva.js` centraliza la sesion activa.
+- Datos dependientes de backend siempre con fallback claro.
 
-## Commits recientes importantes
+## Mini-skill: Mermaid + drawio (cuestionarios)
 
-- `30d6651` Conecta graficas de oxigenacion y glucosa.
-- `eced4f6` Ordena archivos legacy fuera del arbol activo.
-- `4f25f4` Mueve paginas placeholder fuera del arbol activo.
-- `8b0a685` Actualiza avatar compartido y jsconfig.
-- `66a2eb7` Mueve tarjeta bienestar sin uso activo.
-- `f801e38` Mueve piezas de metricas sin uso activo.
-- `7fef2a5` Mueve assets de metricas sin uso activo.
-- `df12adc` Mueve documento pdf de metricas sin uso activo.
-- `017a4c7` Reutiliza pantalla temporal en rutas pendientes.
+Fuente: `docs/historia_clinica/questionnaires/index.DEMO_quewstionnaire.drawio` (17 paginas); salida `.mmd` en `mermaid/` (indice: `index.md`). Conversion tab por tab a mano, sin scripts generadores; python solo en modo lectura para inspeccionar celdas `<mxCell>` y aristas del XML.
+
+- Patron de cuestionario aprobado: un nodo por item con enunciado + opciones numeradas con valor (`A.1.1 Nunca (0)`); cadena secuencial unica entre items, una flecha por linea (`A.1 -> D.1 -> A.2 -> ...`); un `{tab}-review.md` por cuestionario con su tabla Markdown `Puntuacion | Interpretacion`.
+- Trabas resueltas: comentarios `%%` antes de `flowchart LR` rompen el parseo (declarar `flowchart` primero); el drawio original tiene rotulaciones erroneas (A.2 -> "3.2/3.3/3.4", D.2.1 -> "4.1.") que se corrigen y se anotan en `%%`.
+- Ser fiel al drawio: los valores y conexiones se leen del XML real (nodos de valor + aristas), no se asumen por el estandar clinico; si el drawio contradice el estandar, se sigue el drawio salvo que el usuario decida otra cosa, y se anota en `%%`/review.
+- Auditar flechas/conexiones: no confiar solo en contar items; verificar la cadena una-flecha-por-linea y, en el SVG renderizado, contar `marker-end` y el orden de `x`. Ojo con flujos condicionales y con rotulos duplicados en el drawio (dos opciones con el mismo rotulo) que hacen perder conexiones.
+- Validar con `npx --yes @mermaid-js/mermaid-cli@10 -p <config-no-sandbox> -i X.mmd -o X.svg`; para verificar el orden visual real, leer coordenadas `x` de los nodos del SVG.
 
 ## Pendientes naturales
 
-- Revisar carpetas activas por partes, no hacer limpiezas masivas a ciegas.
-- Afinar estilos con wireframes cuando diseno los comparta.
-- Completar pantallas de recuperacion de contrasena cuando backend entregue servicios.
-- Seguir puliendo metricas con el patron de Frecuencia, Presion, Oxigenacion y Glucosa.
-- Revisar `tmp/`, `tools/`, `docs/` e `integraciones/` solo con contexto, porque pueden servir como referencia.
-- Evaluar despues si conviene Zustand para estado global, pero solo cuando el arbol de datos lo pida de verdad.
+- Limpiezas por partes, con contexto, no masivas a ciegas.
+- Recuperacion de contrasena cuando backend entregue servicios.
+- Revisar `tmp/`, `tools/`, `docs/` e `integraciones/` solo con contexto.
+- Zustand solo si el arbol de datos lo pide de verdad.
 
 ## Comandos utiles
 
@@ -103,18 +67,7 @@ rg "texto-a-buscar" src
 rg --files src
 ```
 
-## Criterio para mover a `afuera/`
+## Mover a `afuera/`
 
-Mover a `afuera/` cuando se cumpla al menos una de estas condiciones:
-
-- No hay imports ni referencias activas en `src`.
-- Es una version vieja reemplazada por una nueva en `features/metricas`.
-- Es un documento o asset de referencia que no participa en runtime.
-- El usuario confirma que ya no se usara, pero quiere conservarlo por seguridad.
-
-No mover si:
-
-- Pertenece a cuestionarios pendientes.
-- Esta conectado a rutas activas.
-- Es un asset usado por Inicio, Header, Footer, Login o metricas activas.
-- Solo parece viejo, pero aun no se verificaron referencias.
+Mover si: sin imports/referencias activas; version vieja reemplazada por nueva; documento/asset de referencia sin runtime; usuario lo confirma.
+No mover si: pertenece a cuestionarios pendientes; esta en rutas activas; es asset de Inicio/Header/Footer/Login/metricas activas; solo parece viejo sin verificar.

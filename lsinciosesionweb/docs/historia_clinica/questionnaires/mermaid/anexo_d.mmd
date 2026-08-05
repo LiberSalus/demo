@@ -1,0 +1,131 @@
+%% Diagrama Mermaid de la tab "ANEXO D" - PSICOLOGÍA (routing de cuestionarios)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina ANEXO D)
+%% Es un flujo de derivacion: segun respuestas, se habilita un instrumento
+%% (ZARIT-CBI, SF-12, HADS, GAD-7, CTH, DTS, SPIN, TAS-20, CDI/GDS/PHQ-9,
+%%  EDAH/ASRS, DAI-10, EAG).
+flowchart TD
+
+d173(["PSICOLOGÍA"]):::titulo
+d252(["CODIGOS DEL CIE-11"]):::nota
+
+%% ---- A. REGISTRO ----
+d146(["A. REGISTRO"]):::seccion
+d145["1.0 ¿Requiere apoyo de tutor o responsable?"]
+d143(["1.1 Sí"]):::opt
+d147(["ZARIT-CBI"]):::instrumento
+d145 --> d143 --> d147
+d146 --> d145
+
+%% ---- B. PADECIMIENTO ACTUAL ----
+d161(["B. PADECIMIENTO ACTUAL"]):::seccion
+d160["2.0 ¿Qué le gustaría atender en este momento?"]
+d155(["2.1 Presenta alguna molestia o síntomas"]):::opt
+d168(["2.2 Dar seguimiento a un problema de salud"]):::opt
+d170(["2.3 Cuidar su salud y prevenir problemas"]):::opt
+d172(["2.4 Realizar un chequeo general"]):::opt
+d162(["SF-12"]):::instrumento
+d161 --> d160
+d160 --> d155 --> d162
+d160 --> d168 --> d162
+d160 --> d170 --> d162
+d160 --> d172 --> d162
+
+%% ---- C. ANTECEDENTES PERSONALES PATOLÓGICOS ----
+d176(["C. ANTECEDENTES PERSONALES PATOLÓGICOS"]):::seccion
+d175["1.0 ¿Tienes algunos de los siguientes problemas?"]
+d180(["1.1 MENTAL"]):::opt
+d182(["1.1.1 SÍ"]):::opt
+d183(["HADS"]):::instrumento
+d176 --> d175 --> d180 --> d182 --> d183
+
+d185["2.0 ¿Padece o ha padecido alguna de las siguientes enfermedades?"]
+d193["2.1 Enfermedades transmisibles y no transmisibles"]
+d195(["2.1.12 Ansiedad"]):::opt
+d196(["GAD-7"]):::instrumento
+d198(["2.1.14 Bipolaridad"]):::opt
+d199(["CTH"]):::instrumento
+d201(["2.1.16 Estrés postraumático"]):::opt
+d202(["DTS"]):::instrumento
+d204(["2.1.17 Fobia social"]):::opt
+d205(["SPIN"]):::instrumento
+d207(["2.1.18 Alexitimia"]):::opt
+d208(["TAS-20"]):::instrumento
+d254(["2.1.6 Depresión"]):::opt
+d273(["2.1.15 TDAH"]):::opt
+
+d175 --> d185 --> d193
+d193 --> d195 --> d196
+d193 --> d198 --> d199
+d193 --> d201 --> d202
+d193 --> d204 --> d205
+d193 --> d207 --> d208
+d193 --> d254
+d193 --> d273
+
+%% Depresión: rama por edad
+d257["Su edad es < 18"]
+d259(["Sí"]):::opt
+d261(["No"]):::opt
+d262(["CDI"]):::instrumento
+d265["Su edad es > 60"]
+d267(["Sí"]):::opt
+d269(["No"]):::opt
+d270(["GDS"]):::instrumento
+d271(["PHQ-9"]):::instrumento
+d254 --> d257 --> d259 --> d262
+d257 --> d261 --> d265 --> d267 --> d270
+d265 --> d269 --> d271
+
+%% TDAH: rama por edad
+d276["Su edad es 6-12"]
+d278(["Sí"]):::opt
+d280(["No"]):::opt
+d281(["EDAH"]):::instrumento
+d282(["ASRS-V1.1"]):::instrumento
+d273 --> d276 --> d278 --> d281
+d276 --> d280 --> d282
+
+%% Medicamentos → DAI-10
+d210["2.2.1.1 Indique los medicamentos que correspondan"]
+d222["Despliegue de BD de medicamentos"]
+d212(["Haloperidol (Haldol)"]):::opt
+d224(["Clorpromazina"]):::opt
+d226(["Flufenacina"]):::opt
+d228(["Risperidona (Risperdal)"]):::opt
+d230(["Olanzapina (Zyprexa)"]):::opt
+d232(["Quetiapina (Seroquel)"]):::opt
+d234(["Aripiprazol (Abilify)"]):::opt
+d236(["Clozapina"]):::opt
+d213(["DAI-10"]):::instrumento
+d185 --> d210 --> d222
+d222 --> d212 --> d213
+d222 --> d224 --> d213
+d222 --> d226 --> d213
+d222 --> d228 --> d213
+d222 --> d230 --> d213
+d222 --> d232 --> d213
+d222 --> d234 --> d213
+d222 --> d236 --> d213
+
+%% ---- Sustancias → EAG ----
+d238["3.0 ¿Fuma?"]
+d240(["3.1 Sí"]):::opt
+d243["4.0 ¿Consume bebidas alcohólicas?"]
+d245(["4.1 Sí"]):::opt
+d247["5.0 ¿Ha consumido algún tipo de droga?"]
+d249(["5.1 Sí"]):::opt
+d241(["EAG"]):::instrumento
+d185 --> d238 --> d240 --> d241
+d185 --> d243 --> d245 --> d241
+d185 --> d247 --> d249 --> d241
+
+d173 --> d146
+d173 --> d161
+d173 --> d176
+d173 -.-> d252
+
+classDef titulo fill:#1a1a1a,stroke:#000,color:#fff;
+classDef seccion fill:#4d84c4,stroke:#001DBC,color:#fff;
+classDef opt fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef instrumento fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;

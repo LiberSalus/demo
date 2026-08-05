@@ -1,0 +1,112 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO DTS"
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO DTS)
+%% DTS = Davidson Trauma Scale. 18 items (evaluando Frecuencia 0-4 y Gravedad 0-4 en cada uno).
+%% Flujo SECUENCIAL: d1 -> d2 -> ... -> d18 -> Resultados DTS -> Fin.
+%% Nota: el item 13 del drawio repite el enunciado del 12 (duplicado en el original).
+%% Tabla de interpretacion: cuestionario_dts-review.md.
+
+dtsIntro["En la ultima semana. Valore para cada sintoma su Frecuencia (0-4) y Gravedad (0-4)."]:::nota
+
+d1[/"<b>1. ¿Ha tenido imagenes, recuerdos o pensamientos dolorosos del acontecimiento?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d2[/"<b>2. ¿Ha tenido pesadillas sobre el acontecimiento?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d3[/"<b>3. ¿Ha sentido que el acontecimiento estaba ocurriendo de nuevo?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d4[/"<b>4. ¿Le ha molestado alguna cosa que se lo haya recordado?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d5[/"<b>5. ¿Ha tenido manifestaciones fisicas por recuerdos del acontecimiento?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d6[/"<b>6. ¿Ha estado evitando algun pensamiento o sentimiento sobre el acontecimiento?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d7[/"<b>7. ¿Ha estado evitando hacer cosas o estar en situaciones que le recordaban?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d8[/"<b>8. ¿Ha sido incapaz de recordar partes importantes del acontecimiento?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d9[/"<b>9. ¿Ha tenido dificultad para disfrutar de las cosas?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d10[/"<b>10. ¿Se ha sentido distante o alejado de la gente?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d11[/"<b>11. ¿Ha sido incapaz de tener sentimientos de tristeza o de afecto?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d12[/"<b>12. ¿Ha tenido dificultad para imaginar una vida larga y cumplir sus objetivos?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+%% Item 13 del drawio: repite casi el mismo enunciado del item 12 (duplicado en el original).
+d13[/"<b>13. ¿Ha tenido dificultad para imaginar una vida larga y cumplir sus objetivos? (dup. del 12)</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d14[/"<b>14. ¿Ha tenido dificultad para iniciar o mantener el sueno?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d15[/"<b>15. ¿Ha estado irritable o ha tenido accesos de ira?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d16[/"<b>16. ¿Ha tenido dificultades de concentracion?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d17[/"<b>17. ¿Se ha sentido nervioso, facilmente distraido o permanecido «en guardia»?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+d18[/"<b>18. ¿Ha estado nervioso o se ha asustado facilmente?</b>
+• Frecuencia: Nunca (0) | A veces (1) | (2-3) veces (2) | (4-6) veces (3) | A diario (4)
+• Gravedad: Nada (0) | Leve (1) | Moderada (2) | Marcada (3) | Extrema (4)"/]:::item
+
+dResultados["Resultados DTS"]:::resultado
+dFin(["Fin del cuestionario DTS"]):::fin
+
+%% Cadena secuencial:
+dtsIntro --> d1
+d1 --> d2
+d2 --> d3
+d3 --> d4
+d4 --> d5
+d5 --> d6
+d6 --> d7
+d7 --> d8
+d8 --> d9
+d9 --> d10
+d10 --> d11
+d11 --> d12
+d12 --> d13
+d13 --> d14
+d14 --> d15
+d15 --> d16
+d16 --> d17
+d17 --> d18
+d18 --> dResultados
+dResultados --> dFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

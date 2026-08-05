@@ -1,0 +1,84 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO PHQ" (PHQ-9)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO PHQ)
+%% PHQ-9 = Patient Health Questionnaire-9. 9 items en flujo SECUENCIAL:
+%%   p1 -> p2 -> p3 -> p4 -> p5 -> p6 -> p7 -> p8 -> p9 -> Resultados PHQ-9 -> Fin.
+%% Cada item es un unico nodo con el enunciado completo del Drawio y sus 4 opciones con valor (0-3).
+%% Tabla de interpretacion: cuestionario_phq-review.md.
+
+pIntro["En las ultimas dos semanas usted sintio..."]:::nota
+
+p1[/"<b>1. Poco interes o placer en hacer cosas</b>
+1.1 Ningun dia (0)
+1.2 Varios dias (1)
+1.3 Mas de la mitad de los dias (2)
+1.4 Casi todos los dias (3)"/]:::item
+
+p2[/"<b>2. Se ha sentido decaido(a), deprimido(a) o sin esperanzas</b>
+2.1 Ningun dia (0)
+2.2 Varios dias (1)
+2.3 Mas de la mitad de los dias (2)
+2.4 Casi todos los dias (3)"/]:::item
+
+p3[/"<b>3. Ha tenido dificultad para quedarse o permanecer dormido(a), o ha dormido demasiado</b>
+3.1 Ningun dia (0)
+3.2 Varios dias (1)
+3.3 Mas de la mitad de los dias (2)
+3.4 Casi todos los dias (3)"/]:::item
+
+p4[/"<b>4. Se ha sentido cansado(a) o con poca energia</b>
+4.1 Ningun dia (0)
+4.2 Varios dias (1)
+4.3 Mas de la mitad de los dias (2)
+4.4 Casi todos los dias (3)"/]:::item
+
+p5[/"<b>5. Sin apetito o ha comido en exceso</b>
+5.1 Ningun dia (0)
+5.2 Varios dias (1)
+5.3 Mas de la mitad de los dias (2)
+5.4 Casi todos los dias (3)"/]:::item
+
+p6[/"<b>6. Se ha sentido mal con usted mismo(a) – o que es un fracaso o que ha quedado mal con usted mismo(a) o con su familia</b>
+6.1 Ningun dia (0)
+6.2 Varios dias (1)
+6.3 Mas de la mitad de los dias (2)
+6.4 Casi todos los dias (3)"/]:::item
+
+p7[/"<b>7. Ha tenido dificultad para concentrarse en ciertas actividades, tales como leer el cuerpo del texto o ver la television</b>
+7.1 Ningun dia (0)
+7.2 Varios dias (1)
+7.3 Mas de la mitad de los dias (2)
+7.4 Casi todos los dias (3)"/]:::item
+
+p8[/"<b>8. ¿Se ha movido o hablado tan lento que otras personas podrian haberlo notado? o lo contrario – muy inquieto(a) o agitado(a) que ha estado moviendose mucho mas de lo normal</b>
+8.1 Ningun dia (0)
+8.2 Varios dias (1)
+8.3 Mas de la mitad de los dias (2)
+8.4 Casi todos los dias (3)"/]:::item
+
+p9[/"<b>9. Pensamientos de que estaria mejor muerto(a) o de lastimarse de alguna manera</b>
+9.1 Ningun dia (0)
+9.2 Varios dias (1)
+9.3 Mas de la mitad de los dias (2)
+9.4 Casi todos los dias (3)"/]:::item
+
+pResultados["Resultados PHQ-9"]:::resultado
+pFin(["Fin del cuestionario PHQ-9"]):::fin
+
+%% Cadena secuencial del cuestionario:
+pIntro --> p1
+p1 --> p2
+p2 --> p3
+p3 --> p4
+p4 --> p5
+p5 --> p6
+p6 --> p7
+p7 --> p8
+p8 --> p9
+p9 --> pResultados
+pResultados --> pFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

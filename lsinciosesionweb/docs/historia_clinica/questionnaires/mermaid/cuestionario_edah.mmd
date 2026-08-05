@@ -1,0 +1,161 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO EDAH"
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO EDAH)
+%% EDAH = Evaluacion del Trastorno por Deficit de Atencion e Hiperactividad.
+%% 20 items en flujo SECUENCIAL: e1 -> e2 -> ... -> e20 -> Resultados EDAH -> Fin.
+%% Opciones por item: Nada (0), Poco (1), Bastante (2), Mucho (3).
+%% Tabla de interpretacion y subescalas (H, DA, DAH, TC, Global): cuestionario_edah-review.md.
+
+edahIntro["Evaluacion del TDAH en ninos/as. Valore el comportamiento del nino/a durante los ultimos 6 meses."]:::nota
+
+e1[/"<b>1. Muestra excesiva inquietud motora</b>
+1.1 Nada (0)
+1.2 Poco (1)
+1.3 Bastante (2)
+1.4 Mucho (3)"/]:::item
+
+e2[/"<b>2. Tiene dificultades de aprendizaje escolar</b>
+2.1 Nada (0)
+2.2 Poco (1)
+2.3 Bastante (2)
+2.4 Mucho (3)"/]:::item
+
+e3[/"<b>3. Molesta frecuentemente a otros ninos/as</b>
+3.1 Nada (0)
+3.2 Poco (1)
+3.3 Bastante (2)
+3.4 Mucho (3)"/]:::item
+
+e4[/"<b>4. Se distrae facilmente, muestra escasa atencion</b>
+4.1 Nada (0)
+4.2 Poco (1)
+4.3 Bastante (2)
+4.4 Mucho (3)"/]:::item
+
+e5[/"<b>5. Exige inmediata solucion a sus demandas</b>
+5.1 Nada (0)
+5.2 Poco (1)
+5.3 Bastante (2)
+5.4 Mucho (3)"/]:::item
+
+e6[/"<b>6. Tiene dificultades para las actividades cooperativas</b>
+6.1 Nada (0)
+6.2 Poco (1)
+6.3 Bastante (2)
+6.4 Mucho (3)"/]:::item
+
+e7[/"<b>7. Se muestra ensimismado, como «en las nubes»</b>
+7.1 Nada (0)
+7.2 Poco (1)
+7.3 Bastante (2)
+7.4 Mucho (3)"/]:::item
+
+e8[/"<b>8. Deja inconclusas las tareas que empieza</b>
+8.1 Nada (0)
+8.2 Poco (1)
+8.3 Bastante (2)
+8.4 Mucho (3)"/]:::item
+
+e9[/"<b>9. No es bien aceptado por el grupo de companeros/as</b>
+9.1 Nada (0)
+9.2 Poco (1)
+9.3 Bastante (2)
+9.4 Mucho (3)"/]:::item
+
+e10[/"<b>10. Niega sus errores o echa la culpa a sus companeros/as</b>
+10.1 Nada (0)
+10.2 Poco (1)
+10.3 Bastante (2)
+10.4 Mucho (3)"/]:::item
+
+e11[/"<b>11. A menudo grita en situaciones inadecuadas para aquello</b>
+11.1 Nada (0)
+11.2 Poco (1)
+11.3 Bastante (2)
+11.4 Mucho (3)"/]:::item
+
+e12[/"<b>12. Contesta con facilidad. Es irrespetuoso, arrogante</b>
+12.1 Nada (0)
+12.2 Poco (1)
+12.3 Bastante (2)
+12.4 Mucho (3)"/]:::item
+
+e13[/"<b>13. Se mueve constantemente, es intranquilo</b>
+13.1 Nada (0)
+13.2 Poco (1)
+13.3 Bastante (2)
+13.4 Mucho (3)"/]:::item
+
+e14[/"<b>14. Discute y pelea por cualquier cosa u objeto</b>
+14.1 Nada (0)
+14.2 Poco (1)
+14.3 Bastante (2)
+14.4 Mucho (3)"/]:::item
+
+e15[/"<b>15. Tiene explosiones impredecibles de mal genio</b>
+15.1 Nada (0)
+15.2 Poco (1)
+15.3 Bastante (2)
+15.4 Mucho (3)"/]:::item
+
+e16[/"<b>16. Le falta sentido de la «regla», del juego «limpio»</b>
+16.1 Nada (0)
+16.2 Poco (1)
+16.3 Bastante (2)
+16.4 Mucho (3)"/]:::item
+
+e17[/"<b>17. Es impulsivo e irritable</b>
+17.1 Nada (0)
+17.2 Poco (1)
+17.3 Bastante (2)
+17.4 Mucho (3)"/]:::item
+
+e18[/"<b>18. Se lleva mal con la mayoria de sus companeros/as</b>
+18.1 Nada (0)
+18.2 Poco (1)
+18.3 Bastante (2)
+18.4 Mucho (3)"/]:::item
+
+e19[/"<b>19. Se frustra facilmente, es inconstante</b>
+19.1 Nada (0)
+19.2 Poco (1)
+19.3 Bastante (2)
+19.4 Mucho (3)"/]:::item
+
+e20[/"<b>20. Accede de mala forma a las indicaciones del profesor/a</b>
+20.1 Nada (0)
+20.2 Poco (1)
+20.3 Bastante (2)
+20.4 Mucho (3)"/]:::item
+
+eResultados["Resultados EDAH"]:::resultado
+eFin(["Fin del cuestionario EDAH"]):::fin
+
+%% Cadena secuencial:
+edahIntro --> e1
+e1 --> e2
+e2 --> e3
+e3 --> e4
+e4 --> e5
+e5 --> e6
+e6 --> e7
+e7 --> e8
+e8 --> e9
+e9 --> e10
+e10 --> e11
+e11 --> e12
+e12 --> e13
+e13 --> e14
+e14 --> e15
+e15 --> e16
+e16 --> e17
+e17 --> e18
+e18 --> e19
+e19 --> e20
+e20 --> eResultados
+eResultados --> eFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

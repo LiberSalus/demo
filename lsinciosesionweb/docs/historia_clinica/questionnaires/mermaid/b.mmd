@@ -1,0 +1,133 @@
+%% Diagrama Mermaid de la tab "B" - PADECIMIENTO ACTUAL
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina B)
+%% Nota del original: el titulo lleva el comentario "(PODRÍA MEJORAR EL NOMBRE?)".
+flowchart TD
+
+btitulo(["B. PADECIMIENTO ACTUAL (PODRÍA MEJORAR EL NOMBRE?)"]):::todo
+%% Texto completo 1.0:
+%% "1.0 Para brindar una atención más completa y personalizada, se le harán
+%%  algunas preguntas sobre su molestia o problema de salud actual."
+b10["1.0 Para brindar una atención más completa y personalizada..."]:::nota
+b20["2.0 ¿Qué le gustaría atender en este momento?"]
+
+b21(["2.1 Presenta alguna molestia o síntoma"]):::opt
+b22(["2.2 Dar seguimiento a un problema de salud"]):::opt
+b23(["2.3 Cuidar su salud y prevenir problemas"]):::opt
+b24(["2.4 Realizar un chequeo general"]):::opt
+
+b231["2.3.1 Actualmente, ¿presenta alguna molestia o síntoma?"]
+b2311(["2.3.1.1 Sí"]):::opt
+b2312(["2.3.1.2 No"]):::opt
+
+b30["Motivo de consulta 3.0 ¿Cuál es la principal molestia o síntoma que presenta en este momento?"]
+b40["Inicio del problema 4.0 ¿Desde cuándo presenta esta molestia o síntoma?"]
+b41(["4.1 Inició hoy"]):::opt
+b42(["4.2 Hace algunos días"]):::opt
+b43(["4.3 Hace semanas"]):::opt
+b44(["4.4 Hace meses"]):::opt
+b45(["4.5 Hace más tiempo"]):::opt
+b50["Forma de inicio 5.0 ¿Cómo comenzó esta molestia o síntoma?"]
+b51(["5.1 De forma repentina"]):::opt
+b52(["5.2 De manera gradual"]):::opt
+b53(["5.3 Aparece y desaparece"]):::opt
+b54(["5.4 No lo recuerda"]):::opt
+b60["Causa real o aparente 6.0 ¿Ha notado alguna situación, actividad o evento que relacione con el inicio de esta molestia o síntoma?"]
+b61(["6.1 Actividad física o esfuerzo"]):::opt
+b62(["6.2 Estrés o emociones"]):::opt
+b63(["6.3 Algún golpe o lesión"]):::opt
+b64(["6.4 Contacto con alguna sustancia o alimento"]):::opt
+b65(["6.5 Enfermedad previa"]):::opt
+b66(["6.6 Medicamento o tratamiento"]):::opt
+b67(["6.7 Ninguna"]):::opt
+b68(["6.8 Otro"]):::opt
+b70["Evolución 7.0 Desde que comenzó, ¿cómo ha evolucionado?"]
+b71(["7.1 Ha mejorado"]):::opt
+b72(["7.2 Ha empeorado"]):::opt
+b73(["7.3 Se ha mantenido igual"]):::opt
+b74(["7.4 Aparece y desaparece"]):::opt
+b80["Caracterización del síntoma 8.0 A continuación, se le harán algunas preguntas más específicas sobre la molestia o síntoma..."]:::nota
+b90["Localización 9.0 ¿En qué parte del cuerpo presenta la molestia?"]
+bselector(["Opción de selector corporal visual para seleccionar zona donde siente la molestia"]):::nota
+bnotaLumbar(["Si señala la zona lumbar, articulaciones o dolores musculoesqueléticos..."]):::nota
+b100["Irradiación 10.0 ¿La molestia se extiende a otra parte del cuerpo?"]
+b110["Tipo de molestia 11.0 ¿Cómo describiría la molestia?"]
+b120["Intensidad 12.0 En una escala del 0 al 10, donde 0 es ninguna molestia y 10 es la mayor intensidad posible, ¿qué tan intensa es?"]
+b130["Frecuencia 13.0 ¿Con qué frecuencia presenta esta molestia?"]
+b140["Duración 14.0 ¿Cuando aparece, cuánto tiempo dura?"]
+b150["Factores que empeoran 15.0 ¿Ha notado algo que la empeore?"]
+b160["Factores que alivian 16.0 ¿Hay algo que la alivie?"]
+b170["Síntomas asociados 17.0 Además de esta molestia, ¿ha presentado alguno otro síntoma?"]
+b170a["Síntomas asociados 17.0A ¿Estos síntomas acompañantes continúan actualmente?"]
+b171a(["17.1A Sí, todos"]):::opt
+b172a(["17.2A Algunos de ellos"]):::opt
+b173a(["17.3A No"]):::opt
+b180["Impacto funcional 18.0 ¿Esta molestia ha afectado sus actividades diarias?"]
+b190["Acciones previas 19.0 ¿Ha realizado alguna acción para aliviar esta molestia?"]
+b200["Antecedentes relacionados 20.0 ¿Había presentado esta molestia anteriormente?"]
+b210["Antecedentes relacionados 21.0 ¿Había presentado esta molestia anteriormente?"]
+b220["Estudios previos 22.0 ¿Se ha realizado estudio, análisis o revisiones relacionados con esta molestia?"]
+b221(["22.1 Sí"]):::opt
+b222(["22.2 NO"]):::opt
+b2211["22.1.1 Especifique"]
+bbd(["Conectar con BD de estudios"]):::todo
+b230["Acciones o tratamiento previo 23.0 ¿Ha tomado algún tratamiento o realizado acción para tratarlo?"]
+b231(["23.1 Medicamentos"]):::opt
+b232(["23.2 Atención médica"]):::opt
+b233(["23.3 Remedios caseros"]):::opt
+b234(["23.4 Terapias"]):::opt
+b235(["23.5 Ninguna"]):::opt
+
+btitulo --> b10 --> b20
+b20 --> b21 --> b30
+b20 --> b22 --> b231
+b20 --> b23 --> b231
+b20 --> b24 --> b231
+b231 --> b2311 --> b30
+b231 --> b2312
+
+b30 --> b40
+b40 --> b41 --> b50
+b40 --> b42 --> b50
+b40 --> b43 --> b50
+b40 --> b44 --> b50
+b40 --> b45 --> b50
+b50 --> b51 --> b60
+b50 --> b52 --> b60
+b50 --> b53 --> b60
+b50 --> b54 --> b60
+b60 --> b61 --> b70
+b60 --> b62 --> b70
+b60 --> b63 --> b70
+b60 --> b64 --> b70
+b60 --> b65 --> b70
+b60 --> b66 --> b70
+b60 --> b67 --> b70
+b60 --> b68 --> b70
+b70 --> b71 --> b80
+b70 --> b72 --> b80
+b70 --> b73 --> b80
+b70 --> b74 --> b80
+b80 --> b90
+b90 --> bselector
+b90 --> bnotaLumbar
+b90 --> b100
+b100 --> b110 --> b120 --> b130 --> b140 --> b150 --> b160 --> b170
+b170 --> b170a
+b170 --> b180
+b170a --> b171a
+b170a --> b172a
+b170a --> b173a
+b180 --> b190 --> b200 --> b210 --> b220
+b220 --> b221 --> b2211
+b220 --> b222 --> b230
+b2211 --> bbd
+b2211 --> b230
+b230 --> b231
+b230 --> b232
+b230 --> b233
+b230 --> b234
+b230 --> b235
+
+classDef opt fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef todo fill:#ffce00,stroke:#b38600,color:#1a1a1a;

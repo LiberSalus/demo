@@ -1,0 +1,58 @@
+%% Diagrama Mermaid de la tab "ANEXO C" - MAPEO condicion → cuestionario
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina ANEXO C)
+%% Es una tabla de mapeo. Columnas originales:
+%%   Pregunta de condición | Respuesta | Pregunta | Respuesta | Cuestionario que se habilita
+%% Se interpreta como: si (Pregunta condicion + Respuesta) y (Pregunta + Respuesta)
+%% entonces se habilita el Cuestionario.
+flowchart LR
+
+%% ===== Sección PSICOLOGÍA =====
+subgraph PSICO["PSICOLOGÍA"]
+  %% Fila: A.1.0 + A.resp 1.1 -> ZARIT-CBI
+  p1["A.1.0 + resp 1.1"]:::cond --> pz["ZARIT-CBI"]:::instr
+  %% B.2.0 + A.resp 2.1 -> SF-12
+  p2["B.2.0 + A.resp 2.1"]:::cond --> psf["SF-12"]:::instr
+  p3["B.2.0 + A.resp 2.2"]:::cond --> psf
+  p4["B.2.0 + A.resp 2.3"]:::cond --> psf
+  p5["B.2.0 + A.resp 2.4"]:::cond --> psf
+  %% ASQ-15
+  p6["B.2.0 + A.resp 2.2"]:::cond --> pasq["ASQ-15"]:::instr
+  p7["B.2.0 + A.resp 2.3"]:::cond --> pasq
+  p8["B.2.0 + A.resp 2.4"]:::cond --> pasq
+  %% HADS
+  p9["C.1.1 + C.resp 1.1.1"]:::cond --> phads["HADS"]:::instr
+  %% PHQ-9 / CDI / GDS (Depresión 2.1.8, por edad)
+  p10["C.2.1 + C.resp 2.1.8"]:::cond --> pphq["PHQ-9"]:::instr
+  p11["A.1.2.13 = <18 AND C.2.1 + 2.1.8"]:::cond --> pcdi["CDI"]:::instr
+  p12["A.1.2.13 = >60 AND C.2.1 + 2.1.8"]:::cond --> pgds["GDS"]:::instr
+  %% GAD-7 / AES-S / CTH / ASRS / EDAH / DTS / SPIN / TAS-20
+  p13["C.2.1 + C.resp 2.1.12"]:::cond --> pgad["GAD-7"]:::instr
+  p14["C.2.1 + C.resp 2.1.13"]:::cond --> paes["AES-S"]:::instr
+  p15["C.2.1 + C.resp 2.1.14"]:::cond --> pcth["CTH"]:::instr
+  p16["C.2.1 + C.resp 2.1.15"]:::cond --> pasrs["ASRS-V1.1"]:::instr
+  p17["A.1.2.13 = 6-12 AND C.2.1 + 2.1.15"]:::cond --> pedah["EDAH"]:::instr
+  p18["C.2.1 + C.resp 2.1.16"]:::cond --> pdts["DTS"]:::instr
+  p19["C.2.1 + C.resp 2.1.17"]:::cond --> pspin["SPIN"]:::instr
+  p20["C.2.1 + C.resp 2.1.18"]:::cond --> ptas["TAS-20"]:::instr
+  %% Medicamentos antipsicóticos -> DAI-10
+  p21["C.2.2.1.1.1 + Haloperidol"]:::cond --> pdai["DAI-10"]:::instr
+  p22["C.2.2.1.1.1 + Clorpromazina"]:::cond --> pdai
+  p23["C.2.2.1.1.1 + Flufenacina"]:::cond --> pdai
+  p24["C.2.2.1.1.1 + Risperidona"]:::cond --> pdai
+  p25["C.2.2.1.1.1 + Olanzapina"]:::cond --> pdai
+  p26["C.2.2.1.1.1 + Quetiapina"]:::cond --> pdai
+  p27["C.2.2.1.1.1 + Aripiprazol"]:::cond --> pdai
+  p28["C.2.2.1.1.1 + Clozapina"]:::cond --> pdai
+  %% Sustancias -> EAG
+  p29["C.3.0 + C.resp 3.1"]:::cond --> peag["EAG"]:::instr
+  p30["C.4.0 + C.resp 4.1"]:::cond --> peag
+  p31["C.5.0 + C.resp 5.1"]:::cond --> peag
+end
+
+%% ===== Sección NUTRICIÓN =====
+subgraph NUTRI["NUTRICIÓN"]
+  n1["j-2.0 + J-2.1"]:::cond --> nipaq["IPAQ"]:::instr
+end
+
+classDef cond fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef instr fill:#d1fadf,stroke:#12b76a,color:#063;

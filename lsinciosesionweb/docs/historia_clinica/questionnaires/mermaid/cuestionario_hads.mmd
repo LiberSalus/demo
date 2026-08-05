@@ -1,0 +1,131 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO HADS"
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO HADS)
+%% HADS = Hospital Anxiety and Depression Scale. 14 items en flujo SECUENCIAL:
+%%   A.1 -> D.1 -> A.2 -> D.2 -> A.3 -> D.3 -> A.4 -> D.4 -> A.5 -> D.5
+%%   -> A.6 -> D.6 -> A.7 -> D.7 -> Resultados HADS -> Fin del cuestionario.
+%% En el drawio, de cada item salen:
+%%   - 4 flechas hacia sus opciones (X.Y.1..X.Y.4) con sus valores 0-3 (scoring)
+%%   - 1 flecha hacia el siguiente item (avance del cuestionario)
+%% Aqui cada item es un unico nodo con el enunciado y sus 4 opciones
+%% numeradas con su valor; la flecha de avance es la unica cadena secuencial,
+%% tal como se lee el cuestionario en drawio.
+%% Tabla de interpretacion: cuestionario_hads-review.md.
+%% Notas del original (errores de rotulacion en el drawio, corregidos aqui):
+%%   - Opciones del item A.2 vienen rotuladas "3.2/3.3/3.4" (deberian ser A.2.x).
+%%   - Opcion D.2.1 "Igual que siempre" aparece rotulada "4.1." en el drawio.
+%%   - Opciones del item D.3 aparecen rotuladas como "D.3.x" y algunas como "A.3.x".
+
+hIntro["Lea cada pregunta y seleccione la respuesta que considere que coincide con su propio estado emocional en la ultima semana. No es necesario que piense mucho tiempo cada respuesta; en este cuestionario las respuestas espontaneas tienen mas valor que las que se piensan mucho."]:::nota
+
+hA1[/"<b>A.1 Me siento tenso/a o nervioso/a</b>
+A.1.1 Nunca (0)
+A.1.2 De vez en cuando (1)
+A.1.3 Gran parte del dia (2)
+A.1.4 Casi todo el dia (3)"/]:::item
+
+hD1[/"<b>D.1 Sigo disfrutando de las cosas como siempre</b>
+D.1.1 Ciertamente, igual que antes (0)
+D.1.2 No tanto como antes (1)
+D.1.3 Solamente un poco (2)
+D.1.4 Ya no disfruto con nada (3)"/]:::item
+
+hA2[/"<b>A.2 Siento una especie de temor como si algo malo fuera a suceder</b>
+A.2.1 No siento nada de eso (0)
+A.2.2 Si, pero no me preocupa (1)
+A.2.3 Si, pero no muy intenso (2)
+A.2.4 Si, y muy intenso (3)"/]:::item
+
+hD2[/"<b>D.2 Soy capaz de reirme y ver el lado gracioso de las cosas</b>
+D.2.1 Igual que siempre (0)
+D.2.2 Actualmente, algo menos (1)
+D.2.3 Actualmente, mucho menos (2)
+D.2.4 Actualmente, en absoluto (3)"/]:::item
+
+hA3[/"<b>A.3 Tengo la cabeza llena de preocupaciones</b>
+A.3.1 Nunca (0)
+A.3.2 De vez en cuando (1)
+A.3.3 Gran parte del dia (2)
+A.3.4 Casi todo el dia (3)"/]:::item
+
+hD3[/"<b>D.3 Me siento alegre</b>
+D.3.1 Gran parte del dia (0)
+D.3.2 En algunas ocasiones (1)
+D.3.3 Muy pocas veces (2)
+D.3.4 Nunca (3)"/]:::item
+
+hA4[/"<b>A.4 Soy capaz de permanecer sentado/a tranquilo/a y relajado/a</b>
+A.4.1 Siempre (0)
+A.4.2 A menudo (1)
+A.4.3 Raras veces (2)
+A.4.4 Nunca (3)"/]:::item
+
+hD4[/"<b>D.4 Me siento lento/a y torpe</b>
+D.4.1 Nunca (0)
+D.4.2 A veces (1)
+D.4.3 A menudo (2)
+D.4.4 Gran parte del dia (3)"/]:::item
+
+hA5[/"<b>A.5 Experimento una desagradable sensacion de «nervios y hormigueos» en el estomago</b>
+A.5.1 Nunca (0)
+A.5.2 Solo en algunas ocasiones (1)
+A.5.3 A menudo (2)
+A.5.4 Muy a menudo (3)"/]:::item
+
+hD5[/"<b>D.5 He perdido el interes por mi aspecto personal</b>
+D.5.1 Me cuido como siempre lo he hecho (0)
+D.5.2 Es posible que no me cuide como debiera (1)
+D.5.3 No me cuido como deberia hacerlo (2)
+D.5.4 Completamente (3)"/]:::item
+
+hA6[/"<b>A.6 Me siento inquieto/a como si no pudiera parar de moverme</b>
+A.6.1 En absoluto (0)
+A.6.2 No mucho (1)
+A.6.3 Bastante (2)
+A.6.4 Realmente mucho (3)"/]:::item
+
+hD6[/"<b>D.6 Espero las cosas con ilusion</b>
+D.6.1 Como siempre (0)
+D.6.2 Algo menos que antes (1)
+D.6.3 Mucho menos que antes (2)
+D.6.4 En absoluto (3)"/]:::item
+
+hA7[/"<b>A.7 Experimento de repente sensaciones de gran angustia o temor</b>
+A.7.1 Nunca (0)
+A.7.2 Raramente (1)
+A.7.3 Con cierta frecuencia (2)
+A.7.4 Muy a menudo (3)"/]:::item
+
+hD7[/"<b>D.7 Soy capaz de disfrutar con un buen libro o con un buen programa de radio o television</b>
+D.7.1 A menudo (0)
+D.7.2 Algunas veces (1)
+D.7.3 Pocas veces (2)
+D.7.4 Casi nunca (3)"/]:::item
+
+hResultados["Resultados HADS"]:::resultado
+hFin(["Fin del cuestionario HADS"]):::fin
+
+%% Cadena secuencial del cuestionario (una flecha por linea):
+%%   A.1 -> D.1 -> A.2 -> D.2 -> A.3 -> D.3 -> A.4 -> D.4
+%%   A.5 -> D.5 -> A.6 -> D.6 -> A.7 -> D.7 -> Resultados -> Fin
+hIntro --> hA1
+hA1 --> hD1
+hD1 --> hA2
+hA2 --> hD2
+hD2 --> hA3
+hA3 --> hD3
+hD3 --> hA4
+hA4 --> hD4
+hD4 --> hA5
+hA5 --> hD5
+hD5 --> hA6
+hA6 --> hD6
+hD6 --> hA7
+hA7 --> hD7
+hD7 --> hResultados
+hResultados --> hFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

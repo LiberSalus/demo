@@ -1,0 +1,149 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO EAG" (Escala de Adiccion General)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO EAG)
+%% EAG = Escala Adiccion General (12 items visibles). Flujo SECUENCIAL:
+%%   e1 -> e2 -> ... -> e12 -> Resultados EAG -> Fin.
+%% Cada item es un unico nodo con el enunciado completo del Drawio y sus 7
+%% opciones con valor (escala simetrica):
+%%   Extremadamente cierto (3) / Bastante cierto (2) / Ligeramente cierto (1)
+%%   / Ni cierto, ni falso (0) / Ligeramente falso (1) / Bastante falso (2)
+%%   / Extremadamente falso (3).
+%% Nota del drawio: el item 7 y el item 8 tienen exactamente el mismo
+%% enunciado ("Si me vienen las ganas tengo que hacerlo inmediatamente"),
+%% tal como aparece duplicado en el original; se conservan ambos.
+%% Rango total: 0-77. Tabla de interpretacion: cuestionario_eag-review.md.
+
+eagIntro["Debe contestar de la forma mas sincera. En las casillas que encontrara a la derecha, rodee con un circulo el numero que indique lo que le ocurre. No hay respuestas correctas ni incorrectas; solo que sea lo mas sincero posible."]:::nota
+
+e1[/"<b>1. He dejado de hacerlo, sin problemas cada vez que he querido</b>
+1.1 Extremadamente cierto (3)
+1.2 Bastante cierto (2)
+1.3 Ligeramente cierto (1)
+1.4 Ni cierto, ni falso (0)
+1.5 Ligeramente falso (1)
+1.6 Bastante falso (2)
+1.7 Extremadamente falso (3)"/]:::item
+
+e2[/"<b>2. No puedo dejarlo por mas que lo intente</b>
+2.1 Extremadamente cierto (3)
+2.2 Bastante cierto (2)
+2.3 Ligeramente cierto (1)
+2.4 Ni cierto, ni falso (0)
+2.5 Ligeramente falso (1)
+2.6 Bastante falso (2)
+2.7 Extremadamente falso (3)"/]:::item
+
+e3[/"<b>3. Puedo resistir las ganas de hacerlo todo el tiempo que quiera</b>
+3.1 Extremadamente cierto (3)
+3.2 Bastante cierto (2)
+3.3 Ligeramente cierto (1)
+3.4 Ni cierto, ni falso (0)
+3.5 Ligeramente falso (1)
+3.6 Bastante falso (2)
+3.7 Extremadamente falso (3)"/]:::item
+
+e4[/"<b>4. Necesito hacerlo cada vez con mas frecuencia</b>
+4.1 Extremadamente cierto (3)
+4.2 Bastante cierto (2)
+4.3 Ligeramente cierto (1)
+4.4 Ni cierto, ni falso (0)
+4.5 Ligeramente falso (1)
+4.6 Bastante falso (2)
+4.7 Extremadamente falso (3)"/]:::item
+
+e5[/"<b>5. Hacerlo me relaja y/o me tranquiliza</b>
+5.1 Extremadamente cierto (3)
+5.2 Bastante cierto (2)
+5.3 Ligeramente cierto (1)
+5.4 Ni cierto, ni falso (0)
+5.5 Ligeramente falso (1)
+5.6 Bastante falso (2)
+5.7 Extremadamente falso (3)"/]:::item
+
+e6[/"<b>6. He notado que necesito hacerlo en mas cantidad que antes</b>
+6.1 Extremadamente cierto (3)
+6.2 Bastante cierto (2)
+6.3 Ligeramente cierto (1)
+6.4 Ni cierto, ni falso (0)
+6.5 Ligeramente falso (1)
+6.6 Bastante falso (2)
+6.7 Extremadamente falso (3)"/]:::item
+
+e7[/"<b>7. Si me vienen las ganas tengo que hacerlo inmediatamente</b>
+7.1 Extremadamente cierto (3)
+7.2 Bastante cierto (2)
+7.3 Ligeramente cierto (1)
+7.4 Ni cierto, ni falso (0)
+7.5 Ligeramente falso (1)
+7.6 Bastante falso (2)
+7.7 Extremadamente falso (3)"/]:::item
+
+%% Item 8 duplicado del 7 en el drawio
+e8[/"<b>8. Si me vienen las ganas tengo que hacerlo inmediatamente</b>
+8.1 Extremadamente cierto (3)
+8.2 Bastante cierto (2)
+8.3 Ligeramente cierto (1)
+8.4 Ni cierto, ni falso (0)
+8.5 Ligeramente falso (1)
+8.6 Bastante falso (2)
+8.7 Extremadamente falso (3)"/]:::item
+
+e9[/"<b>9. Una vez empezando, no puedo parar de hacerlo hasta que algo exterior me lo impide</b>
+9.1 Extremadamente cierto (3)
+9.2 Bastante cierto (2)
+9.3 Ligeramente cierto (1)
+9.4 Ni cierto, ni falso (0)
+9.5 Ligeramente falso (1)
+9.6 Bastante falso (2)
+9.7 Extremadamente falso (3)"/]:::item
+
+e10[/"<b>10. Cuando estoy un tiempo sin hacerlo siento inquietud o nerviosismo</b>
+10.1 Extremadamente cierto (3)
+10.2 Bastante cierto (2)
+10.3 Ligeramente cierto (1)
+10.4 Ni cierto, ni falso (0)
+10.5 Ligeramente falso (1)
+10.6 Bastante falso (2)
+10.7 Extremadamente falso (3)"/]:::item
+
+e11[/"<b>11. Si algo me impide hacerlo no siento ninguna molestia y noto tranquilidad</b>
+11.1 Extremadamente cierto (3)
+11.2 Bastante cierto (2)
+11.3 Ligeramente cierto (1)
+11.4 Ni cierto, ni falso (0)
+11.5 Ligeramente falso (1)
+11.6 Bastante falso (2)
+11.7 Extremadamente falso (3)"/]:::item
+
+e12[/"<b>12. Siento placer al hacerlo</b>
+12.1 Extremadamente cierto (3)
+12.2 Bastante cierto (2)
+12.3 Ligeramente cierto (1)
+12.4 Ni cierto, ni falso (0)
+12.5 Ligeramente falso (1)
+12.6 Bastante falso (2)
+12.7 Extremadamente falso (3)"/]:::item
+
+eResultados["Resultados EAG"]:::resultado
+eFin(["Fin del cuestionario EAG"]):::fin
+
+%% Cadena secuencial del cuestionario:
+eagIntro --> e1
+e1 --> e2
+e2 --> e3
+e3 --> e4
+e4 --> e5
+e5 --> e6
+e6 --> e7
+e7 --> e8
+e8 --> e9
+e9 --> e10
+e10 --> e11
+e11 --> e12
+e12 --> eResultados
+eResultados --> eFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

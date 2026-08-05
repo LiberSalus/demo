@@ -1,0 +1,106 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO CTH" (Cuestionario Trastorno Bipolar / MDQ)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO CTH)
+%% CTH = Cuestionario Trastorno Hipomaniaco / Bipolar (MDQ).
+%% Items 1 a 14 con Si (1) / No (0).
+%% Tras los 14 items, evaluacion condicional Q15 (mismo periodo) y Q16 (grado de disfuncion).
+%% Tabla de interpretacion: cuestionario_cth-review.md.
+
+cthIntro["¿Alguna vez ha pasado por un período en el que se sentía que no era la misma persona de siempre, y..."]:::nota
+
+cth1[/"<b>1. ... se sintió tan bien o tan eufórico/a que otras personas pensaron que usted no era el/la mismo/a de siempre o estaba tan eufórico/a que se metió en problemas?</b>
+1.1 Sí (1)
+1.2 No (0)"/]:::item
+
+cth2[/"<b>2. ... estaba tan irritable que gritaba a la gente o provocaba peleas o discusiones?</b>
+2.1 Sí (1)
+2.2 No (0)"/]:::item
+
+cth3[/"<b>3. ... se sentía mucho más seguro/a de lo habitual?</b>
+3.1 Sí (1)
+3.2 No (0)"/]:::item
+
+cth4[/"<b>4. ... dormía mucho menos que de costumbre y no necesitaba dormir más?</b>
+4.1 Sí (1)
+4.2 No (0)"/]:::item
+
+cth5[/"<b>5. ... era mucho más hablador/a o hablaba más rápido que de costumbre?</b>
+5.1 Sí (1)
+5.2 No (0)"/]:::item
+
+cth6[/"<b>6. ... le pasaban ideas muy rápidamente por la cabeza o no podría hacer que su mente fuera más despacio?</b>
+6.1 Sí (1)
+6.2 No (0)"/]:::item
+
+cth7[/"<b>7. ... se distraía tan fácilmente con cosas de su alrededor que tenía dificultades para concentrarse o para seguir con lo que estaba haciendo?</b>
+7.1 Sí (1)
+7.2 No (0)"/]:::item
+
+cth8[/"<b>8. ... tenía mucha más energía de costumbre?</b>
+8.1 Sí (1)
+8.2 No (0)"/]:::item
+
+cth9[/"<b>9. ... era mucho más activo/a o hacía muchas más cosas que de costumbre?</b>
+9.1 Sí (1)
+9.2 No (0)"/]:::item
+
+cth10[/"<b>10. ... era mucho más sociable o abierto/a que de costumbre, por ejemplo, telefoneaba a un amigo en mitad de la noche?</b>
+10.1 Sí (1)
+10.2 No (0)"/]:::item
+
+cth11[/"<b>11. ... asumía riesgos innecesarios o realizaba actividades peligrosas?</b>
+11.1 Sí (1)
+11.2 No (0)"/]:::item
+
+cth12[/"<b>12. ... estaba mucho más interesado/a en el sexo que de costumbre?</b>
+12.1 Sí (1)
+12.2 No (0)"/]:::item
+
+cth13[/"<b>13. ... hacía cosas que eran inusuales en usted o que otras personas podrían haber considerado excesivas, insensatas o arriesgadas?</b>
+13.1 Sí (1)
+13.2 No (0)"/]:::item
+
+cth14[/"<b>14. ... el gasto de dinero le creó problemas a usted o a su familia?</b>
+14.1 Sí (1)
+14.2 No (0)"/]:::item
+
+cthNota2["Respondió SÍ en más de una de las preguntas anteriores"]:::nota
+
+cth15[/"<b>15. ¿Algunas de estas situaciones ocurrieron durante el mismo período de tiempo?</b>
+15.1 Sí
+15.2 No"/]:::item
+
+cth16[/"<b>16. ¿Qué tanto problema le causaron estas situaciones?</b>
+16.1 Ningún problema
+16.2 Pequeños problemas
+16.3 Problemas moderados
+16.4 Problemas graves"/]:::item
+
+cthResultados["Resultados CTH"]:::resultado
+cthFin(["Fin del cuestionario CTH"]):::fin
+
+%% Cadena secuencial:
+cthIntro --> cth1
+cth1 --> cth2
+cth2 --> cth3
+cth3 --> cth4
+cth4 --> cth5
+cth5 --> cth6
+cth6 --> cth7
+cth7 --> cth8
+cth8 --> cth9
+cth9 --> cth10
+cth10 --> cth11
+cth11 --> cth12
+cth12 --> cth13
+cth13 --> cth14
+cth14 --> cthNota2
+cthNota2 --> cth15
+cth15 --> cth16
+cth16 --> cthResultados
+cthResultados --> cthFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

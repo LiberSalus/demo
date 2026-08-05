@@ -1,0 +1,168 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO ASRS" (ASRS-V1.1)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO ASRS)
+%% ASRS-V1.1 = Adult ADHD Self-Report Scale v1.1. 18 items en flujo SECUENCIAL:
+%%   a1 -> a2 -> ... -> a18 -> Resultados ASRS-V1.1 -> Fin.
+%% Las primeras 6 preguntas (Parte A) son de tamizaje/deteccion de TDAH en adultos.
+%% Nota del drawio: en los items 9, 12, 16 y 18 (Parte B) la opcion "A veces" vale 1;
+%% en el resto de items de Parte B vale 0 (tal cual aparece conectado en el drawio).
+%% El item 15 del drawio rotula "15.1" tanto a "Nunca" como a "Raramente" (ambos 0); aqui se usan 15.1-15.5.
+%% Tabla de interpretacion: cuestionario_asrs-review.md.
+
+asrsIntro["En los ultimos 6 meses. Responda con que frecuencia le ocurren las siguientes situaciones."]:::nota
+
+a1[/"<b>1. ¿Con que frecuencia tiene dificultad para terminar los detalles finales de un proyecto cuando las partes mas dificiles ya se han hecho?</b>
+1.1 Nunca (0)
+1.2 Raramente (0)
+1.3 A veces (1)
+1.4 Frecuentemente (1)
+1.5 Muy frecuentemente (1)"/]:::item
+
+a2[/"<b>2. ¿Con que frecuencia tiene dificultad para ordenar las cosas cuando tiene que realizar una tarea que requiere organizacion?</b>
+2.1 Nunca (0)
+2.2 Raramente (0)
+2.3 A veces (1)
+2.4 Frecuentemente (1)
+2.5 Muy frecuentemente (1)"/]:::item
+
+a3[/"<b>3. ¿Con que frecuencia tiene problemas para recordar citas u obligaciones?</b>
+3.1 Nunca (0)
+3.2 Raramente (0)
+3.3 A veces (1)
+3.4 Frecuentemente (1)
+3.5 Muy frecuentemente (1)"/]:::item
+
+a4[/"<b>4. Cuando tiene una tarea que requiere que piense mucho, ¿con que frecuencia la evita o la retrasa?</b>
+4.1 Nunca (0)
+4.2 Raramente (0)
+4.3 A veces (0)
+4.4 Frecuentemente (1)
+4.5 Muy frecuentemente (1)"/]:::item
+
+a5[/"<b>5. ¿Con que frecuencia mueve o agita sus manos o sus pies cuando tiene que permanecer sentado(a) por mucho tiempo?</b>
+5.1 Nunca (0)
+5.2 Raramente (0)
+5.3 A veces (0)
+5.4 Frecuentemente (1)
+5.5 Muy frecuentemente (1)"/]:::item
+
+a6[/"<b>6. ¿Con que frecuencia se siente usted demasiado activo(a) y como que tiene que hacer cosas, como si tuviera un motor?</b>
+6.1 Nunca (0)
+6.2 Raramente (0)
+6.3 A veces (0)
+6.4 Frecuentemente (1)
+6.5 Muy frecuentemente (1)"/]:::item
+
+a7[/"<b>7. ¿Con que frecuencia comete errores por falta de cuidado cuando esta trabajando en un proyecto aburrido o dificil?</b>
+7.1 Nunca (0)
+7.2 Raramente (0)
+7.3 A veces (0)
+7.4 Frecuentemente (1)
+7.5 Muy frecuentemente (1)"/]:::item
+
+a8[/"<b>8. ¿Con que frecuencia tiene dificultad para mantener atencion cuando esta haciendo trabajos aburridos o dificiles?</b>
+8.1 Nunca (0)
+8.2 Raramente (0)
+8.3 A veces (0)
+8.4 Frecuentemente (1)
+8.5 Muy frecuentemente (1)"/]:::item
+
+a9[/"<b>9. ¿Con que frecuencia tiene dificultad para concentrarse en lo que la gente le dice, aun cuando esten hablando con usted directamente?</b>
+9.1 Nunca (0)
+9.2 Raramente (0)
+9.3 A veces (1)
+9.4 Frecuentemente (1)
+9.5 Muy frecuentemente (1)"/]:::item
+
+a10[/"<b>10. ¿Con que frecuencia pierde o tiene dificultad para encontrar cosas en la casa o en el trabajo?</b>
+10.1 Nunca (0)
+10.2 Raramente (0)
+10.3 A veces (0)
+10.4 Frecuentemente (1)
+10.5 Muy frecuentemente (1)"/]:::item
+
+a11[/"<b>11. ¿Con que frecuencia se distrae por ruidos o actividades a su alrededor?</b>
+11.1 Nunca (0)
+11.2 Raramente (0)
+11.3 A veces (0)
+11.4 Frecuentemente (1)
+11.5 Muy frecuentemente (1)"/]:::item
+
+a12[/"<b>12. ¿Con que frecuencia se levanta de su asiento en reuniones o en otras situaciones en las que se supone debe permanecer sentado?</b>
+12.1 Nunca (0)
+12.2 Raramente (0)
+12.3 A veces (1)
+12.4 Frecuentemente (1)
+12.5 Muy frecuentemente (1)"/]:::item
+
+a13[/"<b>13. ¿Con que frecuencia se siente inquieto o nervioso?</b>
+13.1 Nunca (0)
+13.2 Raramente (0)
+13.3 A veces (0)
+13.4 Frecuentemente (1)
+13.5 Muy frecuentemente (1)"/]:::item
+
+a14[/"<b>14. ¿Con que frecuencia tiene dificultades para relajarse cuando tiene tiempo libre para dedicarselo a usted mismo?</b>
+14.1 Nunca (0)
+14.2 Raramente (0)
+14.3 A veces (0)
+14.4 Frecuentemente (1)
+14.5 Muy frecuentemente (1)"/]:::item
+
+a15[/"<b>15. ¿Con que frecuencia siente que habla demasiado cuando esta en reuniones sociales?</b>
+15.1 Nunca (0)
+15.2 Raramente (0)
+15.3 A veces (0)
+15.4 Frecuentemente (1)
+15.5 Muy frecuentemente (1)"/]:::item
+
+a16[/"<b>16. Cuando esta en una conversacion, ¿con que frecuencia se descubre a si mismo terminando las frases de la gente antes de que ellos terminen?</b>
+16.1 Nunca (0)
+16.2 Raramente (0)
+16.3 A veces (1)
+16.4 Frecuentemente (1)
+16.5 Muy frecuentemente (1)"/]:::item
+
+a17[/"<b>17. ¿Con que frecuencia tiene dificultad para esperar su turno en situaciones en que debe de hacerlo?</b>
+17.1 Nunca (0)
+17.2 Raramente (0)
+17.3 A veces (0)
+17.4 Frecuentemente (1)
+17.5 Muy frecuentemente (1)"/]:::item
+
+a18[/"<b>18. ¿Con que frecuencia interrumpe a otros cuando estan ocupados?</b>
+18.1 Nunca (0)
+18.2 Raramente (0)
+18.3 A veces (1)
+18.4 Frecuentemente (1)
+18.5 Muy frecuentemente (1)"/]:::item
+
+aResultados["Resultados ASRS-V1.1"]:::resultado
+aFin(["Fin del cuestionario ASRS-V1.1"]):::fin
+
+%% Cadena secuencial:
+asrsIntro --> a1
+a1 --> a2
+a2 --> a3
+a3 --> a4
+a4 --> a5
+a5 --> a6
+a6 --> a7
+a7 --> a8
+a8 --> a9
+a9 --> a10
+a10 --> a11
+a11 --> a12
+a12 --> a13
+a13 --> a14
+a14 --> a15
+a15 --> a16
+a16 --> a17
+a17 --> a18
+a18 --> aResultados
+aResultados --> aFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

@@ -1,0 +1,184 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO CDI"
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO CDI)
+%% CDI = Children's Depression Inventory. 27 items en flujo SECUENCIAL:
+%%   c1 -> c2 -> ... -> c27 -> Resultados CDI -> Fin.
+%% Opciones por item: 3 opciones con valor (0, 1, 2). Rango total: 0-54.
+%% Nota del drawio: el item 5 rotula las dos primeras opciones como "5.1" (valores 0 y 1), aqui se usan 5.1/5.2/5.3. El item 25 se deja tal cual lo conecta el drawio (Nadie me quiere=0, No estoy seguro=1, Estoy seguro=2), aunque la escala CDI estandar lo invierte.
+%% Tabla de interpretacion: cuestionario_cdi-review.md.
+
+cIntro["En las ultimas dos semanas"]:::nota
+
+c1[/"<b>1. Estado de animo</b>
+1.1 Estoy triste de vez en cuando (0)
+1.2 Estoy triste muchas veces (1)
+1.3 Estoy triste siempre (2)"/]:::item
+
+c2[/"<b>2. Pesimismo</b>
+2.1 Las cosas me saldrán bien (0)
+2.2 No estoy seguro de si las cosas me saldrán bien (1)
+2.3 Nunca nada me saldrá bien (2)"/]:::item
+
+c3[/"<b>3. Autoeficacia</b>
+3.1 Hago bien la mayoría de las cosas (0)
+3.2 Hago mal muchas cosas (1)
+3.3 Todo lo hago mal (2)"/]:::item
+
+c4[/"<b>4. Anhedonia</b>
+4.1 Me divierten muchas cosas (0)
+4.2 Me divierten algunas cosas (1)
+4.3 Nada me divierte (2)"/]:::item
+
+c5[/"<b>5. Autoestima</b>
+5.1 Soy malo algunas veces (0)
+5.2 Soy malo muchas veces (1)
+5.3 Soy malo siempre (2)"/]:::item
+
+c6[/"<b>6. Preocupacion</b>
+6.1 A veces pienso que me pueden ocurrir cosas malas (0)
+6.2 Me preocupa que me ocurran cosas malas (1)
+6.3 Estoy seguro de que me van a ocurrir cosas terribles (2)"/]:::item
+
+c7[/"<b>7. Autoimagen</b>
+7.1 Me gusta como soy (0)
+7.2 No me gusta como soy (1)
+7.3 Me odio (2)"/]:::item
+
+c8[/"<b>8. Culpa</b>
+8.1 Generalmente no tengo la culpa de que ocurran cosas malas (0)
+8.2 Muchas cosas malas son culpa mia (1)
+8.3 Todas las cosas malas son culpa mia (2)"/]:::item
+
+c9[/"<b>9. Ideacion suicida</b>
+9.1 No pienso en matarme (0)
+9.2 Pienso en matarme pero no lo haria (1)
+9.3 Quiero matarme (2)"/]:::item
+
+c10[/"<b>10. Llanto</b>
+10.1 Tengo ganas de llorar de cuando en cuando (0)
+10.2 Tengo ganas de llorar muchos dias (1)
+10.3 Tengo ganas de llorar todos los dias (2)"/]:::item
+
+c11[/"<b>11. Inquietud / Preocupacion continua</b>
+11.1 Las cosas me preocupan de cuando en cuando (0)
+11.2 Las cosas me preocupan muchas veces (1)
+11.3 Las cosas me preocupan siempre (2)"/]:::item
+
+c12[/"<b>12. Sociabilidad</b>
+12.1 Me gusta estar con la gente (0)
+12.2 Muy a menudo no me gusta estar con la gente (1)
+12.3 No quiero en absoluto estar con la gente (2)"/]:::item
+
+c13[/"<b>13. Indecision</b>
+13.1 Me decido facilmente (0)
+13.2 Me cuesta decidirme (1)
+13.3 No puedo decidirme (2)"/]:::item
+
+c14[/"<b>14. Imagen corporal</b>
+14.1 Tengo buen aspecto (0)
+14.2 Hay algunas cosas de mi aspecto que no me gustan (1)
+14.3 Soy feo (2)"/]:::item
+
+c15[/"<b>15. Esfuerzo escolar / Deberes</b>
+15.1 No me cuesta ponerme a hacer los deberes (0)
+15.2 Muchas veces me cuesta ponerme a hacer los deberes (1)
+15.3 Siempre me cuesta ponerme a hacer los deberes (2)"/]:::item
+
+c16[/"<b>16. Sueno</b>
+16.1 Duermo muy bien (0)
+16.2 Muchas noches me cuesta dormirme (1)
+16.3 Todas las noches me cuesta dormirme (2)"/]:::item
+
+c17[/"<b>17. Fatiga</b>
+17.1 Estoy cansado de cuando en cuando (0)
+17.2 Estoy cansado muchos dias (1)
+17.3 Estoy cansado siempre (2)"/]:::item
+
+c18[/"<b>18. Apetito</b>
+18.1 Como muy bien (0)
+18.2 Muchos dias no tengo ganas de comer (1)
+18.3 La mayoria de los dias no tengo ganas de comer (2)"/]:::item
+
+c19[/"<b>19. Somatizacion / Dolor</b>
+19.1 No me preocupa el dolor ni la enfermedad (0)
+19.2 Muchas veces me preocupa el dolor y la enfermedad (1)
+19.3 Siempre me preocupa el dolor y la enfermedad (2)"/]:::item
+
+c20[/"<b>20. Soledad</b>
+20.1 Nunca me siento solo (0)
+20.2 Me siento solo muchas veces (1)
+20.3 Me siento solo siempre (2)"/]:::item
+
+c21[/"<b>21. Disfrute escolar</b>
+21.1 Me divierto en el colegio muchas veces (0)
+21.2 Me divierto en el colegio solo de vez en cuando (1)
+21.3 Nunca me divierto en el colegio (2)"/]:::item
+
+c22[/"<b>22. Amistades</b>
+22.1 Tengo muchos amigos (0)
+22.2 Tengo muchos amigos pero me gustaria tener mas (1)
+22.3 No tengo amigos (2)"/]:::item
+
+c23[/"<b>23. Rendimiento escolar</b>
+23.1 Mi trabajo en el colegio es bueno (0)
+23.2 Mi trabajo en el colegio no es tan bueno como antes (1)
+23.3 Llevo muy mal las asignaturas que antes llevaba bien (2)"/]:::item
+
+c24[/"<b>24. Comparacion social</b>
+24.1 Soy tan bueno como otros ninos (0)
+24.2 Si quiero puedo ser tan bueno como otros ninos (1)
+24.3 Nunca podre ser tan bueno como otros ninos (2)"/]:::item
+
+c25[/"<b>25. Afecto recibido</b>
+25.1 Nadie me quiere (0)
+25.2 No estoy seguro de que alguien me quiera (1)
+25.3 Estoy seguro de que alguien me quiera (2)"/]:::item
+
+c26[/"<b>26. Obediencia</b>
+26.1 Generalmente hago lo que me dicen (0)
+26.2 Muchas veces no hago lo que me dicen (1)
+26.3 Nunca hago lo que me dicen (2)"/]:::item
+
+c27[/"<b>27. Conflictividad interpersonal</b>
+27.1 Me llevo bien con la gente (0)
+27.2 Me peleo muchas veces (1)
+27.3 Me peleo siempre (2)"/]:::item
+
+cResultados["Resultados CDI"]:::resultado
+cFin(["Fin de cuestionario CDI"]):::fin
+
+%% Cadena secuencial del cuestionario:
+cIntro --> c1
+c1 --> c2
+c2 --> c3
+c3 --> c4
+c4 --> c5
+c5 --> c6
+c6 --> c7
+c7 --> c8
+c8 --> c9
+c9 --> c10
+c10 --> c11
+c11 --> c12
+c12 --> c13
+c13 --> c14
+c14 --> c15
+c15 --> c16
+c16 --> c17
+c17 --> c18
+c18 --> c19
+c19 --> c20
+c20 --> c21
+c21 --> c22
+c22 --> c23
+c23 --> c24
+c24 --> c25
+c25 --> c26
+c26 --> c27
+c27 --> cResultados
+cResultados --> cFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

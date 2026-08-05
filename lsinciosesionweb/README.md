@@ -192,3 +192,23 @@ Chrome DevTools → Application → Service Workers: inspeccionar workers, ver c
 ### Resumen
 
 Push Notifications permiten comunicación backend → usuario mediante Service Workers y Push Services del navegador. Son ideales para alertas y eventos offline, pero no reemplazan bases de datos, colas persistentes ni WebSockets realtime.
+
+## Historial
+
+### Limpieza ya realizada
+
+- Se movieron a `afuera/` carpetas, assets y piezas legacy sin referencias activas (graficas viejas, `backgroundPanel`, config de metricas antiguas, PDF de metricas, tarjeta bienestar, paginas placeholder).
+- Se centralizo el avatar default en `src/shared/assets/images/perfil/usuario-default.png`.
+- Se creo `PaginaEnConstruccion` para pantallas temporales reutilizables.
+
+### Commits recientes
+
+- `30d6651` Conecta graficas de oxigenacion y glucosa.
+- `eced4f6` Ordena archivos legacy fuera del arbol activo.
+- `4f25f4` Mueve paginas placeholder fuera del arbol activo.
+- `8b0a685` Actualiza avatar compartido y jsconfig.
+- `66a2eb7` Mueve tarjeta bienestar sin uso activo.
+- `f801e38` Mueve piezas de metricas sin uso activo.
+- `7fef2a5` Mueve assets de metricas sin uso activo.
+- `df12adc` Mueve documento pdf de metricas sin uso activo.
+- `017a4c7` Reutiliza pantalla temporal en rutas pendientes.

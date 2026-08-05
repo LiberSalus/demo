@@ -1,0 +1,70 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO GAD" (GAD-7)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO GAD)
+%% GAD-7 = Generalized Anxiety Disorder 7-item scale. 7 items en flujo SECUENCIAL:
+%%   g1 -> g2 -> g3 -> g4 -> g5 -> g6 -> g7 -> Resultados GAD-7 -> Fin.
+%% Cada item es un unico nodo con el enunciado completo del Drawio y sus 4 opciones con valor (0-3).
+%% Tabla de interpretacion: cuestionario_gad-review.md.
+
+gIntro["En las ultimas dos semanas usted sintio..."]:::nota
+
+g1[/"<b>1. Se ha sentido nervioso(a), ansioso(a) o como los nervios de punta</b>
+1.1 Ningun dia (0)
+1.2 Varios dias (1)
+1.3 Mas de la mitad de los dias (2)
+1.4 Casi todos los dias (3)"/]:::item
+
+g2[/"<b>2. No ha sido capaz de parar o controlar su preocupacion</b>
+2.1 Ningun dia (0)
+2.2 Varios dias (1)
+2.3 Mas de la mitad de los dias (2)
+2.4 Casi todos los dias (3)"/]:::item
+
+g3[/"<b>3. Se ha preocupado demasiado por motivos diferentes</b>
+3.1 Ningun dia (0)
+3.2 Varios dias (1)
+3.3 Mas de la mitad de los dias (2)
+3.4 Casi todos los dias (3)"/]:::item
+
+g4[/"<b>4. Ha tenido dificultades para relajarse</b>
+4.1 Ningun dia (0)
+4.2 Varios dias (1)
+4.3 Mas de la mitad de los dias (2)
+4.4 Casi todos los dias (3)"/]:::item
+
+g5[/"<b>5. Se ha sentido tan inquieto(a) que no ha podido quedarse quieto(a)</b>
+5.1 Ningun dia (0)
+5.2 Varios dias (1)
+5.3 Mas de la mitad de los dias (2)
+5.4 Casi todos los dias (3)"/]:::item
+
+g6[/"<b>6. Se ha molestado o irritado facilmente</b>
+6.1 Ningun dia (0)
+6.2 Varios dias (1)
+6.3 Mas de la mitad de los dias (2)
+6.4 Casi todos los dias (3)"/]:::item
+
+g7[/"<b>7. Ha tenido miedo de que algo terrible fuera a pasar</b>
+7.1 Ningun dia (0)
+7.2 Varios dias (1)
+7.3 Mas de la mitad de los dias (2)
+7.4 Casi todos los dias (3)"/]:::item
+
+gResultados["Resultados GAD-7"]:::resultado
+gFin(["Fin del cuestionario GAD-7"]):::fin
+
+%% Cadena secuencial del cuestionario:
+gIntro --> g1
+g1 --> g2
+g2 --> g3
+g3 --> g4
+g4 --> g5
+g5 --> g6
+g6 --> g7
+g7 --> gResultados
+gResultados --> gFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;

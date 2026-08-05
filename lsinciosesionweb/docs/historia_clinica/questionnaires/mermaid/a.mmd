@@ -1,0 +1,293 @@
+%% Diagrama Mermaid de la tab "A" - REGISTRO
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina A)
+%% Fiel al arbol de decision original. Textos largos se conservan en
+%% comentarios %% cuando se acortan para legibilidad del render.
+flowchart TD
+
+%% --- Raiz ---
+a10["1.0 ¿Requiere apoyo de tutor o responsable?"]
+
+%% --- Decision 1.1 / 1.2 ---
+a11si(["1.1 Sí"]):::decision
+a12no(["1.2 No"]):::decision
+a10 -->|"Sí"| a11si
+a10 -->|"No"| a12no
+
+%% --- Bloque datos del tutor/responsable (rama Sí) ---
+a49["A continuación, ingrese los datos del tutor o responsable."]
+a220["1.2.1 Nombre completo (Apellido Paterno, Apellido Materno, Nombre(s))"]
+a61["1.1.2 Parentesco"]
+a51(["1.1.2.1 Madre"]):::opt
+a53(["1.1.2.2 Padre"]):::opt
+a63(["1.1.2.3 Cuidador(a)"]):::opt
+a55(["1.1.2.4 Tutor legal"]):::opt
+a65(["1.1.2.6 Otro"]):::opt
+a67["1.1.2.6.1 Especifique"]
+a149["1.1.3 ¿Cuál es su relación en el cuidado y vida diaria del paciente?"]
+a151(["1.1.3.1 Vive con el usuario y participa en su cuidado diario"]):::opt
+a153(["1.1.3.2 Participa en su cuidado, pero no vive con él/ella"]):::opt
+a155(["1.1.3.3 Sólo brinda apoyo administrativo o legal"]):::opt
+%% Texto completo 159:
+%% "A continuación, comparta algunos datos generales que nos ayudarán a conocer mejor su entorno."
+a159["A continuación, comparta algunos datos generales..."]:::nota
+a7["1.1.4 Domicilio actual"]
+%% Texto completo 7:
+%% Calle, Manzana Lote o # Ext., # Int., Unidad, Colonia o Pueblo,
+%% Ciudad o Municipio, Entidad federativa, CP.
+a9["1.1.5 Fecha de nacimiento (dd, mmm, aaaa)"]
+a69["1.1.6 Lugar de nacimiento (Ciudad, Edo)"]
+a11["1.1.7 Teléfono fijo"]
+a13["1.1.8 Celular"]
+a15["1.1.9 Correo electrónico"]
+a19["1.1.10 Sexo al nacer"]
+a71(["1.1.10.1 Femenino"]):::opt
+a73(["1.1.10.2 Masculino"]):::opt
+a75(["1.1.10.3 Intersexual"]):::opt
+a21["1.1.11 EDAD"]
+a91["1.1.12 Religión"]
+a77(["1.1.12.1 Católica"]):::opt
+a79(["1.1.12.2 Cristiana"]):::opt
+a81(["1.1.12.3 Otra religión"]):::opt
+a83(["1.1.12.4 Ninguna"]):::opt
+a85(["1.1.12.5 Prefiere no decirlo"]):::opt
+a93["1.1.12.3.1 Especifique"]
+%% TODO pendiente en el diagrama original:
+a357(["FALTA PONER GRUPO ÉTNICO"]):::todo
+a145["1.1.13 ESCOLARIDAD"]
+a95(["1.1.13.1 Sin estudios"]):::opt
+a97(["1.1.13.2 Educación primaria"]):::opt
+a99(["1.1.13.3 Educación secundaria"]):::opt
+a101(["1.1.13.4 Educación media superior (preparatoria/bachillerato)"]):::opt
+a103(["1.1.13.5 Educación superior (licenciatura/ingeniería)"]):::opt
+a105(["1.1.13.6 Posgrado (maestría, especialidad o doctorado)"]):::opt
+a107(["1.1.13.6 Prefiere no decirlo"]):::opt
+a29["1.1.14 EDO. CIVIL"]
+a109(["1.1.14.1 Soltero/a"]):::opt
+a111(["1.1.14.2 Casado/a"]):::opt
+a113(["1.1.14.3 Unión libre / convivencia"]):::opt
+a115(["1.1.14.4 Separado/a"]):::opt
+a117(["1.1.14.5 Divorciado/a"]):::opt
+a119(["1.1.14.6 Viudo/a"]):::opt
+a121(["1.1.14.7 Prefiere no decirlo"]):::opt
+a163["1.1.17 ¿El usuario depende económicamente de usted?"]
+a165(["1.1.17.1 Sí"]):::opt
+a167(["1.1.17.2 Parcialmente"]):::opt
+a168(["1.1.17.3 No"]):::opt
+a38["1.1.15 Ocupación"]
+a123(["1.1.15.1 Empleado/a"]):::opt
+a125(["1.1.15.2 Trabajador/a independiente"]):::opt
+a127(["1.1.15.3 Estudiante"]):::opt
+a129(["1.1.15.4 Trabajo del hogar"]):::opt
+a131(["1.1.15.5 Desempleado/a"]):::opt
+a133(["1.1.15.6 Jubilado/a o pensionado/a"]):::opt
+a135(["1.1.15.7 Otro"]):::opt
+a137(["1.1.15.8 Prefiere no decirlo"]):::opt
+a43["1.1.16 INGRESOS"]
+a350(["1.1.16.1 Son suficientes para el cuidado de mi salud"]):::opt
+a352(["1.1.16.2 Cubren mis necesidades de salud parcialmente"]):::opt
+a354(["1.1.16.3 Frecuentemente dificultan el cuidado de mi salud"]):::opt
+a356(["1.1.16.4 Prefiere no responder"]):::opt
+
+%% --- Header datos generales (persona en seguimiento) ---
+%% Texto completo 157:
+%% "Datos generales (persona en seguimiento) 'Para mejorar su experiencia en
+%%  la plataforma y comprender mejor su contexto, proporcione la siguiente
+%%  información'"
+a157["Datos generales (persona en seguimiento)"]:::seccion
+a185["1.2.1 Nombre completo (Apellido Paterno, Apellido Materno, Nombre(s))"]
+a170["1.2.2 Domicilio actual"]
+a172["1.2.3 Fecha de nacimiento (dd, mmm, aaaa)"]
+a180["1.2.4 Lugar de nacimiento (Ciudad, Edo)"]
+a174["1.2.5 Teléfono fijo"]
+a176["1.2.6 Celular"]
+a178["1.2.7 Correo electrónico"]
+a183["Agregue un contacto en caso de emergencia (opcional)."]:::nota
+a187["1.2.8B Nombre completo del contacto (Apellido Paterno, Apellido Materno, Nombre(s))"]
+a200["1.2.9 Parentesco"]
+a189(["1.2.9.1 Madre"]):::opt
+a191(["1.2.9.2 Padre"]):::opt
+a202(["1.2.9.3 Pareja"]):::opt
+a204(["1.2.9.4 Hermano(a)"]):::opt
+a212(["1.2.9.5 Hijo(a)"]):::opt
+a214(["1.2.9.6 Amigo(a)"]):::opt
+a216(["1.2.9.7 Cuidador(a)"]):::opt
+a208(["1.2.9.4 Otro"]):::opt
+a210["1.2.9.1.1 Especifique"]
+a206["1.2.10 Teléfono principal"]
+a218["1.2.8A Continuemos con la información del usuario."]:::nota
+a224["1.2.11 Sexo al nacer"]
+a236(["1.2.11.1 Mujer"]):::opt
+a238(["1.2.11.2 Hombre"]):::opt
+a240(["1.2.11.3 Intersexual"]):::opt
+a300["1.2.12A Genero"]
+a302(["1.2.12A.1 Femenino"]):::opt
+a303(["1.2.12A.2 Masculino"]):::opt
+a305(["1.2.12A.3 No binario"]):::opt
+a307(["1.2.12A.4 Otro (especifique)"]):::opt
+a367(["1.2.12A.5 Prefiere no decirlo"]):::opt
+a226["1.2.13 EDAD"]
+a256["1.2.14 Religión"]
+a242(["1.2.14.1 Católica"]):::opt
+a244(["1.2.14.2 Cristiana"]):::opt
+a246(["1.2.14.3 Otra religión"]):::opt
+a248(["1.2.14.4 Ninguna"]):::opt
+a250(["1.2.14.5 Prefiere no decirlo"]):::opt
+a258["1.2.14.3.1 Especifique CAT_RELIGION"]
+a294["1.2.15 ESCOLARIDAD"]
+a260(["1.2.15.1 Sin estudios"]):::opt
+a262(["1.2.15.2 Educación primaria"]):::opt
+a264(["1.2.15.3 Educación secundaria"]):::opt
+a266(["1.2.15.4 Educación media superior (preparatoria/bachillerato)"]):::opt
+a268(["1.2.15.5 Educación superior (licenciatura/ingeniería)"]):::opt
+a270(["1.2.15.6 Posgrado (maestría, especialidad o doctorado)"]):::opt
+a272(["1.2.15.6 Prefiere no decirlo"]):::opt
+a234["1.2.16 EDO. CIVIL"]
+a274(["1.2.16.1 Soltero/a"]):::opt
+a276(["1.2.16.2 Casado/a"]):::opt
+a278(["1.2.16.3 Unión libre / convivencia"]):::opt
+a280(["1.2.16.4 Separado/a"]):::opt
+a282(["1.2.16.5 Divorciado/a"]):::opt
+a284(["1.2.16.6 Viudo/a"]):::opt
+a286(["1.2.16.7 Prefiere no decirlo"]):::opt
+a316["1.2.17 OCUPACIÓN"]
+a323(["1.2.17.1 Empleado/a"]):::opt
+a325(["1.2.17.2 Trabajador/a independiente"]):::opt
+a327(["1.2.17.3 Estudiante"]):::opt
+a329(["1.2.17.4 Trabajo del hogar"]):::opt
+a331(["1.2.17.5 Desempleado/a"]):::opt
+a333(["1.2.17.6 Jubilado/a o pensionado/a"]):::opt
+a335(["1.2.17.7 Otro"]):::opt
+a337(["1.2.17.8 Prefiere no decirlo"]):::opt
+a321["1.2.18 INGRESOS"]
+a359(["1.2.18.1 Son suficientes para el cuidado de mi salud"]):::opt
+a361(["1.2.18.2 Cubren mis necesidades de salud parcialmente"]):::opt
+a363(["1.2.18.3 Frecuentemente dificultan el cuidado de mi salud"]):::opt
+a365(["1.2.18.4 Prefiere no responder"]):::opt
+a343["1.2.19 ¿Cuántas personas dependen económicamente de usted?"]
+a344(["1.2.19.1 Ninguna"]):::opt
+a345(["1.2.19.2 1"]):::opt
+a346(["1.2.19.3 2"]):::opt
+a347(["1.2.19.4 3 o más"]):::opt
+a348(["1.2.19.5 Prefiere no decirlo"]):::opt
+
+%% ===== Conexiones (respetando el grafo original) =====
+%% Rama Sí
+a11si --> a49 --> a220 --> a61
+a61 --> a51 --> a149
+a61 --> a53 --> a149
+a61 --> a55 --> a149
+a61 --> a63 --> a149
+a61 --> a65 --> a67 --> a149
+a149 --> a151 --> a159
+a149 --> a153 --> a159
+a149 --> a155 --> a157
+a159 --> a7 --> a9 --> a69 --> a11 --> a13 --> a15 --> a19
+a19 --> a71 --> a21
+a19 --> a73 --> a21
+a19 --> a75 --> a21
+a21 --> a91
+a91 --> a77 --> a145
+a91 --> a79 --> a145
+a91 --> a81 --> a93 --> a145
+a91 --> a83 --> a145
+a91 --> a85 --> a145
+a145 --> a95 --> a29
+a145 --> a97 --> a29
+a145 --> a99 --> a29
+a145 --> a101 --> a29
+a145 --> a103 --> a29
+a145 --> a105 --> a29
+a145 --> a107 --> a29
+a29 --> a109 --> a163
+a29 --> a111 --> a163
+a29 --> a113 --> a163
+a29 --> a115 --> a163
+a29 --> a117 --> a163
+a29 --> a119 --> a163
+a29 --> a121 --> a163
+a163 --> a165 --> a38
+a163 --> a167 --> a38
+a163 --> a168 --> a38
+a38 --> a123 --> a43
+a38 --> a125 --> a43
+a38 --> a127 --> a43
+a38 --> a129 --> a43
+a38 --> a131 --> a43
+a38 --> a133 --> a43
+a38 --> a135 --> a43
+a38 --> a137 --> a43
+a43 --> a350 --> a157
+a43 --> a352 --> a157
+a43 --> a354 --> a157
+a43 --> a356 --> a157
+
+%% Nota TODO suelta (no conectada en el original)
+a21 -.->|"TODO"| a357
+
+%% Rama No converge a datos generales
+a12no --> a157
+
+%% Datos generales del paciente
+a157 --> a185 --> a170 --> a172 --> a180 --> a174 --> a176 --> a178 --> a183
+a183 --> a187 --> a200
+a200 --> a189 --> a206
+a200 --> a191 --> a206
+a200 --> a202 --> a206
+a200 --> a204 --> a206
+a200 --> a212 --> a206
+a200 --> a214 --> a206
+a200 --> a208 --> a210 --> a206
+a183 --> a218
+a206 --> a218
+a218 --> a224
+a224 --> a236 --> a300
+a224 --> a238 --> a300
+a224 --> a240 --> a300
+a300 --> a302 --> a226
+a300 --> a303 --> a226
+a300 --> a305 --> a226
+a300 --> a307 --> a226
+a300 --> a367 --> a226
+a226 --> a256
+a256 --> a242 --> a294
+a256 --> a244 --> a294
+a256 --> a246 --> a258 --> a294
+a256 --> a248 --> a294
+a256 --> a250 --> a294
+a294 --> a260 --> a234
+a294 --> a262 --> a234
+a294 --> a264 --> a234
+a294 --> a266 --> a234
+a294 --> a268 --> a234
+a294 --> a270 --> a234
+a294 --> a272 --> a234
+a234 --> a274 --> a316
+a234 --> a276 --> a316
+a234 --> a278 --> a316
+a234 --> a280 --> a316
+a234 --> a282 --> a316
+a234 --> a284 --> a316
+a234 --> a286 --> a316
+a316 --> a323 --> a321
+a316 --> a325 --> a321
+a316 --> a327 --> a321
+a316 --> a329 --> a321
+a316 --> a331 --> a321
+a316 --> a333 --> a321
+a316 --> a335 --> a321
+a316 --> a337 --> a321
+a321 --> a359 --> a343
+a321 --> a361 --> a343
+a321 --> a363 --> a343
+a321 --> a365 --> a343
+a343 --> a344
+a343 --> a345
+a343 --> a346
+a343 --> a347
+a343 --> a348
+
+classDef decision fill:#0050ef,stroke:#001DBC,color:#fff;
+classDef opt fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef seccion fill:#1a1a1a,stroke:#000,color:#fff;
+classDef todo fill:#ffce00,stroke:#b38600,color:#1a1a1a;

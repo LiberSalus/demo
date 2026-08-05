@@ -1,0 +1,182 @@
+flowchart LR
+%% Diagrama Mermaid de la tab "CUESTIONARIO TAS" (TAS-20)
+%% Fuente: index.DEMO_quewstionnaire.drawio (pagina CUESTIONARIO TAS)
+%% TAS-20 = Toronto Alexithymia Scale. El drawio muestra 19 items visibles
+%% (el item 20 no aparece visible en el original). Flujo SECUENCIAL:
+%%   t1 -> t2 -> ... -> t19 -> Resultados TAS-20 -> Fin.
+%% Cada item es un unico nodo con el enunciado completo del Drawio y sus 5
+%% opciones con valor: Muy de acuerdo (5) / De acuerdo (4) / Indeciso (3)
+%% / En desacuerdo (2) / Muy en desacuerdo (1).
+%% Items con escala INVERTIDA en el drawio: 4, 5, 17, 18 (valores 1-5 en orden inverso).
+%% Rango de puntuacion: 20-51 ausencia; 52-60 posible; 61-100 alexitimia.
+%% Tabla de interpretacion: cuestionario_tas-review.md.
+
+tasIntro["Seleccione la opcion que mejor describa como se siente respecto a cada enunciado."]:::nota
+
+t1[/"<b>1. A menudo estoy confuso con las emociones que estoy sintiendo</b>
+1.1 Muy de acuerdo (5)
+1.2 De acuerdo (4)
+1.3 Indeciso (3)
+1.4 En desacuerdo (2)
+1.5 Muy en desacuerdo (1)"/]:::item
+
+t2[/"<b>2. Me es dificil encontrar las palabras correctas para expresar mis sentimientos</b>
+2.1 Muy de acuerdo (5)
+2.2 De acuerdo (4)
+2.3 Indeciso (3)
+2.4 En desacuerdo (2)
+2.5 Muy en desacuerdo (1)"/]:::item
+
+t3[/"<b>3. Tengo sensaciones fisicas que incluso ni los doctores entienden</b>
+3.1 Muy de acuerdo (5)
+3.2 De acuerdo (4)
+3.3 Indeciso (3)
+3.4 En desacuerdo (2)
+3.5 Muy en desacuerdo (1)"/]:::item
+
+%% Item 4 INVERTIDO
+t4[/"<b>4. Soy capaz de expresar mis sentimientos facilmente</b>
+4.1 Muy de acuerdo (1)
+4.2 De acuerdo (2)
+4.3 Indeciso (3)
+4.4 En desacuerdo (4)
+4.5 Muy en desacuerdo (5)"/]:::item
+
+%% Item 5 INVERTIDO
+t5[/"<b>5. Prefiero pensar bien acerca de un problema en lugar de solo mencionarlo</b>
+5.1 Muy de acuerdo (1)
+5.2 De acuerdo (2)
+5.3 Indeciso (3)
+5.4 En desacuerdo (4)
+5.5 Muy en desacuerdo (5)"/]:::item
+
+t6[/"<b>6. Cuando estoy mal no se si estoy triste, asustado o enfadado</b>
+6.1 Muy de acuerdo (5)
+6.2 De acuerdo (4)
+6.3 Indeciso (3)
+6.4 En desacuerdo (2)
+6.5 Muy en desacuerdo (1)"/]:::item
+
+t7[/"<b>7. A menudo estoy confundido con las sensaciones de mi cuerpo</b>
+7.1 Muy de acuerdo (5)
+7.2 De acuerdo (4)
+7.3 Indeciso (3)
+7.4 En desacuerdo (2)
+7.5 Muy en desacuerdo (1)"/]:::item
+
+t8[/"<b>8. Prefiero dejar que las cosas sucedan solas, sin preguntarme por que suceden de ese modo</b>
+8.1 Muy de acuerdo (5)
+8.2 De acuerdo (4)
+8.3 Indeciso (3)
+8.4 En desacuerdo (2)
+8.5 Muy en desacuerdo (1)"/]:::item
+
+t9[/"<b>9. Estar en contacto con las emociones es muy importante</b>
+9.1 Muy de acuerdo (5)
+9.2 De acuerdo (4)
+9.3 Indeciso (3)
+9.4 En desacuerdo (2)
+9.5 Muy en desacuerdo (1)"/]:::item
+
+t10[/"<b>10. Me es dificil expresar lo que siento acerca de las personas</b>
+10.1 Muy de acuerdo (5)
+10.2 De acuerdo (4)
+10.3 Indeciso (3)
+10.4 En desacuerdo (2)
+10.5 Muy en desacuerdo (1)"/]:::item
+
+t11[/"<b>11. La gente me dice que exprese mas mis sentimientos</b>
+11.1 Muy de acuerdo (5)
+11.2 De acuerdo (4)
+11.3 Indeciso (3)
+11.4 En desacuerdo (2)
+11.5 Muy en desacuerdo (1)"/]:::item
+
+t12[/"<b>12. No se que pasa dentro de mi</b>
+12.1 Muy de acuerdo (5)
+12.2 De acuerdo (4)
+12.3 Indeciso (3)
+12.4 En desacuerdo (2)
+12.5 Muy en desacuerdo (1)"/]:::item
+
+t13[/"<b>13. A menudo no se por que estoy enfadado</b>
+13.1 Muy de acuerdo (5)
+13.2 De acuerdo (4)
+13.3 Indeciso (3)
+13.4 En desacuerdo (2)
+13.5 Muy en desacuerdo (1)"/]:::item
+
+t14[/"<b>14. Prefiero hablar con la gente de sus actividades diarias mejor que de sus sentimientos</b>
+14.1 Muy de acuerdo (5)
+14.2 De acuerdo (4)
+14.3 Indeciso (3)
+14.4 En desacuerdo (2)
+14.5 Muy en desacuerdo (1)"/]:::item
+
+t15[/"<b>15. Prefiero ver espectaculos simples, pero entretenidos, que dramas psicologicos</b>
+15.1 Muy de acuerdo (5)
+15.2 De acuerdo (4)
+15.3 Indeciso (3)
+15.4 En desacuerdo (2)
+15.5 Muy en desacuerdo (1)"/]:::item
+
+t16[/"<b>16. Me es dificil revelar mis sentimientos mas profundos incluso a mis amigos mas intimos</b>
+16.1 Muy de acuerdo (5)
+16.2 De acuerdo (4)
+16.3 Indeciso (3)
+16.4 En desacuerdo (2)
+16.5 Muy en desacuerdo (1)"/]:::item
+
+%% Item 17 INVERTIDO
+t17[/"<b>17. Puedo sentirme cercano a alguien, incluso en momentos de silencio</b>
+17.1 Muy de acuerdo (1)
+17.2 De acuerdo (2)
+17.3 Indeciso (3)
+17.4 En desacuerdo (4)
+17.5 Muy en desacuerdo (5)"/]:::item
+
+%% Item 18 INVERTIDO
+t18[/"<b>18. Encuentro util examinar mis sentimientos para resolver problemas personales</b>
+18.1 Muy de acuerdo (1)
+18.2 De acuerdo (2)
+18.3 Indeciso (3)
+18.4 En desacuerdo (4)
+18.5 Muy en desacuerdo (5)"/]:::item
+
+t19[/"<b>19. Buscar significados ocultos a peliculas o juegos disminuye el placer de disfrutarlos</b>
+19.1 Muy de acuerdo (5)
+19.2 De acuerdo (4)
+19.3 Indeciso (3)
+19.4 En desacuerdo (2)
+19.5 Muy en desacuerdo (1)"/]:::item
+
+tResultados["Resultados TAS-20"]:::resultado
+tFin(["Fin del cuestionario TAS-20"]):::fin
+
+%% Cadena secuencial del cuestionario:
+tasIntro --> t1
+t1 --> t2
+t2 --> t3
+t3 --> t4
+t4 --> t5
+t5 --> t6
+t6 --> t7
+t7 --> t8
+t8 --> t9
+t9 --> t10
+t10 --> t11
+t11 --> t12
+t12 --> t13
+t13 --> t14
+t14 --> t15
+t15 --> t16
+t16 --> t17
+t17 --> t18
+t18 --> t19
+t19 --> tResultados
+tResultados --> tFin
+
+classDef nota fill:#fff8e1,stroke:#cbb32f,color:#333;
+classDef item fill:#eef6ff,stroke:#4d84c4,color:#1a1a1a;
+classDef resultado fill:#d1fadf,stroke:#12b76a,color:#063;
+classDef fin fill:#1a1a1a,stroke:#000,color:#fff;
