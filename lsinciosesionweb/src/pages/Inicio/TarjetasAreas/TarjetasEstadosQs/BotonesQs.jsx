@@ -9,7 +9,7 @@ import btnProgreso from "./btnProgreso.svg";
 import btnHabilitado from "./btbHabilitado.svg";
 import btnBloqueado from "./btnBloqueado.svg";
 
-const BotonesQs = ({edoQs, av, activo, onClick}) => {
+const BotonesQs = ({titulo, edoQs, av, activo, onClick}) => {
 
   let porcentaje = av;
 
@@ -125,7 +125,7 @@ const BotonesQs = ({edoQs, av, activo, onClick}) => {
       className={styles.info}
       style={{borderColor:brdcolor(edoQs)}}
       >
-        <p className={styles.titulo}>Titulo de cuestionario</p>
+        <p className={styles.titulo}>{titulo || "Cuestionario"}</p>
         {texto(edoQs)}
       </div>
       <div className={styles.icono}>{icono(edoQs)}</div>

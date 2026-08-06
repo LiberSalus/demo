@@ -1,0 +1,322 @@
+// src/config/cuestionarios/phq9.js
+// PHQ-9 (Patient Health Questionnaire) — generado desde docs/historia_clinica/questionnaires/mermaid/cuestionario_phq.mmd
+// (auditoria del drawio: ver tmp/auditoria_*.py). Contrato: dh_forms (key, name,
+// description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
+// list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
+// Nota: la tabla de interpretacion viene de cuestionario_phq-review.md.
+
+export default {
+  id: "PHQ-9",  // id estable (clave del cuestionario)
+  key: "PHQ-9",  // contrato dh_forms
+  name: "PHQ-9 (Patient Health Questionnaire)",
+  description: "Cuestionario de 9 preguntas sobre su estado de animo durante las ultimas dos semanas.",
+  area: "Emocional",
+  area_desc: "Instrumentos para conocer tu bienestar emocional y psicologico.",
+  instrucciones: "En las ultimas dos semanas usted sintio...",
+  estimated_duration: { min_minutes: 3, max_minutes: 10, description: 'Duracion estimada para completar el cuestionario' },
+  list_cie11_codes: [{"code": "6A7"}],
+  list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
+  list_evaluation_topics: [{"name": "Depresion", "key_industry": "health"}],
+  target_age_group: {"min_age": 18, "name": "A partir de los 18 anos"},
+  scoring: {"tipo": "suma", "maximo": 27},
+  interpretacion: [{"desde": 0, "hasta": 4, "texto": "Depresion minima"}, {"desde": 5, "hasta": 9, "texto": "Depresion leve"}, {"desde": 10, "hasta": 14, "texto": "Depresion moderada"}, {"desde": 15, "hasta": 19, "texto": "Depresion moderadamente severa"}, {"desde": 20, "hasta": 27, "texto": "Depresion severa"}],
+  list_questions: [
+  {
+    "id": 1,
+    "order": 1,
+    "type": "SINGLE_CHOICE",
+    "text": "1. Poco interes o placer en hacer cosas",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 2,
+    "order": 2,
+    "type": "SINGLE_CHOICE",
+    "text": "2. Se ha sentido decaido(a), deprimido(a) o sin esperanzas",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 3,
+    "order": 3,
+    "type": "SINGLE_CHOICE",
+    "text": "3. Ha tenido dificultad para quedarse o permanecer dormido(a), o ha dormido demasiado",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 4,
+    "order": 4,
+    "type": "SINGLE_CHOICE",
+    "text": "4. Se ha sentido cansado(a) o con poca energia",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 5,
+    "order": 5,
+    "type": "SINGLE_CHOICE",
+    "text": "5. Sin apetito o ha comido en exceso",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 6,
+    "order": 6,
+    "type": "SINGLE_CHOICE",
+    "text": "6. Se ha sentido mal con usted mismo(a) – o que es un fracaso o que ha quedado mal con usted mismo(a) o con su familia",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 7,
+    "order": 7,
+    "type": "SINGLE_CHOICE",
+    "text": "7. Ha tenido dificultad para concentrarse en ciertas actividades, tales como leer el cuerpo del texto o ver la television",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 8,
+    "order": 8,
+    "type": "SINGLE_CHOICE",
+    "text": "8. ¿Se ha movido o hablado tan lento que otras personas podrian haberlo notado? o lo contrario – muy inquieto(a) o agitado(a) que ha estado moviendose mucho mas de lo normal",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 9,
+    "order": 9,
+    "type": "SINGLE_CHOICE",
+    "text": "9. Pensamientos de que estaria mejor muerto(a) o de lastimarse de alguna manera",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  }
+],
+};

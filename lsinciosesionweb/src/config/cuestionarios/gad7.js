@@ -1,0 +1,256 @@
+// src/config/cuestionarios/gad7.js
+// GAD-7 (Trastorno de Ansiedad Generalizada) — generado desde docs/historia_clinica/questionnaires/mermaid/cuestionario_gad.mmd
+// (auditoria del drawio: ver tmp/auditoria_*.py). Contrato: dh_forms (key, name,
+// description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
+// list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
+// Nota: la tabla de interpretacion viene de cuestionario_gad-review.md.
+
+export default {
+  id: "GAD-7",  // id estable (clave del cuestionario)
+  key: "GAD-7",  // contrato dh_forms
+  name: "GAD-7 (Trastorno de Ansiedad Generalizada)",
+  description: "Cuestionario de 7 preguntas para conocer la frecuencia de sintomas de ansiedad en las ultimas dos semanas.",
+  area: "Emocional",
+  area_desc: "Instrumentos para conocer tu bienestar emocional y psicologico.",
+  instrucciones: "En las ultimas dos semanas usted sintio...",
+  estimated_duration: { min_minutes: 3, max_minutes: 10, description: 'Duracion estimada para completar el cuestionario' },
+  list_cie11_codes: [{"code": "6B0"}],
+  list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
+  list_evaluation_topics: [{"name": "Ansiedad", "key_industry": "health"}],
+  target_age_group: {"min_age": 18, "name": "A partir de los 18 anos"},
+  scoring: {"tipo": "suma", "maximo": 21},
+  interpretacion: [{"desde": 0, "hasta": 4, "texto": "Ansiedad minima"}, {"desde": 5, "hasta": 9, "texto": "Ansiedad leve"}, {"desde": 10, "hasta": 14, "texto": "Ansiedad moderada"}, {"desde": 15, "hasta": 21, "texto": "Ansiedad severa"}],
+  list_questions: [
+  {
+    "id": 1,
+    "order": 1,
+    "type": "SINGLE_CHOICE",
+    "text": "1. Se ha sentido nervioso(a), ansioso(a) o como los nervios de punta",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 2,
+    "order": 2,
+    "type": "SINGLE_CHOICE",
+    "text": "2. No ha sido capaz de parar o controlar su preocupacion",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 3,
+    "order": 3,
+    "type": "SINGLE_CHOICE",
+    "text": "3. Se ha preocupado demasiado por motivos diferentes",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 4,
+    "order": 4,
+    "type": "SINGLE_CHOICE",
+    "text": "4. Ha tenido dificultades para relajarse",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 5,
+    "order": 5,
+    "type": "SINGLE_CHOICE",
+    "text": "5. Se ha sentido tan inquieto(a) que no ha podido quedarse quieto(a)",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 6,
+    "order": 6,
+    "type": "SINGLE_CHOICE",
+    "text": "6. Se ha molestado o irritado facilmente",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 7,
+    "order": 7,
+    "type": "SINGLE_CHOICE",
+    "text": "7. Ha tenido miedo de que algo terrible fuera a pasar",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ningun dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Varios dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mas de la mitad de los dias",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todos los dias",
+        "value": 3,
+        "url": null
+      }
+    ],
+    "conditional": null
+  }
+],
+};

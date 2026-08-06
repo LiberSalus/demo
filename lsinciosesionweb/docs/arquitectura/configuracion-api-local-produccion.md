@@ -11,7 +11,7 @@ La configuracion validada usa un proxy de Vite durante desarrollo. El navegador 
 ### `.env.development`
 
 ```env
-VITE_MOCK_AUTH=0
+VITE_DEMO=false
 VITE_API=/api/
 VITE_LOGIN_URL=/panel/login
 ```

@@ -138,6 +138,13 @@ function obtenerUsuarioDeRespuesta(respuesta) {
 
 // Guarda una version minima del perfil para cabeceras y componentes del dashboard.
 function guardarPerfilMinimo({ usuario, correo }) {
+  // Preserva perfil y edad previos cuando el usuario entrante no los trae
+  // (p. ej. decode-token que solo devuelve claims), para no perder el gating.
+  let previo = {};
+  try {
+    previo = JSON.parse(localStorage.getItem(CLAVE_PERFIL_MINIMO) || "{}");
+  } catch { /* se ignora y se guarda sin previo */ }
+
   localStorage.setItem(
     CLAVE_PERFIL_MINIMO,
     JSON.stringify({
@@ -149,7 +156,9 @@ function guardarPerfilMinimo({ usuario, correo }) {
       username: usuario.username,
       telefono: usuario.telefono,
       rol: usuario.rol,
-      sexo: usuario.sexo || usuario.genero || usuario.gender,
+      perfil: usuario.perfil || previo.perfil,
+      edad: usuario.edad || previo.edad,
+      sexo: usuario.sexo || usuario.genero || usuario.gender || previo.sexo,
     })
   );
 

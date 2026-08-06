@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./VistaFisica.module.css";
 
-import BotonesQs from "../TarjetasEstadosQs/BotonesQs";
-import TarjetaBsEdoQs from "../TarjetasEstadosQs/TarjetaBsEdoQs";
+import ListaCuestionarios from "../ListaCuestionarios";
 import { obtenerTarjetasPorArea } from "../catalogoCuestionarios";
 
 const VistaFisica = () => {
-  const tarjetas = obtenerTarjetasPorArea("fisica");
-  const [tarjetaActiva, setTarjetaActiva] = useState(2);
+  const items = obtenerTarjetasPorArea("fisica");
 
   return (
     <div className={styles.VistaFisica}>
@@ -17,24 +15,7 @@ const VistaFisica = () => {
         conocer tu rutina de actividad, descanso y movilidad, y consultar tu
         avance en cada uno.
       </p>
-      <div className={styles.cntDin}>
-        <div className={styles.cntCmp}>
-          {tarjetas.map((tarjeta, i) => (
-            <BotonesQs
-              key={tarjeta.id}
-              edoQs={tarjeta.edoQs}
-              av={tarjeta.av}
-              activo={tarjetaActiva === i}
-              onClick={() => setTarjetaActiva(i)}
-            />
-          ))}
-        </div>
-        <div className={styles.cntStd}>
-          {tarjetas[tarjetaActiva] && (
-            <TarjetaBsEdoQs {...tarjetas[tarjetaActiva]} />
-          )}
-        </div>
-      </div>
+      <ListaCuestionarios items={items} />
     </div>
   );
 };

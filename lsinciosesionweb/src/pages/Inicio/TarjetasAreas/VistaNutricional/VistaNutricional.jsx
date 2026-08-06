@@ -1,13 +1,11 @@
-import React, {useState} from 'react'
-import styles from './VistaNutricional.module.css'
+import React from "react";
+import styles from "./VistaNutricional.module.css";
 
-import BotonesQs from "../TarjetasEstadosQs/BotonesQs";
-import TarjetaBsEdoQs from "../TarjetasEstadosQs/TarjetaBsEdoQs";
+import ListaCuestionarios from "../ListaCuestionarios";
 import { obtenerTarjetasPorArea } from "../catalogoCuestionarios";
 
 const VistaNutricional = () => {
-  const tarjetas = obtenerTarjetasPorArea("nutricional");
-  const [tarjetaActiva, setTarjetaActiva] = useState(3);
+  const items = obtenerTarjetasPorArea("nutricional");
 
   return (
     <div className={styles.VistaNutricional}>
@@ -17,26 +15,9 @@ const VistaNutricional = () => {
         permiten revisar tus hábitos, hidratación y porciones para comer mejor
         cada día.
       </p>
-      <div className={styles.cntDin}>
-        <div className={styles.cntCmp}>
-          {tarjetas.map((tarjeta, i) => (
-            <BotonesQs
-              key={tarjeta.id}
-              edoQs={tarjeta.edoQs}
-              av={tarjeta.av}
-              activo={tarjetaActiva === i}
-              onClick={() => setTarjetaActiva(i)}
-            />
-          ))}
-        </div>
-        <div className={styles.cntStd}>
-          {tarjetas[tarjetaActiva] && (
-            <TarjetaBsEdoQs {...tarjetas[tarjetaActiva]} />
-          )}
-        </div>
-      </div>
+      <ListaCuestionarios items={items} />
     </div>
-  )
-}
+  );
+};
 
-export default VistaNutricional
+export default VistaNutricional;

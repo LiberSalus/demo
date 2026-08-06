@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
 import styles from "./tarjetaBsEdoQs.module.css";
 
 import paloma from "./palomaV.svg";
@@ -20,6 +21,7 @@ const TarjetaBsEdoQs = ({
   edoQs, // codigo
   n_items = 0,
   n_responses = 0,
+  href, // ruta al runner (opcional); si viene, el boton navega
 }) => {
   // Convierte ESTADOSQS a lista (sirve si viene como array o como objeto)
   const estadosList = useMemo(
@@ -73,9 +75,17 @@ const TarjetaBsEdoQs = ({
           {estadoQs?.ac?.[1]}
         </p>
 
-        <button style={{ backgroundColor: botonBG }}>
-          {estadoQs?.bt}
-        </button>
+        {href ? (
+          <Link className={styles.enlaceBoton} to={href}>
+            <button className={styles.btn} style={{ backgroundColor: botonBG }}>
+              {estadoQs?.bt}
+            </button>
+          </Link>
+        ) : (
+          <button className={styles.btn} style={{ backgroundColor: botonBG }}>
+            {estadoQs?.bt}
+          </button>
+        )}
       </div>
     </div>
   );

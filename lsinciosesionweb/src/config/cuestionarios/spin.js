@@ -1,0 +1,688 @@
+// src/config/cuestionarios/spin.js
+// SPIN (Inventario de Fobia Social) — generado desde docs/historia_clinica/questionnaires/mermaid/cuestionario_spin.mmd
+// (auditoria del drawio: ver tmp/auditoria_*.py). Contrato: dh_forms (key, name,
+// description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
+// list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
+// Nota: la tabla de interpretacion viene de cuestionario_spin-review.md.
+
+export default {
+  id: "SPIN",  // id estable (clave del cuestionario)
+  key: "SPIN",  // contrato dh_forms
+  name: "SPIN (Inventario de Fobia Social)",
+  description: "Inventario de 17 preguntas sobre el malestar o temor en situaciones sociales durante la ultima semana.",
+  area: "Emocional",
+  area_desc: "Instrumentos para conocer tu bienestar emocional y psicologico.",
+  instrucciones: "En la ultima semana. Valore la intensidad de su malestar o temor.",
+  estimated_duration: { min_minutes: 3, max_minutes: 10, description: 'Duracion estimada para completar el cuestionario' },
+  list_cie11_codes: [{"code": "6B04"}],
+  list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
+  list_evaluation_topics: [{"name": "Fobia social", "key_industry": "health"}],
+  target_age_group: {"min_age": 12, "name": "A partir de 12 anos"},
+  scoring: {"tipo": "suma", "maximo": 68},
+  interpretacion: [{"desde": 0, "hasta": 68, "texto": "A mayor puntuacion, mayor nivel de ansiedad social"}],
+  list_questions: [
+  {
+    "id": 1,
+    "order": 1,
+    "type": "SINGLE_CHOICE",
+    "text": "1. Tengo miedo a las personas con autoridad",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 2,
+    "order": 2,
+    "type": "SINGLE_CHOICE",
+    "text": "2. Me molesta ruborizarme delante de la gente",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 3,
+    "order": 3,
+    "type": "SINGLE_CHOICE",
+    "text": "3. Las fiestas y acontecimientos sociales me da miedo",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 4,
+    "order": 4,
+    "type": "SINGLE_CHOICE",
+    "text": "4. Evito hablar con desconocidos",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 5,
+    "order": 5,
+    "type": "SINGLE_CHOICE",
+    "text": "5. Me da mucho miedo ser criticado",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 6,
+    "order": 6,
+    "type": "SINGLE_CHOICE",
+    "text": "6. Por temor al ridiculo evito hacer cosas o hablar con la gente",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 7,
+    "order": 7,
+    "type": "SINGLE_CHOICE",
+    "text": "7. Sudar en publico me produce malestar",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 8,
+    "order": 8,
+    "type": "SINGLE_CHOICE",
+    "text": "8. Evito ir a fiestas",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 9,
+    "order": 9,
+    "type": "SINGLE_CHOICE",
+    "text": "9. Evito actividades en las que soy el centro de atencion",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 10,
+    "order": 10,
+    "type": "SINGLE_CHOICE",
+    "text": "10. Hablar con extranos me atemoriza",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 11,
+    "order": 11,
+    "type": "SINGLE_CHOICE",
+    "text": "11. Evito dar discursos",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 12,
+    "order": 12,
+    "type": "SINGLE_CHOICE",
+    "text": "12. Haria cualquier cosa para evitar ser criticado",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 13,
+    "order": 13,
+    "type": "SINGLE_CHOICE",
+    "text": "13. Me da miedo las palpitaciones cuando estoy con gente",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 14,
+    "order": 14,
+    "type": "SINGLE_CHOICE",
+    "text": "14. Temo hacer las cosas cuando la gente puede estar mirandome",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 15,
+    "order": 15,
+    "type": "SINGLE_CHOICE",
+    "text": "15. Entre mis mayores miedos estan hacer el ridiculo o parecer estupido",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 16,
+    "order": 16,
+    "type": "SINGLE_CHOICE",
+    "text": "16. Evito hablar con cualquiera que tenga autoridad",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 17,
+    "order": 17,
+    "type": "SINGLE_CHOICE",
+    "text": "17. Temblar o presentar sacudidas delante de otros me produce malestar",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nada",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Un poco",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Algo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Mucho",
+        "value": 3,
+        "url": null
+      },
+      {
+        "id": 5,
+        "text": "Extremo",
+        "value": 4,
+        "url": null
+      }
+    ],
+    "conditional": null
+  }
+],
+};

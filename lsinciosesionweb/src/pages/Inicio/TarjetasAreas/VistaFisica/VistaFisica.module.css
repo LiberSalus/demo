@@ -1,76 +1,29 @@
 .VistaFisica {
-  & > h3 {font-size: 1rem; margin-bottom: 0.25rem;}
-  & > p  {font-size: .75rem;}  
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   min-width: 0;
   margin: 0 auto;
-  display: flex;
-  
-}
 
-.cntDin {
-  --cuestionario-columna-ancho: 23.25rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  align-items: center;
-  flex-wrap: nowrap;
-  margin: 0rem auto;
-}
-.cntStd {
-  flex: 1 1 21.875rem;
-  min-width: 0;
-  padding: 1rem;
-  
-}
+  & > h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.4rem;
+    color: #334155;
+  }
 
-.cntCmp {
-  width: 100%;
-  flex: 1 1 var(--cuestionario-columna-ancho);
-  min-width: 0;
-  padding: 0.2rem 0.35rem;
-  max-height: 15.5rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  & > p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0 0 1.1rem;
+    color: #64748b;
+  }
 }
 
 @media (max-width: 864px) {
   .VistaFisica {
-    justify-content: center;
-  }
-
-  .cntDin {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.15rem;
-    
-  }
-
-  .cntCmp {
-    flex-basis: auto;
-    width: min(100%, var(--cuestionario-columna-ancho));
-    max-height: none;
-    margin-top: 1rem;
-  }
-
-  .cntStd {
-    width: min(100%, var(--cuestionario-columna-ancho));
-    padding: 0;
-  }
-
-  .VistaFisica {
-    width: 100%;
-    & > h3, & > p {
+    & > h3,
+    & > p {
       text-align: center;
     }
-    
   }
-  
 }

@@ -34,6 +34,13 @@ const SaludMental = lazy(() => import("@/pages/SaludMental/SaludMental"));
 const SaludNutricional = lazy(() =>
   import("@/pages/SaludNutricional/SaludNutricional")
 );
+const Cuestionarios = lazy(() =>
+  import("@/pages/Cuestionarios/Cuestionarios")
+);
+const AreaCuestionarios = lazy(() =>
+  import("@/pages/Cuestionarios/Area")
+);
+const CuestionarioRun = lazy(() => import("@/pages/Cuestionarios/Run"));
 
 const miSaludRoutes = [
   { path: ROUTES.SOBRE_MI, element: <MiSaludATravesDelTiempo /> },
@@ -111,6 +118,14 @@ export const AppRouter = () => (
             {extrasRoutes.map((route) => (
               <Route key={route.path} path={route.path} element={route.element} />
             ))}
+
+            {/* Cuestionarios (lista, area y runner) */}
+            <Route path="/cuestionarios" element={<Cuestionarios />} />
+            <Route path="/cuestionarios/:area" element={<AreaCuestionarios />} />
+            <Route
+              path="/cuestionarios/:area/:key"
+              element={<CuestionarioRun />}
+            />
 
             <Route index element={<Navigate to={ROUTES.INICIO} replace />} />
           </Route>

@@ -159,15 +159,16 @@ export const CATALOGO_POR_AREA = {
   ],
 };
 
-// Convierte un elemento del catalogo a las props que consume TarjetaBsEdoQs.
+// Convierte un elemento del catalogo a la forma normalizada que consume
+// ListaCuestionarios (key, titulo, descripcion, edoQs, av, n_items, n_responses).
 export function convertirATarjeta(cuestionario) {
   const nItems = Number(cuestionario.n_items) || 0;
   const nRespuestas = Number(cuestionario.n_responses) || 0;
 
   return {
-    id: cuestionario.id,
-    titQs: cuestionario.titulo,
-    desQs: cuestionario.descripcion,
+    key: cuestionario.id,
+    titulo: cuestionario.titulo,
+    descripcion: cuestionario.descripcion,
     edoQs: cuestionario.edo,
     n_items: nItems,
     n_responses: nRespuestas,
@@ -175,12 +176,12 @@ export function convertirATarjeta(cuestionario) {
   };
 }
 
-// Devuelve la lista de tarjetas de un area lista para renderizar.
+// Devuelve la lista de cuestionarios de un area lista para ListaCuestionarios.
 export function obtenerTarjetasPorArea(area) {
   return (CATALOGO_POR_AREA[area] || []).map(convertirATarjeta);
 }
 
-// Devuelve las tarjetas de todas las areas unidas (vista "Todos").
+// Devuelve los cuestionarios de todas las areas unidas (vista "Todos").
 export function obtenerTarjetasTodas() {
   return Object.values(CATALOGO_POR_AREA)
     .flat()

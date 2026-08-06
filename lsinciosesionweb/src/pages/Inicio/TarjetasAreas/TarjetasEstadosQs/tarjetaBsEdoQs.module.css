@@ -80,7 +80,7 @@
         color: #334155;
         line-height: 1.18;
     }
-    & > :nth-child(4) {
+    & > .btn {
         appearance: none;
         outline: none;
         border: none;
@@ -92,6 +92,13 @@
         font-size: 0.9rem;
         font-weight: 700;
         cursor: pointer;
+        font-family: inherit;
+        transition: filter 0.2s ease, transform 0.15s ease;
+    }
+
+    /* boton dentro del enlace (cuando el cuestionario navega al runner) */
+    & > .enlaceBoton .btn:hover {
+        filter: brightness(1.08);
     }
 }
 
@@ -116,4 +123,15 @@
         margin-bottom: 0.2rem;
     }
     
+}
+
+/* Enlace que envuelve el boton de la tarjeta cuando el cuestionario es real */
+.enlaceBoton {
+  display: block;
+  text-decoration: none;
+  border-radius: 999px;
+}
+
+.enlaceBoton:hover button {
+  filter: brightness(1.08);
 }

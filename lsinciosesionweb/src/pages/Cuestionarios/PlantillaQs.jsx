@@ -1,13 +1,10 @@
-// src/components/Cuestionarios/PlantillaQs.jsx
+// src/pages/Cuestionarios/PlantillaQs.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import cuestionario from "./propuesta2.json"; // JSON con show_if
+import { Link } from "react-router-dom";
+import propuesta2 from "./propuesta2.json"; // JSON con show_if (respaldo)
 import PreguntasQs from "./PreguntasQs";
 import styles from "./plantillaQs.module.css";
 import { _pickShowIf } from "@/utils/logicPreg";
-
-// assets (ajusta rutas si cambian)
-import lista from "./lista.png";
-import tiempo from "./tiempo.png";
 
 // helpers de lógica/progreso/storage
 import {
@@ -19,7 +16,11 @@ import {
   saveAnswers,
 } from "@/utils/logicPreg";
 
-const PlantillaQs = () => {
+// Recibe el cuestionario por props (Run.jsx carga el JSON real). Si no llega,
+// se mantiene el import local de propuesta2.json como respaldo.
+const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
+  const cuestionario = cuestionarioProp || propuesta2;
+
   // clave única para guardar respuestas (usa id o name del cuestionario)
   const storageKey = storageKeyFor(
     cuestionario.id || cuestionario.name || "default"
@@ -37,7 +38,7 @@ const PlantillaQs = () => {
   );
 
   // Progreso (solo sobre visibles)
-  const { percent, visiblesCount } = useMemo(
+  const { percent, answeredCount, visiblesCount } = useMemo(
     () => computeProgressPercent(cuestionario.list_questions, respuestas),
     [respuestas]
   );
@@ -59,10 +60,21 @@ const PlantillaQs = () => {
     setRespuestas(loadAnswers(storageKey));
   }, [storageKey]);
 
+  // Persiste tambien el resumen de progreso que leen Area/Inicio (:pct, :ans, :vis)
+  const guardarResumenProgreso = () => {
+    const { percent, answeredCount, visiblesCount } = computeProgressPercent(
+      cuestionario.list_questions,
+      respuestas
+    );
+    localStorage.setItem(`${storageKey}:pct`, String(percent));
+    localStorage.setItem(`${storageKey}:ans`, String(answeredCount));
+    localStorage.setItem(`${storageKey}:vis`, String(visiblesCount));
+  };
+
   // Guardar / Limpiar
   const guardarRespuestas = () => {
     saveAnswers(storageKey, respuestas);
-    console.log("Respuestas:", respuestas);
+    guardarResumenProgreso();
     alert("Respuestas guardadas.");
   };
 
@@ -72,62 +84,70 @@ const PlantillaQs = () => {
   };
 
   // Asegurar campos de área mientras definen definitivo en el JSON
-  const area = cuestionario.area || "Físico";
+  const area = forceArea || cuestionario.area || "Físico";
+  const areaSlug = area.toLowerCase();
   const areaDesc =
     cuestionario.area_desc ||
     "Explora esta área para conocer hábitos y oportunidades de mejora.";
 
+  const completado = percent === 100 && answeredCount > 0;
+
   return (
     <div className={styles.cntPlantillaQs}>
-      {/* ====== BLOQUE DE INFO (manteniendo tu estructura y estilos) ====== */}
-      <div className={styles.cntInfo}>
-        <h3>Cuestionarios</h3>
+      {/* ====== HERO: identidad del cuestionario ====== */}
+      <header className={styles.hero}>
+        <Link to={`/cuestionarios/${areaSlug}`} className={styles.volver}>
+          ← Volver a {cuestionario.area || area}
+        </Link>
 
-        <div className={styles.cntDescripcion}>
-          <p>NOMBRE DE CUESTIONARIO:</p>
-          <h3>{cuestionario.name}</h3>
-          <p>{cuestionario.description}</p>
+        <div className={styles.heroTop}>
+          <span className={styles.badgeArea}>Bienestar {area}</span>
+          {completado && (
+            <span className={styles.badgeOk}>✓ Completado</span>
+          )}
         </div>
 
-        <div className={styles.cntReactivos}>
-          <p>REACTIVOS</p>
-          <img src={lista} alt="lista" />
-          <p>{visiblesCount}</p>
-        </div>
+        <h1 className={styles.titulo}>{cuestionario.name}</h1>
+        <p className={styles.descripcion}>{cuestionario.description}</p>
 
-        <div className={styles.cntTiempo}>
-          <p>TIEMPO</p>
-          <img src={tiempo} alt="tiempo" />
-          <p>
-            {minutos}
-            <span>MIN</span>
-          </p>
-        </div>
-
-        <div className={styles.cntMono}>
-          <button>Bienestar {area}</button>
-          <div className={styles.cntModelo}>
-            <img src={lista} alt={`Bienestar ${area}`} />
+        <div className={styles.metricas}>
+          <div className={styles.metrica}>
+            <span className={styles.metricaLabel}>Reactivos</span>
+            <span className={styles.metricaValor}>{visiblesCount}</span>
           </div>
-          <p>{areaDesc}</p>
+          <div className={styles.metrica}>
+            <span className={styles.metricaLabel}>Tiempo estimado</span>
+            <span className={styles.metricaValor}>
+              {minutos} <small>min</small>
+            </span>
+          </div>
+          <div className={styles.metrica}>
+            <span className={styles.metricaLabel}>Respondidas</span>
+            <span className={styles.metricaValor}>
+              {answeredCount}<small>/{visiblesCount}</small>
+            </span>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* ====== FORM + PROGRESO ====== */}
-      <div className={styles.cntFormulario}>
-        <form className={styles.Form}>
-          <p>INSTRUCCIONES</p>
-          <p>
-            Contesta cada una de las siguientes preguntas. Algunas aparecerán
-            según tus respuestas. Al finalizar, da clic en{" "}
-            <strong>Guardar</strong>.
-          </p>
+      {/* ====== CUERPO: formulario + panel de progreso ====== */}
+      <div className={styles.cuerpo}>
+        <form className={styles.formulario} onSubmit={(e) => e.preventDefault()}>
+          <div className={styles.instrucciones}>
+            <strong className={styles.instruccionesTitulo}>Instrucciones</strong>
+            <p className={styles.instruccionesTexto}>
+              Contesta cada una de las siguientes preguntas. Algunas aparecerán
+              según tus respuestas. Al finalizar, da clic en{" "}
+              <strong>Guardar</strong>.
+            </p>
+          </div>
 
           <div className={styles.cntPreguntas}>
-            {visibleQuestions.map((pregunta) => (
+            {visibleQuestions.map((pregunta, i) => (
               <div key={pregunta.id} className={styles.qAppear}>
                 <PreguntasQs
                   pregunta={pregunta}
+                  numero={i + 1}
                   respuesta={respuestas[pregunta.id]}
                   alCambiarRespuesta={manejarCambioRespuesta}
                 />
@@ -136,9 +156,10 @@ const PlantillaQs = () => {
           </div>
         </form>
 
-        <div className={styles.cntProgreso}>
-          <div className={styles.cntBarra}>
-            <p className={styles.progresoTxt}>PROGRESO</p>
+        {/* Panel lateral sticky con progreso y acciones */}
+        <aside className={styles.panel}>
+          <div className={styles.panelCard}>
+            <p className={styles.progresoTitulo}>Progreso</p>
             <div
               className={styles.barra}
               aria-label="Progreso del cuestionario"
@@ -152,17 +173,32 @@ const PlantillaQs = () => {
                 role="progressbar"
               />
             </div>
-          </div>
+            <p className={styles.porcentaje}>
+              {percent}%
+              <small className={styles.porcentajeDetalle}>
+                {" "}
+                · {answeredCount} de {visiblesCount} reactivos
+              </small>
+            </p>
 
-          <div className={styles.cntBotones}>
-            <button type="button" onClick={guardarRespuestas}>
-              Guardar
-            </button>
-            <button type="button" onClick={limpiarRespuestas}>
-              Limpiar
-            </button>
+            <div className={styles.cntBotones}>
+              <button
+                type="button"
+                className={styles.btnGuardar}
+                onClick={guardarRespuestas}
+              >
+                Guardar respuestas
+              </button>
+              <button
+                type="button"
+                className={styles.btnLimpiar}
+                onClick={limpiarRespuestas}
+              >
+                Limpiar
+              </button>
+            </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

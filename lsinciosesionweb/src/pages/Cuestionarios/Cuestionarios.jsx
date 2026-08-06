@@ -1,294 +1,285 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./cuestionarios.module.css";
-import { Link } from "react-router-dom";
+
+import { AREAS } from "@/config/cuestionarios.config";
+import { getCurrentProfile } from "@/utils/profile";
+import {
+  getProgressSummary,
+  progressState,
+  isUnlocked,
+  computeAreaPercent,
+} from "@/utils/progreso";
+
 import TarjetaListadoAvance from "./TarjetaListadoAvance/TarjetaListadoAvance";
+import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
+import TarjetaProgresoArea from "@/components/Tarjetas/TarjetaProgresoArea/TarjetaProgresoArea";
+
+// iconos por id de área (assets de la sección de cuestionarios)
 import fisico from "./fisico.png";
 import mental from "./mental.png";
 import social from "./social.png";
 import nutricional from "./nutricional.png";
 
-import TrjEstadoCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TrjEstadoCuestionario";
-import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
+const ICONOS_AREA = {
+  fisico,
+  emocional: mental,
+  social,
+  nutricional,
+};
 
-import completado from "@/components/Tarjetas/TarjetaCuestionarios/completado.svg";
-import proceso from "@/components/Tarjetas/TarjetaCuestionarios/proceso.svg";
-import inactivo from "@/components/Tarjetas/TarjetaCuestionarios/candado.svg";
-import TarjetaProgresoArea from "@/components/Tarjetas/TarjetaProgresoArea/TarjetaProgresoArea";
-
-import InputRango from "./Inputs/InputRango";
-
-const estados = ["inactivo", "completado", "proceso"];
-
-const perfilCuestionario = [
-  {
-    id: 1,
-    nombre: "Cuestionario de Satisfacción",
-    descripcion: "Evalúa la satisfacción del cliente con el servicio.",
-    estado: 1,
-    fecha: "01/01/2023",
-  },
-  {
-    id: 2,
-    nombre: "Cuestionario de Evaluación",
-    descripcion: "Evalúa el desempeño del empleado.",
-    estado: 0,
-    fecha: "01/01/2023",
-  },
-  {
-    id: 3,
-    nombre: "Cuestionario de Clima Laboral",
-    descripcion: "Evalúa el ambiente laboral en la empresa.",
-    estado: 2,
-    fecha: "01/01/2023",
-  },
-];
-
-const srcIcon = { completado, proceso, inactivo };
-
-const TarjetaCuestionario = () => (
-  <div className={styles.cntEstadosCuestionario}>
-    {perfilCuestionario.map((c) => (
-      <TrjEstadoCuestionario
-        key={c.id}
-        id={c.id}
-        nombre={c.nombre}
-        descripcion={c.descripcion}
-        estado={estados[c.estado]}
-        fecha={c.fecha}
-        srcIcon={srcIcon[estados[c.estado]]}
-        name={estados[c.estado]}
-      />
-    ))}
-  </div>
-);
+// Lee el progreso real de un área (elegibilidad por perfil + desbloqueo).
+async function cargarArea(areaData, profile) {
+  const byKey = Object.fromEntries(
+    (areaData.questionnaires || []).map((q) => [q.key, q])
+  );
+  const items = await Promise.all(
+    (areaData.questionnaires || [])
+      .filter((q) => !q.profiles || q.profiles.includes(profile))
+      .map(async (meta) => {
+        const { percent, answeredCount, visiblesCount } = getProgressSummary(
+          meta.key || meta.name
+        );
+        const unlocked = await isUnlocked(meta, byKey);
+        return {
+          meta,
+          href: `/cuestionarios/${areaData.id}/${meta.key}`,
+          percent,
+          answeredCount,
+          visiblesCount,
+          state: unlocked ? progressState(percent) : "bloqueado",
+          unlocked,
+        };
+      })
+  );
+  return {
+    id: areaData.id,
+    name: areaData.name,
+    items,
+    percent: computeAreaPercent(items.filter((i) => i.unlocked)),
+  };
+}
 
 const Cuestionarios = () => {
-  // ✅ único estado para el slider
-  const [valor, setValor] = useState(5);
+  const navigate = useNavigate();
+  const profile = getCurrentProfile();
+
+  // áreas con progreso real (loading → null)
+  const [areas, setAreas] = useState(null);
+
+  useEffect(() => {
+    let ok = true;
+    (async () => {
+      const loaded = await Promise.all(AREAS.map((a) => cargarArea(a, profile)));
+      if (!ok) return;
+      setAreas(loaded);
+    })();
+    return () => {
+      ok = false;
+    };
+  }, [profile]);
+
+  // métricas globales
+  const resumen = useMemo(() => {
+    if (!areas) return null;
+    const total = areas.reduce((acc, a) => acc + a.items.length, 0);
+    const completados = areas.reduce(
+      (acc, a) =>
+        acc + a.items.filter((i) => i.unlocked && i.state === "completado").length,
+      0
+    );
+    const enProgreso = areas.reduce(
+      (acc, a) => acc + a.items.filter((i) => i.unlocked && i.state === "proceso").length,
+      0
+    );
+    return { total, completados, enProgreso };
+  }, [areas]);
+
+  // evaluación a destacar: la de mayor progreso (en curso o completada)
+  const evaluacionDestacada = useMemo(() => {
+    if (!areas) return null;
+    const candidatos = [];
+    areas.forEach((a) =>
+      a.items.forEach((i) => {
+        if (i.unlocked) candidatos.push({ ...i, areaName: a.name });
+      })
+    );
+    if (!candidatos.length) return null;
+    // prioriza en progreso; entre iguales, el mayor percent
+    candidatos.sort((x, y) => {
+      if ((x.state === "proceso") !== (y.state === "proceso"))
+        return x.state === "proceso" ? -1 : 1;
+      return y.percent - x.percent;
+    });
+    return candidatos[0];
+  }, [areas]);
+
+  // área con más actividad para el listado de avance
+  const areaActiva = useMemo(() => {
+    if (!areas) return null;
+    return [...areas].sort((a, b) => b.items.length - a.items.length)[0] || null;
+  }, [areas]);
+
+  if (!areas) {
+    return (
+      <div className={styles.cntCuestionarios}>
+        <p className={styles.cargando}>Cargando cuestionarios…</p>
+      </div>
+    );
+  }
 
   return (
-    
-      <div className={styles.cntCuestionarios}>
-        <div className={styles.cntInfo}>
-          <h2>Cuestionarios</h2>
-
-          <div className={styles.cntMejora}>
-            <p>Conoce y mejora tu bienestar</p>
-            <p>
-              Esta sección te permite responder cuestionarios para comprender
-              mejor tu estado físico, mental, social y nutricional. Completar
-              estos cuestionarios te ayudará a obtener recomendaciones
-              personalizadas y a construir tu expediente de salud.
-            </p>
-            <p>?</p>
-          </div>
-
-          <div className={styles.cntTarjetasAreas}>
-            <div className={styles.cntMono}>
-              <img src={fisico} alt="Bienestar fisico" />
-            </div>
-
-            <div className={styles.cntTarjetas}>
-              <div className={styles.tarjeta}>
-                <div className={styles.caja}>
-                  <div className={styles.cntIcon}>
-                    <img src={fisico} />
-                  </div>
-                  <p>Bienestar Físico</p>
-                </div>
-                <p>
-                  Evalúa tu estado de salud, energía, actividad física y
-                  descanso
-                </p>
-              </div>
-
-              <div className={styles.tarjeta}>
-                <div className={styles.caja}>
-                  <div className={styles.cntIcon}>
-                    <img src={social} />
-                  </div>
-                  <p>Bienestar Social</p>
-                </div>
-                <p>Conoce tu interacción con familiares, amigos y comunidad</p>
-              </div>
-
-              <div className={styles.tarjeta}>
-                <div className={styles.caja}>
-                  <div className={styles.cntIcon}>
-                    <img src={mental} />
-                  </div>
-                  <p>Bienestar Mental</p>
-                </div>
-                <p>
-                  Mide tu nivel de estrés, emociones y bienestar psicológico
-                </p>
-              </div>
-
-              <div className={styles.tarjeta}>
-                <div className={styles.caja}>
-                  <div className={styles.cntIcon}>
-                    <img src={nutricional} />
-                  </div>
-                  <p>Bienestar Nutricional</p>
-                </div>
-                <p>
-                  Identifica tus hábitos de alimentación y oportunidades de
-                  mejora
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.cntMejora}>
-            <p>Gestiona tu progreso </p>
-            <p>
-              Puedes avanzar a tu ritmo. Si no terminas un cuestionario, tu
-              progreso quedará guardado para retomarlo después.
-            </p>
-            <p>O</p>
-          </div>
-
-          <div className={styles.cntNumIZ}>
-            <div className={styles.num}>
-              <p>1</p>
-              <p>
-                Visualizarás el progreso de tus cuestionarios desde panel
-                principal
-              </p>
-            </div>
-            <div className={styles.cntComponente}>
-              <p>Bienestar Físico</p>
-              <TarjetaCuestionario />
-            </div>
-          </div>
-
-          <div className={styles.componente}>
-            <div className={styles.cntListadoEstado}>
-              <p>Bienestar Físico</p>
-              <TarjetaCuestionario />
-              <p>Bienestar Social</p>
-              <TarjetaCuestionario />
-              <p>Bienestar Mental</p>
-              <TarjetaCuestionario />
-              <p>Bienestar Nutricional</p>
-              <TarjetaCuestionario />
-            </div>
-            <div className={styles.cntCompEval}>
-              <TarjetaEvaluacion />
-            </div>
-          </div>
-
-          <div className={styles.cntNumDR}>
-            <div className={styles.cntComponente}>
-              <TarjetaProgresoArea />
-            </div>
-            <div className={styles.cntBotones}>
-              <button className={styles.boton}>Bienestar Físico</button>
-              <button className={styles.boton}>Bienestar Social</button>
-              <button className={styles.boton}>Bienestar Mental</button>
-              <button className={styles.boton}>Bienestar Nutricional</button>
-            </div>
-            <div className={styles.num}>
-              <p>2</p>
-              <p>
-                Para cada área de bienestar podrás gestionar el avance de
-                cuestionarios
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.cntMejora}>
-            <p>Reactivos en cuestionarios</p>
-            <p>
-              "Cada cuestionario contiene diferentes tipos de preguntas, desde
-              escribir tu opinión hasta seleccionar opciones o valorar en una
-              escala. ¡Responde con honestidad para obtener mejores resultados!
-            </p>
-            <p>!</p>
-          </div>
-
-          <div className={styles.cntNumIZ}>
-            <div className={styles.num}>
-              <p>3</p>
-              <p>
-                Según el tipo de cuestionario se presentarán los tipos de
-                preguntas
-              </p>
-            </div>
-
-            <div className={styles.cntPreguntas}>
-              <div className={styles.pregunta}>
-                <p>
-                  1. Durante los últimos 7 días, ¿cuántos días realizó usted
-                  actividades físicas vigorosas como levantar objetos pesados,
-                  excavar, aeróbicos o pedalear rápido en bicicleta?
-                </p>
-                <p>Desliza el marcador hasta el número que consideres</p>
-                <div className={styles.cntInput}>
-                  <InputRango
-                    value={valor}
-                    onChange={setValor}
-                    min={1}
-                    max={7}
-                    step={1}
-                  />
-                </div>
-                <button className={styles.boton}>Siguiente</button>
-              </div>
-              <div className={styles.pregunta}>
-                <p>
-                  ¿Has consumido bebidas con alcohol (cerveza, vino, ginebra,
-                  etc)?
-                </p>
-                <div className={styles.cntInputs}>
-                  <input className={styles.inputChk} type="checkbox"></input>
-                  <label>SI</label>
-                  <input className={styles.inputChk} type="checkbox"></input>
-                  <label>NO</label>
-                </div>
-                <p>
-                  ¿Has consumido bebidas con alcohol (cerveza, vino, ginebra,
-                  etc)?
-                </p>
-                <div className={styles.cntInputs}>
-                  <input className={styles.inputChk} type="checkbox"></input>
-                  <label>SI</label>
-                  <input className={styles.inputChk} type="checkbox"></input>
-                  <label>NO</label>
-                </div>
-                <button className={styles.boton}>Siguiente</button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.cntAvance}>
-            <div>
-              <p>Progreso</p>
-              <div className={styles.barra}>
-                <div className={styles.avance}></div>
-              </div>
-            </div>
-            <p>
-              Si requieres salir, da clic en el boton para mantener tu progreso
-            </p>
-            <button className={styles.boton}>Guardar</button>
-          </div>
-          <div className={styles.cntMsj}>
-            <p>TU PARTICIPACIÓN ES CLAVE</p>
-            <p>Cada respuesta que compartes ayuda a construir un panorama más claro de tu bienestar. <br/> ¡Contribuyes a mejorar tu salud y la de tu comunidad!</p>
-          </div>
-          <div className={styles.cntAreas}>
-            <p>ÁREAS DE BIENESTAR</p>
-            <div>
-            <Link to="/cuestionarios/fisico" className={styles.boton}>Bienestar Físico</Link>
-            <Link to="/cuestionarios/mental" className={styles.boton}>Bienestar Mental</Link>
-            <Link to="/cuestionarios/social" className={styles.boton}>Bienestar Social</Link>
-            <Link to="/cuestionarios/nutricional" className={styles.boton}>Bienestar Nutricional</Link>
-
-            </div>
-          </div>
+    <div className={styles.cntCuestionarios}>
+      {/* ====== HERO ====== */}
+      <header className={styles.hero}>
+        <div className={styles.heroTop}>
+          <span className={styles.badge}>Cuestionarios de bienestar</span>
         </div>
-      </div>
-    
+        <h1 className={styles.titulo}>Cuestionarios</h1>
+        <p className={styles.descripcion}>
+          Responde cuestionarios para comprender mejor tu estado físico,
+          emocional, social y nutricional. Tu progreso se guarda
+          automáticamente para que lo retomes cuando quieras.
+        </p>
+        {resumen && (
+          <div className={styles.metricas}>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>Disponibles</span>
+              <span className={styles.metricaValor}>{resumen.total}</span>
+            </div>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>Completados</span>
+              <span className={styles.metricaValor}>{resumen.completados}</span>
+            </div>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>En progreso</span>
+              <span className={styles.metricaValor}>{resumen.enProgreso}</span>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ====== ÁREAS ====== */}
+      <section className={styles.seccion}>
+        <h2 className={styles.seccionTitulo}>Elige un área</h2>
+        <div className={styles.gridAreas}>
+          {areas.map((area) => {
+            const completadas = area.items.filter(
+              (i) => i.unlocked && i.state === "completado"
+            ).length;
+            return (
+              <Link
+                key={area.id}
+                to={`/cuestionarios/${area.id}`}
+                className={styles.tarjetaArea}
+              >
+                <div className={styles.tarjetaAreaHead}>
+                  <div className={styles.cntIcon}>
+                    <img src={ICONOS_AREA[area.id]} alt={area.name} />
+                  </div>
+                  <div className={styles.tarjetaAreaTitulo}>
+                    <strong>{area.name.split(" ")[0]}</strong>
+                    <span>{area.name.split(" ")[1]}</span>
+                  </div>
+                  <span className={styles.flecha} aria-hidden="true">
+                    →
+                  </span>
+                </div>
+                <p className={styles.tarjetaAreaDesc}>
+                  {area.descripcion}
+                </p>
+                <div className={styles.tarjetaAreaPie}>
+                  <div
+                    className={styles.miniBarra}
+                    role="progressbar"
+                    aria-valuenow={area.percent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`Progreso de ${area.name}`}
+                  >
+                    <div
+                      className={styles.miniProgreso}
+                      style={{ width: `${area.percent}%` }}
+                    />
+                  </div>
+                  <span className={styles.tarjetaAreaPct}>
+                    {area.percent}%
+                  </span>
+                </div>
+                <p className={styles.tarjetaAreaMeta}>
+                  {completadas} de {area.items.length} completados
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ====== EVALUACIÓN EN CURSO ====== */}
+      {evaluacionDestacada && (
+        <section className={styles.seccion}>
+          <h2 className={styles.seccionTitulo}>Mi evaluación</h2>
+          <div className={styles.cntEvaluacion}>
+            <TarjetaEvaluacion
+              titulo={evaluacionDestacada.areaName}
+              nombreCuestionario={evaluacionDestacada.meta.name}
+              percent={evaluacionDestacada.percent}
+              estado={
+                evaluacionDestacada.state === "completado"
+                  ? "Completado"
+                  : "En proceso"
+              }
+              onContinuar={() => navigate(evaluacionDestacada.href)}
+              etiquetaBoton={
+                evaluacionDestacada.state === "completado"
+                  ? "Ver respuestas"
+                  : "Continuar respondiendo"
+              }
+            />
+          </div>
+        </section>
+      )}
+
+      {/* ====== SEGUIMIENTO POR ÁREA ====== */}
+      <section className={styles.seccion}>
+        <h2 className={styles.seccionTitulo}>Seguimiento por área</h2>
+        <div className={styles.gridSeguimiento}>
+          {areas.map((area) => (
+            <TarjetaProgresoArea
+              key={area.id}
+              titulo={area.name}
+              percent={area.percent}
+              subtitulo={`${area.items.length} instrumentos disponibles`}
+              mensaje={
+                area.percent === 100
+                  ? "¡Completaste todos los cuestionarios de esta área!"
+                  : "Completa tus cuestionarios para conocer mejor esta área."
+              }
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ====== LISTADO DE AVANCE ====== */}
+      {areaActiva && areaActiva.items.length > 0 && (
+        <section className={styles.seccion}>
+          <h2 className={styles.seccionTitulo}>Detalle de avance</h2>
+          <div className={styles.cntListado}>
+            <TarjetaListadoAvance
+              titulo={areaActiva.name}
+              items={areaActiva.items.map((i) => ({
+                key: i.meta.key,
+                name: i.meta.name,
+                description: i.meta.description,
+                percent: i.percent,
+                state: i.state,
+                href: i.href,
+              }))}
+            />
+          </div>
+        </section>
+      )}
+    </div>
   );
 };
 

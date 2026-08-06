@@ -1,0 +1,29 @@
+.cntListado {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+}
+
+.titulo {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #334155);
+    margin: 0 0 0.35rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--color-brand-primary, #007cba);
+    width: fit-content;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.vacio {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--color-text-secondary, #64748b);
+    margin: 0.5rem 0;
+}

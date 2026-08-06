@@ -20,7 +20,8 @@ export const DEMO_CREDENCIALES = {
 };
 
 // Personas disponibles para explorar la demo. Cada una define la variante
-// visual (avatar y mancha) que el inicio usa para personalizar la interfaz.
+// visual (avatar y mancha) que el inicio usa para personalizar la interfaz y
+// el perfil de salud (perfil + edad) que alimenta el gating de cuestionarios.
 export const PERSONAS_DEMO = [
   {
     clave: "mujer",
@@ -29,6 +30,7 @@ export const PERSONAS_DEMO = [
     last_name: "Fernández",
     sexo: "mujer",
     genero: "Mujer",
+    perfil: "adulto_activo",
     edad: "34",
     peso: "62",
     sangre: "O+",
@@ -43,12 +45,43 @@ export const PERSONAS_DEMO = [
     last_name: "Pérez",
     sexo: "hombre",
     genero: "Hombre",
+    perfil: "adulto_activo",
     edad: "50",
     peso: "90",
     sangre: "A+",
     estatura: "177",
     curp: "PEJJ760514HDFRNC09",
     descripcion: "Adulto activo interesado en mantener su salud física y moverse más.",
+  },
+  {
+    clave: "mayor",
+    nombre: "Rosa Demo",
+    first_name: "Rosa",
+    last_name: "López",
+    sexo: "mujer",
+    genero: "Mujer",
+    perfil: "mayor_asistido",
+    edad: "68",
+    peso: "58",
+    sangre: "B+",
+    estatura: "155",
+    curp: "LOCR580412MMCPRS07",
+    descripcion: "Persona mayor que valora su salud y busca cuidados preventivos.",
+  },
+  {
+    clave: "menor",
+    nombre: "Sofía Demo",
+    first_name: "Sofía",
+    last_name: "García",
+    sexo: "mujer",
+    genero: "Niña",
+    perfil: "menor_tutor",
+    edad: "10",
+    peso: "35",
+    sangre: "A-",
+    estatura: "138",
+    curp: "GAGS160124MQTRRF05",
+    descripcion: "Niña acompañada por su tutor para explorar la plataforma.",
   },
 ];
 
@@ -83,6 +116,7 @@ export const DEMO_PERFIL = {
   correo: DEMO_CREDENCIALES.correo,
   telefono: "5551234567",
   rol: "paciente",
+  perfil: personaDemoActual.perfil || "adulto_activo",
   sexo: personaDemoActual.sexo,
   edad: personaDemoActual.edad || "50",
   peso: personaDemoActual.peso || "90",
@@ -118,6 +152,8 @@ export function construirRespuestaLogin() {
       email: DEMO_CREDENCIALES.correo,
       username: DEMO_CREDENCIALES.correo,
       sexo: persona.sexo,
+      perfil: persona.perfil || "adulto_activo",
+      edad: persona.edad,
     },
   };
 }

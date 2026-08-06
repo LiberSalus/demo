@@ -1,0 +1,83 @@
+/* ============================================================
+   Lista reutilizable de cuestionarios (tabs del Inicio)
+   Columna scrolleable vertical + detalle a la derecha.
+   ============================================================ */
+
+.cntDin {
+  --cuestionario-columna-ancho: 23.25rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+}
+
+/* ---------- columna de botones con scroll ---------- */
+.cntCmp {
+  flex: 1 1 var(--cuestionario-columna-ancho);
+  min-width: 0;
+  max-width: var(--cuestionario-columna-ancho);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.15rem 0.35rem;
+  max-height: 26rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* scrollbar delgado (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: #b9d5ea transparent;
+}
+
+/* scrollbar delgado (WebKit/Blink) */
+.cntCmp::-webkit-scrollbar {
+  width: 5px;
+}
+.cntCmp::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cntCmp::-webkit-scrollbar-thumb {
+  background: #b9d5ea;
+  border-radius: 3px;
+}
+.cntCmp::-webkit-scrollbar-thumb:hover {
+  background: #8fbcdc;
+}
+
+/* ---------- detalle ---------- */
+.cntStd {
+  flex: 1 1 22rem;
+  min-width: 0;
+  padding: 0.5rem 0.25rem;
+}
+
+.vacio {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+  color: var(--color-text-secondary, #64748b);
+  font-size: 0.85rem;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 864px) {
+  .cntDin {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.15rem;
+  }
+
+  .cntCmp {
+    flex-basis: auto;
+    width: min(100%, var(--cuestionario-columna-ancho));
+    max-height: 18rem;
+    max-width: var(--cuestionario-columna-ancho);
+  }
+
+  .cntStd {
+    width: min(100%, var(--cuestionario-columna-ancho));
+    padding: 0;
+  }
+}

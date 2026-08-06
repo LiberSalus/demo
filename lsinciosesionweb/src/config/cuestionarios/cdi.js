@@ -1,0 +1,754 @@
+// src/config/cuestionarios/cdi.js
+// CDI (Inventario de Depresion Infantil) — generado desde docs/historia_clinica/questionnaires/mermaid/cuestionario_cdi.mmd
+// (auditoria del drawio: ver tmp/auditoria_*.py). Contrato: dh_forms (key, name,
+// description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
+// list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
+// Nota: la tabla de interpretacion viene de cuestionario_cdi-review.md.
+
+export default {
+  id: "CDI",  // id estable (clave del cuestionario)
+  key: "CDI",  // contrato dh_forms
+  name: "CDI (Inventario de Depresion Infantil)",
+  description: "Inventario de 27 preguntas sobre como se ha sentido el nino o la nina en las ultimas dos semanas.",
+  area: "Emocional",
+  area_desc: "Instrumentos para conocer tu bienestar emocional y psicologico.",
+  instrucciones: "En las ultimas dos semanas",
+  estimated_duration: { min_minutes: 5, max_minutes: 30, description: 'Duracion estimada para completar el cuestionario' },
+  list_cie11_codes: [{"code": "6A7"}],
+  list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
+  list_evaluation_topics: [{"name": "Depresion infantil", "key_industry": "health"}],
+  target_age_group: {"min_age": 7, "max_age": 17, "name": "De 7 a 17 anos"},
+  scoring: {"tipo": "suma", "maximo": 54},
+  interpretacion: [{"desde": 0, "hasta": 19, "texto": "Sin depresion"}, {"desde": 20, "hasta": 54, "texto": "Presencia de depresion"}],
+  list_questions: [
+  {
+    "id": 1,
+    "order": 1,
+    "type": "SINGLE_CHOICE",
+    "text": "1. Estado de animo",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Estoy triste de vez en cuando",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Estoy triste muchas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Estoy triste siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 2,
+    "order": 2,
+    "type": "SINGLE_CHOICE",
+    "text": "2. Pesimismo",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Las cosas me saldrán bien",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "No estoy seguro de si las cosas me saldrán bien",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Nunca nada me saldrá bien",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 3,
+    "order": 3,
+    "type": "SINGLE_CHOICE",
+    "text": "3. Autoeficacia",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Hago bien la mayoría de las cosas",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Hago mal muchas cosas",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Todo lo hago mal",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 4,
+    "order": 4,
+    "type": "SINGLE_CHOICE",
+    "text": "4. Anhedonia",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me divierten muchas cosas",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me divierten algunas cosas",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Nada me divierte",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 5,
+    "order": 5,
+    "type": "SINGLE_CHOICE",
+    "text": "5. Autoestima",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Soy malo algunas veces",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Soy malo muchas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Soy malo siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 6,
+    "order": 6,
+    "type": "SINGLE_CHOICE",
+    "text": "6. Preocupacion",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "A veces pienso que me pueden ocurrir cosas malas",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me preocupa que me ocurran cosas malas",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Estoy seguro de que me van a ocurrir cosas terribles",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 7,
+    "order": 7,
+    "type": "SINGLE_CHOICE",
+    "text": "7. Autoimagen",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me gusta como soy",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "No me gusta como soy",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Me odio",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 8,
+    "order": 8,
+    "type": "SINGLE_CHOICE",
+    "text": "8. Culpa",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Generalmente no tengo la culpa de que ocurran cosas malas",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchas cosas malas son culpa mia",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Todas las cosas malas son culpa mia",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 9,
+    "order": 9,
+    "type": "SINGLE_CHOICE",
+    "text": "9. Ideacion suicida",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "No pienso en matarme",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Pienso en matarme pero no lo haria",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Quiero matarme",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 10,
+    "order": 10,
+    "type": "SINGLE_CHOICE",
+    "text": "10. Llanto",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Tengo ganas de llorar de cuando en cuando",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Tengo ganas de llorar muchos dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Tengo ganas de llorar todos los dias",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 11,
+    "order": 11,
+    "type": "SINGLE_CHOICE",
+    "text": "11. Inquietud / Preocupacion continua",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Las cosas me preocupan de cuando en cuando",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Las cosas me preocupan muchas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Las cosas me preocupan siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 12,
+    "order": 12,
+    "type": "SINGLE_CHOICE",
+    "text": "12. Sociabilidad",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me gusta estar con la gente",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muy a menudo no me gusta estar con la gente",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "No quiero en absoluto estar con la gente",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 13,
+    "order": 13,
+    "type": "SINGLE_CHOICE",
+    "text": "13. Indecision",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me decido facilmente",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me cuesta decidirme",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "No puedo decidirme",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 14,
+    "order": 14,
+    "type": "SINGLE_CHOICE",
+    "text": "14. Imagen corporal",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Tengo buen aspecto",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Hay algunas cosas de mi aspecto que no me gustan",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Soy feo",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 15,
+    "order": 15,
+    "type": "SINGLE_CHOICE",
+    "text": "15. Esfuerzo escolar / Deberes",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "No me cuesta ponerme a hacer los deberes",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchas veces me cuesta ponerme a hacer los deberes",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Siempre me cuesta ponerme a hacer los deberes",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 16,
+    "order": 16,
+    "type": "SINGLE_CHOICE",
+    "text": "16. Sueno",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Duermo muy bien",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchas noches me cuesta dormirme",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Todas las noches me cuesta dormirme",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 17,
+    "order": 17,
+    "type": "SINGLE_CHOICE",
+    "text": "17. Fatiga",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Estoy cansado de cuando en cuando",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Estoy cansado muchos dias",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Estoy cansado siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 18,
+    "order": 18,
+    "type": "SINGLE_CHOICE",
+    "text": "18. Apetito",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Como muy bien",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchos dias no tengo ganas de comer",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "La mayoria de los dias no tengo ganas de comer",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 19,
+    "order": 19,
+    "type": "SINGLE_CHOICE",
+    "text": "19. Somatizacion / Dolor",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "No me preocupa el dolor ni la enfermedad",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchas veces me preocupa el dolor y la enfermedad",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Siempre me preocupa el dolor y la enfermedad",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 20,
+    "order": 20,
+    "type": "SINGLE_CHOICE",
+    "text": "20. Soledad",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca me siento solo",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me siento solo muchas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Me siento solo siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 21,
+    "order": 21,
+    "type": "SINGLE_CHOICE",
+    "text": "21. Disfrute escolar",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me divierto en el colegio muchas veces",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me divierto en el colegio solo de vez en cuando",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Nunca me divierto en el colegio",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 22,
+    "order": 22,
+    "type": "SINGLE_CHOICE",
+    "text": "22. Amistades",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Tengo muchos amigos",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Tengo muchos amigos pero me gustaria tener mas",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "No tengo amigos",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 23,
+    "order": 23,
+    "type": "SINGLE_CHOICE",
+    "text": "23. Rendimiento escolar",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Mi trabajo en el colegio es bueno",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Mi trabajo en el colegio no es tan bueno como antes",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Llevo muy mal las asignaturas que antes llevaba bien",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 24,
+    "order": 24,
+    "type": "SINGLE_CHOICE",
+    "text": "24. Comparacion social",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Soy tan bueno como otros ninos",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Si quiero puedo ser tan bueno como otros ninos",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Nunca podre ser tan bueno como otros ninos",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 25,
+    "order": 25,
+    "type": "SINGLE_CHOICE",
+    "text": "25. Afecto recibido",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nadie me quiere",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "No estoy seguro de que alguien me quiera",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Estoy seguro de que alguien me quiera",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 26,
+    "order": 26,
+    "type": "SINGLE_CHOICE",
+    "text": "26. Obediencia",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Generalmente hago lo que me dicen",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Muchas veces no hago lo que me dicen",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Nunca hago lo que me dicen",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  },
+  {
+    "id": 27,
+    "order": 27,
+    "type": "SINGLE_CHOICE",
+    "text": "27. Conflictividad interpersonal",
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me llevo bien con la gente",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Me peleo muchas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Me peleo siempre",
+        "value": 2,
+        "url": null
+      }
+    ],
+    "conditional": null
+  }
+],
+};

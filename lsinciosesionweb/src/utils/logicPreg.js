@@ -27,21 +27,41 @@ const coerce = (a, b) => {
   return [na, nb];
 };
 
-export const evalRule = (answers, { q, op, value }) => {
+// Acepta reglas del contrato dh_forms ({ id_question, operator, value }) y las
+// del formato interno ({ q, op, value }) sin cambios en los JSON.
+const normalizarRegla = (regla) => ({
+  q: regla.q ?? regla.id_question,
+  op: regla.op ?? regla.operator,
+  value: regla.value,
+});
+
+export const evalRule = (answers, regla) => {
+  const { q, op, value } = normalizarRegla(regla);
   const aRaw = answers[q];
   const [a, v] = coerce(aRaw, value);
+
+  // Respuesta ausente: ninguna comparacion numerica se cumple.
+  if (a === undefined || a === null || a === "") {
+    if (op === "exists") return false;
+    if (op === "notEmpty") return false;
+    if (op === "!=") return aRaw !== value; // comparacion literal con ausencia
+    return false;
+  }
 
   switch (op) {
     case "==": return a === v;
     case "!=": return a !== v;
+    case ">": return typeof a === "number" && a > v;
+    case ">=": return typeof a === "number" && a >= v;
+    case "<": return typeof a === "number" && a < v;
+    case "<=": return typeof a === "number" && a <= v;
     case "includes": return Array.isArray(a) && a.includes(v);
     case "notIncludes": return Array.isArray(a) && !a.includes(v);
     case "in": return Array.isArray(v) && v.includes(a);
     case "notIn": return Array.isArray(v) && !v.includes(a);
-
-    case "exists": return a !== undefined && a !== null && a !== "";
-    case "notEmpty": return Array.isArray(a) ? a.length > 0 : (a !== "" && a !== undefined && a !== null);
-    default: return true;
+    case "exists": return true;
+    case "notEmpty": return Array.isArray(a) ? a.length > 0 : true;
+    default: return false;
   }
 };
 

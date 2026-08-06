@@ -10,6 +10,21 @@ import { getProgressSummary, progressState, isUnlocked, computeAreaPercent } fro
 
 const PAGE_SIZE = 12;
 
+const ETIQUETAS_TAB = {
+  todos: "Todos",
+  no_iniciado: "No iniciado",
+  progreso: "En progreso",
+  completado: "Completados",
+  bloqueado: "Bloqueados",
+};
+
+const ETIQUETA_ESTADO = {
+  completado: "Completado",
+  progreso: "En progreso",
+  no_iniciado: "No iniciado",
+  bloqueado: "Bloqueado",
+};
+
 export default function Area() {
   const { area } = useParams();
   const areaData = findArea(area);
@@ -52,8 +67,12 @@ export default function Area() {
     return () => { ok = false; };
   }, [areaData, profile]);
 
-  // % del área para tu tarjeta de área
+  // % del área para la tarjeta/hero
   const areaPercent = useMemo(() => computeAreaPercent(items.filter(i=>i.unlocked)), [items]);
+
+  // métricas del hero
+  const completados = items.filter(i => i.unlocked && i.state === "completado").length;
+  const enProgreso = items.filter(i => i.unlocked && i.state === "proceso").length;
 
   // filtros UI
   const filtered = useMemo(() => {
@@ -83,26 +102,56 @@ export default function Area() {
   return (
     <Principal>
       <div className={styles.wrap}>
-        <div className={styles.header}>
-          <Link to="/cuestionarios" className={styles.back}>← Volver</Link>
-          <h2>{areaData.name} · <span className={styles.pctArea}>{areaPercent}%</span></h2>
-        </div>
+        {/* ====== HERO del área ====== */}
+        <header className={styles.hero}>
+          <Link to="/cuestionarios" className={styles.volver}>← Volver a Cuestionarios</Link>
+          <div className={styles.heroTop}>
+            <span className={styles.badge}>Área de bienestar</span>
+          </div>
+          <h1 className={styles.titulo}>{areaData.name}</h1>
+          <p className={styles.descripcion}>{areaData.descripcion}</p>
+          <div className={styles.metricas}>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>Instrumentos</span>
+              <span className={styles.metricaValor}>{items.length}</span>
+            </div>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>Completados</span>
+              <span className={styles.metricaValor}>{completados}</span>
+            </div>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>En progreso</span>
+              <span className={styles.metricaValor}>{enProgreso}</span>
+            </div>
+            <div className={styles.metrica}>
+              <span className={styles.metricaLabel}>Avance del área</span>
+              <span className={styles.metricaValor}>{areaPercent}%</span>
+            </div>
+          </div>
+        </header>
 
+        {/* ====== CONTROLES ====== */}
         <div className={styles.controls}>
-          <input className={styles.search} placeholder="Buscar…" value={q} onChange={(e)=>setQ(e.target.value)} />
+          <input
+            className={styles.search}
+            placeholder="Buscar instrumento…"
+            value={q}
+            onChange={(e)=>setQ(e.target.value)}
+          />
           <div className={styles.tabs}>
-            {["todos","no_iniciado","progreso","completado","bloqueado"].map(t => (
+            {Object.entries(ETIQUETAS_TAB).map(([clave, etiqueta]) => (
               <button
-                key={t}
-                className={`${styles.tab} ${tab===t ? styles.tabActive : ""}`}
-                onClick={()=>setTab(t)}
+                key={clave}
+                className={`${styles.tab} ${tab===clave ? styles.tabActive : ""}`}
+                onClick={()=>setTab(clave)}
               >
-                {t.replace("_"," ")}
+                {etiqueta}
               </button>
             ))}
           </div>
         </div>
 
+        {/* ====== LISTA ====== */}
         {pageItems.length===0 ? (
           <p className={styles.empty}>No hay cuestionarios con esos filtros.</p>
         ) : (
@@ -110,17 +159,26 @@ export default function Area() {
             {pageItems.map(({ meta, percent, answeredCount, visiblesCount, state, href, unlocked }) => (
               <div key={meta.key} className={styles.card}>
                 <div className={styles.cardHead}>
-                  <h3>{meta.name}</h3>
+                  <span className={styles.pill}>{meta.key}</span>
                   <span className={`${styles.badge} ${styles[state]}`}>
-                    {state === "completado" ? "Completado" :
-                     state === "progreso"   ? "En progreso" :
-                     state === "no_iniciado"? "No iniciado" : "Bloqueado"}
+                    {ETIQUETA_ESTADO[state]}
                   </span>
                 </div>
+                <h3 className={styles.cardTitulo}>{meta.name}</h3>
                 <p className={styles.desc}>{meta.description}</p>
 
                 <div className={styles.progressRow}>
-                  <div className={styles.progressBar}><div className={styles.progress} style={{width:`${percent}%`}}/></div>
+                  <div className={styles.progressBar}>
+                    <div
+                      className={styles.progress}
+                      style={{ width: `${percent}%` }}
+                      role="progressbar"
+                      aria-valuenow={percent}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`Progreso de ${meta.name}`}
+                    />
+                  </div>
                   <span className={styles.percent}>{percent}%</span>
                 </div>
                 <div className={styles.metaRow}>
@@ -129,7 +187,9 @@ export default function Area() {
 
                 <div className={styles.actions}>
                   {unlocked ? (
-                    <Link to={href} className={styles.cta}>Continuar</Link>
+                    <Link to={href} className={styles.cta}>
+                      {percent === 100 ? "Ver respuestas" : percent > 0 ? "Continuar" : "Iniciar"}
+                    </Link>
                   ) : (
                     <button className={styles.ctaDisabled} disabled>Bloqueado</button>
                   )}
@@ -139,11 +199,26 @@ export default function Area() {
           </div>
         )}
 
-        <div className={styles.pager}>
-          <button className={styles.pgBtn} disabled={pageSafe<=1} onClick={()=>setPage(p=>Math.max(1,p-1))}>Anterior</button>
-          <span className={styles.pgInfo}>{pageSafe} / {totalPages}</span>
-          <button className={styles.pgBtn} disabled={pageSafe>=totalPages} onClick={()=>setPage(p=>Math.min(totalPages,p+1))}>Siguiente</button>
-        </div>
+        {/* ====== PAGINACIÓN ====== */}
+        {totalPages > 1 && (
+          <div className={styles.pager}>
+            <button
+              className={styles.pgBtn}
+              disabled={pageSafe<=1}
+              onClick={()=>setPage(p=>Math.max(1,p-1))}
+            >
+              ← Anterior
+            </button>
+            <span className={styles.pgInfo}>{pageSafe} / {totalPages}</span>
+            <button
+              className={styles.pgBtn}
+              disabled={pageSafe>=totalPages}
+              onClick={()=>setPage(p=>Math.min(totalPages,p+1))}
+            >
+              Siguiente →
+            </button>
+          </div>
+        )}
       </div>
     </Principal>
   );

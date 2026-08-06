@@ -81,7 +81,9 @@ npm run preview   # previsualizar build
 |---|---|---|
 | `VITE_API` | URL base del backend | `https://libersalus.com/api/` |
 | `VITE_BASE` | Ruta base de la app | `/panel/` |
-| `VITE_MOCK_AUTH` | Modo desarrollo sin backend | `0` o `1` |
+| `VITE_DEMO` | Modo demo totalmente offline (sin backend) | `true` o `false` |
+| `VITE_DEMO_USER` | Correo del usuario demo (default `demo@libersalus.com`) | `demo@libersalus.com` |
+| `VITE_DEMO_PASSWORD` | Contraseña del usuario demo (default `Demo1234`) | `Demo1234` |
 | `VITE_LOGIN_URL` | Ruta de login | `/panel/login` |
 
 ## Arquitectura actual del código

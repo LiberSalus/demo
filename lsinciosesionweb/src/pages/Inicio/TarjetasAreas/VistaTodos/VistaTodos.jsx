@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./VistaTodos.module.css";
 
-import BotonesQs from "../TarjetasEstadosQs/BotonesQs";
-import TarjetaBsEdoQs from "../TarjetasEstadosQs/TarjetaBsEdoQs";
+import ListaCuestionarios from "../ListaCuestionarios";
 import { obtenerTarjetasTodas } from "../catalogoCuestionarios";
 
 // Muestra el listado conjunto de cuestionarios de todas las areas de salud.
 const VistaTodos = () => {
-  const tarjetas = obtenerTarjetasTodas();
-  const [tarjetaActiva, setTarjetaActiva] = useState(0);
+  const items = obtenerTarjetasTodas();
 
   return (
     <div className={styles.VistaTodos}>
@@ -17,24 +15,7 @@ const VistaTodos = () => {
         Todos tus cuestionarios de salud en un solo lugar. Selecciona uno para
         consultar su avance.
       </p>
-      <div className={styles.cntDin}>
-        <div className={styles.cntCmp}>
-          {tarjetas.map((tarjeta, i) => (
-            <BotonesQs
-              key={tarjeta.id}
-              edoQs={tarjeta.edoQs}
-              av={tarjeta.av}
-              activo={tarjetaActiva === i}
-              onClick={() => setTarjetaActiva(i)}
-            />
-          ))}
-        </div>
-        <div className={styles.cntStd}>
-          {tarjetas[tarjetaActiva] && (
-            <TarjetaBsEdoQs {...tarjetas[tarjetaActiva]} />
-          )}
-        </div>
-      </div>
+      <ListaCuestionarios items={items} />
     </div>
   );
 };

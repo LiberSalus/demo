@@ -1,7 +1,20 @@
-@import url('../VistaFisica/VistaFisica.module.css');
-
 .VistaSocial {
-    & > h3 {font-size: 1rem; margin-bottom: 0.25rem;}
-  & > p  {font-size: .75rem;}
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+
+  & > h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.4rem;
+    color: #334155;
+  }
+
+  & > p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0 0 1.1rem;
+    color: #64748b;
+  }
 }

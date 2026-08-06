@@ -1,62 +1,193 @@
+/* ============================================================
+   Preguntas (PreguntasQs) — filas seleccionables con control custom
+   ============================================================ */
+
 .pregunta {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    margin-bottom: 2rem;
-    & > p {
-        font-size: 1.2rem;
-        text-align: left;
-        margin-bottom: 1rem;
-    }
-    & > div {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        
-        gap: 1.0rem;
-        & > input {
-            transform: translateY(-4px);
-            margin-left: 2rem;
-        }
-        & > label {
-            line-height: 1.2;
-        }
-    }
-    & input {
-        margin-top: 0.5rem;
-    }
+  background: #ffffff;
+  border: 1px solid var(--color-border-soft, #acceeb);
+  border-radius: 1rem;
+  padding: 1rem 1.15rem 1.1rem;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(31, 41, 55, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
 }
 
-/* radio, checkbox */
-.inputRadio, .inputMultipleCh {
-    appearance: none; 
-    width: 20px;
-    height: 20px;
-    border: 1px solid #4c56af; /* Borde del círculo externo */
-    background-color: #eff1fc;
-    border-radius: 4px; 
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    &:checked {
-        background-color: #4c56af;
-    } 
+/* encabezado: número + enunciado */
+.encabezado {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: 100%;
 }
 
-.inputRadio:checked + label,
-.inputMultipleCh:checked + label {
-    font-weight: bold;
-    color: darkblue;
+.numero {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 0.55rem;
+  background: linear-gradient(135deg, var(--color-brand-primary, #007cba), #0b5aa8);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.1rem;
 }
 
+.texto {
+  color: var(--color-text-primary, #334155);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: left;
+}
 
+/* ---------- opciones ---------- */
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
 
-/* text */
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.7rem;
+  background: #fbfcfe;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease,
+    box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+.opcion:hover {
+  border-color: #9ec9e8;
+  background: #f2f8fd;
+}
+
+.opcion:active {
+  transform: scale(0.99);
+}
+
+.opcionActiva {
+  border-color: var(--color-brand-primary, #007cba);
+  background: #eaf4fb;
+  box-shadow: 0 0 0 1px var(--color-brand-primary, #007cba) inset;
+}
+
+.opcionTexto {
+  color: var(--color-text-primary, #334155);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.opcionActiva .opcionTexto {
+  color: #0b4d80;
+  font-weight: 600;
+}
+
+/* input nativo oculto (solo accesibilidad) */
+.inputRadio,
+.inputMultipleCh {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* control custom: círculo (radio) */
+.radioCaja {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  border: 2px solid #b8c4d4;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s ease, background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.opcion:hover .radioCaja {
+  border-color: var(--color-brand-primary, #007cba);
+}
+
+.inputRadio:checked ~ .radioCaja {
+  border-color: var(--color-brand-primary, #007cba);
+  background: var(--color-brand-primary, #007cba);
+  box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.18);
+}
+.inputRadio:checked ~ .radioCaja::after {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* control custom: cuadrado (checkbox) */
+.checkCaja {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 0.35rem;
+  border: 2px solid #b8c4d4;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s ease, background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.opcion:hover .checkCaja {
+  border-color: var(--color-brand-primary, #007cba);
+}
+
+.inputMultipleCh:checked ~ .checkCaja {
+  border-color: var(--color-brand-primary, #007cba);
+  background: var(--color-brand-primary, #007cba);
+  box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.18);
+}
+.inputMultipleCh:checked ~ .checkCaja::after {
+  content: "✓";
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* foco visible para accesibilidad */
+.inputRadio:focus-visible ~ .radioCaja,
+.inputMultipleCh:focus-visible ~ .checkCaja {
+  outline: 2px solid var(--color-brand-primary, #007cba);
+  outline-offset: 2px;
+}
+
+/* ---------- texto libre ---------- */
 .inputText {
-    border: 1px solid lightgray;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    color: darkblue;
-    font-weight: bold;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--color-text-primary, #334155);
+  background: #fbfcfe;
+  font-family: inherit;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.inputText:focus {
+  outline: none;
+  border-color: var(--color-brand-primary, #007cba);
+  box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.15);
 }
