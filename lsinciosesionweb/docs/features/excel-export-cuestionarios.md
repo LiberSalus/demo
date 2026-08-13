@@ -93,7 +93,10 @@ Datos tomados de la persona demo activa o de la cuenta registrada
 **Todo viene de los propios JSONs de los instrumentos** (`src/config/cuestionarios/*.js`)
 — no hay tabla externa ni datos nuevos que mantener:
 
-- `scoring`: `{ "tipo": "suma" | "subescalas", "maximo", "subescalas"?: [{ id, nombre, items[], maximo }] }`
+- `scoring`: `{ "tipo": "suma" | "subescalas", "maximo", "items"?, "subescalas"?: [{ id, nombre, items[], maximo }] }`.
+  En `suma`, `items` (opcional) indica qué preguntas suman: el **CTH** solo suma
+  los ítems 1-14 (sus ítems 15-16 son criterios clínicos que no suman); sin
+  `items` se suman todas las preguntas.
 - `interpretacion`: `[{ desde, hasta, texto }]`, y en instrumentos de subescalas
   cada rango incluye `subescala: id` (ej. `A`, `F`, `T`, `Global`).
 - Cálculo: `puntaje = Σ respuestas[item]` para los ítems del instrumento (o de

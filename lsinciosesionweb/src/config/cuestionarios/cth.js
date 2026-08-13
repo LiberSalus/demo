@@ -18,7 +18,9 @@ export default {
   list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
   list_evaluation_topics: [{"name": "Trastorno bipolar", "key_industry": "health"}],
   target_age_group: {"min_age": 18, "name": "A partir de los 18 anos"},
-  scoring: {"tipo": "suma", "maximo": 14},
+  // Nota: solo suman los items 1-14 (sintomas Si=1/No=0); los items 15 y 16 son
+// criterios clinicos (concordancia temporal y disfuncion) y NO suman al puntaje.
+scoring: {"tipo": "suma", "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "maximo": 14},
   interpretacion: [{"desde": 2, "hasta": 13, "texto": "Posible trastorno bipolar"}],
   list_questions: [
   {

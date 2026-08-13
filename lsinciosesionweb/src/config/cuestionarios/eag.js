@@ -4,6 +4,9 @@
 // description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
 // list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
 // Nota: la tabla de interpretacion viene de cuestionario_eag-review.md.
+// Nota: el drawio y el review declaran "0-77 puntos" (error de dibujo del drawio);
+// el maximo real es 36 = 12 items x 3 (opciones simetricas 0-3). El corte clinico
+// "Muy adicto" sigue en 12, solo cambia el tope superior.
 
 export default {
   id: "EAG",  // id estable (clave del cuestionario)
@@ -18,8 +21,8 @@ export default {
   list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
   list_evaluation_topics: [{"name": "Adicciones", "key_industry": "health"}],
   target_age_group: {"min_age": 12, "name": "A partir de 12 anos"},
-  scoring: {"tipo": "suma", "maximo": 77},
-  interpretacion: [{"desde": 0, "hasta": 11, "texto": "Sin adiccion"}, {"desde": 12, "hasta": 77, "texto": "Muy adicto"}],
+  scoring: {"tipo": "suma", "maximo": 36},
+  interpretacion: [{"desde": 0, "hasta": 11, "texto": "Sin adiccion"}, {"desde": 12, "hasta": 36, "texto": "Muy adicto"}],
   list_questions: [
   {
     "id": 1,

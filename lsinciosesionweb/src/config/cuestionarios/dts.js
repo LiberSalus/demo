@@ -4,12 +4,16 @@
 // description, estimated_duration, list_cie11_codes, list_categories, target_age_group,
 // list_questions + conditional) con extensiones demo (scoring, interpretacion, area).
 // Nota: la tabla de interpretacion viene de cuestionario_dts-review.md.
+// Nota: el drawio/mmd traen 18 sintomas con el 13 duplicado del 12 (ver mmd,
+// nodo d13 "(dup. del 12)"). Se elimino el duplicado del JSON: quedan 17
+// sintomas (34 preguntas, frecuencia+gravedad) y maximos 68/68/136, coherentes
+// con el review y con la escala DTS estandar de 17 items.
 
 export default {
   id: "DTS",  // id estable (clave del cuestionario)
   key: "DTS",  // contrato dh_forms
   name: "DTS (Escala de Trauma de Davidson)",
-  description: "Escala de 18 sintomas valorados en frecuencia y gravedad durante la ultima semana.",
+  description: "Escala de 17 sintomas valorados en frecuencia y gravedad durante la ultima semana.",
   area: "Emocional",
   area_desc: "Instrumentos para conocer tu bienestar emocional y psicologico.",
   instrucciones: "En la ultima semana. Valore para cada sintoma su Frecuencia (0-4) y Gravedad (0-4).",
@@ -18,7 +22,7 @@ export default {
   list_categories: [{ key_industry: 1, name: 'Bienestar mental' }],
   list_evaluation_topics: [{"name": "Estres postraumatico", "key_industry": "health"}],
   target_age_group: {"min_age": 18, "name": "A partir de los 18 anos"},
-  scoring: {"tipo": "subescalas", "subescalas": [{"id": "F", "nombre": "Frecuencia", "items": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35], "maximo": 68}, {"id": "G", "nombre": "Gravedad", "items": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36], "maximo": 68}, {"id": "T", "nombre": "Total", "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36], "maximo": 136}], "maximo": 136},
+  scoring: {"tipo": "subescalas", "subescalas": [{"id": "F", "nombre": "Frecuencia", "items": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33], "maximo": 68}, {"id": "G", "nombre": "Gravedad", "items": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34], "maximo": 68}, {"id": "T", "nombre": "Total", "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34], "maximo": 136}], "maximo": 136},
   interpretacion: [{"subescala": "F", "desde": 0, "hasta": 68, "texto": "Puntuacion parcial de frecuencia"}, {"subescala": "G", "desde": 0, "hasta": 68, "texto": "Puntuacion parcial de gravedad"}, {"subescala": "T", "desde": 0, "hasta": 136, "texto": "A mayor puntuacion, mayor gravedad y frecuencia de los sintomas"}],
   list_questions: [
   {
@@ -1069,7 +1073,7 @@ export default {
     "id": 25,
     "order": 25,
     "type": "SINGLE_CHOICE",
-    "text": "13. ¿Ha tenido dificultad para imaginar una vida larga y cumplir sus objetivos?",
+    "text": "13. ¿Ha tenido dificultad para iniciar o mantener el sueno?",
     "list_options": [
       {
         "id": 1,
@@ -1108,7 +1112,7 @@ export default {
     "id": 26,
     "order": 26,
     "type": "SINGLE_CHOICE",
-    "text": "13. ¿Ha tenido dificultad para imaginar una vida larga y cumplir sus objetivos?",
+    "text": "13. ¿Ha tenido dificultad para iniciar o mantener el sueno?",
     "list_options": [
       {
         "id": 1,
@@ -1156,7 +1160,7 @@ export default {
     "id": 27,
     "order": 27,
     "type": "SINGLE_CHOICE",
-    "text": "14. ¿Ha tenido dificultad para iniciar o mantener el sueno?",
+    "text": "14. ¿Ha estado irritable o ha tenido accesos de ira?",
     "list_options": [
       {
         "id": 1,
@@ -1195,7 +1199,7 @@ export default {
     "id": 28,
     "order": 28,
     "type": "SINGLE_CHOICE",
-    "text": "14. ¿Ha tenido dificultad para iniciar o mantener el sueno?",
+    "text": "14. ¿Ha estado irritable o ha tenido accesos de ira?",
     "list_options": [
       {
         "id": 1,
@@ -1243,7 +1247,7 @@ export default {
     "id": 29,
     "order": 29,
     "type": "SINGLE_CHOICE",
-    "text": "15. ¿Ha estado irritable o ha tenido accesos de ira?",
+    "text": "15. ¿Ha tenido dificultades de concentracion?",
     "list_options": [
       {
         "id": 1,
@@ -1282,7 +1286,7 @@ export default {
     "id": 30,
     "order": 30,
     "type": "SINGLE_CHOICE",
-    "text": "15. ¿Ha estado irritable o ha tenido accesos de ira?",
+    "text": "15. ¿Ha tenido dificultades de concentracion?",
     "list_options": [
       {
         "id": 1,
@@ -1330,7 +1334,7 @@ export default {
     "id": 31,
     "order": 31,
     "type": "SINGLE_CHOICE",
-    "text": "16. ¿Ha tenido dificultades de concentracion?",
+    "text": "16. ¿Se ha sentido nervioso, facilmente distraido o permanecido «en guardia»?",
     "list_options": [
       {
         "id": 1,
@@ -1369,7 +1373,7 @@ export default {
     "id": 32,
     "order": 32,
     "type": "SINGLE_CHOICE",
-    "text": "16. ¿Ha tenido dificultades de concentracion?",
+    "text": "16. ¿Se ha sentido nervioso, facilmente distraido o permanecido «en guardia»?",
     "list_options": [
       {
         "id": 1,
@@ -1417,7 +1421,7 @@ export default {
     "id": 33,
     "order": 33,
     "type": "SINGLE_CHOICE",
-    "text": "17. ¿Se ha sentido nervioso, facilmente distraido o permanecido «en guardia»?",
+    "text": "17. ¿Ha estado nervioso o se ha asustado facilmente?",
     "list_options": [
       {
         "id": 1,
@@ -1456,7 +1460,7 @@ export default {
     "id": 34,
     "order": 34,
     "type": "SINGLE_CHOICE",
-    "text": "17. ¿Se ha sentido nervioso, facilmente distraido o permanecido «en guardia»?",
+    "text": "17. ¿Ha estado nervioso o se ha asustado facilmente?",
     "list_options": [
       {
         "id": 1,
@@ -1494,93 +1498,6 @@ export default {
       "rules": [
         {
           "id_question": 33,
-          "operator": ">",
-          "value": 0
-        }
-      ]
-    }
-  },
-  {
-    "id": 35,
-    "order": 35,
-    "type": "SINGLE_CHOICE",
-    "text": "18. ¿Ha estado nervioso o se ha asustado facilmente?",
-    "list_options": [
-      {
-        "id": 1,
-        "text": "Nunca",
-        "value": 0,
-        "url": null
-      },
-      {
-        "id": 2,
-        "text": "A veces",
-        "value": 1,
-        "url": null
-      },
-      {
-        "id": 3,
-        "text": "(2-3) veces",
-        "value": 2,
-        "url": null
-      },
-      {
-        "id": 4,
-        "text": "(4-6) veces",
-        "value": 3,
-        "url": null
-      },
-      {
-        "id": 5,
-        "text": "A diario",
-        "value": 4,
-        "url": null
-      }
-    ],
-    "conditional": null
-  },
-  {
-    "id": 36,
-    "order": 36,
-    "type": "SINGLE_CHOICE",
-    "text": "18. ¿Ha estado nervioso o se ha asustado facilmente?",
-    "list_options": [
-      {
-        "id": 1,
-        "text": "Nada",
-        "value": 0,
-        "url": null
-      },
-      {
-        "id": 2,
-        "text": "Leve",
-        "value": 1,
-        "url": null
-      },
-      {
-        "id": 3,
-        "text": "Moderada",
-        "value": 2,
-        "url": null
-      },
-      {
-        "id": 4,
-        "text": "Marcada",
-        "value": 3,
-        "url": null
-      },
-      {
-        "id": 5,
-        "text": "Extrema",
-        "value": 4,
-        "url": null
-      }
-    ],
-    "conditional": {
-      "type": "all",
-      "rules": [
-        {
-          "id_question": 35,
           "operator": ">",
           "value": 0
         }

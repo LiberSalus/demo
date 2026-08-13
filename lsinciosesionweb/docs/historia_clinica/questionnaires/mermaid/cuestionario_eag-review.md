@@ -17,7 +17,8 @@ simétrica de 7 opciones:
 - Extremadamente falso = 3
 
 El rango máximo por ítem es 3, por lo que el total máximo resulta de sumar
-las puntuaciones de los 12 ítems (dibujado como 0–77).
+las puntuaciones de los 12 ítems. El drawio dibuja el rango como 0–77, pero ese
+máximo es un **error de dibujo**: con 12 ítems × 3 el máximo real es **36**.
 
 *Nota del drawio: los ítems 7 y 8 comparten exactamente el mismo enunciado
 ("Si me vienen las ganas tengo que hacerlo inmediatamente") y se conservan
@@ -28,7 +29,7 @@ ambos, tal como aparecen duplicados en el original.*
 | Puntuación | Interpretación |
 |------------|----------------|
 | 0-11       | Sin adicción |
-| 12-77      | Muy adicto |
+| 12-36      | Muy adicto |
 
 ## Resultado final
 

@@ -26,7 +26,32 @@ export default {
     "order": 1,
     "type": "SINGLE_CHOICE",
     "text": "A.1 Me siento tenso/a o nervioso/a",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "De vez en cuando",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Gran parte del dia",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todo el dia",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -34,7 +59,32 @@ export default {
     "order": 2,
     "type": "SINGLE_CHOICE",
     "text": "D.1 Sigo disfrutando de las cosas como siempre",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Ciertamente, igual que antes",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "No tanto como antes",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Solamente un poco",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Ya no disfruto con nada",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -42,7 +92,32 @@ export default {
     "order": 3,
     "type": "SINGLE_CHOICE",
     "text": "A.2 Siento una especie de temor como si algo malo fuera a suceder",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "No siento nada de eso",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Si, pero no me preocupa",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Si, pero no muy intenso",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Si, y muy intenso",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -50,7 +125,32 @@ export default {
     "order": 4,
     "type": "SINGLE_CHOICE",
     "text": "D.2 Soy capaz de reirme y ver el lado gracioso de las cosas",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Igual que siempre",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Actualmente, algo menos",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Actualmente, mucho menos",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Actualmente, en absoluto",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -58,7 +158,32 @@ export default {
     "order": 5,
     "type": "SINGLE_CHOICE",
     "text": "A.3 Tengo la cabeza llena de preocupaciones",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "De vez en cuando",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Gran parte del dia",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi todo el dia",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -66,7 +191,32 @@ export default {
     "order": 6,
     "type": "SINGLE_CHOICE",
     "text": "D.3 Me siento alegre",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Gran parte del dia",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "En algunas ocasiones",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Muy pocas veces",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Nunca",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -74,7 +224,32 @@ export default {
     "order": 7,
     "type": "SINGLE_CHOICE",
     "text": "A.4 Soy capaz de permanecer sentado/a tranquilo/a y relajado/a",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Siempre",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "A menudo",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Raras veces",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Nunca",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -82,7 +257,32 @@ export default {
     "order": 8,
     "type": "SINGLE_CHOICE",
     "text": "D.4 Me siento lento/a y torpe",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "A veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "A menudo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Gran parte del dia",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -90,7 +290,32 @@ export default {
     "order": 9,
     "type": "SINGLE_CHOICE",
     "text": "A.5 Experimento una desagradable sensacion de «nervios y hormigueos» en el estomago",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Solo en algunas ocasiones",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "A menudo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Muy a menudo",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -98,7 +323,32 @@ export default {
     "order": 10,
     "type": "SINGLE_CHOICE",
     "text": "D.5 He perdido el interes por mi aspecto personal",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Me cuido como siempre lo he hecho",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Es posible que no me cuide como debiera",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "No me cuido como deberia hacerlo",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Completamente",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -106,7 +356,32 @@ export default {
     "order": 11,
     "type": "SINGLE_CHOICE",
     "text": "A.6 Me siento inquieto/a como si no pudiera parar de moverme",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "En absoluto",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "No mucho",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Bastante",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Realmente mucho",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -114,7 +389,32 @@ export default {
     "order": 12,
     "type": "SINGLE_CHOICE",
     "text": "D.6 Espero las cosas con ilusion",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Como siempre",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Algo menos que antes",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Mucho menos que antes",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "En absoluto",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -122,7 +422,32 @@ export default {
     "order": 13,
     "type": "SINGLE_CHOICE",
     "text": "A.7 Experimento de repente sensaciones de gran angustia o temor",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "Nunca",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Raramente",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Con cierta frecuencia",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Muy a menudo",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   },
   {
@@ -130,7 +455,32 @@ export default {
     "order": 14,
     "type": "SINGLE_CHOICE",
     "text": "D.7 Soy capaz de disfrutar con un buen libro o con un buen programa de radio o television",
-    "list_options": [],
+    "list_options": [
+      {
+        "id": 1,
+        "text": "A menudo",
+        "value": 0,
+        "url": null
+      },
+      {
+        "id": 2,
+        "text": "Algunas veces",
+        "value": 1,
+        "url": null
+      },
+      {
+        "id": 3,
+        "text": "Pocas veces",
+        "value": 2,
+        "url": null
+      },
+      {
+        "id": 4,
+        "text": "Casi nunca",
+        "value": 3,
+        "url": null
+      }
+    ],
     "conditional": null
   }
 ],
