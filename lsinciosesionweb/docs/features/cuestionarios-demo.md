@@ -1,4 +1,9 @@
-# Feature: Cuestionarios psicométricos en modo demo (propuesta v2 — alineada con dh_forms)
+# Feature: Cuestionarios psicométricos en modo demo (alineada con dh_forms)
+
+> **Estado: implementada (Fases 1-2 y 4 completas). Pendiente: Fase 3**
+> (bloque de resultado con puntuación e interpretación), condicionales de
+> PHQ-9/CTH y áreas Físico/Social/Nutricional. Este documento es a la vez la
+> propuesta original y el registro del estado implementado.
 
 ## Objetivo
 
@@ -25,10 +30,10 @@ los 17 diagramas son cuestionarios:
 Matices:
 - El ANEXO C deriva NUTRICIÓN → IPAQ, que **ya tienes en dh_forms** (`IPAQ.json`).
   Si se quiere nutrición en demo, el JSON ya existe y solo hay que traerlo.
-- El catálogo del Inicio usa el área `emocional` y `cuestionarios.config.js`
-  usa `mental`; los instrumentos se registran en `mental` (tu categoría
-  "Bienestar mental" se mapea ahí). Sincronizar la etiqueta del Inicio es
-  opcional y posterior.
+- Se unificó el área en **`emocional`** ("Bienestar Emocional"): el catálogo
+  del Inicio y `cuestionarios.config.js` registran los 12 instrumentos ahí,
+  ruta `/panel/cuestionarios/emocional`. La categoría de negocio "Bienestar
+  mental" se conserva dentro del JSON en `list_categories` (`key_industry: 1`).
 
 ## Fuente de verdad
 
@@ -47,8 +52,9 @@ Matices:
 
 ## Contrato de datos: el tuyo (dh_forms), no uno nuevo
 
-El JSON por instrumento sigue exactamente el schema de `PHQ9.json`/`CRAFFT.json`
-de `dh_forms/backend/docs/cuestionarios/`:
+El JSON por instrumento sigue el schema de `PHQ9.json`/`CRAFFT.json` de
+`dh_forms/backend/docs/cuestionarios/` (contrato dh_forms) más **dos
+extensiones demo** al final (`scoring` e `interpretacion`):
 
 ```json
 {
@@ -73,10 +79,18 @@ de `dh_forms/backend/docs/cuestionarios/`:
       "conditional": null
     }
   ],
-  "scoring_expression": { "expression": { "type": "aggregate", "operator": "sum", ... } },
-  "evaluation_expression": { "expression": { "type": "case", "operator": "when", ... } }
+  // Extension demo (no dh_forms) — fuera del contrato, al final del archivo:
+  "scoring": { "tipo": "suma", "maximo": 27 },
+  "interpretacion": [
+    { "desde": 0, "hasta": 4, "texto": "Ansiedad minima" },
+    { "desde": 5, "hasta": 9, "texto": "Ansiedad leve" }
+  ]
 }
 ```
+
+> En los archivos reales (`src/config/cuestionarios/*.js`) las extensiones
+> `scoring` e `interpretacion` van comentadas como "extensiones demo" y el
+> bloque se exporta con `export default` (módulo JS, no JSON puro).
 
 ### Qué se adopta tal cual (sin inventar nada nuevo)
 
@@ -85,26 +99,27 @@ de `dh_forms/backend/docs/cuestionarios/`:
 2. **`conditional`** (`{ type: "all"|"any"|"none", rules: [{ id_question,
    operator, value }] }`): los flujos con ramas de los `.mmd` se expresan con
    este objeto. Casos detectados en la auditoría:
-   - **PHQ-9 ítem 10** (impacto funcional): se muestra si `any` de los ítems
-     1-9 tiene `value > 0`.
-   - **CTH ítems 15-16** (gravedad/limitación): se muestran solo si hay
-     síntomas positivos en la primera parte.
+   - **DTS gravedad** (frecuencia→gravedad): **implementado** — la pregunta de
+     gravedad de cada ítem se muestra si su frecuencia respondida es `> 0`
+     (distinta de "Nunca"), verificado en el runner.
+   - **PHQ-9 ítem 10** (impacto funcional) y **CTH ítems 15-16**
+     (gravedad/limitación): **pendientes** de agregar al JSON (mismo formato).
    - Nota: `CRAFFT.json` aún no ejercita `conditional` (todas sus preguntas
      son lineales); es el primer JSON donde aparecerá de verdad en demo.
-3. **`scoring_expression` + `evaluation_expression`** (sistema de expresiones
-   FormFlow de `docs/types/`): la puntuación y la interpretación se declaran
-   como expresiones, no como tablas ad-hoc:
-   - **Suma simple**: `aggregate.sum` sobre `question.value` (PHQ-9, GAD-7,
-     GDS, SPIN, EAG...).
-   - **Inversiones** (TAS-20 4/5/17/18, CDI 25): `math` con `5 - value` o
-     `2 - value`, o `sum` sobre `args` que apliquen la inversión por ítem.
-   - **Subescalas** (HADS A/D, EDAH H/DA/DAH/TC, ASRS Parte A/B, DTS
-     frecuencia+gravedad): una `scoring_expression` por subescala + una suma
-     total (en `dh_forms` se declara a nivel `form`; para demo se pueden
-     declarar varias y guardar cada resultado).
-   - **Interpretación**: `case.when` sobre el puntaje, traducido 1:1 desde las
-     tablas verificadas de los `*-review.md` (tu propio ejemplo PHQ-9 en
-     `expression.md` ya hace exactamente esto).
+3. **`scoring` + `interpretacion`** (extensión demo, NO el sistema FormFlow de
+   `docs/types/`): la puntuación e interpretación se declaran de forma
+   declarativa y simple:
+   - **Suma simple**: `scoring: { tipo: "suma", maximo: N }` — suma de los
+     `value` de las opciones respondidas (GAD-7, PHQ-9, GDS, SPIN, EAG...).
+   - **Inversiones** (TAS-20 4/5/17/18, CDI 25): se resuelven asignando el
+     `value` invertido directamente en las opciones del JSON (anotado en el
+     ítem), sin expresiones `math`.
+   - **Interpretación**: `interpretacion: [{ desde, hasta, texto }]` traducida
+     1:1 desde las tablas verificadas de los `*-review.md` (bandas de
+     puntuación → etiqueta).
+   - Nota: el sistema de expresiones FormFlow de dh_forms
+     (`scoring_expression`/`evaluation_expression`) **no se adoptó en demo**;
+     queda como contrato para el backend futuro.
 4. **Metadatos**: descripción, `estimated_duration`, `list_cie11_codes`,
    `target_age_group`, referencias y categoría se toman de tu
    `cuestionarios_metadata.csv` para los 12 instrumentos.
@@ -123,59 +138,63 @@ de `dh_forms/backend/docs/cuestionarios/`:
 
 ### Único caso especial: DTS
 
-Cada ítem tiene frecuencia (0-4) y gravedad (0-4). Opciones de modelado
-(decisión en Fase 1):
-- (a) dos preguntas `SINGLE_CHOICE` por ítem (36 preguntas, cero cambios de
-  motor), o
-- (b) un tipo nuevo `DTS_ITEM` con dos `list_options` anidadas.
-El contrato dh_forms no tiene aún el tipo (b); la opción (a) es la fiel al
-contrato actual.
+Cada ítem tiene frecuencia (0-4) y gravedad (0-4). **Decisión tomada
+(opción a)**: dos preguntas `SINGLE_CHOICE` por ítem → **36 preguntas** con
+`order` 1-36 (impares frecuencia, pares gravedad), cero cambios de motor.
+La pregunta de gravedad es **condicionada** (se muestra solo si la frecuencia
+respondida es `> 0`), vía el objeto `conditional` del contrato
+(`{ type: "all", rules: [{ id_question, operator: ">", value: 0 }] }`), que
+el motor consume con `pruneHidden`/`evalShowIf` (`src/utils/logicPreg.js`).
+El tipo nuevo `DTS_ITEM` (opción b) queda descartado para demo.
 
 ## Flujo en modo demo
 
-1. **Ubicación**: los 12 JSON viven en esta app (p. ej. `src/config/
-   cuestionarios/` o `src/features/cuestionarios/data/`), copia fiel del
-   contrato dh_forms — un solo formato para dos consumidores (demo y backend
-   futuro).
+1. **Ubicación**: los 12 JSON viven en `src/config/cuestionarios/` (módulos JS
+   con `export default`), copia fiel del contrato dh_forms + extensiones demo —
+   un solo formato para dos consumidores (demo y backend futuro).
 2. **Registro**: se registran en `src/config/cuestionarios.config.js` bajo el
-   área `mental` (igual que hoy `MENTAL_DEMO`), con import local
-   (`file: () => import("...json")`).
-3. **Listado**: `Area.jsx` (ruta `/cuestionarios/mental`) los lista con
-   estado/progreso sin cambios: ya lee `areaData.questionnaires`.
-4. **Render**: `Run.jsx` carga `meta.file()` y monta `PlantillaQs`. Se adapta
-   el motor actual para leer el contrato dh_forms en su subconjunto
-   (SINGLE_CHOICE + `conditional` + `scoring_expression` + `evaluation_expression`),
-   manteniendo retrocompatibilidad con `propuesta2.json`. Alternativa menor:
-   runner demo nuevo que reutilice `PreguntasQs`/`logicPreg.js`.
+   área **`emocional`**, con import dinámico
+   (`file: () => import("@/config/cuestionarios/gad7.js")`).
+3. **Listado**: `Area.jsx` (ruta `/panel/cuestionarios/emocional`) los lista
+   con estado/progreso, gating por perfil y paginación.
+4. **Render**: `Run.jsx` carga `meta.file()` y monta `PlantillaQs`. El motor
+   se adaptó para leer el contrato dh_forms en su subconjunto (SINGLE_CHOICE +
+   `conditional` + `order`), manteniendo retrocompatibilidad con
+   `propuesta2.json`; el gating de ítems lo resuelve `pruneHidden`
+   (`src/utils/logicPreg.js`) y el badge usa el `order` del instrumento.
 5. **Demo/offline**: al ser imports locales funcionan igual en demo y en real,
    sin tocar `apiClient.js`. Cuando el backend exista, solo cambia el
    transporte: `meta.file` → API (y `resolverRutaDemo` cubre el modo demo), el
    mismo patrón de `docs/features/metricas-v2.md`.
-6. **Resultado**: al completar los ítems visibles, el motor evalúa
-   `scoring_expression`, guarda el resultado (p. ej. en la `assignment` demo de
-   localStorage) y muestra la `evaluation_expression` (interpretación).
+6. **Resultado** *(pendiente — Fase 3)*: al completar los ítems visibles, el
+   motor deberá evaluar `scoring`, guardar el resultado en localStorage y
+   mostrar la `interpretacion` correspondiente. Hoy el runner renderiza,
+   mide progreso y guarda respuestas, pero **aún no muestra puntuación ni
+   interpretación**.
 
 ## Fases de implementación
 
-| Fase | Entregable | Criterio de salida |
+| Fase | Entregable | Estado |
 |---|---|---|
-| 0 | Validar esta propuesta (contrato dh_forms + adaptación del motor) | OK del equipo |
-| 1 | JSON piloto de GAD-7 (suma simple + `evaluation_expression` case), TAS-20 (inversiones) y DTS (doble escala) + adaptar el motor | Build OK; los 3 renderizan y puntúan |
-| 2 | JSON de los 9 restantes con metadata del CSV y condicionales (PHQ-9 ítem 10, CTH 15-16) | Build OK; 12 listados en `/cuestionarios/mental` |
-| 3 | Bloque de resultado: puntuación + interpretación al terminar | Los 12 muestran su evaluación |
-| 4 | Conectar Inicio (tarjetas de área) y validar demo completa sin backend | Demo recorrible |
+| 0 | Validar la propuesta (contrato dh_forms + adaptación del motor) | ✅ Hecho |
+| 1 | JSONs de GAD-7, TAS-20 y DTS (doble escala frecuencia/gravedad) + adaptar el motor | ✅ Hecho — los 12 JSON en `src/config/cuestionarios/`; DTS con 36 ítems y `conditional` frecuencia→gravedad verificado en el runner |
+| 2 | JSON de los 9 restantes con metadata y condicionales | ✅ Hecho (12 listados en `/panel/cuestionarios/emocional` con metadata e interpretación) — ⚠️ condicionales solo en DTS; PHQ-9 ítem 10 y CTH 15-16 pendientes |
+| 3 | Bloque de resultado: puntuación + interpretación al terminar | ⏳ **Pendiente** — `scoring`/`interpretacion` declarados en los JSON pero no evaluados |
+| 4 | Conectar Inicio (tarjetas de área) y validar demo completa | ✅ Hecho — tarjetas navegan al área y el tab Bienestar Emocional lista los 12 con progreso real |
 
 ## Decisiones pendientes
 
-- ¿DTS como dos preguntas por ítem (fiel al contrato) o tipo nuevo `DTS_ITEM`?
-- ¿Los JSON se generan a mano desde los `.mmd` o con un generador en `tmp/`
-  (los `.mmd` son parseables)? El AGENTS.md prefiere conversión manual para
-  diagramas; para JSON demo un generador auditable es razonable.
-- ¿Mostrar la interpretación en pantalla o solo guardarla en la `assignment`
-  demo? (Los `*-review.md` son la fuente de texto.)
-- ¿Traer también IPAQ/SF-12/CRAFFT (ya existen en dh_forms) para cubrir otras
-  áreas del Inicio, o ceñirse a salud mental?
-- ¿Los formularios A/B/C entran en una fase posterior con el mismo motor?
+- ~~¿DTS como dos preguntas por ítem o tipo nuevo `DTS_ITEM`?~~ → **Decidido:
+  opción (a)**, dos `SINGLE_CHOICE` por ítem (36 ítems), implementado.
+- ~~¿Los JSON se generan a mano o con generador?~~ → **Decidido: a mano**
+  desde los `.mmd`, auditados contra el drawio.
+- ¿Mostrar la interpretación en pantalla o solo guardarla? → **Pendiente**
+  (Fase 3; los `*-review.md` son la fuente de texto).
+- ¿Traer también IPAQ/SF-12/CRAFFT (ya existen en dh_forms) para cubrir las
+  áreas Físico/Social/Nutricional? → **Pendiente** (hoy solo Emocional tiene
+  instrumentos reales).
+- ¿Los formularios A/B/C (anamnesis) entran en una fase posterior con el
+  mismo motor? → **Posterior**.
 
 ## Referencias a la propuesta previa (dh_forms)
 

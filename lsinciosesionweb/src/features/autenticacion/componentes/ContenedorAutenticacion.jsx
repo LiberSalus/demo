@@ -28,7 +28,7 @@ function ContenedorAutenticacion({
           onClick={onEntrarDemo}
           aria-label="Entrar en modo demo"
         >
-          {demoCargando ? 'Entrando...' : 'Modo demo'}
+          {demoCargando ? 'Entrando...' : 'Iniciar demo'}
         </button>
       ) : null}
       <section className={clasesMarco}>

@@ -100,6 +100,11 @@ export function establecerPersonaDemo(clave) {
   if (persona) personaDemoActual = persona;
 }
 
+// Fija una persona construida en runtime (p. ej. derivada de una cuenta local).
+export function establecerPersonaDemoObjeto(persona) {
+  if (persona && persona.nombre) personaDemoActual = persona;
+}
+
 // Token simplificado (sin firma) que permite mantener coherentes los guards.
 export const DEMO_TOKEN = btoa(JSON.stringify({ alg: "none", typ: "JWT" })) +
   "." +
@@ -107,22 +112,28 @@ export const DEMO_TOKEN = btoa(JSON.stringify({ alg: "none", typ: "JWT" })) +
   ".";
 
 // Datos del perfil del usuario demo activo que alimentan header e Inicio.
-export const DEMO_PERFIL = {
-  nombre: personaDemoActual.nombre,
-  nombre_completo: personaDemoActual.nombre,
-  first_name: personaDemoActual.first_name,
-  last_name: personaDemoActual.last_name,
-  email: DEMO_CREDENCIALES.correo,
-  correo: DEMO_CREDENCIALES.correo,
-  telefono: "5551234567",
-  rol: "paciente",
-  perfil: personaDemoActual.perfil || "adulto_activo",
-  sexo: personaDemoActual.sexo,
-  edad: personaDemoActual.edad || "50",
-  peso: personaDemoActual.peso || "90",
-  sangre: personaDemoActual.sangre || "A+",
-  estatura: personaDemoActual.estatura || "177",
-};
+// Es una funcion (no una constante) porque la persona activa puede cambiar en
+// runtime: persona de catalogo o cuenta registrada localmente.
+export function obtenerPerfilDemo() {
+  const persona = obtenerPersonaDemo();
+
+  return {
+    nombre: persona.nombre,
+    nombre_completo: persona.nombre,
+    first_name: persona.first_name,
+    last_name: persona.last_name,
+    email: DEMO_CREDENCIALES.correo,
+    correo: DEMO_CREDENCIALES.correo,
+    telefono: "5551234567",
+    rol: "paciente",
+    perfil: persona.perfil || "adulto_activo",
+    sexo: persona.sexo,
+    edad: persona.edad || "50",
+    peso: persona.peso || "90",
+    sangre: persona.sangre || "A+",
+    estatura: persona.estatura || "177",
+  };
+}
 
 // Claims de sesion esperados por useSesionActiva (obtenerClaims).
 export function construirClaimsDemo() {
@@ -132,7 +143,7 @@ export function construirClaimsDemo() {
   return {
     sub: "demo-user",
     name: persona.nombre,
-    role: DEMO_PERFIL.rol,
+    role: obtenerPerfilDemo().rol,
     refresh_threshold_minutes: 15,
     iat: ahoraSegundos,
     exp: ahoraSegundos + 60 * 60 * 24,
@@ -140,8 +151,10 @@ export function construirClaimsDemo() {
 }
 
 // Respuesta base de inicio de sesion; replica la forma del backend (access_token + user).
-export function construirRespuestaLogin() {
+// Para una cuenta registrada localmente se pasa su propio correo.
+export function construirRespuestaLogin(correoCuenta) {
   const persona = obtenerPersonaDemo();
+  const correo = String(correoCuenta || "").trim() || DEMO_CREDENCIALES.correo;
 
   return {
     access_token: DEMO_TOKEN,
@@ -149,8 +162,8 @@ export function construirRespuestaLogin() {
     user: {
       first_name: persona.first_name,
       last_name: persona.last_name,
-      email: DEMO_CREDENCIALES.correo,
-      username: DEMO_CREDENCIALES.correo,
+      email: correo,
+      username: correo,
       sexo: persona.sexo,
       perfil: persona.perfil || "adulto_activo",
       edad: persona.edad,
@@ -161,19 +174,24 @@ export function construirRespuestaLogin() {
 // Home de paciente; replica la forma normalizada por services/dashboard.js.
 export function construirHomeDemo() {
   const persona = obtenerPersonaDemo();
+  const esCuentaLocal = persona.origen === "cuenta";
+  const perfil = obtenerPerfilDemo();
+  const cuentaLocal = cargarCuentaDemo();
+  const correo =
+    esCuentaLocal && cuentaLocal?.correo ? cuentaLocal.correo : perfil.correo;
 
   return {
     perfil: {
       nombre: persona.nombre,
       sexo: persona.sexo,
-      correo: DEMO_CREDENCIALES.correo,
-      telefono: persona.telefono || DEMO_PERFIL.telefono,
+      correo,
+      telefono: persona.telefono || perfil.telefono,
     },
     resumenSalud: {
-      edad: persona.edad || DEMO_PERFIL.edad,
-      peso: persona.peso || DEMO_PERFIL.peso,
-      sangre: persona.sangre || DEMO_PERFIL.sangre,
-      estatura: persona.estatura || DEMO_PERFIL.estatura,
+      edad: persona.edad || (esCuentaLocal ? "" : perfil.edad),
+      peso: persona.peso || (esCuentaLocal ? "" : perfil.peso),
+      sangre: persona.sangre || (esCuentaLocal ? "" : perfil.sangre),
+      estatura: persona.estatura || (esCuentaLocal ? "" : perfil.estatura),
     },
     mensaje: "Modo demo: estás viendo la plataforma con datos de ejemplo.",
   };
@@ -198,3 +216,92 @@ export const NOTICIAS_DEMO = [
     link: "",
   },
 ];
+
+// ---------- Cuenta registrada localmente (registro demo) ----------
+const CLAVE_CUENTA_DEMO = "cuentaDemo";
+
+// Guarda o fusiona datos de la cuenta registrada en modo demo (localStorage).
+export function guardarCuentaDemo(parcial = {}) {
+  const cuenta = { ...cargarCuentaDemo(), ...parcial };
+  localStorage.setItem(CLAVE_CUENTA_DEMO, JSON.stringify(cuenta));
+  return cuenta;
+}
+
+// Devuelve la cuenta registrada en modo demo (o null si no existe).
+export function cargarCuentaDemo() {
+  try {
+    const cruda = localStorage.getItem(CLAVE_CUENTA_DEMO);
+    return cruda ? JSON.parse(cruda) : null;
+  } catch {
+    return null;
+  }
+}
+
+// Deriva el perfil de salud por edad (misma regla que src/utils/profile.js).
+function derivarPerfilDemo(edad) {
+  const n = Number(edad);
+  if (!Number.isFinite(n)) return "adulto_activo";
+  if (n < 18) return "menor_tutor";
+  if (n > 60) return "mayor_asistido";
+  return "adulto_activo";
+}
+
+// Calcula la edad desde una fecha de nacimiento ("YYYY-MM-DD" o "DD/MM/YYYY").
+function calcularEdadDesdeFechaNacimiento(fecha) {
+  const texto = String(fecha || "").trim();
+  let coincidencia = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto);
+  let dia;
+  let mes;
+  let anio;
+
+  if (coincidencia) {
+    [, anio, mes, dia] = coincidencia;
+  } else {
+    coincidencia = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(texto);
+    if (!coincidencia) return "";
+    [, dia, mes, anio] = coincidencia;
+  }
+
+  const nacimiento = new Date(Number(anio), Number(mes) - 1, Number(dia));
+  if (Number.isNaN(nacimiento.getTime())) return "";
+
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const cumplioEsteAnio =
+    hoy.getMonth() > nacimiento.getMonth() ||
+    (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() >= nacimiento.getDate());
+  if (!cumplioEsteAnio) edad -= 1;
+
+  return String(edad);
+}
+
+// Construye una persona demo derivada desde una cuenta registrada localmente,
+// para que la identidad y el gating funcionen igual que con PERSONAS_DEMO.
+export function construirPersonaDesdeCuenta(cuenta = {}) {
+  const nombre =
+    String(cuenta.nombre || "").trim() ||
+    `${String(cuenta.first_name || "").trim()} ${String(cuenta.last_name || "").trim()}`.trim() ||
+    "Usuario demo";
+  const edad =
+    calcularEdadDesdeFechaNacimiento(cuenta.fechaNacimiento) ||
+    String(cuenta.edad || "");
+
+  return {
+    clave: "cuenta_local",
+    origen: "cuenta",
+    nombre,
+    first_name: String(cuenta.first_name || "").trim(),
+    last_name: String(cuenta.last_name || "").trim(),
+    sexo: String(cuenta.sexo || "").trim(),
+    genero:
+      cuenta.sexo === "hombre"
+        ? "Hombre"
+        : cuenta.sexo === "mujer"
+          ? "Mujer"
+          : "",
+    perfil: derivarPerfilDemo(edad),
+    edad,
+    telefono: String(cuenta.telefono || "").trim(),
+    descripcion: "Cuenta registrada en el modo demo.",
+  };
+}

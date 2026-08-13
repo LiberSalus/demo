@@ -5,6 +5,7 @@ import {
   construirClaimsDemo,
   construirHomeDemo,
   construirRespuestaLogin,
+  guardarCuentaDemo,
   NOTICIAS_DEMO,
 } from "@/config/demo.config";
 
@@ -30,8 +31,9 @@ export const getAuthToken = () => _token;
 export const clearAuthToken = () => setAuthToken(null);
 
 // Detecta la ruta correspondiente para resolver una consulta demo sin red.
-function resolverRutaDemo(metodo, ruta) {
+function resolverRutaDemo(metodo, ruta, datos) {
   const url = String(ruta || "");
+  const cuerpo = datos && typeof datos === "object" ? datos : {};
 
   const coincide = (fragmentos) =>
     fragmentos.some((fragmento) => url.includes(fragmento));
@@ -64,8 +66,51 @@ function resolverRutaDemo(metodo, ruta) {
     return { data: null };
   }
 
-  // Flujo de preregistro (registro) resuelve en demo sin backend.
-  if (coincide(["enviar-codigo-correo", "validar-correo", "reenviar-codigo", "registro/", "guardar-curp", "guardar-direccion", "buscar-correo"])) {
+  // Flujo de preregistro (registro): resuelve en demo sin backend. Los pasos
+  // de creacion de cuenta y datos personales persisten en localStorage para
+  // poder iniciar sesion con la cuenta registrada.
+  if (
+    coincide([
+      "enviar-codigo-correo",
+      "validar-correo",
+      "reenviar-codigo",
+      "enviar-codigo-telefono",
+      "validar-telefono",
+    ])
+  ) {
+    return { data: { id: 9001 } };
+  }
+
+  // Ojo: "preregistro/" contiene "registro/", asi que se matchea el final
+  // exacto de la URL (la creacion de cuenta termina en "registro/").
+  if (url.endsWith("registro/")) {
+    guardarCuentaDemo({
+      correo: cuerpo.correo,
+      telefono: cuerpo.telefono,
+      contrasena: cuerpo.contrasena,
+      rol: cuerpo.rol,
+    });
+    return { data: { id: 9001 } };
+  }
+
+  if (coincide(["guardar-curp"])) {
+    guardarCuentaDemo({
+      curp: cuerpo.curp,
+      first_name: cuerpo.first_name,
+      last_name: cuerpo.last_name,
+      second_last_name: cuerpo.second_last_name,
+      sexo: cuerpo.sex_curp,
+      fechaNacimiento: cuerpo.birthdate,
+    });
+    return { data: { id: 9001 } };
+  }
+
+  if (coincide(["guardar-direccion", "direccion/registrar"])) {
+    guardarCuentaDemo({ domicilio: cuerpo });
+    return { data: { id: 9001 } };
+  }
+
+  if (coincide(["buscar-correo", "buscar-telefono"])) {
     return { data: { id: 9001 } };
   }
 
@@ -76,14 +121,14 @@ function resolverRutaDemo(metodo, ruta) {
 // Adaptador demo: mantiene el mismo interfaz (`{ data }`) que axios para que
 // ningun servicio tenga que conocer la existencia del modo offline.
 function crearApiDemo() {
-  const resolver = (metodo, ruta) =>
+  const resolver = (metodo, ruta, datos) =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(resolverRutaDemo(metodo, ruta)), 80);
+      setTimeout(() => resolve(resolverRutaDemo(metodo, ruta, datos)), 80);
     });
 
   return {
     get: (ruta) => resolver("get", ruta),
-    post: (ruta) => resolver("post", ruta),
+    post: (ruta, datos) => resolver("post", ruta, datos),
   };
 }
 

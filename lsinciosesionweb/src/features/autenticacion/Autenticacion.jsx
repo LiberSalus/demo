@@ -23,6 +23,8 @@ import { obtenerConfiguracionPaso } from './utilidades/obtenerConfiguracionPaso'
 import VistaInicioSesion from './vistas/VistaInicioSesion'
 import VistaRegistro from './vistas/VistaRegistro'
 import VistaSeleccionDemo from './vistas/VistaSeleccionDemo'
+import VistaDemoLogin from './vistas/VistaDemoLogin'
+import ModalDemoHub from './vistas/ModalDemoHub'
 
 const datosInicioSesionIniciales = {
   correoElectronico: '',
@@ -105,6 +107,7 @@ function Autenticacion() {
   const rutaDestino = location.state?.from?.pathname || ROUTES.INICIO
 
   const [vistaActual, setVistaActual] = useState('inicioSesion')
+  const [demoHubAbierto, setDemoHubAbierto] = useState(false)
   const [pasoRegistroActual, setPasoRegistroActual] = useState('registroCuenta')
   const [datosInicioSesion, setDatosInicioSesion] = useState(datosInicioSesionIniciales)
   const [estadoInicioSesion, setEstadoInicioSesion] = useState({
@@ -162,14 +165,32 @@ function Autenticacion() {
   }
 
   const cambiarARegistro = () => {
+    setDemoHubAbierto(false)
     setVistaActual('registro')
     setPasoRegistroActual('registroCuenta')
     setDatosPreregistro(estadoInicialPreregistro)
     setEstadoPreregistro({ cargando: false, error: '', exito: '' })
   }
 
+  // Abre el modal del hub del modo demo (perfil de prueba / iniciar sesion / crear cuenta).
+  const abrirDemoHub = () => {
+    setDemoHubAbierto(true)
+    setEstadoInicioSesion({ cargando: false, error: '' })
+  }
+
+  const cerrarDemoHub = () => {
+    setDemoHubAbierto(false)
+  }
+
+  const irADemoLogin = () => {
+    setDemoHubAbierto(false)
+    setVistaActual('demoLogin')
+    setEstadoInicioSesion({ cargando: false, error: '' })
+  }
+
   // Abre la pantalla en la que el usuario elige con que persona entrar a la demo.
   const abrirSeleccionDemo = () => {
+    setDemoHubAbierto(false)
     setVistaActual('seleccionDemo')
     setEstadoInicioSesion({ cargando: false, error: '' })
   }
@@ -450,14 +471,15 @@ function Autenticacion() {
   }
 
   return (
-    <ContenedorAutenticacion
+    <>
+      <ContenedorAutenticacion
       mostrarPanelLateral={
         vistaActual === 'registro' && configuracionPasoRegistro.mostrarPanelLateral
       }
       panelLateral={panelLateralRegistro}
       demoActivo={DEMO_ACTIVO}
       demoCargando={estadoInicioSesion.cargando}
-      onEntrarDemo={abrirSeleccionDemo}
+      onEntrarDemo={abrirDemoHub}
     >
       {vistaActual === 'inicioSesion' ? (
         <VistaInicioSesion
@@ -467,6 +489,16 @@ function Autenticacion() {
           onCambiarARegistro={cambiarARegistro}
           onEnviarInicioSesion={enviarInicioSesion}
           onInputInicioSesionChange={actualizarDatosInicioSesion}
+        />
+      ) : vistaActual === 'demoLogin' ? (
+        <VistaDemoLogin
+          datosInicioSesion={datosInicioSesion}
+          estadoInicioSesion={estadoInicioSesion}
+          onEnviarInicioSesion={enviarInicioSesion}
+          onInputInicioSesionChange={actualizarDatosInicioSesion}
+          onPerfilPrueba={abrirSeleccionDemo}
+          onCrearCuenta={cambiarARegistro}
+          onVolver={cambiarAInicioSesion}
         />
       ) : vistaActual === 'seleccionDemo' ? (
         <VistaSeleccionDemo
@@ -484,6 +516,16 @@ function Autenticacion() {
         />
       )}
     </ContenedorAutenticacion>
+
+    {demoHubAbierto ? (
+      <ModalDemoHub
+        onPerfilPrueba={abrirSeleccionDemo}
+        onIniciarSesion={irADemoLogin}
+        onCrearCuenta={cambiarARegistro}
+        onCerrar={cerrarDemoHub}
+      />
+      ) : null}
+    </>
   )
 }
 

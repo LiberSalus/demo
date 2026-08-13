@@ -5,8 +5,11 @@ import {
   DEMO_ACTIVO,
   DEMO_CREDENCIALES,
   PERSONAS_DEMO,
+  cargarCuentaDemo,
+  construirPersonaDesdeCuenta,
   construirRespuestaLogin,
   establecerPersonaDemo,
+  establecerPersonaDemoObjeto,
 } from "@/config/demo.config";
 
 const CLAVE_SESION_LISTA = "auth_ready";
@@ -209,20 +212,34 @@ export async function iniciarSesion({
   const correoNormalizado = String(correo || username || "").trim();
   const contrasenaNormalizada = contrasena || password || "";
 
-  // Modo demo: valida las credenciales definidas y crea la sesion sin backend.
+  // Modo demo: valida las credenciales definidas o la cuenta registrada
+  // localmente, y crea la sesion sin backend.
   if (DEMO_ACTIVO) {
-    if (
-      correoNormalizado !== DEMO_CREDENCIALES.correo ||
-      contrasenaNormalizada !== DEMO_CREDENCIALES.contrasena
-    ) {
+    const esCredencialDemo =
+      correoNormalizado === DEMO_CREDENCIALES.correo &&
+      contrasenaNormalizada === DEMO_CREDENCIALES.contrasena;
+
+    const cuentaLocal = cargarCuentaDemo();
+    const esCuentaLocal =
+      Boolean(cuentaLocal) &&
+      correoNormalizado === String(cuentaLocal.correo || "").trim() &&
+      contrasenaNormalizada === String(cuentaLocal.contrasena || "");
+
+    let correoSesion = DEMO_CREDENCIALES.correo;
+
+    if (esCredencialDemo) {
+      if (persona) establecerPersonaDemo(persona);
+    } else if (esCuentaLocal) {
+      establecerPersonaDemoObjeto(construirPersonaDesdeCuenta(cuentaLocal));
+      correoSesion = String(cuentaLocal.correo).trim();
+    } else {
       throw new Error("Credenciales demo inválidas.");
     }
 
-    if (persona) establecerPersonaDemo(persona);
-    const respuesta = construirRespuestaLogin();
+    const respuesta = construirRespuestaLogin(correoSesion);
     guardarSesionAutenticada({
       respuesta,
-      correo: DEMO_CREDENCIALES.correo,
+      correo: correoSesion,
     });
 
     const perfil = JSON.parse(localStorage.getItem("perfil_min") || "{}");
