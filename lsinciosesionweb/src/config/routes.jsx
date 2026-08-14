@@ -28,6 +28,9 @@ export const ROUTES = {
   PLAN_CUIDADO: "/mis-consultas/plan-cuidado",
   PROXIMOS_PASOS: "/mis-consultas/proximos-pasos",
 
+  // Cuestionarios
+  CUESTIONARIOS: "/cuestionarios",
+
   // Otros
   ANY: "/any",
   MONITOR: "/monitor",

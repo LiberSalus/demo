@@ -324,6 +324,21 @@
   border-color: rgba(199, 38, 17, 0.4);
 }
 
+.btnDescargar {
+  background: #ffffff;
+  color: var(--color-brand-primary, #007cba);
+  border: 1px solid rgba(0, 124, 186, 0.4);
+}
+.btnDescargar:hover:not(:disabled) {
+  background: #eef7fd;
+  color: var(--color-brand-primary, #007cba);
+  border-color: var(--color-brand-primary, #007cba);
+}
+.btnDescargar:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 860px) {
   .cuerpo {

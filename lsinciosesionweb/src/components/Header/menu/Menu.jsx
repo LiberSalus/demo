@@ -11,6 +11,7 @@ import inicio from "./icoInicio.svg";
 import miSalud from "./icoMiSalud.svg";
 import miCuidado from "./icoMiCuidado.svg";
 import monitor from "./icoMonitor.svg";
+import cuestionarios from "./icoCuestionarios.svg";
 import franky from "./icoFranky.svg";
 import any from "./icoAny.svg"
 import tami from "./icoTami.svg"
@@ -19,6 +20,7 @@ import activeInicio from './icoActiveInicio.svg'
 import activeMiSalud from './icoActiveMiSalud.svg'
 import activeMiCuidado from './icoActiveMiCuidado.svg'
 import activeMonitor from './icoActiveMonitor.svg'
+import activeCuestionarios from './icoActiveCuestionarios.svg'
 import activeFranky from './icoActiveFranky.svg'
 import activeAny from './icoActiveAny.svg'
 import activeTami from './icoActiveTami.svg'
@@ -48,6 +50,12 @@ const links = [
     label: "Monitor de salud", 
     icon: monitor, 
     activeIcon: activeMonitor, 
+  },
+  { id: "CUESTIONARIOS",
+    to: ROUTES.CUESTIONARIOS,
+    label: "Cuestionarios",
+    icon: cuestionarios,
+    activeIcon: activeCuestionarios,
   },
   { id: "FRANKY", 
     to: ROUTES.FRANKY, 

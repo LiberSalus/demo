@@ -1,6 +1,6 @@
 // src/pages/Cuestionarios/PlantillaQs.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import propuesta2 from "./propuesta2.json"; // JSON con show_if (respaldo)
 import PreguntasQs from "./PreguntasQs";
 import styles from "./plantillaQs.module.css";
@@ -15,10 +15,17 @@ import {
   loadAnswers,
   saveAnswers,
 } from "@/utils/logicPreg";
+import {
+  construirWorkbookArea,
+  descargarXlsx,
+  obtenerDatosPaciente,
+  fechaArchivo,
+} from "@/utils/exportarExcel";
 
 // Recibe el cuestionario por props (Run.jsx carga el JSON real). Si no llega,
 // se mantiene el import local de propuesta2.json como respaldo.
 const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
+  const navigate = useNavigate();
   const cuestionario = cuestionarioProp || propuesta2;
 
   // clave única para guardar respuestas (usa id o name del cuestionario)
@@ -76,11 +83,36 @@ const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
     saveAnswers(storageKey, respuestas);
     guardarResumenProgreso();
     alert("Respuestas guardadas.");
+    // Al guardar se regresa a la pantalla anterior (la página del área),
+    // donde el progreso queda reflejado en la tarjeta del instrumento.
+    navigate(`/cuestionarios/${areaSlug}`);
   };
 
   const limpiarRespuestas = () => {
     setRespuestas({});
     localStorage.removeItem(storageKey);
+  };
+
+  // Exporta el cuestionario a Excel (hoja paciente + resumen + hoja del instrumento)
+  const descargarExcel = () => {
+    if (answeredCount === 0) return;
+    const perfil = obtenerDatosPaciente();
+    const wb = construirWorkbookArea({
+      areaName: cuestionario.area || area,
+      perfil,
+      instrumentos: [
+        {
+          json: cuestionario,
+          respuestas,
+          completo: percent === 100 && answeredCount > 0,
+          fecha: new Date().toLocaleDateString("es-MX"),
+        },
+      ],
+    });
+    descargarXlsx(
+      wb,
+      `Reporte_${cuestionario.key || cuestionario.id}_${fechaArchivo()}.xlsx`
+    );
   };
 
   // Asegurar campos de área mientras definen definitivo en el JSON
@@ -188,6 +220,19 @@ const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
                 onClick={guardarRespuestas}
               >
                 Guardar respuestas
+              </button>
+              <button
+                type="button"
+                className={styles.btnDescargar}
+                onClick={descargarExcel}
+                disabled={answeredCount === 0}
+                title={
+                  answeredCount === 0
+                    ? "Responde al menos una pregunta para descargar"
+                    : "Descargar respuestas en Excel"
+                }
+              >
+                Descargar Excel
               </button>
               <button
                 type="button"

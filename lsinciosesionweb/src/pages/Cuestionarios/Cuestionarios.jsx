@@ -4,12 +4,17 @@ import styles from "./cuestionarios.module.css";
 
 import { AREAS } from "@/config/cuestionarios.config";
 import { getCurrentProfile } from "@/utils/profile";
+import { loadAnswers, storageKeyFor } from "@/utils/logicPreg";
 import {
   getProgressSummary,
   progressState,
   isUnlocked,
   computeAreaPercent,
 } from "@/utils/progreso";
+import {
+  descargarZipTodo,
+  obtenerDatosPaciente,
+} from "@/utils/exportarExcel";
 
 import TarjetaListadoAvance from "./TarjetaListadoAvance/TarjetaListadoAvance";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
@@ -63,6 +68,7 @@ async function cargarArea(areaData, profile) {
 const Cuestionarios = () => {
   const navigate = useNavigate();
   const profile = getCurrentProfile();
+  const [exportando, setExportando] = useState(false);
 
   // áreas con progreso real (loading → null)
   const [areas, setAreas] = useState(null);
@@ -78,6 +84,30 @@ const Cuestionarios = () => {
       ok = false;
     };
   }, [profile]);
+
+  // ¿existe alguna respuesta guardada en alguna categoría? (para habilitar el ZIP)
+  const hayRespuestas = useMemo(() =>
+    AREAS.some((area) =>
+      (area.questionnaires || [])
+        .filter((q) => !q.profiles || q.profiles.includes(profile))
+        .some((meta) => Object.keys(loadAnswers(storageKeyFor(meta.key || meta.name))).length > 0)
+    ),
+    [profile]
+  );
+
+  // Descarga un .xlsx por categoría con respuestas, empaquetado en ZIP.
+  const descargarTodo = async () => {
+    if (!hayRespuestas || exportando) return;
+    setExportando(true);
+    try {
+      const incluidos = await descargarZipTodo({ perfil: obtenerDatosPaciente() });
+      if (incluidos === 0) {
+        alert("No hay respuestas guardadas para exportar.");
+      }
+    } finally {
+      setExportando(false);
+    }
+  };
 
   // métricas globales
   const resumen = useMemo(() => {
@@ -134,6 +164,19 @@ const Cuestionarios = () => {
       <header className={styles.hero}>
         <div className={styles.heroTop}>
           <span className={styles.badge}>Cuestionarios de bienestar</span>
+          <button
+            type="button"
+            className={styles.btnDescargar}
+            onClick={descargarTodo}
+            disabled={!hayRespuestas || exportando}
+            title={
+              hayRespuestas
+                ? "Descargar un Excel por categoría (ZIP)"
+                : "No hay respuestas para exportar"
+            }
+          >
+            {exportando ? "Generando…" : "Descargar todo (ZIP)"}
+          </button>
         </div>
         <h1 className={styles.titulo}>Cuestionarios</h1>
         <p className={styles.descripcion}>

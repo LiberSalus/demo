@@ -1,11 +1,13 @@
 # Feature: Export de cuestionarios completados a Excel (.xlsx)
 
-> **Estado: Propuesta (pendiente de validación/implementación).** Diseño
-> acordado: un **`.xlsx` por categoría de bienestar** (ej. Bienestar
-> Emocional), generado **100 % en el cliente** con la librería SheetJS
-> (`xlsx`), con **tres tipos de hoja**: datos del paciente, resumen de
-> puntajes/interpretación y una hoja por instrumento. En modo demo funciona
-> totalmente **offline** (los datos viven en `localStorage`).
+> **Estado: Implementado (12 ago 2026, v1).** Un **`.xlsx` por categoría de
+> bienestar** (ej. Bienestar Emocional), generado **100 % en el cliente** con la
+> librería SheetJS (`xlsx@0.18.5`), con **tres tipos de hoja**: datos del
+> paciente, resumen de puntajes/interpretación y una hoja por instrumento
+> (`PREGUNTA_CODE | PREGUNTA | ANSWER | ANSWER_VALUE`, encabezados en
+> mayúsculas y `ANSWER` con el texto en mayúsculas). Botones en el runner y en
+> la página del área; en modo demo funciona totalmente **offline**. El
+> documento conserva la propuesta original y registra lo implementado.
 
 ## Objetivo
 
@@ -136,20 +138,21 @@ Nombre de hoja = `key` del JSON (ej. `PHQ-9`, `GAD-7`, `DTS`) — el nombre larg
 ("PHQ-9 (Patient Health Questionnaire)") excede el límite de 31 caracteres de
 Excel. Columnas recomendadas:
 
-| `pregunta_code` | `pregunta` | `answer` |
-|---|---|---|
-| 1 | Se ha sentido nervioso(a)... | Casi todos los días |
-| 2 | No ha sido capaz de parar... | Ningún día |
+| `PREGUNTA_CODE` | `PREGUNTA` | `ANSWER` | `ANSWER_VALUE` |
+|---|---|---|---|
+| 1 | Se ha sentido nervioso(a)... | CASI TODOS LOS DÍAS | 3 |
+| 2 | No ha sido capaz de parar... | NINGÚN DÍA | 0 |
 
-- **`pregunta_code`** = el `id` de la pregunta (clave con la que se guardan las
+- **`PREGUNTA_CODE`** = el `id` de la pregunta (clave con la que se guardan las
   respuestas; `order` es solo el número visible en pantalla).
-- **`answer`** = el **texto de la opción**, no el número. Lo guardado es el
-  valor numérico (0-3); el export lo desnormaliza con
+- **`ANSWER`** = el **texto de la opción en mayúsculas**, no el número. Lo
+  guardado es el valor numérico (0-3); el export lo desnormaliza con
   `list_options.find(o => Number(o.value) === respuesta)` → "Casi todos los
-  días". Un solo número haría la hoja ilegible sin el manual del instrumento.
-- **`answer_value`** (opcional, columna 4): el valor numérico crudo — solo si
-  se planea **re-importar** las respuestas a un backend (el contrato dh_forms
-  almacena valores numéricos).
+  días".
+- **`ANSWER_VALUE`** = el **valor numérico codificado** (fiel al diagrama):
+  `SINGLE_CHOICE` → el `value` de la opción (0-3, ej. "Nunca" → 0);
+  `MULTIPLE_CHOICE` → los valores separados por "; "; `TEXT` → celda vacía (no
+  tiene valor codificado). Permite re-importar al contrato dh_forms.
 
 ## Flujo de descarga (puntos de entrada)
 
@@ -176,25 +179,39 @@ servidor y sin navegación.
 | Pregunta condicional no visible | Se **omite la fila** (ya las limpia `pruneHidden` al guardar) |
 | Instrumento sin respuestas | No genera hoja de instrumento (solo portada + resumen) |
 
-## Cambios técnicos implicados (sin implementar)
+## Cambios técnicos implementados (12 ago 2026)
 
-1. **Nueva dependencia**: `xlsx` (SheetJS, ~400 KB) para generar el workbook en
-   el cliente. `jszip` **solo** si se agrega la opción "Descargar todo" (zip con
-   un xlsx por categoría).
-2. **Utilidad de export** (`src/utils/exportarExcel.js` aprox.):
-   - `construirHojaPaciente(perfil)` → hoja 1.
-   - `calcularPuntaje(json, respuestas)` → maneja **ambos** formatos de
-     `scoring` (`suma` y `subescalas`) y devuelve, por instrumento o por
-     subescala: `{ puntaje, maximo, interpretacion }` (o `null` si está
-     incompleto).
-   - `construirHojaResumen(listaInstrumentosConPuntaje)` → hoja 2 (una fila
-     por instrumento o por subescala, según el formato).
-   - `construirHojaInstrumento(json, respuestas)` → hoja por instrumento
-     (desnormaliza valor → texto de `list_options`).
-   - `descargarXlsx(workbook, nombreArchivo)` → Blob + descarga.
-3. **Botones de descarga**: en `PlantillaQs.jsx` (por instrumento) y en el
-   encabezado del tab del área (por categoría), con estado activo/inactivo
-   según haya respuestas.
+1. **Nuevas dependencias**: `xlsx` (SheetJS, `0.18.5` — última en npm; las
+   versiones más nuevas viven solo en el CDN de SheetJS y no son necesarias
+   porque la app solo **escribe** el archivo, nunca parsea hojas ajenas) y
+   `jszip` (`3.10.1`, para el ZIP "Descargar todo").
+2. **Utilidad de export** (`src/utils/exportarExcel.js`):
+   - `obtenerDatosPaciente()` → datos del paciente (demo: `obtenerPerfilDemo`;
+     real: `user` + `perfil_min`).
+   - `calcularPuntaje(json, respuestas, { completo })` → maneja `suma` (con
+     `items` opcionales, p. ej. CTH 1-14) y `subescalas`; devuelve una fila por
+     instrumento o por subescala; **interpretación solo si está completo**.
+   - `construirHojaPaciente` / `construirHojaResumen` / `construirHojaInstrumento`
+     → las tres hojas con anchos de columna.
+   - `construirWorkbookArea({ areaName, perfil, instrumentos })` → workbook
+     completo (paciente + resumen + hoja por instrumento).
+   - `descargarXlsx` → Blob + `<a download>` + liberación del objeto URL.
+3. **Botones de descarga**: en `PlantillaQs.jsx` (runner, por instrumento,
+   activo con respuestas) y en `Area.jsx` (página del área, por categoría,
+   deshabilitado si ningún instrumento tiene respuestas).
+4. **ZIP "Descargar todo" (14 ago 2026)**: botón **"Descargar todo (ZIP)"**
+   en el hero de la página principal de Cuestionarios (`Cuestionarios.jsx`),
+   habilitado si existe alguna respuesta en cualquier categoría. `descargarZipTodo()`
+   (en `exportarExcel.js`) recorre `AREAS`, arma un `.xlsx` por categoría con
+   respuestas (reutilizando `construirWorkbookArea`) y los empaqueta en
+   `Reporte_Cuestionarios_Todas_las_Categorias_{YYYY-MM-DD}.zip`.
+
+**Verificado en vivo**: GAD-7 completo → `21/21 · Ansiedad severa`; HADS → una
+fila por subescala (`HADS-A 21/21`, `HADS-D 0/21`); DTS (34 ítems) →
+`68/68 · 0/68 · 68/136`; CTH → `14/14` (solo suman 1-14); ZIP con
+`Reporte_Bienestar_Emocional_2026-08-14.xlsx` (con hojas paciente + resumen)
+validado como zip real (magic `PK`) desde el preview. Build de producción
+verde.
 
 ## Decisiones de diseño pendientes
 
@@ -203,9 +220,9 @@ servidor y sin navegación.
 | **Multi-toma**: hoy `localStorage` guarda **solo la última aplicación** (una clave por instrumento). ¿Exportar la última toma o historial? | **v1: última toma** (cero cambios de storage). v2 (historial por fecha) requiere versionar la clave en `logicPreg.js` — fuera de esta propuesta |
 | ¿Resumen con puntaje/interpretación en la hoja 2? | **Sí** — es lo que hace útil la portada de un vistazo; adelanta solo la pieza de cálculo del export, no la pantalla (Fase 3) |
 | ¿Identificar al paciente en la hoja 1? | **Sí** (nombre/edad/perfil desde la sesión demo). Opción "anónimo" como extensión futura |
-| Columnas de la hoja de instrumento: ¿3 o 4? | **3** (`pregunta_code \| pregunta \| answer`); agregar `answer_value` solo si se va a re-importar a un backend |
+| Columnas de la hoja de instrumento: ¿3 o 4? | **4 — resuelto** (`PREGUNTA_CODE \| PREGUNTA \| ANSWER \| ANSWER_VALUE`, 12 ago 2026): encabezados y `ANSWER` en mayúsculas; `ANSWER_VALUE` numérico según tipo (SINGLE/MULTIPLE/TEXT) |
 | Nombre de archivo | `Reporte_Cuestionarios_{Área}_{YYYY-MM-DD}.xlsx` |
-| ¿Zip "Descargar todo"? | **No en v1**; se agrega solo si se pide descargar varias categorías de una vez |
+| ¿Zip "Descargar todo"? | **Sí — implementado (14 ago 2026)** como botón en la página principal de Cuestionarios: un `.xlsx` por categoría con respuestas dentro de un zip |
 
 ## Alcance
 

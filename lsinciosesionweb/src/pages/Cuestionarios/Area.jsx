@@ -7,6 +7,8 @@ import styles from "./area.module.css";
 import { findArea } from "@/config/cuestionarios.config";
 import { getCurrentProfile } from "@/utils/profile";
 import { getProgressSummary, progressState, isUnlocked, computeAreaPercent } from "@/utils/progreso";
+import { storageKeyFor, loadAnswers, computeProgressPercent } from "@/utils/logicPreg";
+import { construirWorkbookArea, descargarXlsx, obtenerDatosPaciente, fechaArchivo } from "@/utils/exportarExcel";
 
 const PAGE_SIZE = 12;
 
@@ -34,6 +36,49 @@ export default function Area() {
   const [q, setQ] = useState("");
   const [tab, setTab] = useState("todos"); // todos | no_iniciado | progreso | completado | bloqueado
   const [page, setPage] = useState(1);
+  const [exportando, setExportando] = useState(false);
+
+  const hayRespuestas = items.some((i) => i.answeredCount > 0);
+
+  // Arma el workbook con las hojas de los instrumentos del área que tengan respuestas.
+  const descargarExcel = async () => {
+    if (!hayRespuestas || exportando) return;
+    setExportando(true);
+    try {
+      const elegibles = (areaData.questionnaires || []).filter(
+        (q) => !q.profiles || q.profiles.includes(profile)
+      );
+      const instrumentos = [];
+      for (const meta of elegibles) {
+        const mod = await meta.file();
+        const json = mod.default || mod;
+        const respuestas = loadAnswers(storageKeyFor(meta.key || meta.name));
+        if (!Object.keys(respuestas).length) continue;
+        const { percent, answeredCount } = computeProgressPercent(
+          json.list_questions,
+          respuestas
+        );
+        instrumentos.push({
+          json,
+          respuestas,
+          completo: percent === 100 && answeredCount > 0,
+          fecha: new Date().toLocaleDateString("es-MX"),
+        });
+      }
+      if (!instrumentos.length) return;
+      const wb = construirWorkbookArea({
+        areaName: areaData.name,
+        perfil: obtenerDatosPaciente(),
+        instrumentos,
+      });
+      descargarXlsx(
+        wb,
+        `Reporte_Cuestionarios_${areaData.name.replace(/\s+/g, "_")}_${fechaArchivo()}.xlsx`
+      );
+    } finally {
+      setExportando(false);
+    }
+  };
 
   useEffect(() => {
     let ok = true;
@@ -107,6 +152,19 @@ export default function Area() {
           <Link to="/cuestionarios" className={styles.volver}>← Volver a Cuestionarios</Link>
           <div className={styles.heroTop}>
             <span className={styles.badge}>Área de bienestar</span>
+            <button
+              type="button"
+              className={styles.btnDescargar}
+              onClick={descargarExcel}
+              disabled={!hayRespuestas || exportando}
+              title={
+                hayRespuestas
+                  ? "Descargar respuestas en Excel"
+                  : "No hay respuestas para exportar"
+              }
+            >
+              {exportando ? "Generando…" : "Descargar Excel"}
+            </button>
           </div>
           <h1 className={styles.titulo}>{areaData.name}</h1>
           <p className={styles.descripcion}>{areaData.descripcion}</p>
