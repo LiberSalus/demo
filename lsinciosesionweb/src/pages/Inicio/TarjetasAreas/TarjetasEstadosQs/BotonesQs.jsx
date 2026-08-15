@@ -9,7 +9,7 @@ import btnProgreso from "./btnProgreso.svg";
 import btnHabilitado from "./btbHabilitado.svg";
 import btnBloqueado from "./btnBloqueado.svg";
 
-const BotonesQs = ({titulo, edoQs, av, activo, onClick}) => {
+const BotonesQs = ({titulo, edoQs, av, activo, onClick, fecha}) => {
 
   let porcentaje = av;
 
@@ -67,7 +67,7 @@ const BotonesQs = ({titulo, edoQs, av, activo, onClick}) => {
   const texto = (estado) => {
     switch (estado) {
       case "edo1":
-        return <p>Completado el: DD/MM/AAAA</p>;
+        return <p>Completado el: {fecha || "DD/MM/AAAA"}</p>;
       case "edo2":
         return <BarraProgreso porcentaje={porcentaje} />;
       case "edo3":

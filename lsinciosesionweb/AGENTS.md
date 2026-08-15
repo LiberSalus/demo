@@ -51,6 +51,12 @@ Fuente: `docs/historia_clinica/questionnaires/index.DEMO_quewstionnaire.drawio` 
 - Auditar flechas/conexiones: no confiar solo en contar items; verificar la cadena una-flecha-por-linea y, en el SVG renderizado, contar `marker-end` y el orden de `x`. Ojo con flujos condicionales y con rotulos duplicados en el drawio (dos opciones con el mismo rotulo) que hacen perder conexiones.
 - Validar con `npx --yes @mermaid-js/mermaid-cli@10 -p <config-no-sandbox> -i X.mmd -o X.svg`; para verificar el orden visual real, leer coordenadas `x` de los nodos del SVG.
 
+## Skill: archivos `.pen` (pen.dev)
+
+- Diseños de pen.dev en `docs/pen.dev/`; formato JSON `version 2.17` (árbol de objetos con `id`/`type`).
+- Guía completa de formato y operaciones: `.agents/workflow/pen-dev-skill.md`.
+- Inspeccionar/editar con `node tools/pen/pen.mjs` (summary, tree, find, text, palette, validate, components, edit). No leer `.pen` enteros (2-16 MB).
+
 ## Pendientes naturales
 
 - Limpiezas por partes, con contexto, no masivas a ciegas.

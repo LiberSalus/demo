@@ -25,10 +25,7 @@ const LoQueDice = lazy(() => import("@/pages/MisConsultas/LoQueDice"));
 const Comprension = lazy(() => import("@/pages/MisConsultas/Comprension"));
 const PlanCuidado = lazy(() => import("@/pages/MisConsultas/PlanCuidado"));
 const ProximosPasos = lazy(() => import("@/pages/MisConsultas/ProximosPasos"));
-const Any = lazy(() => import("@/pages/Any/Any"));
-const FrankyTeAcompana = lazy(() => import("@/pages/FRANKY/Franky"));
 const MonitorDeSalud = lazy(() => import("@/pages/Monitor/Monitor"));
-const Tami = lazy(() => import("@/pages/Ayuda/DudasFrecuentes"));
 const SaludFisica = lazy(() => import("@/pages/SaludFisica/SaludFisica"));
 const SaludMental = lazy(() => import("@/pages/SaludMental/SaludMental"));
 const SaludNutricional = lazy(() =>
@@ -67,10 +64,7 @@ const misConsultasRoutes = [
 ];
 
 const extrasRoutes = [
-  { path: ROUTES.ANY, element: <Any /> },
   { path: ROUTES.MONITOR, element: <MonitorDeSalud /> },
-  { path: ROUTES.FRANKY, element: <FrankyTeAcompana /> },
-  { path: ROUTES.DUDAS, element: <Tami /> },
 ];
 
 const fallbackRuta = <div style={{ padding: "1rem" }}>Cargando...</div>;

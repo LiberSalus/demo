@@ -14,6 +14,11 @@ import {
   storageKeyFor,
   loadAnswers,
   saveAnswers,
+  saveFecha,
+  loadFecha,
+  removeFecha,
+  loadFechaInicio,
+  loadFechaFinalizacion,
 } from "@/utils/logicPreg";
 import {
   construirWorkbookArea,
@@ -82,6 +87,17 @@ const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
   const guardarRespuestas = () => {
     saveAnswers(storageKey, respuestas);
     guardarResumenProgreso();
+
+    // Fecha de inicio: se fija con el primer guardado que tenga respuestas
+    // (la primera vez que el cuestionario deja de estar "no iniciado").
+    if (answeredCount > 0 && !loadFecha(storageKey, "inicio")) {
+      saveFecha(storageKey, "inicio");
+    }
+    // Fecha de finalización: se fija la primera vez que se completa.
+    if (percent === 100 && answeredCount > 0 && !loadFecha(storageKey, "fecha")) {
+      saveFecha(storageKey, "fecha");
+    }
+
     alert("Respuestas guardadas.");
     // Al guardar se regresa a la pantalla anterior (la página del área),
     // donde el progreso queda reflejado en la tarjeta del instrumento.
@@ -91,6 +107,11 @@ const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
   const limpiarRespuestas = () => {
     setRespuestas({});
     localStorage.removeItem(storageKey);
+    localStorage.removeItem(`${storageKey}:pct`);
+    localStorage.removeItem(`${storageKey}:ans`);
+    localStorage.removeItem(`${storageKey}:vis`);
+    removeFecha(storageKey, "inicio");
+    removeFecha(storageKey, "fecha");
   };
 
   // Exporta el cuestionario a Excel (hoja paciente + resumen + hoja del instrumento)
@@ -105,7 +126,8 @@ const PlantillaQs = ({ cuestionario: cuestionarioProp, forceArea }) => {
           json: cuestionario,
           respuestas,
           completo: percent === 100 && answeredCount > 0,
-          fecha: new Date().toLocaleDateString("es-MX"),
+          inicio: loadFechaInicio(storageKey),
+          fecha: loadFechaFinalizacion(storageKey),
         },
       ],
     });

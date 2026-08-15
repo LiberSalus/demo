@@ -1,12 +1,24 @@
-import { storageKeyFor, loadAnswers, computeProgressPercent } from "@/utils/logicPreg";
+import {
+  storageKeyFor,
+  loadAnswers,
+  computeProgressPercent,
+  loadFecha,
+} from "@/utils/logicPreg";
 
-// Lee cache (PlantillaQs debe guardar :pct, :ans, :vis)
+// Lee cache (PlantillaQs debe guardar :pct, :ans, :vis) + fechas de
+// inicio/finalización (:inicio, :fecha) formateadas ("05/08/2026").
 export function getProgressSummary(keyOrName) {
   const base = storageKeyFor(keyOrName);
   const pct = Number(localStorage.getItem(`${base}:pct`) || "0");
   const ans = Number(localStorage.getItem(`${base}:ans`) || "0");
   const vis = Number(localStorage.getItem(`${base}:vis`) || "0");
-  return { percent: pct, answeredCount: ans, visiblesCount: vis };
+  return {
+    percent: pct,
+    answeredCount: ans,
+    visiblesCount: vis,
+    inicio: loadFecha(base, "inicio"),
+    fecha: loadFecha(base, "fecha"),
+  };
 }
 
 export function progressState(percent) {

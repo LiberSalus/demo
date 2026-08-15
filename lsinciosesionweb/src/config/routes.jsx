@@ -32,8 +32,5 @@ export const ROUTES = {
   CUESTIONARIOS: "/cuestionarios",
 
   // Otros
-  ANY: "/any",
   MONITOR: "/monitor",
-  DUDAS: "/ayuda/dudas-frecuentes",
-  FRANKY: "/franky",
 };

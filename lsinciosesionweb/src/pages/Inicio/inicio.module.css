@@ -915,3 +915,90 @@
     align-items: center;
   }
 }
+
+/* ============================================================
+   Vida y micro-interacciones (animaciones sutiles de marca)
+   ============================================================ */
+
+/* Entrada escalonada de secciones al cargar (una sola vez) */
+.seccSuperior,
+.seccCentro,
+.seccInfe {
+  animation: subeAparece 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+.seccCentro {
+  animation-delay: 0.12s;
+}
+.seccInfe {
+  animation-delay: 0.2s;
+}
+
+@keyframes subeAparece {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Saludo: aparece suave */
+.saludo {
+  animation: apareceSuave 0.5s ease 0.1s backwards;
+}
+
+@keyframes apareceSuave {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Avatar: flotación muy sutil para que la persona “respire” */
+.cntMono .mono {
+  animation: flotaSuave 4.5s ease-in-out 0.7s infinite;
+  will-change: transform;
+}
+
+@keyframes flotaSuave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Hover de las tarjetas principales del hero */
+.cntMono,
+.cntAgenda {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cntMono:hover,
+.cntAgenda:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(11, 90, 168, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seccSuperior,
+  .seccCentro,
+  .seccInfe,
+  .saludo {
+    animation: none;
+  }
+  .cntMono .mono {
+    animation: none;
+    will-change: auto;
+  }
+  .cntMono:hover,
+  .cntAgenda:hover {
+    transform: none;
+  }
+}

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ProgCora.module.css";
 import cora from './icoCora.svg'
 
 const ProgCora = ({porcentaje=100}) => {
 
   let grados = 2.8 * porcentaje - 140;
+
+  // La aguja parte del reposo (-140deg) y barre hasta el valor real al montar.
+  const [giro, setGiro] = useState(null);
+  useEffect(() => {
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setGiro(grados))
+    );
+    return () => cancelAnimationFrame(raf);
+  }, [grados]);
 
   return (
     <div className={styles.ProgCora}>
@@ -48,7 +57,7 @@ const ProgCora = ({porcentaje=100}) => {
       <img className={styles.cora} src={cora} alt="Tu salud Actual"/>
       <div 
       className={styles.indicador}
-      style={{transform:`rotate(${grados}deg)`}}
+      style={{transform:`rotate(${giro ?? -140}deg)`}}
       ></div>
 
     </div>

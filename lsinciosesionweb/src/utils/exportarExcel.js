@@ -11,7 +11,12 @@ import * as XLSX from "xlsx";
 import JSZip from "jszip";
 import { DEMO_ACTIVO, obtenerPerfilDemo } from "@/config/demo.config";
 import { AREAS } from "@/config/cuestionarios.config";
-import { loadAnswers, storageKeyFor, computeProgressPercent } from "@/utils/logicPreg";
+import {
+  loadAnswers,
+  storageKeyFor,
+  computeProgressPercent,
+  loadFecha,
+} from "@/utils/logicPreg";
 import { getCurrentProfile } from "@/utils/profile";
 
 // ---------- Datos del paciente (demo o sesión real) ----------
@@ -142,16 +147,31 @@ export function construirHojaPaciente(perfil = {}, areaName = "") {
 }
 
 export function construirHojaResumen(filas = []) {
-  const header = ["INSTRUMENTO", "PUNTAJE", "INTERPRETACIÓN", "ESTADO", "FECHA"];
+  const header = [
+    "INSTRUMENTO",
+    "PUNTAJE",
+    "INTERPRETACIÓN",
+    "ESTADO",
+    "INICIADO",
+    "FINALIZADO",
+  ];
   const data = filas.map((f) => [
     f.subescala ? `${f.instrumento}-${f.subescala}` : f.instrumento,
     f.maximo != null ? `${f.puntaje}/${f.maximo}` : String(f.puntaje ?? ""),
     f.interpretacion || "",
     f.estado || "",
+    f.inicio || "",
     f.fecha || "",
   ]);
   const ws = XLSX.utils.aoa_to_sheet([header, ...data]);
-  ws["!cols"] = [{ wch: 18 }, { wch: 12 }, { wch: 42 }, { wch: 14 }, { wch: 14 }];
+  ws["!cols"] = [
+    { wch: 18 },
+    { wch: 12 },
+    { wch: 42 },
+    { wch: 14 },
+    { wch: 13 },
+    { wch: 13 },
+  ];
   return ws;
 }
 
@@ -175,20 +195,23 @@ export function construirWorkbookArea({ areaName = "", perfil = {}, instrumentos
   XLSX.utils.book_append_sheet(wb, construirHojaPaciente(perfil, areaName), "Datos del paciente");
 
   const filasResumen = [];
-  instrumentos.forEach(({ json, respuestas, completo = false, fecha = "" }) => {
-    const nombre = json.key || json.id || json.name || "Instrumento";
-    calcularPuntaje(json, respuestas, { completo }).forEach((r) => {
-      filasResumen.push({
-        instrumento: nombre,
-        subescala: r.subescalaId,
-        puntaje: r.puntaje,
-        maximo: r.maximo,
-        interpretacion: r.interpretacion,
-        estado: completo ? "Completado" : "En progreso",
-        fecha,
+  instrumentos.forEach(
+    ({ json, respuestas, completo = false, inicio = "", fecha = "" }) => {
+      const nombre = json.key || json.id || json.name || "Instrumento";
+      calcularPuntaje(json, respuestas, { completo }).forEach((r) => {
+        filasResumen.push({
+          instrumento: nombre,
+          subescala: r.subescalaId,
+          puntaje: r.puntaje,
+          maximo: r.maximo,
+          interpretacion: r.interpretacion,
+          estado: completo ? "Completado" : "En progreso",
+          inicio,
+          fecha,
+        });
       });
-    });
-  });
+    }
+  );
   if (filasResumen.length) {
     XLSX.utils.book_append_sheet(wb, construirHojaResumen(filasResumen), "Resumen");
   }
@@ -255,11 +278,13 @@ export async function descargarZipTodo({
         json.list_questions,
         respuestas
       );
+      const baseKey = storageKeyFor(meta.key || meta.name);
       instrumentos.push({
         json,
         respuestas,
         completo: percent === 100 && answeredCount > 0,
-        fecha: new Date().toLocaleDateString("es-MX"),
+        inicio: loadFecha(baseKey, "inicio"),
+        fecha: loadFecha(baseKey, "fecha"),
       });
     }
     if (!instrumentos.length) continue;

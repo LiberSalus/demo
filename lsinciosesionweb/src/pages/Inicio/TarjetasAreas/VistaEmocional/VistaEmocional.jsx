@@ -36,8 +36,12 @@ const VistaEmocional = () => {
               if (schema?.description) desc = schema.description;
             } catch { /* se queda con la descripcion del catalogo */ }
 
-            const { percent, answeredCount, visiblesCount } =
-              getProgressSummary(meta.key);
+            const {
+              percent,
+              answeredCount,
+              visiblesCount,
+              fecha,
+            } = getProgressSummary(meta.key);
 
             return {
               key: meta.key,
@@ -47,6 +51,7 @@ const VistaEmocional = () => {
               av: percent,
               n_items: visiblesCount,
               n_responses: answeredCount,
+              fecha, // "05/08/2026" si está completado; "" en otro caso
               href: `/cuestionarios/emocional/${meta.key}`,
             };
           })

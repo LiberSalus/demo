@@ -1,0 +1,356 @@
+/* ============================================================
+   Mi salud a través del tiempo — hub de Historia clínica
+   Consistente con la marca (azul #007cba) y el resto del panel.
+   ============================================================ */
+
+.wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #007cba 0%, #0b5aa8 60%, #173d8f 100%);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.9rem;
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(11, 90, 168, 0.28);
+  animation: subeAparece 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+.hero::before {
+  width: 16rem;
+  height: 16rem;
+  top: -7rem;
+  right: -4rem;
+}
+.hero::after {
+  width: 9rem;
+  height: 9rem;
+  bottom: -4rem;
+  left: 24%;
+}
+
+.heroTop {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0.9rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.35rem 0.85rem;
+  border-radius: 2rem;
+}
+
+.titulo {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.descripcion {
+  position: relative;
+  z-index: 1;
+  margin: 0.6rem 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 48rem;
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tab {
+  appearance: none;
+  border: 1px solid var(--color-border-soft, #acceeb);
+  background: #ffffff;
+  color: var(--color-text-secondary, #64748b);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.15s ease;
+}
+
+.tab:hover {
+  border-color: var(--color-brand-primary, #007cba);
+  color: var(--color-brand-primary, #007cba);
+}
+
+.tab:active {
+  transform: scale(0.97);
+}
+
+.tabActiva {
+  background: var(--color-brand-primary, #007cba);
+  border-color: var(--color-brand-primary, #007cba);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(0, 124, 186, 0.25);
+}
+
+/* ---------- SECCIONES ---------- */
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: subeAparece 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+
+.seccionTitulo {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #334155);
+  padding-left: 0.6rem;
+  border-left: 4px solid var(--color-brand-primary, #007cba);
+}
+
+.cargando {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-secondary, #64748b);
+}
+
+/* ---------- RESUMEN ---------- */
+.gridResumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.9rem;
+}
+
+.datoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border-soft, #acceeb);
+  border-radius: 0.9rem;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.22s ease;
+}
+
+.datoCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(11, 90, 168, 0.1);
+}
+
+.datoLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.datoValor {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #334155);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- LÍNEA DE TIEMPO ---------- */
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 1.6rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 2px;
+  background: linear-gradient(180deg, #007cba, #acceeb);
+  border-radius: 2px;
+}
+
+.evento {
+  position: relative;
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.75rem 0;
+}
+
+.punto {
+  position: absolute;
+  left: -1.6rem;
+  top: 1rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35);
+}
+
+.puntoCompletado {
+  background: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
+}
+
+.eventoCuerpo {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid var(--color-border-soft, #acceeb);
+  border-radius: 0.9rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.22s ease;
+}
+
+.eventoCuerpo:hover {
+  transform: translateX(3px);
+  box-shadow: 0 8px 18px rgba(11, 90, 168, 0.1);
+}
+
+.eventoFecha {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-brand-primary, #007cba);
+}
+
+.eventoTitulo {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #334155);
+}
+
+.eventoDetalle {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+/* ---------- RESULTADOS ---------- */
+.cntTabla {
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid var(--color-border-soft, #acceeb);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.05);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #eef2f7;
+  white-space: nowrap;
+}
+
+.tabla thead th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted, #94a3b8);
+  background: #f8fafc;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla tbody tr:hover {
+  background: #f4f9fd;
+}
+
+.estadoPill {
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 2rem;
+}
+
+.estadoOk {
+  background: rgba(34, 197, 94, 0.14);
+  color: #15803d;
+}
+
+.estadoProceso {
+  background: rgba(0, 124, 186, 0.12);
+  color: #0369a1;
+}
+
+/* ---------- ANIMACIONES ---------- */
+@keyframes subeAparece {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero,
+  .seccion {
+    animation: none;
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 560px) {
+  .titulo {
+    font-size: 1.5rem;
+  }
+  .gridResumen {
+    grid-template-columns: 1fr 1fr;
+  }
+}

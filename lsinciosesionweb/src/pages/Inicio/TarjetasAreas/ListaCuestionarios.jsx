@@ -39,6 +39,7 @@ const ListaCuestionarios = ({ items = [] }) => {
             av={item.av}
             activo={activo === i}
             onClick={() => setActivo(i)}
+            fecha={item.fecha}
           />
         ))}
       </div>

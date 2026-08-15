@@ -12,6 +12,12 @@
   flex-direction: column;
   align-items: center;
   background-color: var(--surface-card-bg);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cntTarjetaSalud:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(11, 90, 168, 0.12);
 }
 
 @media (min-width: 461px) and (max-width: 1365px) {
@@ -43,6 +49,8 @@
 
   &> :nth-child(3) {
     transform: translate(0.5rem, -1.5rem);
+    transition: filter 0.25s ease;
+    cursor: pointer;
   }
 }
 
@@ -88,6 +96,49 @@
 .frase {
 
   text-align: center;
+}
+
+/* Entrada escalonada de las tarjetas de métricas */
+.botonTarjeta {
+  animation: tarjetaSube 0.45s ease backwards;
+}
+.botonTarjeta:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.botonTarjeta:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.botonTarjeta:nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+@keyframes tarjetaSube {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cntTarjetaSalud:hover .encabezado > :nth-child(3) {
+  filter: drop-shadow(0 0 5px rgba(0, 124, 186, 0.55)) brightness(1.06);
+}
+
+/* Slider: el pulgar crece al pasar el cursor */
+.rango::-webkit-slider-thumb {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.rango:hover::-webkit-slider-thumb {
+  transform: scale(1.18);
+}
+.rango::-moz-range-thumb {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.rango:hover::-moz-range-thumb {
+  transform: scale(1.18);
 }
 
 
@@ -281,6 +332,15 @@
 @media (max-width: 900px) {
   .modalContenido {
     width: calc(80vw - 3rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cntTarjetaSalud:hover {
+    transform: none;
+  }
+  .botonTarjeta {
+    animation: none;
   }
 }
 

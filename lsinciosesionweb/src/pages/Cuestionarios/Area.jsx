@@ -7,7 +7,12 @@ import styles from "./area.module.css";
 import { findArea } from "@/config/cuestionarios.config";
 import { getCurrentProfile } from "@/utils/profile";
 import { getProgressSummary, progressState, isUnlocked, computeAreaPercent } from "@/utils/progreso";
-import { storageKeyFor, loadAnswers, computeProgressPercent } from "@/utils/logicPreg";
+import {
+  storageKeyFor,
+  loadAnswers,
+  computeProgressPercent,
+  loadFecha,
+} from "@/utils/logicPreg";
 import { construirWorkbookArea, descargarXlsx, obtenerDatosPaciente, fechaArchivo } from "@/utils/exportarExcel";
 
 const PAGE_SIZE = 12;
@@ -58,11 +63,13 @@ export default function Area() {
           json.list_questions,
           respuestas
         );
+        const baseKey = storageKeyFor(meta.key || meta.name);
         instrumentos.push({
           json,
           respuestas,
           completo: percent === 100 && answeredCount > 0,
-          fecha: new Date().toLocaleDateString("es-MX"),
+          inicio: loadFecha(baseKey, "inicio"),
+          fecha: loadFecha(baseKey, "fecha"),
         });
       }
       if (!instrumentos.length) return;

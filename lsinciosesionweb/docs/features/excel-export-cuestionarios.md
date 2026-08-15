@@ -69,13 +69,21 @@ Datos tomados de la persona demo activa o de la cuenta registrada
 
 ### Hoja 2 — Resumen de instrumentos
 
-| Instrumento | Puntaje | Interpretación | Estado | Fecha |
-|---|---|---|---|---|
-| GAD-7 | 12/21 | Ansiedad moderada | Completado | 05/08/2026 |
-| PHQ-9 | 6/27 | Depresión leve | Completado | 05/08/2026 |
-| HADS-A | 8/21 | Probable ansiedad | Completado | 05/08/2026 |
-| HADS-D | 4/21 | Normalidad | Completado | 05/08/2026 |
-| DTS-F | — | Puntuación parcial | En progreso | — |
+| Instrumento | Puntaje | Interpretación | Estado | Iniciado | Finalizado |
+|---|---|---|---|---|---|
+| GAD-7 | 12/21 | Ansiedad moderada | Completado | 01/08/2026 | 05/08/2026 |
+| PHQ-9 | 6/27 | Depresión leve | Completado | 01/08/2026 | 05/08/2026 |
+| HADS-A | 8/21 | Probable ansiedad | Completado | 01/08/2026 | 05/08/2026 |
+| HADS-D | 4/21 | Normalidad | Completado | 01/08/2026 | 05/08/2026 |
+| DTS-F | — | Puntuación parcial | En progreso | 03/08/2026 | — |
+
+- **Iniciado** = fecha del primer guardado con respuestas (`{key}:inicio`).
+  **Finalizado** = fecha del primer guardado que completa el cuestionario
+  (`{key}:fecha`). Ambas se registran en `localStorage` desde el runner
+  (`PlantillaQs`) y se leen con `loadFecha(key, "inicio"| "fecha")` en
+  formato fijo `DD/MM/AAAA`.
+- Los instrumentos completados **antes** de esta implementación no tienen
+  fechas retroactivas; se registran en el siguiente guardado.
 
 - Los instrumentos con `scoring.tipo: "suma"` generan **una fila**
   (`Puntaje = Σ valores / maximo`).

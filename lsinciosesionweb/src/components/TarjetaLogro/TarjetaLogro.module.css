@@ -10,6 +10,12 @@
   gap: 1rem;  
   position: relative;
   box-shadow: 0 6px 16px rgba(31, 41, 55, .16);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.TarjetaLogro:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(31, 41, 55, 0.22);
 }
 
 .inf {
@@ -55,6 +61,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: flotaLogro 3.2s ease-in-out 0.9s infinite;
+  will-change: transform;
+}
+
+@keyframes flotaLogro {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .img > svg,
@@ -308,6 +326,16 @@
   }
 } */
 
+
+@media (prefers-reduced-motion: reduce) {
+  .TarjetaLogro:hover {
+    transform: none;
+  }
+  .img {
+    animation: none;
+    will-change: auto;
+  }
+}
 
 @media (max-width: 460px) {
   .TarjetaLogro {

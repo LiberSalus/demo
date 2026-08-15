@@ -127,5 +127,41 @@ export const saveAnswers = (key, answers) => {
   localStorage.setItem(key, JSON.stringify(answers));
 };
 
+// ---------- Fechas de inicio y finalización ----------
+// `:inicio` se guarda con el primer guardado que tenga respuestas (la primera
+// vez que el cuestionario pasa de "no iniciado"). `:fecha` se guarda solo al
+// completarlo (percent === 100). Viven junto al resumen (:pct, :ans, :vis).
+export const claveFecha = (key, tipo) => `${key}:${tipo}`; // tipo: "inicio" | "fecha"
+
+export const saveFecha = (key, tipo, iso = new Date().toISOString()) => {
+  localStorage.setItem(claveFecha(key, tipo), iso);
+};
+
+export const removeFecha = (key, tipo) => {
+  localStorage.removeItem(claveFecha(key, tipo));
+};
+
+// Devuelve la fecha formateada ("05/08/2026", con ceros a la izquierda) o
+// "" si no existe. El formato es fijo (DD/MM/AAAA), sin depender de la locale.
+export const loadFecha = (key, tipo) => {
+  try {
+    const iso = localStorage.getItem(claveFecha(key, tipo));
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso; // no era ISO; se devuelve tal cual
+    const p = (n) => String(n).padStart(2, "0");
+    return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+  } catch {
+    return "";
+  }
+};
+
+// Atajos legibles
+const fechaInicio = (key) => loadFecha(key, "inicio");
+const fechaFinalizacion = (key) => loadFecha(key, "fecha");
+
+export const loadFechaInicio = fechaInicio;
+export const loadFechaFinalizacion = fechaFinalizacion;
+
 // Export util si lo necesitas en otros lados
 export const _pickShowIf = (q) => pickShowIf(q);

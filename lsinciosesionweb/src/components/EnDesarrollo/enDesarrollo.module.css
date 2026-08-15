@@ -1,0 +1,74 @@
+/* ============================================================
+   EnDesarrollo — estado vacío elegante para secciones en construcción
+   ============================================================ */
+
+.contenedor {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  background: #ffffff;
+  border: 1.5px dashed var(--color-border-soft, #acceeb);
+  border-radius: 1.1rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 124, 186, 0.08);
+  border: 1px solid rgba(0, 124, 186, 0.25);
+  color: var(--color-brand-primary, #007cba);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2rem;
+}
+
+.icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e6f1fa, #f2f8fd);
+  animation: pulsoSuave 2.6s ease-in-out infinite;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #334155);
+}
+
+.descripcion {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary, #64748b);
+  max-width: 26rem;
+}
+
+@keyframes pulsoSuave {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icono {
+    animation: none;
+  }
+}
