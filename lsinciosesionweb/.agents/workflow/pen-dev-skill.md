@@ -143,13 +143,20 @@ específicas cuando haga falta.
 
 ```bash
 node tools/pen/pen.mjs summary <archivo>                 # version, tipos, frames raíz
-node tools/pen/pen.mjs tree <archivo> [--depth 2]        # jerarquía con ids y nombres
-node tools/pen/pen.mjs find <archivo> "<texto>"          # buscar por id/nombre/tipo/content
-node tools/pen/pen.mjs text <archivo>                    # todos los textos del diseño
+node tools/pen/pen.mjs specs <archivo> [--json]         # especificaciones completas: tokens, layouts, accesibilidad, grids, estados, responsive
+node tools/pen/pen.mjs capture <archivo> [--screen X]    # brief completo: pantallas, tipografia, paleta, textos, estructura
+node tools/pen/pen.mjs screens <archivo>                 # listar breakpoints detectados
+node tools/pen/pen.mjs tree <archivo> [--depth 2] [--screen X]  # jerarquía con ids, layout y tipografia
+node tools/pen/pen.mjs find <archivo> "<texto>"          # buscar por id/nombre/tipo/content/icono/fuente
+node tools/pen/pen.mjs text <archivo>                    # todos los textos con tipografia
+node tools/pen/pen.mjs typography <archivo>            # escala tipografica agrupada
+node tools/pen/pen.mjs inspect <archivo> <id> [--depth N] # detalle de un nodo
 node tools/pen/pen.mjs palette <archivo>                 # colores únicos (fill/stroke)
 node tools/pen/pen.mjs validate <archivo>                # chequea ids, tipos, refs
 node tools/pen/pen.mjs components <archivo>              # detecta componentes: reusable, refs y variantes (Figma)
 node tools/pen/pen.mjs edit <archivo> <id> <key> <json> [--write]  # cambiar una propiedad
+node tools/pen/pen.mjs export <archivo> [--out png] [--scale N]  # PNG via pen.dev CLI
+node tools/pen/pen.mjs cli-exec <archivo> "<script>"     # ejecutar snippet en pen interactive (headless)
 ```
 
 - `summary`/`find`/`text`/`palette`/`validate` aceptan `--json` para salida
@@ -158,18 +165,82 @@ node tools/pen/pen.mjs edit <archivo> <id> <key> <json> [--write]  # cambiar una
 
 ## Operaciones comunes (receta)
 
-1. **"Qué pantallas hay en este .pen"** → `summary` (frames raíz) + `tree --depth 2`.
-2. **"Dónde aparece tal texto / label"** → `find <archivo> "texto"` o `text`.
-3. **"Cuál es la paleta de colores"** → `palette` (ordenado por uso).
-4. **"Cambiar el color de un nodo"** → `find` para ubicar id, luego
-   `edit <archivo> <id> fill '"#nuevocolor"' --write` (el valor va como JSON,
-   por eso las comillas dobles).
-5. **"Cambiar un texto"** → `edit <archivo> <id> content '"nuevo texto"' --write`.
-6. **"Validar que el archivo quedó bien"** → `validate` (ids duplicados, refs rotos...).
-7. **"Qué componentes/variantes hay"** → `components` (matriz de ejes
-   Type/State/Size por componente; reusable y refs si existieran).
-8. **"En qué pantallas se usa tal componente"** → `find <archivo> "<nombre del
-   componente>"` (el conteo de hits indica cuántos breakpoints lo usan).
+1. **"Qué pantallas hay en este .pen"** → `screens` o `capture` (resumen) / `tree --depth 2`.
+2. **"Capturar el diseño completo para implementar"** → `capture --json` (incluye estructura, textos por pantalla, tipografia, paleta).
+3. **"Obtener especificaciones técnicas de diseño"** → `specs --json` (tokens, layouts, accesibilidad, grids, estados interactivos, patrones responsive).
+4. **"Dónde aparece tal texto / label"** → `find <archivo> "texto"` o `text`.
+5. **"Cuál es la paleta de colores"** → `palette` (ordenado por uso).
+6. **"Ver un nodo con detalle"** → `inspect <archivo> <id> [--depth 2]`.
+7. **"Preview visual del diseño"** → `export <archivo> --out preview.png --scale 0.25`.
+8. **"Cambiar el color de un nodo"** → `find` para ubicar id, luego
+   `edit <archivo> <id> fill '"#nuevocolor"' --write`.
+9. **"Cambiar un texto"** → `edit <archivo> <id> content '"nuevo texto"' --write`.
+10. **"Validar que el archivo quedó bien"** → `validate`.
+11. **"Qué componentes/variantes hay"** → `components`.
+12. **"En qué pantallas se usa tal componente"** → `find <archivo> "<nombre>"`.
+13. **"Consulta avanzada via motor pen.dev"** → `cli-exec <archivo> 'execute({ input: "Get(...)" })'`.
+
+## Nuevas capacidades de análisis de diseño
+
+El comando `specs` ahora incluye análisis avanzado del diseño:
+
+### Accesibilidad
+- **Texto pequeño**: Detecta textos con `fontSize < 12px` (puede ser difícil de leer)
+- **Áreas de toque**: Identifica elementos interactivos con dimensiones < 44px (recomendación WCAG)
+- **Contraste**: Preparado para análisis de contraste (requiere cálculo de luminancia)
+
+### Patrones de Grid
+- **Anchos comunes**: Detecta anchos de contenedores horizontales que se repiten
+- **Columnas estimadas**: Infiere el sistema de columnas basado en patrones de ancho
+- **Sistemas de alineación**: Identifica patrones de espaciado y layout
+
+### Estados Interactivos
+- **Detección de estados**: Identifica componentes con estados hover/active/focus/disabled por convención de nombres
+- **Componentes base**: Agrupa variantes por su nombre base (ej: "Button", "Button hover", "Button active" → "Button" con estados)
+- **Patrones de denominación**: Soporta convenciones como `:hover`, `-hover`, `_h`, etc.
+
+### Patrones Responsive
+- **Breakpoints**: Lista todos los breakpoints detectados por patrón de nombres
+- **Adaptaciones**: Identifica componentes que cambian de tamaño o layout entre breakpoints
+- **Análisis de variaciones**: Detecta qué propiedades se adaptan (ancho, layout, etc.)
+
+### Tokens de Diseño Mejorados
+- **Spacing**: Gaps y paddings más frecuentes con conteo de uso
+- **Bordes**: Radius y strokes con sus variaciones
+- **Layout**: Patrones de layout (flex/grid) con ejemplos de uso
+- **Efectos**: Sombras, blur y otros efectos agrupados por tipo
+
+### Anotaciones
+- **Notas del diseñador**: Extrae `note`, `prompt`, `context` con su ruta en el árbol
+- **Contexto de IA**: Captura anotaciones específicas para agentes de IA
+
+### Notas de Desarrollador
+- **Developer Notes**: Detecta notas específicas para desarrolladores (keywords: "developer", "handoff", "guías", "notas", "especificaciones")
+- **Flujos de navegación**: Captura información sobre navegación entre pantallas (ej: "REG-06", "REG-07")
+- **Especificaciones de comportamiento**: Extrae reglas de negocio y validaciones documentadas
+- **Información legal**: Detecta avisos de privacidad, términos y condiciones
+
+### Patrones de Animación
+- **Secuencias detectadas**: Identifica frames con nombres como "anim", "animation" que contienen hijos numerados (01, 02, 03...)
+- **Frame counting**: Cuenta el número de frames en cada secuencia
+- **Dimensiones**: Captura las dimensiones de cada frame de la animación
+- **Rutas**: Proporciona la ruta en el árbol para ubicar las animaciones
+
+### Relaciones Documentadas
+- **Conexiones entre componentes**: Detecta texto que describe relaciones entre componentes (keywords: "utiliza", "usa", "mantiene", "comparte")
+- **Flujos de trabajo**: Captura descripciones de flujos entre pantallas
+- **Dependencias**: Identifica dependencias documentadas entre componentes
+
+### Elementos SVG Personalizados
+- **Paths complejos**: Detecta elementos `path` con geometría compleja (probables iconos/ilustraciones)
+- **Filtrado inteligente**: Excluye paths decorativos simples, prioriza elementos con geometría o dimensiones típicas de iconos
+- **Metadatos**: Captura dimensiones, stroke, fill y si tiene geometría personalizada
+
+### Estados Basados en Propiedades
+- **Property X=Y naming**: Detecta estados definidos como "Property 1=Hover", "State=Default", etc.
+- **Agrupación por nombre base**: Agrupa variantes bajo un nombre base común
+- **Extracción de propiedades**: Parsea múltiples propiedades por nombre (ej: "Property 1=Medico, State=Hover")
+- **Conteo de variantes**: Identifica componentes con múltiples variantes basadas en propiedades
 
 ## Reglas al modificar `.pen`
 
@@ -184,6 +255,34 @@ node tools/pen/pen.mjs edit <archivo> <id> <key> <json> [--write]  # cambiar una
 - Tras cualquier edición correr `validate` y revisar con `git diff --stat`.
 - Los `.pen` viven en `docs/pen.dev/`; son untracked aún (nunca commitear sin
   pedir autorización).
+
+## Configuración e Instalación del Servidor MCP Nativo
+
+Para permitir la conexión directa de agentes IA (como Antigravity) al canvas de diseño de forma nativa:
+
+1. **Instalación de la CLI**: 
+   Siguiendo la guía de [docs.pencil.dev/for-developers/pen-cli](https://docs.pencil.dev/for-developers/pen-cli), la CLI se instala de forma global:
+   ```bash
+   npm install -g @pen.dev/cli
+   ```
+   *(Nota: `@pencil.dev/cli` está deprecado y fue reemplazado por `@pen.dev/cli`).*
+
+2. **Servidor MCP**:
+   El paquete de la CLI incluye binarios del servidor MCP ya compilados dentro de `dist/out/`.
+   - **Ruta del binario en Linux (x64)**: `/home/m4cky/.nvm/versions/node/v24.13.0/lib/node_modules/@pen.dev/cli/dist/out/mcp-server-linux-x64`
+
+3. **Configuración en Antigravity**:
+   Se vincula el servidor añadiendo la configuración en `~/.gemini/antigravity/mcp_config.json` bajo la clave `"pencil"`:
+   ```json
+   "pencil": {
+     "command": "/home/m4cky/.nvm/versions/node/v24.13.0/lib/node_modules/@pen.dev/cli/dist/out/mcp-server-linux-x64",
+     "args": [
+       "-app",
+       "desktop"
+     ]
+   }
+   ```
+   *Nota: Es necesario pasar el argumento `-app desktop` para iniciar el servidor en modo stdio y conectar con la aplicación.*
 
 ## Fuentes
 
