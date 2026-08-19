@@ -84,7 +84,7 @@ export { ROUTES } from "@/config/routes";
 */
 
 export const AppRouter = () => (
-  <BrowserRouter basename="/panel">
+  <BrowserRouter basename="/">
     <ScrollToTop />
     <Suspense fallback={fallbackRuta}>
       <Routes>
