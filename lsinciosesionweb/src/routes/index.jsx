@@ -83,8 +83,12 @@ export { ROUTES } from "@/config/routes";
   6. Cualquier URL desconocida redirige a `LOGIN`.
 */
 
-export const AppRouter = () => (
-  <BrowserRouter basename="/">
+export const AppRouter = () => {
+  const base = import.meta.env.VITE_BASE || "/";
+  const basename = base.endsWith("/") ? base.slice(0, -1) : base;
+
+  return (
+  <BrowserRouter basename={basename}>
     <ScrollToTop />
     <Suspense fallback={fallbackRuta}>
       <Routes>
@@ -131,4 +135,5 @@ export const AppRouter = () => (
       </Routes>
     </Suspense>
   </BrowserRouter>
-);
+  );
+};
