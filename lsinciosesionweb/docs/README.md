@@ -18,12 +18,14 @@ docs/
 ### arquitectura/
 
 - **configuracion-api-local-produccion** — como se configura el proyecto para apuntar a API local o de produccion.
+- **ui-home-flujo** — diagrama de componentes, navegación y estructura visual del Home/Dashboard del paciente.
 
 ### features/
 
 - **demo** — modo demo offline: entrar al panel sin backend con un clic y datos de ejemplo.
 - **login-integracion** — plan de integracion del flujo de login.
 - **metricas-v2** — arquitectura y migracion de las metricas a su version nueva.
+- **cuestionarios-comportamiento** — reglas de modales, auto-guardado, exportacion y bloqueo de edicion en cuestionarios.
 
 ### inventarios/
 

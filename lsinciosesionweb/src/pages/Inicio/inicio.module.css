@@ -134,6 +134,46 @@
   border-radius: 0.8vw;
 }
 
+.btnHistoria {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 19.875rem;
+  max-width: 25rem;
+  padding: 0.65rem 1rem;
+  background-color: #007cba;
+  color: #ffffff !important;
+  border: none;
+  border-radius: var(--surface-card-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  margin-top: auto;
+}
+
+.btnHistoria span {
+  color: #ffffff !important;
+}
+
+.btnHistoria:hover {
+  background-color: #005f8f !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.btnHistoria:active {
+  transform: translateY(0);
+}
+
+.iconoHistoria {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
 .hr {
   transform: translateY(15.9rem);
   appearance: none;
@@ -480,6 +520,22 @@
     width: 100%;
     max-width: 19.5rem;
   }
+
+  .btnHistoria {
+    width: 100%;
+    max-width: 19.5rem;
+    font-size: 0.75rem;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .btnHistoria span {
+    color: #ffffff !important;
+  }
+
+  .iconoHistoria {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 968px) {
@@ -575,6 +631,22 @@
   .cntLogros {
     width: 100%;
     max-width: 20rem;
+  }
+
+  .btnHistoria {
+    width: 100%;
+    max-width: 20rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .btnHistoria span {
+    color: #ffffff !important;
+  }
+
+  .iconoHistoria {
+    width: 1rem;
+    height: 1rem;
   }
 }
 
@@ -836,6 +908,23 @@
     display: flex;
     justify-content: center;
     order: 3;
+  }
+
+  .btnHistoria {
+    width: 90%;
+    max-width: 16.5rem;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.65rem;
+    order: 4;
+  }
+
+  .btnHistoria span {
+    color: #ffffff !important;
+  }
+
+  .iconoHistoria {
+    width: 0.9rem;
+    height: 0.9rem;
   }
 
   .cntPie {

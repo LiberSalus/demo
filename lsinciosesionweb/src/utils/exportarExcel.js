@@ -278,11 +278,14 @@ export async function descargarZipTodo({
         json.list_questions,
         respuestas
       );
+      const completo = percent === 100 && answeredCount > 0;
+      // Solo incluir cuestionarios completados (excluir en progreso)
+      if (!completo) continue;
       const baseKey = storageKeyFor(meta.key || meta.name);
       instrumentos.push({
         json,
         respuestas,
-        completo: percent === 100 && answeredCount > 0,
+        completo,
         inicio: loadFecha(baseKey, "inicio"),
         fecha: loadFecha(baseKey, "fecha"),
       });

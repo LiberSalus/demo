@@ -1,7 +1,6 @@
 // src/pages/Cuestionarios/Area.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
-import Principal from "@/Layout/Principal";
 import styles from "./area.module.css";
 
 import { findArea } from "@/config/cuestionarios.config";
@@ -27,6 +26,7 @@ const ETIQUETAS_TAB = {
 
 const ETIQUETA_ESTADO = {
   completado: "Completado",
+  pendiente: "Pendiente",
   progreso: "En progreso",
   no_iniciado: "No iniciado",
   bloqueado: "Bloqueado",
@@ -63,11 +63,14 @@ export default function Area() {
           json.list_questions,
           respuestas
         );
+        const completo = percent === 100 && answeredCount > 0;
+        // Solo incluir cuestionarios completados (excluir en progreso)
+        if (!completo) continue;
         const baseKey = storageKeyFor(meta.key || meta.name);
         instrumentos.push({
           json,
           respuestas,
-          completo: percent === 100 && answeredCount > 0,
+          completo,
           inicio: loadFecha(baseKey, "inicio"),
           fecha: loadFecha(baseKey, "fecha"),
         });
@@ -99,7 +102,7 @@ export default function Area() {
         areaData.questionnaires
           .filter(q => !q.profiles || q.profiles.includes(profile)) // elegibles por perfil
           .map(async (meta) => {
-            const { percent, answeredCount, visiblesCount } = getProgressSummary(meta.key || meta.name);
+            const { percent, answeredCount, visiblesCount, guardado } = getProgressSummary(meta.key || meta.name);
             const unlocked = await isUnlocked(meta, byKey);
             return {
               meta,
@@ -107,7 +110,8 @@ export default function Area() {
               percent,
               answeredCount,
               visiblesCount,
-              state: unlocked ? progressState(percent) : "bloqueado",
+              guardado,
+              state: unlocked ? progressState(percent, guardado) : "bloqueado",
               unlocked,
             };
           })
@@ -123,8 +127,8 @@ export default function Area() {
   const areaPercent = useMemo(() => computeAreaPercent(items.filter(i=>i.unlocked)), [items]);
 
   // métricas del hero
-  const completados = items.filter(i => i.unlocked && i.state === "completado").length;
-  const enProgreso = items.filter(i => i.unlocked && i.state === "proceso").length;
+  const completados = items.filter(i => i.unlocked && (i.state === "completado" || i.state === "pendiente")).length;
+  const enProgreso = items.filter(i => i.unlocked && i.state === "progreso").length;
 
   // filtros UI
   const filtered = useMemo(() => {
@@ -135,7 +139,11 @@ export default function Area() {
         norm(meta.name).includes(qn) ||
         norm(meta.description).includes(qn) ||
         norm(meta.key).includes(qn);
-      const hitTab = tab === "todos" ? true : (state === tab);
+      const hitTab = tab === "todos"
+        ? true
+        : tab === "completado"
+          ? (state === "completado" || state === "pendiente")
+          : (state === tab);
       return hitText && hitTab;
     });
   }, [items, q, tab]);
@@ -152,11 +160,10 @@ export default function Area() {
   if (!areaData) return <Navigate to="/cuestionarios" replace />;
 
   return (
-    <Principal>
       <div className={styles.wrap}>
         {/* ====== HERO del área ====== */}
         <header className={styles.hero}>
-          <Link to="/cuestionarios" className={styles.volver}>← Volver a Cuestionarios</Link>
+          <Link to="/cuestionarios" className={styles.volver}>Ver todos los cuestionarios</Link>
           <div className={styles.heroTop}>
             <span className={styles.badge}>Área de bienestar</span>
             <button
@@ -285,6 +292,5 @@ export default function Area() {
           </div>
         )}
       </div>
-    </Principal>
   );
 }

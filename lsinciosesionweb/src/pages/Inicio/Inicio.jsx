@@ -16,7 +16,9 @@ import TarjetaSalud from "./TarjetaSalud/TarjetaSalud";
 import TarjetaAreas from "./TarjetasAreas/TarjetaAreas";
 import AgendaInicio from "./Calendario/AgendaInicio";
 import Sos from "@/components/Sos/Sos";
+import { useNavigate } from "react-router-dom";
 import { obtenerHomePaciente } from "@/services/dashboard";
+import iconoHistoria from "./iconoHistoria.svg";
 
 const resumenSaludInicial = {
   edad: "50",
@@ -45,6 +47,7 @@ function obtenerVarianteSexo(sexo) {
 
 // Renderiza el inicio del paciente con datos locales primero y sincronizacion del backend despues.
 export default function Inicio() {
+  const navigate = useNavigate();
   const [nombre, setNombre] = useState("Usuario");
   // Para maquetado puedes probar con: "female", "mujer" u "hombre".
   const [sexo, setSexo] = useState("hombre");
@@ -162,6 +165,10 @@ export default function Inicio() {
             <div className={styles.cntLogros}>
               <TarjetaLogro id="reto4" />
             </div>
+            <button type="button" className={styles.btnHistoria} onClick={() => navigate("/mi-salud/historia-salud")}>
+              <img src={iconoHistoria} alt="" className={styles.iconoHistoria} />
+              <span>Mi historia clínica</span>
+            </button>
           </div>
         </div>
 

@@ -1,0 +1,783 @@
+/* ============================================================
+   Mi Historia Clínica — Glassmorphism + 3 Propuestas
+   ============================================================ */
+
+.wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+/* ---------- SELECTOR FLOTANTE ---------- */
+.selectorFlotante {
+  position: fixed;
+  top: calc(var(--layout-header-height) + 1rem);
+  left: 1.5rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.selectorLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.selectorBotones {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.selectorBtn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(226, 232, 240, 0.35);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #94a3b8;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.selectorBtn:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: #64748b;
+}
+
+.selectorBtnActivo {
+  background: rgba(0, 124, 186, 0.85);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+/* ---------- HERO — Glassmorphism ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, rgba(0, 124, 186, 0.85) 0%, rgba(11, 90, 168, 0.9) 60%, rgba(23, 61, 143, 0.92) 100%);
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  color: #ffffff;
+}
+
+
+
+.heroIcono {
+  width: 4rem;
+  height: 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.heroInfo {
+  position: relative;
+  z-index: 1;
+}
+
+.heroTitulo {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.heroDescripcion {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- PROPUESTA CONTAINER ---------- */
+.propuesta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- MÉTRICAS ---------- */
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.metrica {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.metrica:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.metricaIcono {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.metricaValor {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.metricaLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metricaFamilia { border-left: 3px solid #e91e63; border-top: none; }
+.metricaPatologico { border-left: 3px solid #2196f3; border-top: none; }
+.metricaActual { border-left: 3px solid #ff9800; border-top: none; }
+
+/* ---------- SECCIONES (ACORDEÓN) ---------- */
+.seccion {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.85rem;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.seccion:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.seccionFamilia { border-left: 3px solid #e91e63; }
+.seccionPatologico { border-left: 3px solid #2196f3; }
+.seccionActual { border-left: 3px solid #ff9800; }
+
+.seccionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.seccionHeader:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.seccionAbierta {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+}
+
+.seccionHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.seccionIcono {
+  width: 2rem;
+  height: 2rem;
+}
+
+.seccionTitulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+  text-align: left;
+}
+
+.seccionSubtitulo {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.flecha {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  transition: transform 0.3s ease;
+}
+
+.flechaAbierta {
+  transform: rotate(90deg);
+}
+
+.seccionContenido {
+  padding: 0.75rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- BOTÓN AGREGAR ---------- */
+.btnAgregar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.85rem;
+  background: transparent;
+  border: 1px dashed rgba(0, 124, 186, 0.25);
+  border-radius: 0.65rem;
+  color: #007cba;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.btnAgregar:hover {
+  background: rgba(0, 124, 186, 0.05);
+  border-color: rgba(0, 124, 186, 0.4);
+}
+
+.btnAgregarIconoImg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.btnAgregarSmallIcono {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.2rem;
+}
+
+.btnAgregarSmall {
+  padding: 0.5rem 0.85rem;
+  background: rgba(0, 124, 186, 0.08);
+  border: 1px dashed rgba(0, 124, 186, 0.3);
+  border-radius: 0.7rem;
+  color: #007cba;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.btnAgregarSmall:hover {
+  background: rgba(0, 124, 186, 0.12);
+}
+
+/* ---------- CARD ITEM ---------- */
+.cardItem {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(226, 232, 240, 0.25);
+  border-radius: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  transition: all 0.15s ease;
+}
+
+.cardItem:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.cardFamilia { border-left: 2px solid rgba(233, 30, 99, 0.5); }
+.cardPatologico { border-left: 2px solid rgba(33, 150, 243, 0.5); }
+.cardActual { border-left: 2px solid rgba(255, 152, 0, 0.5); }
+
+.cardItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.cardItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cardItemTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardItemIcono {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cardItemParentesco {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.cardItemNombre {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.cardItemDesde {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.cardItemBadges {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.badge {
+  padding: 0.2rem 0.5rem;
+  background: rgba(148, 163, 184, 0.08);
+  border-radius: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.badgeVivo {
+  background: rgba(34, 197, 94, 0.08);
+  color: #22c55e;
+}
+
+.badgeFallecido {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+}
+
+.badgeEstado {
+  background: rgba(0, 124, 186, 0.06);
+  color: #64748b;
+}
+
+.cardItemDetalle {
+  margin: 0.5rem 0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.cardItemAcciones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btnAccion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.55rem;
+  background: transparent;
+  border: 1px solid rgba(226, 232, 240, 0.35);
+  border-radius: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #94a3b8;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.btnAccion:hover {
+  color: #64748b;
+  border-color: rgba(226, 232, 240, 0.6);
+}
+
+.btnAccionIcono {
+  width: 1rem;
+  height: 1rem;
+}
+
+.btnAccion:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 124, 186, 0.3);
+  color: #007cba;
+}
+
+.btnEliminar:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ---------- INTENSIDAD ---------- */
+.intensidad {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0;
+}
+
+.intensidadLabel {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.intensidadBarra {
+  flex: 1;
+  height: 0.3rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.intensidadFill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #f59e0b, #ef4444);
+  border-radius: 2rem;
+  transition: width 0.5s ease;
+}
+
+.intensidadValor {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  min-width: 2rem;
+}
+
+/* ---------- TABS ---------- */
+.tabs {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tab {
+  flex: 1;
+  padding: 0.65rem 0.85rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.tabActiva {
+  background: rgba(0, 124, 186, 0.85);
+  color: #ffffff;
+}
+
+.tabIcono {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+}
+
+.tabContenido {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+}
+
+.tabPanel {
+  animation: fadeIn 0.25s ease;
+}
+
+.gridCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.cardTab {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(226, 232, 240, 0.25);
+  border-radius: 0.65rem;
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.cardTab:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.cardTabAvatar {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 0.5rem;
+}
+
+.cardTabNombre {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  text-align: center;
+}
+
+.cardTabParentesco {
+  font-size: 0.78rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.cardTabDesde {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.cardTabInfo {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.cardTabDivider {
+  width: 100%;
+  height: 1px;
+  background: rgba(226, 232, 240, 0.5);
+  margin: 0.75rem 0;
+}
+
+.cardTabEnfermedades {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* ---------- TIMELINE ---------- */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timelineNodo {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timelineNodo:last-child {
+  margin-bottom: 0;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -2rem;
+  top: 1.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.dotFamilia { background: #e91e63; }
+.dotPatologico { background: #2196f3; }
+.dotActual { background: #ff9800; }
+
+.timelineLinea {
+  position: absolute;
+  left: calc(-2rem + 0.45rem);
+  top: 2.5rem;
+  bottom: -2rem;
+  width: 2px;
+  border-radius: 1px;
+}
+
+.dotFamilia ~ .timelineLinea {
+  background: linear-gradient(180deg, #e91e63 0%, #e91e6300 100%);
+}
+
+.dotPatologico ~ .timelineLinea {
+  background: linear-gradient(180deg, #2196f3 0%, #2196f300 100%);
+}
+
+.timelineNodo:last-child .timelineLinea {
+  display: none;
+}
+
+.timelineContenido {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.timelineIcono {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.timelineTitulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.timelineSubtitulo {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.cardTimeline {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(226, 232, 240, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.cardTimeline:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.cardTimeline:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- BOTÓN GUARDAR ---------- */
+.btnGuardar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, rgba(0, 124, 186, 0.85), rgba(11, 90, 168, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.85rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btnGuardarIcono {
+  width: 1.25rem;
+  height: 1.25rem;
+  filter: brightness(0) invert(1);
+  box-shadow: 
+    0 4px 16px rgba(0, 124, 186, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+}
+
+.btnGuardar:hover {
+  background: linear-gradient(135deg, rgba(0, 124, 186, 0.92), rgba(11, 90, 168, 0.97));
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .selectorFlotante {
+    position: static;
+    width: 100%;
+    justify-content: center;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .metricas {
+    grid-template-columns: 1fr;
+  }
+  
+  .gridCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabs {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0.75rem 1rem 2.5rem;
+  }
+  
+  .hero {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+  
+  .heroTitulo {
+    font-size: 1.4rem;
+  }
+  
+  .selectorBotones {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

@@ -6,6 +6,7 @@ import { ROUTES } from "@/config/routes";
 // Layout y guard
 import Principal from "@/Layout/Principal";
 import ProtectedRoute from "./protected-route";
+import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 
 const Login = lazy(() => import("@/pages/LoginNuevo/LoginNuevo"));
 const Inicio = lazy(() => import("@/pages/Inicio/Inicio"));
@@ -84,6 +85,7 @@ export { ROUTES } from "@/config/routes";
 
 export const AppRouter = () => (
   <BrowserRouter basename="/panel">
+    <ScrollToTop />
     <Suspense fallback={fallbackRuta}>
       <Routes>
         <Route path={ROUTES.LOGIN} element={<Login />} />

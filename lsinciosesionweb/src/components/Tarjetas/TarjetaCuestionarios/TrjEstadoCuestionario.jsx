@@ -5,8 +5,11 @@ import styles from "./trjEstadoCuestionario.module.css";
 // Estado del cuestionario → etiqueta en español + color (vía data-estado).
 const ETIQUETAS_ESTADO = {
   completado: "Completado",
+  pendiente: "Pendiente",
+  progreso: "En progreso",
   proceso: "En progreso",
   inactivo: "No iniciado",
+  no_iniciado: "No iniciado",
   bloqueado: "Bloqueado",
 };
 

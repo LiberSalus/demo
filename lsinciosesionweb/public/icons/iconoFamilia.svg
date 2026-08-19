@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="gradFamilia" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e91e63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c2185b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Padre -->
+  <circle cx="28" cy="24" r="10" fill="url(#gradFamilia)" opacity="0.9"/>
+  <path d="M16 52C16 42 22 36 28 36C34 36 40 42 40 52" fill="url(#gradFamilia)" opacity="0.7"/>
+  <!-- Madre -->
+  <circle cx="52" cy="24" r="10" fill="url(#gradFamilia)" opacity="0.75"/>
+  <path d="M40 52C40 42 46 36 52 36C58 36 64 42 64 52" fill="url(#gradFamilia)" opacity="0.55"/>
+  <!-- Hijo -->
+  <circle cx="40" cy="32" r="7" fill="url(#gradFamilia)"/>
+  <path d="M32 52C32 45 35 41 40 41C45 41 48 45 48 52" fill="url(#gradFamilia)" opacity="0.85"/>
+  <!-- Corazón -->
+  <path d="M36 58C36 55 38 53 40 53C42 53 44 55 44 58C44 62 40 66 40 66C40 66 36 62 36 58Z" fill="url(#gradFamilia)"/>
+</svg>

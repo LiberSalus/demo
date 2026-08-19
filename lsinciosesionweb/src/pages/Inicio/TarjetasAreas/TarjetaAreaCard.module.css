@@ -1,0 +1,96 @@
+.tarjeta {
+  flex: 1 1 14rem;
+  max-width: 20rem;
+  min-width: 12rem;
+  padding: 1.25rem;
+  border: 2px solid;
+  border-radius: var(--surface-card-radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.icono {
+  width: 5rem;
+  height: 5rem;
+  flex-shrink: 0;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #475569;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.descripcion {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.boton {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--surface-card-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  margin-top: auto;
+}
+
+.boton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.boton:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tarjeta {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .icono {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tarjeta {
+    flex: 1 1 calc(33.333% - 0.5rem);
+    max-width: calc(33.333% - 0.5rem);
+  }
+
+  .icono {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}

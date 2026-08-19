@@ -2,8 +2,9 @@ import React from 'react';
 import styles from './preguntasQS.module.css';
 
 // Opciones como filas seleccionables (radio/checkbox custom).
-const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
+const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta, sinRespuesta = false, soloLectura = false }) => {
   const { id, type, text, list_options } = pregunta;
+  const clasePregunta = sinRespuesta ? `${styles.pregunta} ${styles.preguntaSinRespuesta}` : styles.pregunta;
 
   // El JSON trae el numero en el texto ("1. Enunciado") y el badge lo muestra;
   // se quita el prefijo para no duplicar el numero.
@@ -15,7 +16,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
 
   if (type === 'SINGLE_CHOICE') {
     return (
-      <fieldset className={styles.pregunta}>
+      <fieldset className={clasePregunta}>
         <legend className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
@@ -37,6 +38,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
                   value={val}
                   checked={activa}
                   onChange={(e) => alCambiarRespuesta(id, Number(e.target.value))}
+                  disabled={soloLectura}
                 />
                 <span className={styles.radioCaja} aria-hidden="true" />
                 <span className={styles.opcionTexto}>{opcion.text}</span>
@@ -50,7 +52,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
 
   if (type === 'MULTIPLE_CHOICE') {
     return (
-      <fieldset className={styles.pregunta}>
+      <fieldset className={clasePregunta}>
         <legend className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
@@ -75,6 +77,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
                     e.target.checked ? set.add(val) : set.delete(val);
                     alCambiarRespuesta(id, Array.from(set));
                   }}
+                  disabled={soloLectura}
                 />
                 <span className={styles.checkCaja} aria-hidden="true" />
                 <span className={styles.opcionTexto}>{opcion.text}</span>
@@ -88,7 +91,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
 
   if (type === 'TEXT') {
     return (
-      <div className={styles.pregunta}>
+      <div className={clasePregunta}>
         <div className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
@@ -99,6 +102,7 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta }) => {
           value={respuesta || ''}
           placeholder="Escribe tu respuesta…"
           onChange={(e) => alCambiarRespuesta(id, e.target.value)}
+          disabled={soloLectura}
         />
       </div>
     );

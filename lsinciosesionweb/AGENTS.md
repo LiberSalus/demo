@@ -10,6 +10,13 @@ Compact work guide for `lsinciosesionweb` project.
 - Don't revert user changes.
 - Run `npm run build` after changes to active code or assets.
 
+## Documentation conventions
+
+- **UI mockups**: Use ASCII art in fenced code blocks (```). Visual layout representations of screens/components should use plain ASCII for portability and readability.
+- **Flow diagrams, state diagrams, sequence diagrams, Gantt, etc.**: Use Mermaid syntax. Mermaid is supported in most Markdown renderers and provides interactive, zoomable diagrams.
+- **Tables**: Use Markdown tables for structured data (configs, comparisons, mappings).
+- **When both apply**: A screen mockup stays ASCII; the navigation flow from that screen uses Mermaid.
+
 ## Code rules
 
 - **User-facing docs**: Spanish, clear and friendly tone

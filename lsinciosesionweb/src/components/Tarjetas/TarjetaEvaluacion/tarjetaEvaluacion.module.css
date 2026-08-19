@@ -156,12 +156,16 @@
         display: flex;
         align-items: center;
         gap: 0.9rem;
-        color: #ffffff;
+        color: #ffffff !important;
         background: linear-gradient(135deg, var(--color-brand-primary, #007cba), #0b5aa8);
         border: 1px solid transparent;
         cursor: pointer;
         transition: transform 0.15s ease, box-shadow 0.2s ease;
         font-family: inherit;
+
+        &>span {
+            color: #ffffff !important;
+        }
 
         &:hover {
             transform: translateY(-1px);

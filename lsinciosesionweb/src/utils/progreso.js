@@ -12,17 +12,20 @@ export function getProgressSummary(keyOrName) {
   const pct = Number(localStorage.getItem(`${base}:pct`) || "0");
   const ans = Number(localStorage.getItem(`${base}:ans`) || "0");
   const vis = Number(localStorage.getItem(`${base}:vis`) || "0");
+  const guardado = localStorage.getItem(`${base}:guardado`) === "true";
   return {
     percent: pct,
     answeredCount: ans,
     visiblesCount: vis,
+    guardado,
     inicio: loadFecha(base, "inicio"),
     fecha: loadFecha(base, "fecha"),
   };
 }
 
-export function progressState(percent) {
-  if (percent >= 100) return "completado";
+export function progressState(percent, guardado = false) {
+  if (percent >= 100 && guardado) return "completado";
+  if (percent >= 100) return "pendiente"; // 100% sin enviar
   if (percent > 0)   return "progreso";
   return "no_iniciado";
 }

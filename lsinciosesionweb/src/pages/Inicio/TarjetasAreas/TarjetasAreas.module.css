@@ -17,45 +17,24 @@
     font-size: 1.5rem;
     line-height: 1.1;
   }
-  & > p  { 
-    font-size: 0.75rem; 
-    padding-left: 0.5rem;
-  } 
 }
 
-
-.cntPestañas {
-  margin-top: 0.25rem;
-  width: 100%;
-  min-width: 0;
-  height: auto;
-  border-radius: var(--surface-card-radius);
-  padding: 0;
-  
-}
-
-.fisica,
-.emocional,
-.social,
-.nutricional,
-.todos {
-  border-color: #007cba;
-  color: #007cba;
-  font-weight: 700;
-  background-color: rgba(0, 124, 186, 0.06);
-  box-shadow: inset 0 0 0 1px #007cba;
+.cntCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }
 
 @media (max-width: 947px) {
   .cntTarjetaAreas {
-    /* border: 1px dashed lightgreen; */
     margin: 0 auto;
     width: 100%;
     max-width: none;
     height: auto;
     padding: 0.65rem;
 
-    &> h3, &> p {
+    &> h3 {
       text-align: center;
     }
     

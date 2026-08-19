@@ -18,19 +18,12 @@ import {
 
 import TarjetaListadoAvance from "./TarjetaListadoAvance/TarjetaListadoAvance";
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
-import TarjetaProgresoArea from "@/components/Tarjetas/TarjetaProgresoArea/TarjetaProgresoArea";
 
-// iconos por id de área (assets de la sección de cuestionarios)
-import fisico from "./fisico.png";
-import mental from "./mental.png";
-import social from "./social.png";
-import nutricional from "./nutricional.png";
-
+// Iconos de áreas (mismos SVGs del Home en public/icons/)
 const ICONOS_AREA = {
-  fisico,
-  emocional: mental,
-  social,
-  nutricional,
+  fisico: `${import.meta.env.BASE_URL}icons/icoFisico.svg`,
+  emocional: `${import.meta.env.BASE_URL}icons/icoEmocional.svg`,
+  social: `${import.meta.env.BASE_URL}icons/icoSocial.svg`,
 };
 
 // Lee el progreso real de un área (elegibilidad por perfil + desbloqueo).
@@ -42,7 +35,7 @@ async function cargarArea(areaData, profile) {
     (areaData.questionnaires || [])
       .filter((q) => !q.profiles || q.profiles.includes(profile))
       .map(async (meta) => {
-        const { percent, answeredCount, visiblesCount } = getProgressSummary(
+        const { percent, answeredCount, visiblesCount, guardado } = getProgressSummary(
           meta.key || meta.name
         );
         const unlocked = await isUnlocked(meta, byKey);
@@ -52,7 +45,8 @@ async function cargarArea(areaData, profile) {
           percent,
           answeredCount,
           visiblesCount,
-          state: unlocked ? progressState(percent) : "bloqueado",
+          guardado,
+          state: unlocked ? progressState(percent, guardado) : "bloqueado",
           unlocked,
         };
       })
@@ -70,13 +64,14 @@ const Cuestionarios = () => {
   const profile = getCurrentProfile();
   const [exportando, setExportando] = useState(false);
 
-  // áreas con progreso real (loading → null)
+  // áreas con progreso real (loading → null) — excluye nutricional
   const [areas, setAreas] = useState(null);
 
   useEffect(() => {
     let ok = true;
     (async () => {
-      const loaded = await Promise.all(AREAS.map((a) => cargarArea(a, profile)));
+      const areasFiltradas = AREAS.filter((a) => a.id !== "nutricional");
+      const loaded = await Promise.all(areasFiltradas.map((a) => cargarArea(a, profile)));
       if (!ok) return;
       setAreas(loaded);
     })();
@@ -115,11 +110,11 @@ const Cuestionarios = () => {
     const total = areas.reduce((acc, a) => acc + a.items.length, 0);
     const completados = areas.reduce(
       (acc, a) =>
-        acc + a.items.filter((i) => i.unlocked && i.state === "completado").length,
+        acc + a.items.filter((i) => i.unlocked && (i.state === "completado" || i.state === "pendiente")).length,
       0
     );
     const enProgreso = areas.reduce(
-      (acc, a) => acc + a.items.filter((i) => i.unlocked && i.state === "proceso").length,
+      (acc, a) => acc + a.items.filter((i) => i.unlocked && i.state === "progreso").length,
       0
     );
     return { total, completados, enProgreso };
@@ -210,118 +205,109 @@ const Cuestionarios = () => {
             const completadas = area.items.filter(
               (i) => i.unlocked && i.state === "completado"
             ).length;
+            const colores = {
+              fisico: { bg: "#fce4ec", border: "#f8bbd0", accent: "#e91e63" },
+              emocional: { bg: "#e3f2fd", border: "#bbdefb", accent: "#2196f3" },
+              social: { bg: "#f3e5f5", border: "#e1bee7", accent: "#9c27b0" },
+            };
+            const color = colores[area.id] || colores.fisico;
             return (
-              <Link
-                key={area.id}
-                to={`/cuestionarios/${area.id}`}
-                className={styles.tarjetaArea}
-              >
-                <div className={styles.tarjetaAreaHead}>
-                  <div className={styles.cntIcon}>
+              <div key={area.id} className={styles.areaBloque}>
+                <Link
+                  to={`/cuestionarios/${area.id}`}
+                  className={styles.tarjetaAreaGlass}
+                  style={{
+                    "--card-bg": color.bg,
+                    "--card-border": color.border,
+                    "--card-accent": color.accent,
+                  }}
+                >
+                  <div className={styles.tarjetaAreaIcono}>
                     <img src={ICONOS_AREA[area.id]} alt={area.name} />
                   </div>
-                  <div className={styles.tarjetaAreaTitulo}>
-                    <strong>{area.name.split(" ")[0]}</strong>
-                    <span>{area.name.split(" ")[1]}</span>
+                  <div className={styles.tarjetaAreaInfo}>
+                    <h3 className={styles.tarjetaAreaNombre}>{area.name}</h3>
+                    <p className={styles.tarjetaAreaDesc}>
+                      {area.descripcion}
+                    </p>
                   </div>
-                  <span className={styles.flecha} aria-hidden="true">
+                  <span className={styles.tarjetaAreaFlecha} aria-hidden="true">
                     →
                   </span>
-                </div>
-                <p className={styles.tarjetaAreaDesc}>
-                  {area.descripcion}
-                </p>
-                <div className={styles.tarjetaAreaPie}>
-                  <div
-                    className={styles.miniBarra}
-                    role="progressbar"
-                    aria-valuenow={area.percent}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-label={`Progreso de ${area.name}`}
-                  >
+                </Link>
+
+                {/* Progreso justo debajo de la card */}
+                <div className={styles.progresoInline}>
+                  <div className={styles.progresoInlineHeader}>
+                    <span className={styles.progresoInlineNombre}>Progreso</span>
+                    <span className={styles.progresoInlinePct}>{area.percent}%</span>
+                  </div>
+                  <div className={styles.progresoInlineBarra}>
                     <div
-                      className={styles.miniProgreso}
-                      style={{ width: `${area.percent}%` }}
+                      className={styles.progresoInlineFill}
+                      style={{
+                        width: `${area.percent}%`,
+                        background: color.accent,
+                      }}
                     />
                   </div>
-                  <span className={styles.tarjetaAreaPct}>
-                    {area.percent}%
-                  </span>
+                  <p className={styles.progresoInlineMeta}>
+                    {completadas} de {area.items.length} cuestionarios completados
+                  </p>
                 </div>
-                <p className={styles.tarjetaAreaMeta}>
-                  {completadas} de {area.items.length} completados
-                </p>
-              </Link>
+              </div>
             );
           })}
         </div>
       </section>
 
-      {/* ====== EVALUACIÓN EN CURSO ====== */}
-      {evaluacionDestacada && (
-        <section className={styles.seccion}>
-          <h2 className={styles.seccionTitulo}>Mi evaluación</h2>
-          <div className={styles.cntEvaluacion}>
-            <TarjetaEvaluacion
-              titulo={evaluacionDestacada.areaName}
-              nombreCuestionario={evaluacionDestacada.meta.name}
-              percent={evaluacionDestacada.percent}
-              estado={
-                evaluacionDestacada.state === "completado"
-                  ? "Completado"
-                  : "En proceso"
-              }
-              onContinuar={() => navigate(evaluacionDestacada.href)}
-              etiquetaBoton={
-                evaluacionDestacada.state === "completado"
-                  ? "Ver respuestas"
-                  : "Continuar respondiendo"
-              }
-            />
-          </div>
-        </section>
-      )}
+      {/* ====== EVALUACIÓN EN CURSO + AVANCE (2 columnas) ====== */}
+      <div className={styles.gridInferior}>
+        {/* Mi evaluación */}
+        {evaluacionDestacada && (
+          <section className={styles.seccionGlass}>
+            <h2 className={styles.seccionTitulo}>Mi evaluación</h2>
+            <div className={styles.cntEvaluacion}>
+              <TarjetaEvaluacion
+                titulo={evaluacionDestacada.areaName}
+                nombreCuestionario={evaluacionDestacada.meta.name}
+                percent={evaluacionDestacada.percent}
+                estado={
+                  evaluacionDestacada.state === "completado"
+                    ? "Completado"
+                    : "En proceso"
+                }
+                onContinuar={() => navigate(evaluacionDestacada.href)}
+                etiquetaBoton={
+                  evaluacionDestacada.state === "completado"
+                    ? "Ver respuestas"
+                    : "Continuar respondiendo"
+                }
+              />
+            </div>
+          </section>
+        )}
 
-      {/* ====== SEGUIMIENTO POR ÁREA ====== */}
-      <section className={styles.seccion}>
-        <h2 className={styles.seccionTitulo}>Seguimiento por área</h2>
-        <div className={styles.gridSeguimiento}>
-          {areas.map((area) => (
-            <TarjetaProgresoArea
-              key={area.id}
-              titulo={area.name}
-              percent={area.percent}
-              subtitulo={`${area.items.length} instrumentos disponibles`}
-              mensaje={
-                area.percent === 100
-                  ? "¡Completaste todos los cuestionarios de esta área!"
-                  : "Completa tus cuestionarios para conocer mejor esta área."
-              }
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ====== LISTADO DE AVANCE ====== */}
-      {areaActiva && areaActiva.items.length > 0 && (
-        <section className={styles.seccion}>
-          <h2 className={styles.seccionTitulo}>Detalle de avance</h2>
-          <div className={styles.cntListado}>
-            <TarjetaListadoAvance
-              titulo={areaActiva.name}
-              items={areaActiva.items.map((i) => ({
-                key: i.meta.key,
-                name: i.meta.name,
-                description: i.meta.description,
-                percent: i.percent,
-                state: i.state,
-                href: i.href,
-              }))}
-            />
-          </div>
-        </section>
-      )}
+        {/* Detalle de avance */}
+        {areaActiva && areaActiva.items.length > 0 && (
+          <section className={styles.seccionGlass}>
+            <h2 className={styles.seccionTitulo}>Detalle de avance</h2>
+            <div className={styles.cntListado}>
+              <TarjetaListadoAvance
+                titulo={areaActiva.name}
+                items={areaActiva.items.map((i) => ({
+                  key: i.meta.key,
+                  name: i.meta.name,
+                  description: i.meta.description,
+                  percent: i.percent,
+                  state: i.state,
+                  href: i.href,
+                }))}
+              />
+            </div>
+          </section>
+        )}
+      </div>}
     </div>
   );
 };

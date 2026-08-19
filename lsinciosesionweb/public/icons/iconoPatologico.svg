@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="gradPatologico" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2196f3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565c0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Edificio hospital -->
+  <rect x="16" y="24" width="48" height="40" rx="4" fill="url(#gradPatologico)" opacity="0.85"/>
+  <!-- Techo -->
+  <path d="M12 28L40 12L68 28" stroke="url(#gradPatologico)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Puerta -->
+  <rect x="34" y="48" width="12" height="16" rx="2" fill="white" opacity="0.9"/>
+  <!-- Ventanas -->
+  <rect x="22" y="32" width="8" height="8" rx="1" fill="white" opacity="0.7"/>
+  <rect x="50" y="32" width="8" height="8" rx="1" fill="white" opacity="0.7"/>
+  <!-- Cruz médica -->
+  <rect x="36" y="16" width="8" height="2" rx="1" fill="white"/>
+  <rect x="39" y="13" width="2" height="8" rx="1" fill="white"/>
+</svg>
