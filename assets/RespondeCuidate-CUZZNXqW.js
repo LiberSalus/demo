@@ -1,1 +1,0 @@
-import{j as t}from"./react-vendor-xHlx2AOR.js";import"./jszip.min-cNUI8R4m.js";import"./index-a-UYjKvo.js";import"./mui-vendor-KBXKy3ZI.js";import"./date-vendor-JJVV5h4O.js";const s=()=>t.jsx("div",{children:"Responde y cuidate"});export{s as default};
