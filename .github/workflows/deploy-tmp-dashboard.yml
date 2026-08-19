@@ -1,4 +1,4 @@
-name: Build & Deploy — lsinciosesionweb
+name: Build & Deploy — ls_tmp_dashboard
 
 on:
   push:
@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: dev-questionnaires
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -31,7 +34,7 @@ jobs:
         working-directory: lsinciosesionweb
         run: npm run build
         env:
-          VITE_BASE: /registro/
+          VITE_BASE: /ls_tmp_dashboard/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

@@ -33,6 +33,7 @@
     0 8px 32px rgba(11, 90, 168, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
     inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  animation: subeAparece 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
 }
 
 .hero::before,
@@ -209,6 +210,7 @@
   text-decoration: none;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
+  animation: subeAparece 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
 }
 
 .tarjetaAreaGlass:hover {
@@ -331,6 +333,8 @@
   padding: 1.25rem 1.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: subeAparece 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  animation-delay: 0.25s;
 }
 
 .seccionGlass:hover {
@@ -349,6 +353,18 @@
 /* ---------- LISTADO ---------- */
 .cntListado {
   max-width: 42rem;
+}
+
+/* ---------- ANIMACIONES ---------- */
+@keyframes subeAparece {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---------- RESPONSIVE ---------- */

@@ -201,7 +201,7 @@ const Cuestionarios = () => {
       <section className={styles.seccion}>
         <h2 className={styles.seccionTitulo}>Elige un área</h2>
         <div className={styles.gridAreas}>
-          {areas.map((area) => {
+          {areas.map((area, idx) => {
             const completadas = area.items.filter(
               (i) => i.unlocked && i.state === "completado"
             ).length;
@@ -220,6 +220,7 @@ const Cuestionarios = () => {
                     "--card-bg": color.bg,
                     "--card-border": color.border,
                     "--card-accent": color.accent,
+                    animationDelay: `${0.08 * idx}s`,
                   }}
                 >
                   <div className={styles.tarjetaAreaIcono}>
