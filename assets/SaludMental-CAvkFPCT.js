@@ -1,0 +1,1 @@
+import{j as r}from"./react-vendor-xHlx2AOR.js";import{u as a,M as o}from"./useMetricasArea-BO4UIMA5.js";import{A as s}from"./metricas.config-CdFlDj9O.js";import"./index-CVOrdRzi.js";import"./mui-vendor-KBXKy3ZI.js";import"./date-vendor-JJVV5h4O.js";const n=()=>{const t=a(s.SALUD_MENTAL);return r.jsx(o,{tituloSeccion:"Salud Mental",metricas:t})};export{n as default};
