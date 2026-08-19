@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="gradRosa" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fce4ec"/>
+      <stop offset="100%" stop-color="#f8bbd0"/>
+    </linearGradient>
+    <linearGradient id="gradCorazon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f48fb1"/>
+      <stop offset="100%" stop-color="#ec407a"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo circular suave -->
+  <circle cx="40" cy="40" r="38" fill="url(#gradRosa)" opacity="0.4"/>
+  <!-- Corazón principal con gradiente -->
+  <path d="M40 65 C22 50, 8 38, 8 24 C8 12, 16 5, 26 5 C33 5, 37 9, 40 14 C43 9, 47 5, 54 5 C64 5, 72 12, 72 24 C72 38, 58 50, 40 65Z" 
+        fill="url(#gradCorazon)" stroke="#e91e63" stroke-width="2" stroke-linejoin="round"/>
+  <!-- ECG/Línea de pulso -->
+  <polyline points="14,42 24,42 30,28 36,52 40,35 44,46 50,42 66,42" 
+            stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"/>
+  <!-- Brillo en el corazón -->
+  <ellipse cx="28" cy="20" rx="6" ry="8" fill="#ffffff" opacity="0.25" transform="rotate(-20 28 20)"/>
+  <!-- Persona corriendo (silueta elegante) -->
+  <circle cx="62" cy="16" r="5" fill="#e91e63" opacity="0.7"/>
+  <path d="M62 21 L62 32 M57 26 L67 26 M62 32 L56 42 M62 32 L68 42" 
+        stroke="#e91e63" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  <!-- Gotas de esfuerzo -->
+  <circle cx="56" cy="20" r="1.5" fill="#f48fb1" opacity="0.6"/>
+  <circle cx="68" cy="22" r="1" fill="#f48fb1" opacity="0.5"/>
+</svg>

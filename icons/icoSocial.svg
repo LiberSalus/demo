@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="gradMorado" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3e5f5"/>
+      <stop offset="100%" stop-color="#e1bee7"/>
+    </linearGradient>
+    <linearGradient id="gradPersona" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ba68c8"/>
+      <stop offset="100%" stop-color="#9c27b0"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo circular suave -->
+  <circle cx="40" cy="40" r="38" fill="url(#gradMorado)" opacity="0.4"/>
+  <!-- Persona central (principal) -->
+  <circle cx="40" cy="22" r="10" fill="url(#gradPersona)" stroke="#7b1fa2" stroke-width="2"/>
+  <path d="M24 62 L24 44 C24 36, 31 30, 40 30 C49 30, 56 36, 56 44 L56 62" 
+        fill="url(#gradPersona)" stroke="#7b1fa2" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Persona izquierda -->
+  <circle cx="14" cy="28" r="7" fill="#ce93d8" stroke="#9c27b0" stroke-width="1.5" opacity="0.85"/>
+  <path d="M4 58 L4 48 C4 43, 8 40, 14 40 C20 40, 24 43, 24 48 L24 58" 
+        fill="#ce93d8" stroke="#9c27b0" stroke-width="1.5" opacity="0.85"/>
+  <!-- Persona derecha -->
+  <circle cx="66" cy="28" r="7" fill="#ce93d8" stroke="#9c27b0" stroke-width="1.5" opacity="0.85"/>
+  <path d="M56 58 L56 48 C56 43, 60 40, 66 40 C72 40, 76 43, 76 48 L76 58" 
+        fill="#ce93d8" stroke="#9c27b0" stroke-width="1.5" opacity="0.85"/>
+  <!-- Manos conectadas (brazos extendidos) -->
+  <path d="M24 44 L18 42" stroke="#ba68c8" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M56 44 L62 42" stroke="#ba68c8" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <!-- Corazón central uniendo al grupo -->
+  <path d="M40 52 C36 47, 30 47, 30 52 C30 57, 40 63, 40 63 C40 63, 50 57, 50 52 C50 47, 44 47, 40 52Z" 
+        fill="#e91e63" opacity="0.7"/>
+  <!-- Brillo del corazón -->
+  <ellipse cx="36" cy="50" rx="3" ry="4" fill="#ffffff" opacity="0.4" transform="rotate(-15 36 50)"/>
+  <!-- Líneas de conexión (ondas de unión) -->
+  <path d="M18 36 Q14 32, 10 36" stroke="#ce93d8" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M62 36 Q66 32, 70 36" stroke="#ce93d8" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- Estrellas sutiles -->
+  <circle cx="8" cy="16" r="2" fill="#ffd54f" opacity="0.6"/>
+  <circle cx="72" cy="16" r="1.5" fill="#ffd54f" opacity="0.5"/>
+</svg>
