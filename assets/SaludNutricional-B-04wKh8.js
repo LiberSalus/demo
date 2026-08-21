@@ -1,1 +1,0 @@
-import{j as r}from"./react-vendor-xHlx2AOR.js";import{u as o,M as i}from"./useMetricasArea-C4PccUsf.js";import{A as a}from"./metricas.config-CU2tpBHV.js";import"./index-DFzYGQZr.js";import"./mui-vendor-KBXKy3ZI.js";import"./date-vendor-JJVV5h4O.js";const n=()=>{const t=o(a.SALUD_NUTRICIONAL);return r.jsx(i,{tituloSeccion:"Salud Nutricional",metricas:t})};export{n as default};
