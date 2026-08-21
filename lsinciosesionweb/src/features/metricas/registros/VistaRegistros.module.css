@@ -87,6 +87,11 @@
   cursor: pointer;
 }
 
+/* Prevencion: spans internos heredan el blanco del boton */
+.botonDescargar > span {
+  color: inherit;
+}
+
 .botonPdf {
   min-width: 1.7rem;
   height: 1.7rem;

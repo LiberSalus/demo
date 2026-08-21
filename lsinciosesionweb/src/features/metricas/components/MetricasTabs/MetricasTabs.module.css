@@ -33,6 +33,11 @@
   padding: 0.55rem 1rem;
 }
 
+/* Prevencion: spans internos heredan el blanco del boton */
+.btnRegistros > span {
+  color: inherit;
+}
+
 .btnRegistrosIcono {
   align-items: center;
   display: inline-flex;

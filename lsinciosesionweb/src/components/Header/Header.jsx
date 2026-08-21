@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './Header.module.css'
 import logoHero from './LogoHero.svg'
 import menu from './icoMenu.svg'
@@ -313,87 +314,91 @@ const Header = ({ estados = ["e2"], sesion = null }) => {
     triggerButtonRef.current?.focus()
   }, [isOpen, isMounted])
 
-  return (
-    <div className={styles.Header}>
-      <Menu isOpen={isMenuOpen} onClose={closeMenu} mobileOnly />
-      <img className={styles.logoLiber} src={logoHero} alt="Liber Salus" />
-      <button type="button" className={styles.botonMenu} onClick={toggleMenu} aria-label="Abrir menú principal">
-        <img className={styles.icoMenu} src={menu} alt="Menú" />
-      </button>
-      <div className={styles.cntBotonPerfil}>
-        <button className={styles.boton}><img src={ayuda} alt="Ayuda" /></button>
-        <button
-          ref={bellButtonRef}
-          type="button"
-          className={`${styles.boton} ${isBellShaking ? styles.botonCampanaActiva : ""}`}
-          onClick={toggleAlerts}
-          aria-label={hasPendingAlert ? "Tienes alertas pendientes" : "Alertas"}
-          aria-expanded={isAlertsOpen}
-          aria-haspopup="dialog"
-        >
-          {hasPendingAlert && <span className={styles.alerta}></span>}
-                      <img key={bellAnimationTick} src={campana} alt="Alertas" />
-        </button>
-        {isAlertsOpen && (
-          <div
-            ref={alertsPopoverRef}
-            className={styles.alertsPopover}
-            role="dialog"
-            aria-label="Alertas recientes"
-          >
-            {alertItems.length === 0 ? (
-              <p className={styles.alertsEmpty}>No hay alertas recientes.</p>
-            ) : (
-              alertItems.map((item) => (
-                <div key={item.id} className={styles.alertItem}>
-                  <div className={styles.alertItemHeader}>
-                    <span className={styles.alertTime}>{item.timeLabel}</span>
-                    <span className={styles.alertIcon} aria-hidden="true">
-                      <img src={resolveAlertIcon(item)} alt="" />
-                    </span>
-                  </div>
-                  <p className={styles.alertTitle}>{item.title}</p>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-        <button
-          ref={triggerButtonRef}
-          type="button"
-          className={styles.boton}
-          onClick={openPanel}
-          aria-label="Abrir perfil"
-        >
-          <img src={fotoPerfil} alt="Foto de usuario" />
-        </button>
+  const overlayElement = (
+    <div
+      className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
+      onClick={closePanel}
+    >
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Panel de perfil"
+        className={`${styles.panel} ${isOpen ? styles.panelOpen : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <TarjetaLataral
+          estados={estados}
+          sesion={sesion}
+          onClose={closePanel}
+          fotoPerfil={fotoPerfil}
+          onGuardarFoto={handleGuardarFotoPerfil}
+          onLogout={handleLogout}
+        />
       </div>
-      {isMounted && (
-        <div
-          className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
-          onClick={closePanel}
-        >
-          <div
-            ref={panelRef}
-            tabIndex={-1}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Panel de perfil"
-            className={`${styles.panel} ${isOpen ? styles.panelOpen : ''}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <TarjetaLataral 
-            estados={estados}
-            sesion={sesion}
-            onClose={closePanel}
-            fotoPerfil={fotoPerfil}
-            onGuardarFoto={handleGuardarFotoPerfil}
-            onLogout={handleLogout}
-            />
-          </div>
-        </div>
-      )}
     </div>
+  )
+
+  return (
+    <>
+      <div className={styles.Header}>
+        <Menu isOpen={isMenuOpen} onClose={closeMenu} mobileOnly />
+        <img className={styles.logoLiber} src={logoHero} alt="Liber Salus" />
+        <button type="button" className={styles.botonMenu} onClick={toggleMenu} aria-label="Abrir menú principal">
+          <img className={styles.icoMenu} src={menu} alt="Menú" />
+        </button>
+        <div className={styles.cntBotonPerfil}>
+          <button className={styles.boton}><img src={ayuda} alt="Ayuda" /></button>
+          <button
+            ref={bellButtonRef}
+            type="button"
+            className={`${styles.boton} ${isBellShaking ? styles.botonCampanaActiva : ""}`}
+            onClick={toggleAlerts}
+            aria-label={hasPendingAlert ? "Tienes alertas pendientes" : "Alertas"}
+            aria-expanded={isAlertsOpen}
+            aria-haspopup="dialog"
+          >
+            {hasPendingAlert && <span className={styles.alerta}></span>}
+            <img key={bellAnimationTick} src={campana} alt="Alertas" />
+          </button>
+          {isAlertsOpen && (
+            <div
+              ref={alertsPopoverRef}
+              className={styles.alertsPopover}
+              role="dialog"
+              aria-label="Alertas recientes"
+            >
+              {alertItems.length === 0 ? (
+                <p className={styles.alertsEmpty}>No hay alertas recientes.</p>
+              ) : (
+                alertItems.map((item) => (
+                  <div key={item.id} className={styles.alertItem}>
+                    <div className={styles.alertItemHeader}>
+                      <span className={styles.alertTime}>{item.timeLabel}</span>
+                      <span className={styles.alertIcon} aria-hidden="true">
+                        <img src={resolveAlertIcon(item)} alt="" />
+                      </span>
+                    </div>
+                    <p className={styles.alertTitle}>{item.title}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+          <button
+            ref={triggerButtonRef}
+            type="button"
+            className={styles.boton}
+            onClick={openPanel}
+            aria-label="Abrir perfil"
+          >
+            <img src={fotoPerfil} alt="Foto de usuario" />
+          </button>
+        </div>
+      </div>
+      {isMounted && createPortal(overlayElement, document.body)}
+    </>
   )
 }
 

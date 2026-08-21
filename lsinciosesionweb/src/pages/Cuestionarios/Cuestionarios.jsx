@@ -308,7 +308,7 @@ const Cuestionarios = () => {
             </div>
           </section>
         )}
-      </div>}
+      </div>
     </div>
   );
 };

@@ -20,6 +20,9 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta, sinRespu
         <legend className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
+          <span className={`${styles.tag} ${sinRespuesta ? styles.tagPendiente : styles.tagRespondida}`}>
+            {sinRespuesta ? 'PENDIENTE' : '✓ RESPONDIDA'}
+          </span>
         </legend>
         <div className={styles.opciones}>
           {list_options.map((opcion) => {
@@ -56,6 +59,9 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta, sinRespu
         <legend className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
+          <span className={`${styles.tag} ${sinRespuesta ? styles.tagPendiente : styles.tagRespondida}`}>
+            {sinRespuesta ? 'PENDIENTE' : '✓ RESPONDIDA'}
+          </span>
         </legend>
         <div className={styles.opciones}>
           {list_options.map((opcion) => {
@@ -95,6 +101,9 @@ const PreguntasQs = ({ pregunta, numero, respuesta, alCambiarRespuesta, sinRespu
         <div className={styles.encabezado}>
           <span className={styles.numero}>{numeroVisible}</span>
           <span className={styles.texto}>{textoLimpio}</span>
+          <span className={`${styles.tag} ${sinRespuesta ? styles.tagPendiente : styles.tagRespondida}`}>
+            {sinRespuesta ? 'PENDIENTE' : '✓ RESPONDIDA'}
+          </span>
         </div>
         <input
           className={styles.inputText}

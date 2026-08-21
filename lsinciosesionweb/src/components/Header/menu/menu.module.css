@@ -21,8 +21,11 @@
   height: calc(100dvh - 110px);
   /* width: var(--menu-w); */
   width: 4rem;
-  background: var(--menu-bg);
-  box-shadow: 6px 0 18px rgba(13, 27, 44, 0.08);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 4px 0 20px rgba(31, 41, 55, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -198,16 +201,16 @@
   z-index: 1100;
   width: 100vw !important;
   height: 100dvh;
-  background: var(--prnci);
+  background: linear-gradient(135deg, rgba(0, 124, 186, 0.35) 0%, rgba(11, 90, 168, 0.45) 100%);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
   color: #ffffff;
   transform: translate3d(-100%, 0, 0);
-  opacity: 0.98;
   transition:
     transform var(--menu-mobile-ms) var(--menu-mobile-ease),
     opacity var(--menu-mobile-ms) var(--menu-mobile-ease);
-  
-  
-  /* box-shadow: 8px 0 24px rgba(0, 0, 0, 0.25); */
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 4px 0 24px rgba(11, 90, 168, 0.15);
   padding: 0.9rem 0.95rem 1.1rem;
 }
 
@@ -226,28 +229,26 @@
 
 .closeBtn {
   position: absolute;
-  background-color: transparent   ;
+  background-color: var(--prnci);
   color: #fff;
-  width:  2.5rem;
-  height: 2.5rem;
-  border-radius: 999px;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+  border-radius: 50%;
   font-size: 2rem;
   line-height: 1;
   cursor: pointer;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: -105%;
-  left: -0.1  rem;
-  outline: 15px solid var(--prnci);
+  left: -0.1rem;
   border: 2px solid var(--prnci);
-  padding-right: 4rem;
-  background-color: var(--prnci);
   &> img {
-    position: absolute;
-    left: 0;
+    width: 1.1rem;
+    height: 1.1rem;
     filter: invert(1) brightness(2);
   }
-  
 }
 
 .mobileLogo {
